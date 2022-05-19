@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt">마포구</div></a>
+	</div>
+	<div class="header-right">
+		<a href="#" class="btn-page-ui btn-page-search"><div class="icon icon-size-24 icon-page-search">검색</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<div class="map-wrap"><div class="map-data">map</div></div>
+		<div class="reserve-list-wrap">
+			<!-- 20211024 수정 : sort-tab 클래스로 수정 -->
+			<div class="sort-tab">
+				<!-- 20211024 수정 : sort-tab-inner 클래스로 수정 -->
+				<div class="sort-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell actived"><a href="#" class="btn-tab-item">인기순</a></div>
+					<div class="tab-cell"><a href="#" class="btn-tab-item">거리순</a></div>
+				</div>
+			</div>
+						
+			<div class="vertical-list-wrap line">
+				<div class="list-inner">
+					<div class="list-cell">
+						<a href="#" class="basic-list-item" onclick="pop.open('productSelectedPop');">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<!-- 20211024 수정 : tag-item 클래스로 수정 -->
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<div class="thumb-label">
+									<div class="label label-purple">신규입점</div>
+								</div>
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="list-cell">
+						<a href="#" class="basic-list-item">
+							<div class="thumb">
+								<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+							</div>
+							<div class="info-wrap">
+								<div class="item-name">소망애견 미용실</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+								<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+								<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+								<div class="item-option-group">
+									<div class="group-inner">
+										<div class="tag-item">평일 11:00-22:00</div>
+										<div class="tag-item">연중무휴</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //page-body -->	
+	<!-- 선택된 팝업 -->
+	<!--
+	// actived클래스 추가시 활성화
+	-->
+	<div id="productSelectedPop" class="layer-pop-wrap layer-pop-bottom actived">
+		<div class="pop-header">
+			<div class="pop-header-title">선택하신 매장</div>
+		</div>
+		<div class="pop-body">
+			<a href="#" class="basic-list-item">
+				<div class="thumb">
+					<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+				</div>
+				<div class="info-wrap">
+					<div class="item-name">소망애견 미용실</div>
+					<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+					<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+					<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+					<div class="item-option-group">
+						<div class="group-inner">
+							<div class="tag-item">평일 11:00-22:00</div>
+							<div class="tag-item">연중무휴</div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+		<button type="button" class="btn-pop-close" onclick="pop.close(this);">팝업 닫기</button>
+	</div>
+</section>
+<!-- //container -->
+
+</body>
+</html>

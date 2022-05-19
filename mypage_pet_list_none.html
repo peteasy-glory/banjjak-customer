@@ -1,0 +1,59 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>         
+            
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">마이펫 관리</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="user-pet-main">
+			<!-- 내용 있을 때
+			<div class="info">*이용하시던 펫샵에서 등록한 펫을 지우면 이용이력도 삭제되오니 이름이나 기타 정보가 다르면 정보수정을 눌러 변경하시면 됩니다.</div>
+			<div class="user-pet-list">
+				
+			</div>
+			//내용 있을 때 -->
+			<!-- 내용 없을 때 -->
+			<div class="common-none-data">
+				<div class="none-inner">
+					<!-- 20211110 수정 : 이미지명 및 속성 수정 -->
+					<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+					<div class="item-info">아직 등록된 아이가 없어요.<span>등록하고 맞춤형 서비스를 받아보세요!</span></div>
+				</div>
+			</div>
+			<!-- //내용 없을 때 -->
+		</div>
+
+
+	</div>
+	<!-- //page-body -->
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom">마이 펫 등록하기</a>
+	</div>
+	<!-- //page-bottom -->	
+</section>
+<!-- //container -->
+
+	
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

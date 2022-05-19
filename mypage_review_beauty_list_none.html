@@ -1,0 +1,53 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>       
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">내 후기 작성/변경</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="mypage-review-wrap">
+			<div class="wide-tab">
+				<div class="wide-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell actived"><a href="#" class="btn-tab-item">미용</a></div>
+					<div class="tab-cell"><a href="#" class="btn-tab-item">상품</a></div>
+				</div>
+			</div>
+			<div class="page-middle-banner">
+				<a href="#" class="btn-banner-item"><img src="/static/pub/images/mypage_banner.png" alt=""/></a>
+				<div class="page-middle-banner-info">*포인트는 작성한 달의 다음달 초에 적립됩니다.</div>
+			</div>
+			<!-- 내용이 있을 때 -->			
+			<!-- //내용이 있을 때 -->
+			<!-- 내용이 없을 때 -->
+			<div class="common-none-data">
+				<div class="none-inner">
+					<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+					<div class="item-info">이용내역이 없습니다.<span>서비스 이용 후 후기 작성이 가능합니다.</span></div>
+				</div>
+			</div>
+			<!-- //내용이 없을 때 -->
+		</div>
+
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+	
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

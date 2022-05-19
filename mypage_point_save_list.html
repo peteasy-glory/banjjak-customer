@@ -1,0 +1,270 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+//var_dump($user_id);
+//exit();
+
+?>          
+                 
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">포인트</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="mypage-point-wrap">
+				<div class="user-point-data">
+                    <?php
+                    $point = new Point;
+                    $result = $point->select_point($user_id);
+                    $curPoint = 0;
+                    if ($result == true) {
+                        $curPoint = $point->get_point();
+                    }
+                    ?>
+                
+					<div class="item-title">현재 포인트<!--<a href="mypage_point_charge" class="btn btn-outline-purple btn-round btn-inline btn-charge"><em>충전하기</em></a>--></div>
+					<div class="item-value"><?= number_format($curPoint) ?>P</div>
+				</div>
+				<div class="wide-tab">
+					<div class="wide-tab-inner">
+						<!-- 활성화시 actived클래스 추가 -->
+						<div class="tab-cell actived"><a href="#" class="btn-tab-item">적립 내역</a></div>
+						<div class="tab-cell "><a href="mypage_point_use_list" class="btn-tab-item">사용 내역</a></div>
+						<div class="tab-cell "><a href="mypage_point_cancel_list" class="btn-tab-item">취소 내역</a></div>
+					</div>
+				</div>
+
+
+
+                <?php
+						//총 적립 포인트
+                        $total_purchase = 0;
+                        $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'BUY';";
+                        $select_result = mysqli_query($connection, $select_sql);
+                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                            $total_purchase += $result_datas->adding_point;
+                        }
+
+						//적립 포인트
+                        $total_accumulate = 0;
+                        $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'ACCUMLATE';";
+                        $select_result = mysqli_query($connection, $select_sql);
+                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                            $total_accumulate += $result_datas->adding_point;
+                        }
+
+						//이벤트 포인트
+                        $total_event = 0;
+                        $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'EVENT';";
+                        $select_result = mysqli_query($connection, $select_sql);
+                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                            $total_event += $result_datas->adding_point;
+                        }
+
+						//산책포인트
+						$total_tracking = 0;
+                        $select_sql = "select point from tb_tracking_mgr where owner_id = '" . $user_id . "';";
+                        $select_result = mysqli_query($connection, $select_sql);
+                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                            $total_tracking += $result_datas->point;
+                        }
+
+						//소멸 예정 산책포인트
+
+						//젤 빠른 소멸 포인트
+						$select_sql = "select point, fi_date 
+							from tb_tracking_mgr 
+							where owner_id = '{$user_id}'
+							and is_invalid_point = 0
+							and is_delete = 0
+							and fi_date != ''
+							order by fi_date asc";
+						$select_result = mysqli_query($connection, $select_sql);
+						$num_data = mysqli_num_rows($select_result);
+
+						//var_dump($select_sql);
+						//var_dump($num_data);
+						//exit();
+						
+						//소멸 예정 포인트
+						$total_point_tracking_delete = 0;
+						$msg_delete = "";
+
+						if($num_data > 0){
+							
+
+							for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+								//첫 데이터
+								if($ch_index == 0){
+									$obj_first = $result_datas;
+									$fi_date = $obj_first->fi_date;
+								}
+
+								//첫 데이터와 같은 날짜만 
+								if($result_datas->fi_date == $obj_first->fi_date){
+									$total_point_tracking_delete += $result_datas->point;
+								}
+							}
+
+							$date = date("Y.m.d", strtotime($fi_date));
+							$hour = date("H", strtotime($fi_date));
+							$min  = date("i", strtotime($fi_date));
+
+							//$date = date_format($fi_date, "Y,m,d");
+							//$hour = date_format($fi_date, "H");
+							//$min  = date_format($fi_date, "i");
+
+							//$hour = date("H", strtotime($fi_date));
+							//$min  = date("i", strtotime($date_str));
+
+							//var_dump($fi_date);
+							//var_dump($date);
+							//var_dump($hour);
+							//var_dump($min);
+							//exit();
+
+							if ($hour > 12) {
+								//오후
+								$hour = $hour - 12;
+
+								$msg_delete = "소멸 예정일 : {$date} 오후 {$hour}:{$min}";
+							}else{
+								//오전
+								$msg_delete = "소멸 예정일 : {$date} 오전 {$hour}:{$min}";
+							}
+
+						}else{
+							$total_point_tracking_delete = 0;
+							$msg_delete = "";
+						}
+					
+
+
+                ?>
+				
+                    <!-- 포인트 리스트 -->
+                    <div class="user-point-list">
+                        <div class="user-point-list-item total">
+                            <div class="item-title">총 적립 포인트</div>
+                            <!-- <div class="item-value">65,000P</div> -->
+                        </div>
+                        <div class="user-point-list-item">
+                            <div class="item-title">구매 포인트</div>
+                            <div class="item-value"><?= number_format($total_purchase) ?>P</div>
+                        </div>
+                        <div class="user-point-list-item">
+                            <div class="item-title">적립 포인트</div>
+                            <div class="item-value"><?= number_format($total_accumulate) ?>P</div>
+                        </div>
+                        <div class="user-point-list-item">
+                            <div class="item-title">이벤트 포인트</div>
+                            <div class="item-value"><?= number_format($total_event) ?>P</div>
+                        </div>
+
+                        <div class="user-point-list-item">
+                            <div class="item-title">산책 포인트</div>
+                            <div class="item-value"><?= number_format($total_tracking) ?>P</div>
+                        </div>
+						<div class="user-point-list-item extinction">
+							<div class="item-title">소멸 예정 산책포인트</div>
+							<div class="item-value"><?= number_format($total_point_tracking_delete) ?>P</div>
+							<div class="item-wide-info"><?= $msg_delete ?></div>
+						</div>
+
+                    </div>
+                    <!-- //포인트 리스트 -->
+
+                    <div class="page-middle-banner">
+                        <a href="#" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/pointbuy.png" alt=""/></a>
+                    </div>
+
+                    <div class="user-detail-list">
+                        <div class="con-title-group">
+                            <h5 class="con-title">상세내역</h5>
+                        </div>
+                        <div>
+                            <!-- 리스트 내용 있을 때 -->
+                            <div class="point-detail-list">
+                                <?
+                                    $select_sql = "select * from tb_point_history where customer_id = '" . $user_id . "' and type <> 'SPEND' order by update_time desc;";
+                                    $select_result = mysqli_query($connection, $select_sql);
+        
+                                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                                        $event_name = $result_datas->event_name;
+                                        $type = $result_datas->type;
+                                        $adding_point = $result_datas->adding_point;
+                                        $payment_log_seq = $result_datas->payment_log_seq;
+                                        $update_time = $result_datas->update_time;
+                                        $title = "";
+                                        if ($type == 'EVENT') {
+                                            $title = "EVENT";
+                                        }
+                                        else if($type == 'ACCUMLATE'){
+                                            $sql2 = "select ts.name from tb_payment_log tpl, tb_shop ts where tpl.payment_log_seq = '" . $payment_log_seq . "' and tpl.artist_id = ts.customer_id and tpl.is_cancel = 0;";
+                                            $result2 = mysqli_query($connection, $sql2);
+                                            if ($result_datas2 = mysqli_fetch_object($result2)) {
+                                                $title = $result_datas2->name;
+                                            } else {
+                                                $title = "적립";
+                                            }
+        
+                                        }
+                                        else if($type == 'BUY'){
+                                            $title = "구매";                                        
+                                        }    
+                                ?>
+                                <div class="point-detail-item">
+                                    <div class="item-title"><?= $title ?></div>
+                                    <div class="item-date"><?= $update_time ?></div>
+                                    <div class="item-value"><?= number_format($adding_point) ?>P</div>
+                                </div>
+                                <? } ?>
+                            </div>
+                            <!-- //리스트 내용 있을 때 -->
+
+
+                            <!-- 리스트 내용 없을 때 -->
+                            <? if($ch_index == 0){ ?>                            
+                                <div class="none-simple-data">내역이 없습니다.</div>
+                            <? } ?>
+                            <!-- //리스트 내용 없을 때 -->
+                        </div>
+                    </div>
+
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+	
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

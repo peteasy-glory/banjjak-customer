@@ -1,0 +1,51 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>          
+    
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">포인트 충전하기</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="mypage-point-wrap">
+				<div class="point-charge-complete">
+					<!-- 20211110 수정 : 이미지명 및 속성 수정 -->
+					<div class="item-visual"><img src="/static/pub/images/icon/img-illust-2@2x.png" alt="" width="203"/></div>
+					<div class="item-info">포인트 충전이 완료되었습니다.</div>
+					<div class="item-value">충전 포인트 : <strong>100,000P</strong><em>(총 220,000P)</em></div>
+				</div>
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom">메인 화면으로 이동</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

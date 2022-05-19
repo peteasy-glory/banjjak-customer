@@ -1,0 +1,153 @@
+<?php
+include "../include/top.php";
+
+$cl_result = include "../include/check_login.php";
+if ($cl_result == 0) {
+    return false;
+}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+// 권한 체크
+if($user_id != ""){
+	$sql = "
+		SELECT *
+		FROM tb_customer
+		WHERE id = '".$user_id."'
+	";
+	$result = mysql_query($sql);
+	$row = mysql_fetch_assoc($result);
+	$admin_flag = $row["admin_flag"];
+	$operator_flag = $row["operator_flag"];
+	$my_shop_flag = $row["my_shop_flag"];
+	$artist_flag = $row["artist_flag"];
+}
+?>
+<script type="text/javascript" src="<?= $js_directory ?>/auto_login.js"></script>
+<link rel="stylesheet" href="<?= $css_directory ?>/m_new.css?<?= filemtime($upload_static_directory . $css_directory . '/m_new.css') ?>">
+<style>
+	#mainpage_my_menu { max-width: 400px; margin: 60px auto; background-color: #fcfcfc; font-family: 'NL2GR'; }
+	#mainpage_my_menu .my_shop_div { background-color: #ffebc0; }
+	#cs_shop_index { box-sizing: border-box; width: 100%; height:100%; margin: 30px auto; }
+	#cs_shop_index .shop_menu_wrap { display: flex; justify-content: flex-start; flex-wrap: wrap; align-items: flex-start; margin:0 auto; width: calc(100% - 20px); padding-bottom: 60px; }
+	#cs_shop_index .flex-item { position: relative; flex: 1 1 33%; color: #fff; text-align: center; box-sizing: border-box; white-space: nowrap; }
+	#cs_shop_index .flex-item .inner { width: 75px; height: 75px; border:1px solid #332600; border-radius: 100%; margin:15px auto 40px; }
+	#cs_shop_index .flex-item .inner img { width: calc(100% - 40px); min-width: 35px; min-height: 35px; margin-top: 20px; }
+	#cs_shop_index .flex-item .inner h5 { padding-top: 30px; font-family: 'NL2GR'; font-weight: normal; }
+	#cs_shop_index .flex-item2 { flex: 1 1 50%; margin-top: 40px; }
+	#cs_shop_index .flex-item2:after { content: ''; background-color: #fffbe3; display: inline-block; width: 140px; height: 100px; border-radius: 30px; position: absolute; left: 50%; top: 0px; margin-left: -70px; z-index: 0; }
+	#cs_shop_index .flex-item2 .inner2 { position: relative; z-index: 1; padding: 20px 0px; }
+	#cs_shop_index .flex-item2 .inner2 img { width: 60px; }
+	#cs_shop_index .flex-item2 .inner2 h5 { padding-top: 35px; font-family: 'NL2GR'; font-weight: normal; }
+	#mainpage_my_menu .my_tester_div { background-color: #5F5243; color: #fff; }
+	#mainpage_my_menu .my_tester_div .my_shop_text { color: #fff; }
+	#mainpage_my_menu .my_tester_div img { filter: opacity(0.5) drop-shadow(0px 0px 0px #fff); }
+</style>
+
+<div class="top_menu">
+    <div class="top_back"><a href="<?=$mainpage_directory ?>/index.php"><img src="<?= $image_directory ?>/btn_back_2.png" width="26px"></a></div>
+    <div class="top_title">
+        <p>마이 반짝</p>
+    </div>
+</div>
+
+<div id="mainpage_my_menu">
+	<div class="mymenu_wrap">
+	<?php
+	if ($admin_flag || $operator_flag) {
+	?>
+		<a href="<?= $admin_directory ?>/index.php">
+			<div class="my_admin_div">
+				<div class="my_admin_icon"><img src="../images/new_admin_icon.png"></div>
+				<div class="my_admin_text">관리자 모드</div>
+				<img src="<?= $image_directory ?>/new_myshop_btn.png" class="my_admin_img">
+			</div>
+		</a>
+	<?php
+	}
+	?>
+	<?php
+	if ($my_shop_flag) {
+	?>
+		<a href="<?= $shop_directory ?>/index.php?artist_id=<?= urlencode($user_id) ?>">
+			<div class="my_shop_div">
+				<div class="my_shop_icon"><img src="../images/new_shop_icon.png"></div>
+				<div class="my_shop_text">MY SHOP</div>
+				<img src="<?= $image_directory ?>/new_myshop_btn.png" class="my_shop_img">
+			</div>
+		</a>
+	<?php
+	}
+	?>
+	<?php
+	if ($artist_flag == "1") {
+	?>
+		<a href="<?= $shop_directory ?>/manage_sell_info.php">
+			<div class="my_shop_div">
+				<div class="my_shop_text">
+					<div>
+						<div>SHOP 예약 접수</div>
+					</div>
+				</div>
+				<img src="<?= $image_directory ?>/new_myshop_btn.png" class="my_shop_img">
+			</div>
+		</a>
+	<?php
+	}
+	?>
+	<?php
+	if ($my_shop_flag) {
+	?>
+		<a href="<?= $shop_directory ?>/manage_counseling_request.php">
+			<div class="my_counseling_div">
+				<div class="my_shop_icon"><img src="../images/new_shop_info.png"></div>
+				<div class="my_shop_text">이용 상담 관리</div>
+				<img src="<?= $image_directory ?>/new_myshop_btn.png" class="my_shop_img">
+			</div>
+		</a>
+	<?php
+	}
+	?>
+	<?php
+	if ($user_id == "nakmsna@naver.com") { // 앱개발자용 테스트 페이지 링크 추가(개발 후 삭제 필수!)
+	?>
+		<a href="../test/test_item_product_page.php?no=PE-D-A01">
+			<div class="my_tester_div">
+				<div class="my_shop_icon"><img src="../images/n_menu01.png"></div>
+				<div class="my_shop_text">테스트 결제</div>
+				<img src="<?= $image_directory ?>/new_myshop_btn.png" class="my_shop_img">
+			</div>
+		</a>
+	<?php
+	}
+	?>
+		<div id="cs_shop_index">
+			<div class="shop_menu_wrap">
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_my_statement.php"><div class="inner"><img src="../images/n_menu01.png" style="padding-left: 10px;"><h5 class="menu_name">이용상담내역</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_my_reservation.php"><div class="inner"><img src="../images/n_menu02.png"><h5 class="menu_name">예약내역</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $item_directory ?>/item_order_list.php"><div class="inner"><img src="../images/n_menu03.png"><h5 class="menu_name">상품결제내역</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_my_coupon.php"><div class="inner"><img src="../images/n_menu04.png"><h5 class="menu_name">매장구입쿠폰</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_my_point.php"><div class="inner"><img src="../images/n_menu05.png"><h5 class="menu_name">포인트</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_my_postwrite.php"><div class="inner"><img src="../images/n_menu06.png"><h5 class="menu_name">내후기작성/변경</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_my_likeartist.php"><div class="inner"><img src="../images/n_menu07.png"><h5 class="menu_name new">나의단골펫샵</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_1vs1.php"><div class="inner"><img src="../images/n_menu08.png"><h5 class="menu_name">1대1문의</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_setting.php"><div class="inner"><img src="../images/n_menu09.png"><h5 class="menu_name">설정</h5></div></a></div>
+				<div class="flex-item"><a href="<?= $mainpage_directory ?>/manage_user_info.php"><div class="inner"><img src="../images/n_menu10.png"><h5 class="menu_name">회원정보수정</h5></div></a></div>
+				<div class="flex-item no_item"></div>
+				<div class="flex-item no_item"></div>
+			<?php
+			if (!$my_shop_flag) {
+			?>
+				<div class="flex-item flex-item2"><a href="<?= $mainpage_directory ?>/view_event2.php"><div class="inner2"><img src="../images/n_menu11_2.png"><h5 class="menu_name">미용샵/<br>호텔입점신청</h5></div></a></div>
+			<?php
+			}
+			?>
+				<div class="flex-item flex-item2"><a href="<?= $mainpage_directory ?>/shop_entry.php"><div class="inner2"><img src="../images/n_menu12.png"><h5 class="menu_name">쇼핑입점/<br>제휴 광고문의</h5></div></a></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="<?= $js_directory ?>/auto_login.js"></script>
+<?php include "../include/bottom.php"; ?>

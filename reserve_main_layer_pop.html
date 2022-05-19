@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt">마포구</div></a>
+	</div>
+	<div class="header-right">
+		<a href="#" class="btn-page-ui btn-page-search"><div class="icon icon-size-24 icon-page-search">검색</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('distanceSet');"><em>거리설정</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('locationAGree');"><em>위치기반 이용동의</em></button>
+	</div>
+	<!-- //page-body -->	
+	
+	<!--  거리설정 -->
+	<article id="distanceSet" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="distance-set-range">
+							<div class="info-txt">고객님의 위치를 기준으로 ‘거리순’을 설정하세요.<br>최대 30Km까지 확인하실 수 있습니다.</div>
+							<div class="range-wrap">
+								<div class="range-bar">
+									<div id="slider-range" class="bar"></div>
+								</div>
+								<div class="range-value"><strong><em id="slider-value">0</em>Km</strong> 이내</div>
+							</div>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //거리설정 -->
+	
+	<!--  위치기반 이용동의 -->
+	<article id="locationAGree" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">위치기반 서비스 이용동의 후<br>이용하실 수 있습니다.</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //위치기반 이용동의 -->
+
+</section>
+<!-- //container -->
+
+<script src="/static/pub/js/jquery-ui.min.js"></script>
+<script src="/static/pub/js/jquery.ui.touch-punch.min.js"></script>
+<script>
+$(function(){
+	$( "#slider-range" ).slider({
+		range: 'min',
+		value : 0,
+		min: 1,
+		max: 30,
+		step : 1,
+		slide: function( event, ui ) {
+			$('#slider-value').html(ui.value);
+		//설정된 최소 , 최대값 가져오기
+		//$( "#range-min" ).html(ui.values[ 0 ] + "%");
+		//$( "#range-max" ).html(ui.values[ 1 ] + "%");
+		}
+	});
+});
+</script>
+
+</body>
+</html>

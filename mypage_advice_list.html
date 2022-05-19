@@ -1,0 +1,132 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+            
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+//print_r($user_id);
+//print_r($user_name);
+
+$review_images_array;
+?>
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">이용 상담 신청내역</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="user-advice-wrap">
+			<div class="advice-state-info">
+				<div class="item-state">
+					<strong class="font-color-purple">상담 완료</strong> : 해당샵에 예약 가능한 상태<br>
+					<strong class="font-color-black">상담 대기</strong> : 상담을 기다리고 있는 상태<br>
+					<strong class="font-color-lightgray">상담 취소</strong> : 샵의 사정으로 예약이 불가한 상태
+				</div>
+				<div class="item-info">
+					<div class="info-cell">*최초 이용샵의 경우 이용상담 신청 후 예약이 가능합니다.</div>
+					<div class="info-cell">*최대 12시간 이내에 예약 상담이 이루어지며 이후 시간 선택 및 예약이 가능해집니다.<br>(12시간 이후 상담이 이루어지지 않으면 자동으로 상담이 취소됩니다.)</div>
+				</div>
+			</div>
+
+			<div class="user-advice-list">
+                <?php
+                    $login_insert_sql = "SELECT tpl.artist_id, tpl.update_time, tpl.approval, ts.photo AS artist_photo, ts.name
+                                        FROM tb_payment_log tpl
+                                        LEFT JOIN tb_shop ts ON ts.customer_id = tpl.artist_id
+                                        LEFT JOIN tb_mypet tm ON tm.pet_seq = tpl.pet_seq
+                                        WHERE tpl.customer_id = '{$user_id}' 
+                                          AND tpl.approval<>'1'
+                                        ORDER BY tpl.update_time DESC;";
+                    // error_log('----- $login_insert_sql : '.$login_insert_sql);
+                    $result = mysqli_query($connection, $login_insert_sql);
+
+                    for ($opinionkey = 0; $result_datas = mysqli_fetch_object($result); $opinionkey++) {
+                        $artist_id = $result_datas->artist_id;
+                        $approval = $result_datas->approval;
+                        $update_time = $result_datas->update_time;
+                        $artist_photo = "https://image.banjjakpet.com".img_link_change($result_datas->artist_photo);
+                        $artist_name = $result_datas->name;
+
+                ?>
+                    <div class="list-cell">
+                        <div class="thema-gray-item">
+                            <a href="#" class="basic-list-item store">
+                                <div class="content-thumb small"><img src=<?= $artist_photo ?> alt=""></div>
+                                <div class="info-wrap">
+                                    <div class="item-name"><?= $artist_name ?></div>
+                                    <div>
+                                        <?
+                                            $diff_12hours_time = strtotime("-12 hours");
+                                            $update_time = strtotime($update_time);
+                                            $str_update_time = date('Y년 m월 d일 H시 i분', $update_time);
+                                            echo "<div class='item-date'>$str_update_time</div>";
+                                        ?>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                            <?php
+                                if ($update_time > $diff_12hours_time) {
+                                    if ($approval == '0') {
+                                ?>
+                                        <div class="item-state"><strong class="font-color-purple">상담 대기중</strong></div>                                
+                                    <?php
+                                    } elseif ($approval == '2') {
+                                    ?>
+                                        <div class="item-state"><strong class="font-color-purple">상담 완료</strong></div>                                
+                                    <?php
+                                    } elseif ($approval == '3') {
+                                    ?>
+                                        <div class="item-state"><strong class="font-color-purple">상담 취소</strong></div>                                
+                                    <?php
+                                    }
+                                } else {
+                                    //----- 상담 신청에 대한 응대 유효시간이 지난 후 [상담 완료] 처리 가능성을 대비하여 추가
+                                    if ($approval == '2') {
+                                    ?>
+                                        <div class="item-state"><strong class="font-color-purple">상담 완료</strong></div>                                
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <div class="item-state"><strong class="font-color-purple">상담 취소</strong></div>                                
+                                <?php
+                                    }
+                                }
+                            ?>
+                            
+                        </div>
+                    </div>
+                <?
+                }
+                ?>
+			</div>
+			
+		</div>
+
+
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

@@ -1,0 +1,10 @@
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet1', 10, 1, '클리밍');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet2', 11, 1, '가위컷');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet3', 12, 1, '스포팅');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet4', 13, 1, '썸머컷');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet5', 14, 1, '곰돌이컷');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet6', 15, 1, '하이바');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet7', 16, 1, '브로콜리컷');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet8', 17, 1, '베이비컷');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet9', 18, 1, '비숑');
+insert into tb_config_professional ( name, sequence, enable_flag, value ) values ('pet10', 19, 1, '배들링턴');

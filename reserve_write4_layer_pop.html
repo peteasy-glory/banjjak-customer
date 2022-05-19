@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약 신청하기</div>
+	<div class="reserve-state-bar">
+		<div class="bar" style="width:66.66%"></div>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('payPhoneModify');"><em>예약자 연락처 변경하기</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('payTimeOver');"><em>결제시간 초과</em></button>
+	</div>
+	<!-- //page-body -->	
+
+	<!--  예약자 연락처 변경하기 -->
+	<article id="payPhoneModify" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-title">예약자 연락처 변경하기</div>
+						<div class="msg-txt">신청자와 예약자가 다른 경우거나, 다른 전화번호로 연락이 오길 원하시면 아래에 연락처를 입력해주세요.</div>
+						<div class="form-group">
+							<div class="form-group-cell">
+								<div class="form-group-item">
+									<div class="form-item-label">연락처</div>
+									<div class="form-item-data type-2">
+										<input type="text" class="" placeholder="변경할 연락처를 입력해 주세요.">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+						<button type="button" class="btn btn-confirm" onclick="">변경하기</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //예약자 연락처 변경하기 -->
+	
+	<!--  결제시간 초과 -->
+	<article id="payTimeOver" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">결제시간(10분)이 초과되어 예약 시간을 재선택해야 합니다. </div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //결제시간 초과 -->
+
+</section>
+<!-- //container -->
+
+<script src="/static/pub/js/jquery-ui.min.js"></script>
+<script src="/static/pub/js/jquery.ui.touch-punch.min.js"></script>
+<script>
+$(function(){
+	$( "#slider-range" ).slider({
+		range: 'min',
+		value : 0,
+		min: 1,
+		max: 30,
+		step : 1,
+		slide: function( event, ui ) {
+			$('#slider-value').html(ui.value);
+		//설정된 최소 , 최대값 가져오기
+		//$( "#range-min" ).html(ui.values[ 0 ] + "%");
+		//$( "#range-max" ).html(ui.values[ 1 ] + "%");
+		}
+	});
+});
+</script>
+
+</body>
+</html>

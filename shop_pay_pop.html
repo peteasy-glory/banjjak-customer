@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">팝업 모음</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderMsgPop1');"><em>주문받으시는 분의 연락처를 입력해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderMsgPop2');"><em>배송받으실 주소를 검색해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderMsgPop3');"><em>택배요청사항을 입력해주세요 </em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderMsgPop4');"><em>배송지를 선택해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderMsgPop5');"><em>입금자명을 입력해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderMsgPop6');"><em>구매진행에 동의해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderConfirmPop1');"><em>주문자 성명을 입력해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderConfirmPop2');"><em>연락처를 입력해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('orderConfirmPop3');"><em>이메일을 입력해주세요</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('addressModifyPop');"><em>배송지 추가 및 변경(리스트)</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('addressAddPop');"><em>배송지 추가 및 변경(추가)</em></button>
+	</div>
+	<!-- //page-body -->	
+	
+	<!--  주문받으시는 분의 연락처를 입력해주세요 -->
+	<article id="orderMsgPop1" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">주문받으시는 분의 연락처를 입력해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //주문받으시는 분의 연락처를 입력해주세요 -->	
+	
+	<!--  배송받으실 주소를 검색해주세요 -->
+	<article id="orderMsgPop2" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">배송받으실 주소를 검색해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //배송받으실 주소를 검색해주세요 -->	
+	
+	<!--  택배요청사항을 입력해주세요 -->
+	<article id="orderMsgPop3" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">택배요청사항을 입력해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //택배요청사항을 입력해주세요 -->	
+	
+	<!--  배송지를 선택해주세요 -->
+	<article id="orderMsgPop4" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">배송지를 선택해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //배송지를 선택해주세요 -->	
+	
+	<!-- 입금자명을 입력해주세요  -->
+	<article id="orderMsgPop5" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">입금자명을 입력해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //입금자명을 입력해주세요 -->	
+	
+	<!-- 구매진행에 동의해주세요  -->
+	<article id="orderMsgPop6" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">구매진행에 동의해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //구매진행에 동의해주세요 -->
+	
+	<!--  주문자 성명을 입력해주세요 -->
+	<article id="orderConfirmPop1" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">주문자 성명을 입력해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">삭제</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //주문자 성명을 입력해주세요 -->
+	
+	<!-- 연락처를 입력해주세요  -->
+	<article id="orderConfirmPop2" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">연락처를 입력해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">삭제</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //연락처를 입력해주세요 -->
+	
+	<!--  이메일을 입력해주세요 -->
+	<article id="orderConfirmPop3" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">이메일을 입력해주세요</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">삭제</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //이메일을 입력해주세요 -->
+
+	<!--  입력폼 있는 경우 -->
+	<article id="pop3" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-title">타이틀 입니다.</div>
+						<div class="msg-txt">텍스트 입니다.</div>
+						<div class="form-group">
+							<div class="form-group-cell">
+								<div class="form-group-item">
+									<div class="form-item-label">타이틀</div>
+									<div class="form-item-data type-2">
+										<input type="text" class="" placeholder="placeholder">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //입력폼 있는 경우 -->
+	
+	<!-- 타이틀이 있는 경우 -->
+	<article id="pop4" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data alert-pop-data">
+					<div class="pop-header">
+						<h4 class="con-title">큰타이틀</h4>
+					</div>
+					<div class="pop-body">
+						<div class="msg-title">작은 타이틀 입니다.</div>
+						<div class="msg-txt">텍스트 입니다.</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+					<button type="button" class="btn-pop-close" onclick="pop.close();">닫기</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<!-- //타이틀이 있는 경우 -->
+	
+	<!-- 배송지 추가 및 변경(리스트) -->
+	<article id="addressModifyPop" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data alert-pop-data">
+					<div class="pop-header">
+						<h4 class="con-title">배송지 추가 및 변경</h4>
+					</div>
+					<div class="pop-body type-3">
+						<div class="address-list-wrap">
+							<div class="address-list-ui"><button type="button" class="btn btn-outline-purple btn-small-size btn-inline btn-border-radius-16"  onclick="pop.open('addressAddPop');">배송지 추가 +</button></div>							
+							<!-- 데이타가 있을 때 -->
+							<div class="address-list-data">
+								<div class="address-list-item">
+									<div class="address-list-check">
+										<label for="r1" class="form-radiobox"><input type="radio" id="r1" name="address"><span class="form-check-icon"><em>본가</em></span></label>
+										<button type="button" class="btn-address-del"><span class="icon icon-size-16 icon-close-small-gray"></span></button>
+									</div>
+									<div class="address-list-value">경기 수원시 권선구 입북로 77번길 61 그린에코 빌리지 101동 101호</div>
+								</div>
+								<div class="address-list-item">
+									<div class="address-list-check">
+										<label for="r2" class="form-radiobox"><input type="radio" id="r2" name="address"><span class="form-check-icon"><em>서울 집</em></span></label>
+										<button type="button" class="btn-address-del"><span class="icon icon-size-16 icon-close-small-gray"></span></button>
+									</div>
+									<div class="address-list-value">경기 수원시 권선구 입북로 77번길 61 그린에코 빌리지 101동 101호</div>
+								</div>
+								<div class="address-list-item">
+									<div class="address-list-check">
+										<label for="r3" class="form-radiobox"><input type="radio" id="r3" name="address"><span class="form-check-icon"><em>사무실</em></span></label>
+										<button type="button" class="btn-address-del"><span class="icon icon-size-16 icon-close-small-gray"></span></button>
+									</div>
+									<div class="address-list-value">경기 수원시 권선구 입북로 77번길 61 그린에코 빌리지 101동 101호</div>
+								</div>
+							</div>		
+							<!-- //데이타가 있을 때 -->		
+							<!-- 데이타가 없을 때 -->
+							<div class="address-list-none">등록된 배송지가 없습니다.</div>
+							<!-- //데이타가 없을 때 -->			
+							<div class="address-list-action">
+								<!-- 배송지 선택 가능할 시 disabled 속성 삭제 -->
+								<button type="button" class="btn btn-middle-size btn-purple btn-round" disabled>배송지 선택</button>
+							</div>
+						</div>
+					</div>
+					<button type="button" class="btn-pop-close" onclick="pop.close();">닫기</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<!-- //배송지 추가 및 변경(리스트) -->
+
+	<!-- 배송지 추가 및 변경(추가) -->
+	<article id="addressAddPop" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data alert-pop-data">
+					<div class="pop-header">
+						<h4 class="con-title">배송지 추가 및 변경</h4>
+					</div>
+					<div class="pop-body type-3">
+						<div class="address-add-wrap">
+							<div class="form-group">
+								<div class="form-group-cell middle">
+									<div class="form-group-item">
+										<div class="form-item-label">주소명칭</div>
+										<div class="form-item-data type-2">
+											<input type="text" class="" placeholder="입력">
+										</div>
+									</div>
+								</div>
+								<div class="form-group-cell middle">
+									<div class="form-group-item">
+										<div class="form-item-label">주소검색</div>
+										<div class="form-item-data type-2">
+											<div class="form-vertical-cell">
+												<div class="form-control-btns">
+													<input type="text" class="" placeholder="입력">											
+													<button type="button" class="btn btn-outline-gray btn-round btn-inline">검색</button>
+												</div>
+											</div>
+											<div class="form-vertical-cell">
+												<input type="text" class="" placeholder="기본주소">
+											</div>
+											<div class="form-vertical-cell">
+												<input type="text" class="" placeholder="상세주소">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="address-add-action">
+								<button type="button" class="btn btn-outline-gray btn-round" onclick="pop.close();">목록</button>
+								<button type="button" class="btn btn-outline-purple btn-round">추가</button>
+							</div>
+						</div>
+					</div>
+					<button type="button" class="btn-pop-close" onclick="pop.close();">닫기</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<!-- //배송지 추가 및 변경(추가) -->
+
+</section>
+<!-- //container -->
+
+</body>
+</html>

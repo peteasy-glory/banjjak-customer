@@ -1,0 +1,479 @@
+<?php include "../include/top.php"; ?>
+<?php include "../include/Point.class.php"; ?>
+<?php
+$cl_result = include "../include/check_login.php";
+if ($cl_result == 0) {
+    return false;
+}
+?>
+<?php
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+$sequence = 0;
+if ($_REQUEST['sequence']) {
+    $sequence = $_REQUEST['sequence'];
+}
+?>
+<style>
+@font-face {font-family: 'BMJUA';src: url("../fonts/BMJUA.ttf");}
+@font-face {font-family: 'NanumGothic';src: url("../fonts/NanumGothic.ttf");}
+
+* {
+    font-family: 'BMJUA','NanumGothic';
+	font-weight: normal;
+    
+}
+
+    body {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:link {
+        color: white;
+    }
+
+    a:visited {
+        color: white;
+    }
+
+    a:hover {
+        color: white;
+    }
+
+    a:active {
+        color: white;
+    }
+
+    .gobeauty_small_button4 {
+        -webkit-appearance: none;
+        border-radius: 0;
+        background-color: #f5bf2e;
+        -webkit-border-top-left-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-right-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        border-bottom-right-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        border-bottom-left-radius: 5px;
+        text-indent: 0;
+        border: 1px solid #f5bf2e;
+        display: inline-block;
+        color: #ffffff;
+        font-size: 16px;
+        font-style: normal;
+        height: 30px;
+        line-height: 30px;
+        width: 80px;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .gobeauty_small_button4:active {
+        position: relative;
+        top: 1px;
+    }
+
+.top_menu {position: relative;}
+.top_back {position: absolute;top: 15px;left: 10px;}
+.top_title {width: 100%;text-align: center;font-size: 25px;font-weight: normal;padding: 15px 0px 15px 0px;border-bottom: 0.5px solid #e1e1e1;}
+.top_title p {margin: 0px;font-family: 'BMJUA';font-weight: normal;}
+    .top_charge {
+        position: absolute;
+        top: 12px;
+        right: 10px;
+    }
+
+    .point_wrap {
+        border-bottom: 3px solid #e1e1e1;
+        padding-bottom: 20px;
+        padding-top: 5px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .point_big_title {
+        font-size: 16px;
+    }
+
+    .point_title {
+        color: #f5bf2e;
+    }
+
+    .point_score {
+        font-size: 22px;
+        margin-top: 6px;
+        color: #ED0B44;
+        font-weight: bold;
+    }
+
+    .point_section {
+
+        margin-bottom: 60px;
+    }
+
+    .point_menu {
+        float: left;
+        width: 33.3%;
+        text-align: center;
+    }
+
+    .section_1 {
+        width: 90%;
+        margin: 0px auto;
+    }
+
+    .s1_article {
+        width: 90%;
+        margin: 0px auto;
+        font-size: 14px;
+        padding: 5px 0px;
+
+    }
+
+    .article_title {
+
+        float: left;
+    }
+
+    .article_wrap {
+        margin-top: 20px;
+    }
+
+    .section_2 {
+        width: 90%;
+        margin: 0px auto;
+    }
+</style>
+<div class="top_menu">
+    <div class="top_back"><a href="<?= $mainpage_directory ?>/mainpage_my_menu.php"><img src="<?= $image_directory ?>/btn_back_2.png" width="26px"></a></div>
+    <div class="top_title">
+        <p>포인트</p>
+    </div>
+    <div class="top_charge"><a class="gobeauty_small_button4" href="<?= $mainpage_directory ?>/payment_point.php">포인트 충전</a></div>
+</div>
+<div class="point_wrap">
+    <div class="point_big_title"> 현재 포인트</div>
+    <div class="point_score">
+        <?php
+        $point = new Point;
+        $result = $point->select_point($user_id);
+        if ($result == true) {
+            echo number_format($point->get_point());
+        } else {
+            echo "0";
+        }
+        ?>
+        점 </div>
+</div>
+<div class="point_section">
+    <div>
+        <div class="point_menu"> <a href="?sequence=0">
+                <?php
+                if ($sequence == 0) {
+                    echo "<div style='height:40px; line-height: 40px;  width:100%; background-color: #f5bf2e; color:#ffffff;'>";
+                } else {
+                    echo "<div style='height:40px; line-height: 40px;  width:100%; border-bottom:0px solid #999999;color:#999999;'>";
+                }
+                ?>
+                적립 내역 </div>
+        </a>
+    </div>
+    <div class="point_menu"> <a href="?sequence=1">
+            <?php
+            if ($sequence == 1) {
+                echo "<div style='height:40px; line-height: 40px;  width:100%; background-color: #f5bf2e; color:#ffffff;'>";
+            } else {
+                echo "<div style='height:40px; line-height: 40px;  width:100%;border-bottom:0px solid #999999;color:#999999;'>";
+            }
+            ?>
+            사용 내역 </div>
+    </a>
+</div>
+<div class="point_menu"> <a href="?sequence=2">
+        <?php
+        if ($sequence == 2) {
+            echo "<div style='height:40px; line-height: 40px;  width:100%; background-color: #f5bf2e; color:#ffffff;'>";
+        } else {
+            echo "<div style='height:40px; line-height: 40px;  width:100%;border-bottom:0px solid #999999;color:#999999;'>";
+        }
+        ?>
+        취소 내역 </div>
+</a>
+</div>
+</div>
+</div>
+<?php
+if ($sequence == 0) {
+    $total_purchase = 0;
+    $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'BUY';";
+    $select_result = mysql_query($select_sql);
+    for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+        $total_purchase += $result_datas->adding_point;
+    }
+    $total_accumulate = 0;
+    $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'ACCUMLATE';";
+    $select_result = mysql_query($select_sql);
+    for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+        $total_accumulate += $result_datas->adding_point;
+    }
+    $total_event = 0;
+    $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'EVENT';";
+    $select_result = mysql_query($select_sql);
+    for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+        $total_event += $result_datas->adding_point;
+    }
+    ?>
+    <div class="section_1">
+        <div class="point_title">총 적립 포인트</div>
+        <div class="s1_article">
+            <div width='100%'>
+                <div>
+                    <div class="article_title">구매 포인트 : </div>
+                    <div align='right'>
+                        <?= number_format($total_purchase) ?>
+                        점</div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="s1_article">
+            <div width='100%'>
+                <div>
+                    <div class="article_title">적립 포인트 : </div>
+                    <div align='right'>
+                        <?= number_format($total_accumulate) ?>
+                        점</div>
+                </div>
+            </div>
+        </div> -->
+        <div class="s1_article">
+            <div width='100%'>
+                <div>
+                    <div class="article_title">이벤트 포인트 : </div>
+                    <div align='right'>
+                        <?= number_format($total_event) ?>
+                        점</div>
+                </div>
+            </div>
+        </div>
+        <div class="article_wrap">
+            <div class="point_title">상세 내역</div>
+            <div class="s1_article">
+                <?php
+                    $select_sql = "select * from tb_point_history where customer_id = '" . $user_id . "' and type <> 'SPEND' order by update_time desc;";
+                    $select_result = mysql_query($select_sql);
+                    for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+                        $event_name = $result_datas->event_name;
+                        $type = $result_datas->type;
+                        $adding_point = $result_datas->adding_point;
+                        $payment_log_seq = $result_datas->payment_log_seq;
+                        $update_time = $result_datas->update_time;
+                        if ($type == 'EVENT') {
+                            ?>
+                        <div style="height:5px;"></div>
+                        <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> <b>
+                                <?= $update_time ?>
+                            </b> / EVENT<br>
+                            적립 :
+                            <?= number_format($adding_point) ?>
+                            점 </div>
+                    <?php
+                            // } else if ($type == 'ACCUMLATE') {
+                                ?>
+                        <!-- <div style="height:5px;"></div>
+                        <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> <b>
+                                <?= $update_time ?>
+                            </b> /
+                            <?php
+                                        $sql2 = "select ts.name from tb_payment_log tpl, tb_shop ts where tpl.payment_log_seq = '" . $payment_log_seq . "' and tpl.artist_id = ts.customer_id and tpl.and is_cancel = 0;";
+                                        $result2 = mysql_query($sql2);
+                                        if ($result_datas2 = mysql_fetch_object($result2)) {
+                                            echo $result_datas2->name;
+                                        } else {
+                                            echo "적립";
+                                        }
+                                        ?>
+                            <br>
+                            적립 :
+                            <?= number_format($adding_point) ?>
+                            점 </div> -->
+                    <?php
+                            } else if ($type == 'BUY') {
+                                ?>
+                        <div style="height:5px;"></div>
+                        <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> <b>
+                                <?= $update_time ?>
+                            </b> / 구매<br>
+                            적립 :
+                            <?= number_format($adding_point) ?>
+                            점 </div>
+                    <?php
+                            }
+                        }
+                        if ($ch_index == 0) {
+                            ?>
+                    <div style="height:5px;"></div>
+                    <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> 내역이 없습니다. </div>
+                <?php
+                    }
+                    ?>
+            </div>
+        </div>
+
+
+
+
+
+    <?php
+    } else if ($sequence == 1) {
+        $total_spend = 0;
+        $select_sql = 
+        "SELECT tph.spending_point 
+        FROM tb_point_history tph, tb_payment_log tpl 
+        WHERE tph.customer_id = '" . $user_id . "' 
+        AND tph.payment_log_seq = tpl.payment_log_seq
+        AND tpl.is_cancel = 0
+        AND type = 'SPEND';";
+        $select_result = mysql_query($select_sql);
+        for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+            $total_spend += $result_datas->spending_point;
+        }
+        ?>
+        <div class="section_2">
+            <div class="point_title" style="float:left;">총 사용포인트</div>
+            <div class="score">
+                <div width='100%'>
+                    <div>
+                        <div align='right'>
+                            <?= number_format($total_spend) ?>
+                            점</div>
+                    </div>
+                </div>
+            </div>
+            <div class="point_title" style="margin-top: 16px;">상세 내역</div>
+            <div class="s1_article">
+                <?php
+                    // $select_sql = "select tph.type, tph.update_time, tph.spending_point, tph.order_id, tpl.artist_id, tpl.total_price, ts.name from tb_point_history tph, tb_payment_log tpl, tb_shop ts where tph.customer_id = '".$user_id."' and (tph.type = 'SPEND' or tph.type = 'CANCEL') and tph.order_id = tpl.order_id and tpl.artist_id = ts.customer_id and tpl.is_cancel = 0 order by tpl.update_time desc;";
+                    $select_sql =
+                        "SELECT tph.type, tph.update_time, tph.spending_point, tpl.payment_log_seq, tpl.artist_id, tpl.total_price, ts.name 
+                    FROM tb_point_history tph, tb_payment_log tpl, tb_shop ts 
+                    WHERE tph.customer_id = '" . $user_id . "' 
+                    AND tph.type = 'SPEND' 
+                    AND tph.payment_log_seq = tpl.payment_log_seq 
+                    AND tpl.artist_id = ts.customer_id 
+                    AND tpl.is_cancel = 0 
+                    ORDER BY tpl.update_time DESC;";
+                    $select_result = mysql_query($select_sql);
+                    for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+                        $spending_point = $result_datas->spending_point;
+                        $payment_log_seq = $result_datas->payment_log_seq;
+                        $update_time = $result_datas->update_time;
+                        $artist_id = $result_datas->artist_id;
+                        $artist_name = $result_datas->name;
+                        $total_price = $result_datas->total_price;
+                        $type = $result_datas->type;
+                        ?>
+                    <div style="height:5px;"></div>
+                    <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> <b>
+                            <?= $update_time ?>
+                        </b> /
+                        <?= $artist_name ?>
+                        <br>
+                        <div width='100%' style="text-align:right"> 결제 예정금액 :
+                            <?= number_format($total_price) ?>
+                            원<br>
+                            사용 :
+                            <?= number_format($spending_point) ?>
+                            점<br>
+                            최종 결제금액 :
+                            <?= number_format($total_price - $spending_point) ?>
+                            원<br>
+                        </div>
+                    </div>
+                <?php
+                    }
+                    if ($ch_index == 0) {
+                        ?>
+                    <div style="height:5px;"></div>
+                    <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> 내역이 없습니다. </div>
+                <?php
+                    }
+                    ?>
+            </div>
+
+        </div>
+
+
+
+    <?php
+    } else {
+        $total_spend = 0;
+        $select_sql = "select spending_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'CANCEL';";
+        $select_result = mysql_query($select_sql);
+        for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+            $total_spend += $result_datas->spending_point;
+        }
+        ?>
+        <div class="section_2">
+            <div class="point_title" style="float:left;">총 취소 반환 포인트</div>
+            <div class="score">
+                <div>
+                    <div>
+                        <div align='right'>
+                            <?= number_format($total_spend) ?>
+                            점</div>
+                    </div>
+                </div>
+            </div>
+            <div class="point_title" style="margin-top: 16px;">상세 내역</div>
+            <div class="s1_article">
+                <?php
+                    $select_sql = "select * from tb_point_history where customer_id = '" . $user_id . "' and type = 'CANCEL' order by update_time desc;";
+                    $select_result = mysql_query($select_sql);
+                    for ($ch_index = 0; $result_datas = mysql_fetch_object($select_result); $ch_index++) {
+                        $spending_point = $result_datas->spending_point;
+                        $payment_log_seq = $result_datas->payment_log_seq;
+                        $update_time = $result_datas->update_time;
+                        $artist_id = $result_datas->artist_id;
+                        $artist_name = $result_datas->name;
+                        $total_price = $result_datas->total_price;
+                        $type = $result_datas->type;
+                        ?>
+                    <div style="height:5px;"></div>
+                    <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> <b>
+                            <?= $update_time ?>
+                        </b> <br>
+                        <div width='100%' style="text-align:right"> 취소 반환 포인트 :
+                            <?= number_format($spending_point) ?>
+                            점<br>
+                        </div>
+                    </div>
+                <?php
+                    }
+                    if ($ch_index == 0) {
+                        ?>
+                    <div style="height:5px;"></div>
+                    <div width='100%' style="font-size:13px;padding:5px;border:1px solid #999999;"> 내역이 없습니다. </div>
+                <?php
+                    }
+                    ?>
+            </div>
+        <?php
+        }
+        ?>
+        </div>
+    </div>
+
+    <?php
+    closeDB();
+    ?>
+    <?php include "../include/bottom.php"; ?>

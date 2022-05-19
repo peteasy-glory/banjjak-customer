@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<div class="page-tab">
+			<div class="page-tab-inner">
+				<!-- 활성화시 actived클래스 추가 -->
+				<div class="tab-cell actived"><a href="#" class="btn-tab-item"><span>키워드</span></a></div>
+				<div class="tab-cell"><a href="#" class="btn-tab-item"><span>지역</span></a></div>
+			</div>
+		</div>
+	</div>
+	<div class="header-right">
+		<a href="#" class="btn-page-ui btn-page-close"><div class="icon icon-size-24 icon-page-close">페이지 닫기</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<!-- 검색 영역 -->
+			<div class="basic-data-group basic-search-wrap">
+				<div class="search-info-txt">시, 구를 입력하여<br>다른 지역의 펫샵을 검색해 보세요</div>
+				<div class="input-wrap">
+					<div class="input-cell">
+						<div class="form-btns">
+							<input type="text" placeholder="예) 광명시 또는 동대문구">
+							<button type="button" class="btn-data-send btn-data-search"><span class="icon icon-size-24 icon-page-search">검색</span></button>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn-gps-set"><span class="icon icon-size-24 icon-gps-color"></span>내주변 설정</button>
+			</div>
+			<!-- //검색 영역 -->
+			<!-- 최근 검색 -->
+			<!-- 내용 없을 때 basic-data-group 클래스값의 태그 영역 전체 비노출 -->
+			<div class="basic-data-group">
+				<div class="con-title-group">
+					<div class="con-title">최근 검색</div>					
+				</div>
+				<div class="word-scroll-list">
+					<div class="horizontal-swiper-scoller margin auto">
+						<div class="scroller-inner">
+							<div class="word-item scroller-item"><div class="name">서울시 강남구</div><button type="button" class="btn-del">삭제</button></div>
+							<div class="word-item scroller-item"><div class="name">서울시 강남구</div><button type="button" class="btn-del">삭제</button></div>
+							<div class="word-item scroller-item"><div class="name">서울시 강남구</div><button type="button" class="btn-del">삭제</button></div>
+							<div class="word-item scroller-item"><div class="name">서울시 강남구</div><button type="button" class="btn-del">삭제</button></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //최근 검색 -->
+			<!-- 최근 본 샵 -->
+			<!-- 내용 없을 때 basic-data-group 클래스값의 태그 영역 전체 비노출 -->
+			<div class="basic-data-group">
+				<div class="con-title-group">
+					<div class="con-title">최근 본 샵</div>
+				</div>
+				<div class="horizontal-swiper-scoller">
+					<div class="scroller-inner">
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="scroller-item">
+							<a href="#" class="picture-item">
+								<div class="thumb"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>
+								<div class="info-wrap">
+									<div class="item-name">폴리파크 홍대점</div>
+									<div class="item-option-group">
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-distance">0.15km</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //최근 본 샵 -->
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

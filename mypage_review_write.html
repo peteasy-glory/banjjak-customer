@@ -1,0 +1,454 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
+
+$emoji = new TEmoji();
+
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
+$is_android = 0;
+if ($user_agent) {
+    if (strpos($user_agent, "APP_GOBEAUTY_AND") > 0) {
+        $is_android = 1;
+    }
+}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+$payment_log_seq = $_REQUEST['payment_log_seq'];
+$artist_id = $_REQUEST['artist_id'];
+$backurl = $_GET["backurl"];
+
+$memo = "";
+$update_time = "";
+$rating = 0;
+$sql = "select * from tb_usage_reviews where customer_id='" . $user_id . "' and payment_log_seq = '" . $payment_log_seq . "' and is_delete = 0;";
+$result = mysqli_query($connection,$sql);
+if ($rows = mysqli_fetch_object($result)) {
+    $memo = $emoji->emojiDBToStr($rows->review);
+    $rating = $rows->rating;
+    $update_time = $rows->update_time;
+    $review_images = $rows->review_images;
+}
+?>         
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_review_beauty_list" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">후기 작성</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<form id="container" action="mainpage/insert_usage_review.php" method="post">
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="review-write-wrap">
+				<div class="page-info-desc">귀여운 아이사진으로<br>생생한 이용후기를 전하세요</div>
+				<div class="review-write-form">
+                    <input type="hidden" name="payment_log_seq" value="<?= $payment_log_seq ?>">
+                    <input type="hidden" name="artist_id" value="<?= $artist_id ?>">
+                    <input type="hidden" name="review_images" id="review_images" value="<?= $review_images ?>">
+                    <input type="hidden" id="rating" class="rating" name="rating" value="<?= $rating ?>">
+					<div class="form-group">
+						<!--<div class="form-group-cell">
+							<div class="review-store-info">
+								<div class="item-name"><strong>후기 작성 후</strong><span class="item-date">2021.09.01</span></div>
+								<div class="item-info">알림톡테스트 / 말티, 푸들 / 전체미용 / ~6.9kg</div>
+							</div>
+						</div>-->
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">평점</div>
+								<div class="form-item-data type-5">
+									<div class="grade-select-group rating_wrap">
+										<button type="button" onclick="rating_star(1);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
+										<button type="button" onclick="rating_star(2);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
+										<button type="button" onclick="rating_star(3);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
+										<button type="button" onclick="rating_star(4);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
+										<button type="button" onclick="rating_star(5);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
+									</div>									
+								</div>
+							</div>
+						</div>
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">사진 등록</div>
+								<div class="form-item-data type-3">
+									<div class="picture-register-group">
+										<div class="list-inner review_img_view">
+											<!--<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>
+											<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>
+											<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>
+											<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>-->
+											<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>
+										</div>				
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">후기 작성</div>
+                                <div style="display:block;position:absolute;top:-50px"><input type="file" accept="image/*" name="imgupfile" id="addimgfile"></div>
+								<div class="form-item-data">
+									<textarea id="memo" class="form-control" name="memo"><?=$memo ?></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" id="submit" onclick="check_write();" class="btn-page-bottom disabled">저장하기</a>
+	</div>
+	<!-- //page-bottom -->
+</form>
+<!-- //container -->
+    <article id="delete_photo" class="layer-pop-wrap " style="z-index: 100000;">
+        <div class="layer-pop-parent">
+            <div class="layer-pop-children">
+                <div class="pop-data alert-pop-data">
+                    <div class="pop-body">
+                        <div class="msg-txt">해당 사진을 삭제하시겠습니까?</div>
+                    </div>
+                    <div class="pop-footer">
+                        <button type="button" id="delete_ok" class="btn btn-confirm" onclick="popalert.close();">저장</button>
+                        <button type="button" class="btn btn-confirm" onclick="popalert.close();">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+<script>
+    var rating_cnt = <?=$rating ?>;
+
+    $(document).ready(function(){
+
+       rating_star(rating_cnt);
+
+        if ($("#review_images").val() == "" || $("#review_images").val() == undefined) {
+        } else {
+            // console.log('----- $("#review_images").val() : ' + $("#review_images").val());
+            review_img_arr = $("#review_images").val().split('|');
+            // console.log('----- review_img_arr.length : ' + review_img_arr.length);
+            if (review_img_arr.length > 0) {
+                var review_img_output = "";
+                for (i = 0; i < review_img_arr.length; i++) {
+                    review_img_output += '<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img id="img_arr_' + i + '" src="https://image.banjjakpet.com' + img_link_change(review_img_arr[i]) + '" onclick="review_img_delete(' + i + ')"></div></div></div>';
+                }
+                review_img_output += '<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>';
+                $(".review_img_view").html(review_img_output);
+            }
+        }
+
+        //dvck=getDeviceCheck();
+        if (<?= $is_android ?> == 1) {
+            $(".fileuparea").hide();
+            $(".fileuparea2").show();
+        }
+    });
+
+
+    // 별점 매기기
+    function rating_star(cnt){
+        var html = '';
+        for(var i=0;i<5;i++){
+            if(i < cnt){
+                html += '<button type="button" onclick="rating_star('+(i+1)+');" class="btn-grade-select"><div class="icon icon-size-36 icon-star-on-yellow"></div></button>';
+            }else{
+                html += '<button type="button" onclick="rating_star('+(i+1)+');" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>';
+            }
+        }
+        $(".rating_wrap").html(html);
+        $("#rating").val(cnt);
+        if($("#memo").val() != ""){
+            $("#submit").removeClass('disabled');
+        }
+    }
+
+    $("#memo").keyup(function(){
+        if($("#rating").val() != 0){
+            $("#submit").removeClass('disabled');
+        }
+    });
+
+    // 리뷰 저장하기
+    var double_chk = "0";
+    function check_write() {
+        obj = document.reviewForm;
+        if ($('#memo').val().trim() == "") {
+            $('#firstRequestMsg1').find('.msg-txt').text('내용을 입력해주세요.');
+            pop.open('firstRequestMsg1');
+            return false;
+        }
+
+        if($('#rating').val() == "0" || $('#rating').val() == ""){
+            $('#firstRequestMsg1').find('.msg-txt').text('평점을 입력해주세요.');
+            pop.open('firstRequestMsg1');
+            return false;
+        }
+
+        var YokList = new Array('개새끼', '개색기', '개색끼', '개자식', '개보지', '개자지', '개년', '개걸래', '개걸레', '씨발', '씨팔', '씨부랄', '씨바랄', '씹창', '씹탱', '씹보지', '씹자지', '씨방세', '씨방새', '씨펄', '시펄', '십탱', '씨박', '썅', '쌍놈', '쌍넘', '싸가지', '쓰벌', '씁얼', '상넘이', '상놈의', '상놈이', '상놈을', '좆', '좃', '존나게', '존만한', '같은년', '넣을년', '버릴년', '부랄년', '바랄년', '미친년', '니기미', '니미씹', '니미씨', '니미럴', '니미랄', '호로', '후레아들', '호로새끼', '후레자식', '후래자식', '후라들년', '후라들넘', '빠구리', 'script', 'iframe', '병신', '보지', '자지', '씨.발', '졸라', '씹', '씹할');
+        var Tmp;
+        for (i = 0; i < YokList.length; i++) {
+            Tmp = $('#memo').val().toLowerCase().indexOf(YokList[i]);
+            if (Tmp >= 0) {
+                $('#firstRequestMsg1').find('.msg-txt').text('금지어가 포함되어있습니다.');
+                pop.open('firstRequestMsg1');
+                return false;
+            }
+        }
+
+        if(double_chk == "1"){
+            $('#firstRequestMsg1').find('.msg-txt').text('업로드중입니다.');
+            pop.open('firstRequestMsg1');
+            return false;
+        }
+
+        double_chk = "1";
+        document.getElementById('container').submit();
+        return true;
+    }
+
+    //////////////////// 사진등록 시작 /////////////////////////
+    $('#addimgfile').bind('change', function(e) {
+
+        var upload_chk = "0";
+        if(upload_chk == "0"){
+            upload_chk = "1";
+            var ext = $('#addimgfile').val().split('.').pop().toLowerCase();
+            if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                alert('gif,png,jpg,jpeg 파일만 업로드 할수 있습니다.');
+                return;
+            }
+
+            var filename = $("input[name=imgupfile]")[0].files[0].name;
+            var newfilename = GetPhotoFilename('usage_review_photo', '<?= $user_id ?>', filename);
+            var formData = new FormData();
+
+            formData.append("myfile", $("input[name=imgupfile]")[0].files[0]);
+            formData.append("filepath", newfilename);
+            formData.append("payment_log_seq", "<?= $payment_log_seq ?>");
+            formData.append("artist_id", "<?= $artist_id ?>");
+
+            $.ajax({
+                url: 'mainpage/upload_usages_review_photo.php',
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data) {
+                    if (/(MSIE|Trident)/.test(navigator.userAgent)) {
+                        // ie 일때 input[type=file] init.
+                        $("#addimgfile").replaceWith($("#addimgfile").clone(true));
+                    } else {
+                        // other browser 일때 input[type=file] init.
+                        $("#addimgfile").val("");
+                    }
+
+                    if ($("#review_images").val() == "" || $("#review_images").val() == undefined) {
+                        $("#review_images").val('<?= $upload_directory2 ?>' + '/' + newfilename);
+                    } else {
+                        $("#review_images").val($("#review_images").val() + '|' + '<?= $upload_directory2 ?>' + '/' + newfilename);
+                    }
+
+                    review_img_arr = $("#review_images").val().split('|');
+                    if (review_img_arr.length > 0) {
+
+                        var review_img_output = "";
+                        for (i = 0; i < review_img_arr.length; i++) {
+                            review_img_output += '<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img id="img_arr_' + i + '" src="' + review_img_arr[i] + '" onclick="review_img_delete(' + i + ')"></div></div></div>';
+                        }
+                        review_img_output += '<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>';
+                        $(".review_img_view").html(review_img_output);
+                        $(".review_img_view").show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // alert(error+"에러발생");
+                }
+            });
+
+        }else{
+                alert("사진파일 업로드 중입니다.");
+        }
+    });
+
+
+    function review_img_delete(idx){
+        $("#delete_ok").data('id',idx);
+        popalert.open('delete_photo');
+    }
+
+    $("#delete_ok").click(function(){
+        var review_img_view = "";
+        var replace_str = "";
+        var this_src = "";
+        var idx = $(this).data('id');
+        this_src = $("#img_arr_" + idx).attr("src");
+
+        $.ajax({
+            url: 'mainpage/delete_usages_review_photo.php',
+            data: {
+                'src': $("#img_arr_" + idx).attr("src"),
+                'payment_log_seq': '<?= $payment_log_seq ?>',
+                'artist_id': '<?= $artist_id ?>',
+                'user_id': '<?= $user_id ?>'
+            },
+            type: 'POST',
+            success: function(data) {
+                var RIA_length = 0;
+                review_img_view = $(".review_img_view").html();
+                replace_str = '<img id="img_arr_' + idx + '" src="' + this_src + '" onclick="review_img_delete(' + idx + ')">';
+                review_img_view = review_img_view.replace(replace_str, '');
+                review_img_output += '<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>';
+                $(".review_img_view").html(review_img_view);
+
+                var review_images_split = $("#review_images").val();
+                review_images_split = review_images_split.split('|');
+                RIA_length = review_images_split.length;
+
+                if (RIA_length > 1) {
+                    if (review_images_split[0] != this_src) {
+                        $("#review_images").val($("#review_images").val().replace('|' + this_src, ''));
+                    } else {
+                        $("#review_images").val($("#review_images").val().replace(this_src + '|', ''));
+                    }
+                } else {
+                    $("#review_images").val("");
+                }
+
+                if ($("#review_images").val() == "" || $("#review_images").val() == undefined) {
+                    $(".review_img_view").hide();
+                }
+            },
+            error: function(xhr, status, error) {}
+        });
+    });
+
+    function MemofocusNcursor() {
+        html = "<div id='upimgarea'></div>";
+        // document.getElementById('memo').focus();
+        var sel, range;
+        if (window.getSelection) {
+            // IE9 and non-IE
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+
+                // Range.createContextualFragment() would be useful here but is
+                // non-standard and not supported in all browsers (IE9, for one)
+                var el = document.createElement("div");
+                el.innerHTML = html;
+                var frag = document.createDocumentFragment(),
+                    node, lastNode;
+                while ((node = el.firstChild)) {
+                    lastNode = frag.appendChild(node);
+                }
+                range.insertNode(frag);
+
+                // Preserve the selection
+                if (lastNode) {
+                    range = range.cloneRange();
+                    range.setStartAfter(lastNode);
+                    range.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+        } else if (document.selection && document.selection.type != "Control") {
+            // IE < 9
+            document.selection.createRange().pasteHTML(html);
+        }
+        $("#addimgfile").trigger("click");
+    }
+
+    function galleryup() {
+        //alert("갤러리")
+        window.Android.openGallery();
+    }
+
+    function cameraup() {
+        //alert("카메라")
+        window.Android.openCamera();
+    }
+
+    //안드에서 업로드가 끝나면 무조건 호출..
+    function uploadEnd(fileName) {
+        $(".fileuparea2").hide();
+        $("#fileuplodingarea").show();
+
+        var newfilename = GetPhotoFilename('appupload_photo', '<?= $user_id ?>', fileName);
+        var post_data =
+            'filepath=' + fileName +
+            '&newfilepath=' + newfilename +
+            '&payment_log_seq=' + '<?= $payment_log_seq ?>' +
+            '&artist_id=' + '<?= $artist_id ?>';
+
+        $.ajax({
+            url: 'upload_usages_review_photo_byapp.php',
+            data: post_data,
+            type: 'POST',
+            success: function(data) {
+                $(".fileuparea2").show();
+                $("#fileuplodingarea").hide();
+                // alert(data)
+                //      return;
+                if (/(MSIE|Trident)/.test(navigator.userAgent)) {
+                    // ie 일때 input[type=file] init.
+                    $("#addimgfile").replaceWith($("#addimgfile").clone(true));
+                } else {
+                    // other browser 일때 input[type=file] init.
+                    $("#addimgfile").val("");
+                }
+
+                if ($("#review_images").val() == "" || $("#review_images").val() == undefined) {
+                    $("#review_images").val('<?= $upload_directory2 ?>' + '/' + newfilename);
+                } else {
+                    $("#review_images").val($("#review_images").val() + '|' + '<?= $upload_directory2 ?>' + '/' + newfilename);
+                }
+
+                review_img_arr = $("#review_images").val().split('|');
+                if (review_img_arr.length > 0) {
+
+                    var review_img_output = "";
+                    for (i = 0; i < review_img_arr.length; i++) {
+                        review_img_output += '<img id="img_arr_' + i + '" src="' + review_img_arr[i] + '" onclick="review_img_delete(' + i + ')">';
+                    }
+                    $(".review_img_view").html(review_img_output);
+                    $(".review_img_view").show();
+                }
+            },
+            error: function(xhr, status, error) {
+                //alert(error + "네트워크에러");
+                if(xhr.status != 0){
+                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                }
+            }
+        });
+    }
+
+    //////////////////// 사진등록 끝 /////////////////////////
+
+
+</script>
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

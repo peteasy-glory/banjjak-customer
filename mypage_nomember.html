@@ -1,0 +1,36 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>  
+
+<!-- header -->
+<header id="header">	
+	<h1 class="page-title">마이반짝</h1>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- mypage-nomember-main -->
+		<div class="mypage-nomember-main">
+			<div class="con-title-group">
+				<h3 class="con-title">로그인이 필요한 페이지입니다.</h3>
+			</div>	
+			<div class="basic-data-group middle">
+				<div class="btn-group vertical">
+					<div class="btn-group-cell"><a href="/login.html" class="btn btn-middle-size btn-round btn-yellow"><strong>로그인으로 이동하기</strong></a></div>
+					<div class="btn-group-cell"><a href="/mypage_nomember_inquiry" class="btn btn-middle-size btn-round btn-outline-gray"><strong>비회원 주문조회</strong></a></div>
+				</div>	
+			</div>
+		</div>
+		<!-- //mypage-nomember-main -->
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

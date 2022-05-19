@@ -1,0 +1,215 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$site = "customer.banjjakpet.com";
+$okurlgo = "https://$site/data/my_profile_phone.php";
+?>          
+            
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">휴대폰 번호 수정</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="form-group">
+
+                <div class="basic-data-group middle">
+                    <a href="/login/auto_cellphone_confirm.php?okurl=<?php echo $okurlgo?>" class="btn btn-outline-purple btn-middle-size btn-round">전화번호 인증</a>
+                </div>
+
+			</div>
+		</div>
+		<!-- //page-contents -->
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<!--<button id="phone_save_btn" onclick="onClickPhoneSave()" class="btn-page-bottom disabled" disabled>저장하기</button>-->
+	</div>
+	<!-- //page-bottom -->
+
+	<!-- 인증번호 발송완료 팝업 -->
+	<div id="confirmNumSend" class="toast-pop-wrap">
+		<div class="toast-pop-data">인증번호를 발송하였습니다.</div>
+	</div>
+	<!-- //인증번호 발송완료 팝업 -->
+
+	<!-- 인증번호 발송틀림 팝업 -->
+	<div id="confirmNumError" class="toast-pop-wrap red">
+		<div class="toast-pop-data">인증번호가 틀립니다.<br>다시 확인해 주세요.</div>
+	</div>
+	<!-- //인증번호 발송틀림 팝업 -->
+
+	<!-- 인증번호 완료 팝업 -->
+	<div id="confirmNumComplete" class="toast-pop-wrap">
+		<!-- 20211223 수정 -->
+		<div class="toast-pop-data">인증되었습니다.</div>
+		<!-- //20211223 수정 -->
+	</div>
+	<!-- //인증번호 완료 팝업 -->
+
+	<article id="mypageMainMsg2" class="layer-pop-wrap pop-data" style="z-index: 100002;">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">휴대폰번호 수정이 완료되었습니다.</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();	location.href = '/mypage_main';">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+
+</section>
+<!-- //container -->
+
+<script>
+	const state = {
+		phone: "",
+		authenticatedPhone : ""
+	}
+	
+	function checkphonenumber(phoneNumber) {
+		const regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+		if (!phoneNumber) {
+			popalert.open('firstRequestMsg1', '전화번호를 입력하세요.');
+			return false;
+		} 
+		
+		if (!regExp.test(phoneNumber)) {
+			popalert.open('firstRequestMsg1',"잘못된 전화번호입니다. 숫자, - 를 포함한 숫자만 입력하세요. 예) 050-XXXX-XXXX");
+			return false;
+		}
+		return true;
+	}
+    
+	function sendSms() {
+		const phoneInputElement = document.getElementById("phone_input");
+		state.phone = phoneInputElement.value;
+		const phone = state.phone;
+
+		InactivatePhoneSaveButton();
+
+		if (!(checkphonenumber(phone))) {
+				return
+		}
+
+
+		$.ajax({
+				type: "POST",
+				url: '/login/certification_sms.php',
+				data: "userphone=" + phone,
+				dataType: "JSON",
+				success: function(data) {
+					let message = "";
+
+					if (!data.sendsms) {
+						message = data.msg;	
+						popalert.open('firstRequestMsg1', message);
+
+						$("#authentication_number_btn").attr("disabled", true);
+					} else {
+						common.toastPopOpen('confirmNumSend');
+
+						$("#authentication_number_btn").attr("disabled", false);
+						$("#phone_send_btn").text("재전송");
+					}
+
+				},
+				error: function(xhr, status, error) {
+						alert(error + "에러발생");
+				}
+		});
+  }
+
+    
+	function confirmAuthenticationNumber() {
+		const gobeauty_2_check_cellphone = document.getElementById("authentication_number_input").value;
+		$.ajax({
+				type: "POST",
+				url: '/login/check_auth_number.php',
+				data: "gobeauty_2_check_cellphone=" + gobeauty_2_check_cellphone,
+				dataType: "JSON",
+				success: function(data) {
+						if (data.result == "true") {
+							successAuthentication();
+						} else {
+							failAuthentication();
+						}
+						// console.log(data);
+				},
+				error: function(xhr, status, error) {
+						alert(error + "에러발생");
+				}
+		});
+	}
+
+	function successAuthentication() {
+		state.authenticatedPhone = state.phone;
+		common.toastPopOpen('confirmNumComplete');
+
+		activatePhoneSaveButton();
+	}
+
+	function failAuthentication() {
+		common.toastPopOpen('confirmNumError');
+	}
+
+	function activatePhoneSaveButton() {
+		const saveButtonElement = document.getElementById('phone_save_btn');
+		saveButtonElement.disabled = false;
+
+		saveButtonElement.classList.remove("disabled");
+	}
+
+	function InactivatePhoneSaveButton() {
+		const saveButtonElement = document.getElementById('phone_save_btn');
+		saveButtonElement.disabled = true;
+
+		saveButtonElement.classList.add("disabled");
+	}
+
+
+	function onClickPhoneSave() {
+		updateCellPhone(state.authenticatedPhone);
+	}
+
+	function updateCellPhone(phone){
+
+		$.post("/data/my_profile_phone", { phone })
+			.done((response) => { 
+				const isSuccess = response == "true";
+
+				if (!isSuccess) {
+					alert("오류 발생");
+					return;
+				}
+
+				pop.open("mypageMainMsg2");
+			});
+	}
+
+</script>
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

@@ -1,0 +1,22 @@
+<?php include "../include/top.php"; ?>
+
+<?php include "mainpage_top_menu.php"; ?>
+<hr>
+<?php include "mainpage_swiper_image.php"; ?>
+<hr>
+<?php
+	if(!isset($_SESSION['gobeauty_user_id']) || !isset($_SESSION['gobeauty_user_nickname'])) {
+?>
+		<p>로그인을 해 주세요. <a href="<?=$root_directory?>/login/index.php">로그인</a></p>
+<?php
+	} else {
+		$user_id = $_SESSION['gobeauty_user_id'];
+		$user_name = $_SESSION['gobeauty_user_nickname'];
+?>
+		<p><strong><?=$user_name?></strong>(<?=$user_id?>)님 환영합니다. 
+		<a href="<?=$root_directory?>/login/logout_process.php">로그아웃</a></p>
+<?php
+	}
+?>
+
+<?php include "../include/bottom.php"; ?>

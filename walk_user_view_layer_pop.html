@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('blockAdd');"><em>차단 하기</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('blockRemove');"><em>차단해제 하기</em></button>
+	</div>
+	<!-- //page-body -->		
+	<!-- 차단 하기 -->
+	<article id="blockAdd" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-title">복실이맘</div>
+						<div class="msg-txt">해당 사용자를 차단하시겠습니까?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">차단하기</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //차단 하기 -->
+	<!-- 차단해제 하기 -->
+	<article id="blockRemove" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-title">복실이맘</div>
+						<div class="msg-txt">해당 사용자를 차단 해제하시겠습니까?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">차단 해제하기</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //차단해제 하기 -->
+</section>
+<!-- //container -->
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
+
+$emoji = new TEmoji();
+
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl1']);
+$_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
+
+if($user_id != ""){
+    $sql = "
+		SELECT *
+		FROM tb_customer
+		WHERE id = '".$user_id."'
+	";
+    $result = mysqli_query($connection, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $photo = ($row["photo"])? "https://image.banjjakpet.com".img_link_change($row["photo"]) : "static/pub/images/icon/icon-none-user.png";
+    $nickame = $row["nickname"];
+    $cellphone = $row["cellphone"];
+
+}
+
+$review_sql = "
+    SELECT a.payment_log_seq pls, CONCAT(a.year,'-', a.month,'-', a.day,' ', a.hour,':', a.minute) beauty_date, a.product, a.artist_id shop_id, b.*
+    FROM tb_payment_log a
+    LEFT JOIN tb_usage_reviews b ON b.payment_log_seq = a.payment_log_seq
+    WHERE a.customer_id = '".$user_id."'
+    AND a.is_cancel = '0'
+    AND a.worker IS NOT null
+    ORDER BY DATE_FORMAT(CONCAT(a.year,'-', a.month,'-', a.day,' ', a.hour,':', a.minute), '%Y-%m-%d %H:%i') desc
+";
+$total_reviews = sql_fetch_array($review_sql);
+?>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">내 후기 작성/변경</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="mypage-review-wrap">
+			<div class="wide-tab">
+				<div class="wide-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell actived"><a href="#" class="btn-tab-item">미용</a></div>
+					<div class="tab-cell"><a href="mypage_review_item_list" class="btn-tab-item">상품</a></div>
+				</div>
+			</div>
+			<div class="page-middle-banner">
+				<a href="shop_event?seq=9" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/best_review.png" alt=""/></a>
+				<div class="page-middle-banner-info">*포인트는 작성한 달의 다음달 초에 적립됩니다.</div>
+			</div>
+            <?php
+
+            if(count($total_reviews)>0){
+                foreach($total_reviews as $rs){
+                    $product = explode('|', $rs['product']);
+
+            ?>
+                    <!-- 내용이 있을 때 -->
+                    <div class="review-detail-list">
+                        <!-- 하나의 아이템 -->
+                        <div class="review-detail-cell">
+                            <div class="review-store-info">
+                                <div class="item-name"><strong><?php echo $product[2]; ?></strong><span class="item-date"><?php echo $rs['beauty_date'];?></span></div>
+                                <div class="item-info"><?php echo $product[0];?> / <?php echo $product[3];?> / <?php echo $product[4];?> / <?php echo "~".explode(':',$product[5])[0]."kg";?></div>
+                            <?php
+                            // 리뷰가 있을 경우
+                            if($rs['review_seq'] && $rs['is_delete']=='0'){
+                            ?>
+                            </div>
+                                <div class="comment-item">
+                                    <div class="item-user-info">
+                                        <div class="user-thumb-wrap">
+                                            <div class="user-thumb"><img src="<?php echo $photo; ?>" alt=""></div>
+                                        </div>
+                                        <div class="user-data">
+                                            <div class="data-inner">
+                                                <div class="user-name"><?php echo $nickame; ?></div>
+                                                <div class="user-grade">
+                                                    <div class="icon-star-group">
+                                                        <?php
+
+                                                        if ($rs['rating'] <= 1) {
+                                                            echo "<div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>";
+                                                        } else if ($rs['rating'] <= 2){
+                                                            echo "<div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>";
+                                                        } else if($rs['rating'] <= 3){
+                                                            echo "<div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>";
+                                                        } else if($rs['rating'] <= 4){
+                                                            echo "<div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-gray'></div>";
+                                                        } else{
+                                                            echo "<div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>
+                                                                    <div class='icon icon-size-16 icon-star-yellow'></div>";
+                                                        }
+
+                                                        ?>
+
+                                                    </div>
+                                                    <div class="time"><?php echo ($rs['update_time'])? $rs['update_time'] : $rs['reg_time']; ?></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    // 이용후기에 사진이 있을 경우
+                                    if($rs['review_images']){
+                                        $review_images = explode('|', $rs['review_images']);
+
+                                    ?>
+                                    <div class="item-gallery">
+                                        <div class="portfolio-list-wrap">
+                                            <div class="list-inner">
+                                                <?php
+                                                for($i=0;$i<count($review_images);$i++){
+                                                ?>
+                                                    <div class="list-cell"><div class="btn-portfolio-item"><img src="https://image.banjjakpet.com<?php echo img_link_change($review_images[$i]) ?>" alt=""></div></div>
+                                                <?php
+                                                }
+                                                ?>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    }
+                                    $review = nl2br($emoji->emojiDBToStr($rs['review']));
+                                    ?>
+                                    <div class="item-detail"><?php echo $review; ?></div>
+                                    <div class="basic-item basic-item-ui">
+                                        <button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
+                                        <div class="basic-item-ui-list">
+                                            <a href="mypage_review_write?artist_id=<?php echo $rs['shop_id']; ?>&payment_log_seq=<?php echo $rs['pls']; ?>" class="btn-basic-item-ui-item report_review">수정</a>
+                                            <a href="#" class="btn-basic-item-ui-item report_review" onclick="review_delete('<?php echo $rs['shop_id']; ?>', '<?php echo $rs['pls']; ?>');">삭제</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+                            // 샵의 후기 답글이 있을경우
+                            if($rs['artist_reply']){
+                            ?>
+                                <div class="recomment-list">
+                                    <div class="recomment-cell">
+                                        <div class="recomment-item">
+                                            <div class="user-thumb-wrap">
+                                                <div class="user-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+                                            </div>
+                                            <div class="recomment-data">
+                                                <div class="item-name"><?php echo $product[2]; ?><span class="date"><?php echo $rs['reply_time'] ?></span></div>
+                                                <div class="item-detail"><?php echo $rs['artist_reply']; ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                            </div>
+                        <?php
+                        // 리뷰 없을 경우
+                        }else{
+                        ?>
+                                <div class="item-btns"><a href="mypage_review_write?artist_id=<?php echo $rs['shop_id']; ?>&payment_log_seq=<?php echo $rs['pls']; ?>" class="btn btn-outline-purple btn-middle-size btn-border-radius-5"><em>후기작성</em></a></div>
+                            </div>
+                        <?php
+                        }
+                        ?>
+            <?php
+                }
+            }else{
+            ?>
+                <!-- 내용이 없을 때 -->
+                <div class="common-none-data">
+                    <div class="none-inner">
+                        <div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+                        <div class="item-info">이용내역이 없습니다.<span>서비스 이용 후 후기 작성이 가능합니다.</span></div>
+                    </div>
+                </div>
+                <!-- 내용이 없을 때 -->
+            <?php
+            }
+            ?>
+		</div>
+
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+    <article id="delete_pop" class="layer-pop-wrap " style="z-index: 100000;">
+        <div class="layer-pop-parent">
+            <div class="layer-pop-children">
+                <div class="pop-data alert-pop-data">
+                    <div class="pop-body">
+                        <div class="msg-txt">해당 후기를 삭제하시겠습니까?</div>
+                    </div>
+                    <div class="pop-footer">
+                        <button type="button" id="delete_ok" class="btn btn-confirm" onclick="popalert.close();">삭제</button>
+                        <button type="button" class="btn btn-confirm" onclick="popalert.close();">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+<script>
+
+    function review_delete(shop_id, seq){
+        $("#delete_ok").data('id',shop_id);
+        $("#delete_ok").data('seq',seq);
+        popalert.open('delete_pop');
+    }
+
+    $("#delete_ok").click(function(){
+        var payment_log_seq = $(this).data("seq");
+        var artist_id = $(this).data("id");
+
+        location.href = "mainpage/insert_usage_review.php?key=delete&payment_log_seq="+payment_log_seq+"&artist_id="+artist_id;
+
+    });
+</script>
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

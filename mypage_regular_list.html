@@ -1,0 +1,152 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl_reserve']);
+$_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
+
+?>          
+          
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">나의 단골 펫샵</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="user-regular-wrap">
+                                
+				<!-- 내용 있을 때 -->
+				<div class="user-regular-list">
+                    <?php
+                    $login_insert_sql = "select * from tb_like_artist tur, tb_shop ts where tur.customer_id = '" . $user_id . "' and tur.artist_id = ts.customer_id;";
+                    $result = mysqli_query($connection, $login_insert_sql);
+                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($result); $ch_index++) {
+                        $artist_id = $result_datas->artist_id;
+                        $update_time = $result_datas->update_time;
+                        $artist_name = $result_datas->name;
+                        $artist_photo = "https://image.banjjakpet.com".img_link_change($result_datas->photo);
+                        $introduction = str_replace("/", " ", $result_datas->self_introduction);
+
+						//var_dump($result_datas->photo);
+						//var_dump($artist_photo);
+						//exit();
+                
+                        $heart = new Heart();
+                        $is_like = $heart->is_like_artist($user_id, $artist_id);
+//                      print_r($result_datas);
+                        ?>
+					<div class="list-cell">
+						<div class="thema-gray-item">
+							<a href="reserve_view?artist_id=<?=$artist_id?>" class="basic-list-item store">
+								<div class="content-thumb small"><img src=<?= $artist_photo ?> alt=""></div>
+								<div class="info-wrap">
+									<div class="item-name"><?= $artist_name ?></div>
+									<div class="item-address"><?= $introduction ?></div>
+								</div>
+							</a>
+							<button type="button" class="btn-like-view <? echo (($is_like == 1)? "actived" :"") ?>" artist_id="<?= $artist_id ?>" is_on="1" id="like<?= $ch_index ?>">좋아요</button>
+						</div>
+					</div>
+                    <? } ?>
+				</div>
+				<!-- //내용 있을 때 -->			
+				<!-- 내용 없을 때 -->
+                <? if($ch_index == 0) { ?>
+				<div class="list-none-data">내용이 없습니다.</div>
+                <? } ?>
+				<!-- //내용 없을 때 -->
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<script>
+	$(document).ready(function(){
+		$(".btn-like-view").click(function(){
+			var artist_id = $(this).attr("artist_id");
+			var is_on = $(this).attr("is_on");
+			is_on = parseInt(is_on);
+
+			if(is_on == 0){
+				is_on = 1;
+			}else{
+				is_on = 0;
+			}
+
+			var id = $(this).attr("id");
+
+			console.log(artist_id);
+			console.log(is_on);
+			console.log(id);
+
+			//return ;
+
+			//ajax
+			$.ajax({
+				url: 'data/like_artist',
+				data: {
+					artist_id : artist_id,
+					is_on : is_on,
+					id : id,
+				},
+				type: 'POST',
+				dataType : "json",
+				success: function(data) {
+					if(data.ret == true){
+						//성공 시 로직
+						console.log(data);
+						//alert(data.msg);
+
+
+						$("#"+data.id).attr("is_on", is_on);
+						if(data.is_on == 1){
+							$("#"+data.id).addClass("actived");
+						}else{
+							$("#"+data.id).removeClass("actived");
+						}
+						
+
+						
+					}else{
+						//alert(data.msg);
+					}
+				},
+				error: function(xhr, status, error) {
+					alert(error + "에러발생");
+				}
+			});
+
+		});
+		
+	});
+</script>
+
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

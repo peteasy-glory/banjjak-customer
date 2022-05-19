@@ -1,0 +1,235 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$payment_log_seq = (isset($_GET['payment_log_seq']))? $_GET['payment_log_seq'] : "";
+//$payment_log_seq = '504382';
+if($payment_log_seq == ""){
+    ?>
+    <script>
+        alert("잘못된 접근입니다. 메인페이지로 이동합니다.");
+        location.href = "/";
+    </script>
+    <?php
+}
+
+$query = "SELECT * 
+            , SUBSTRING_INDEX(SUBSTRING_INDEX(product,'|',3),'|',-1) shopName
+        FROM tb_payment_log WHERE payment_log_seq = '{$payment_log_seq}'";
+$result = mysqli_query($connection,$query);
+$data = mysqli_fetch_object($result);
+
+$shop_query = "SELECT * FROM tb_request_artist WHERE customer_id = '{$data->artist_id}'";
+$shop_result = mysqli_query($connection,$shop_query);
+$shop_data = mysqli_fetch_object($shop_result);
+$is_got_offline_shop = $shop_data->is_got_offline_shop;
+$dec_phone = add_hyphen($shop_data->offline_shop_phonenumber,);
+$shop_address = $shop_data->offline_shop_address;
+
+$pay_data = json_decode($data->pay_data);
+$year = $data->year;
+$month = $data->month;
+$day = $data->day;
+$hour = $data->hour;
+$minute = $data->minute;
+$toMinute = $data->to_minute;
+$toHour = $data->to_hour;
+$is_cancel = $data->is_cancel;
+
+$product = $data->product;
+$product_info = explode('|',$product);
+
+$cellphone = $data->cellphone;
+$week_arr = ['일', '월', '화', '수', '목', '금', '토'];
+$reservationTime = strtotime("$year-$month-$day $hour:$minute");
+$startDate = date("Y년 m월 d일", $reservationTime);
+$startDate .= "(".$week_arr[date("w", $reservationTime)].") ";
+$startDate .= date("H시 i분", $reservationTime);
+
+$endDate = date("H시 i분", strtotime("$year-$month-$day $toHour:$toMinute"));
+
+$cancelTime = $data->cancel_time;
+$cancelTime = strtotime($cancelTime);
+
+$cancelDate = date("Y년 m월 d일", $cancelTime);
+$cancelDate .= "(".$week_arr[date("w", $cancelTime)].") ";
+$cancelDate .= date("H시 i분", $cancelTime);
+
+$pet_name = "";
+$pet_kind = "";
+$pet_type = "";
+$pet_year = "";
+$pet_month = "";
+$pet_day = "";
+$pet_gender = "";
+$pet_basic_service = "";
+
+$pet_weight = "";
+
+if ($pay_data != NULL) {
+    $pet_name = $pay_data->pet_name;
+    $pet_kind = $pay_data->pet_kind;
+    $pet_type = $pay_data->pet_type;
+    $pet_year = $pay_data->pet_year;
+    $pet_month = $pay_data->pet_month;
+    $pet_day = $pay_data->pet_day;
+    $pet_gender = $pay_data->pet_gender;
+    $pet_basic_service = $pay_data->pet_basic_service;
+
+    $pet_weight1 = $pay_data->pet_weight1;
+    $pet_weight2 = $pay_data->pet_weight2;
+
+    $pet_weight = floatval($pet_weight1 . "." . (($pet_weight2 != "" && $pet_weight2 != null) ? $pet_weight2 : "0"));
+}
+
+$artist_id = '';
+$artist_photo = "";
+$artist_sql = "select *, shop.photo as photo2 from tb_shop shop, tb_customer customer where shop.customer_id = '" . $data->artist_id . "' and shop.customer_id = customer.id;";
+$artist_result = mysqli_query($connection,$artist_sql);
+if ($artist_datas = mysqli_fetch_object($artist_result)) {
+    $artist_id = $artist_datas->customer_id;
+    $artist_photo = $artist_datas->photo2;
+    $is_vat = $artist_datas->is_vat;
+}
+
+$working_sql = "select * from tb_working_schedule tws, tb_regular_holiday trh where tws.customer_id = '" . $artist_id . "' and trh.customer_id = '" . $artist_id . "';";
+$working_result = mysqli_query($connection,$working_sql);
+if ($working_datas = mysqli_fetch_object($working_result)) {
+    $working_start = $working_datas->working_start;
+    $working_end = $working_datas->working_end;
+    $rest_public_holiday = $working_datas->rest_public_holiday;
+    $holiday = "";
+    if ($working_datas->is_monday) {
+        $holiday.= " 월요일";
+    }
+    if ($working_datas->is_tuesday) {
+        $holiday.= " 화요일";
+    }
+    if ($working_datas->is_wednesday) {
+        $holiday.= " 수요일";
+    }
+    if ($working_datas->is_thursday) {
+        $holiday.= " 목요일";
+    }
+    if ($working_datas->is_friday) {
+        $holiday.= " 금요일";
+    }
+    if ($working_datas->is_saturday) {
+        $holiday.= " 토요일";
+    }
+    if ($working_datas->is_sunday) {
+        $holiday.= " 일요일";
+    }
+    if (!$working_datas->is_monday && !$working_datas->is_tuesday && !$working_datas->is_wednesday && !$working_datas->is_thursday && !$working_datas->is_friday && !$working_datas->is_saturday && !$working_datas->is_sunday) {
+        $holiday= "없음";
+    }
+}
+
+
+?>
+
+
+    <!-- header -->
+    <header id="header">
+        <div class="header-left">
+            <!--<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>-->
+        </div>
+        <div class="page-title">예약 내용</div>
+    </header>
+    <!-- //header -->
+
+    <!-- container -->
+    <section id="container">
+        <!-- page-body -->
+        <div class="page-body">
+
+            <div class="user-reserve-view">
+
+                <!-- 예약 펫샵 및 일시 -->
+                <div class="view-data-group">
+                    <h5 class="con-title">예약 펫샵 및 일시</h5>
+                    <div class="simple-thumb-info">
+                        <div class="thumb-wrap">
+                            <div class="content-thumb small"><img src="https://image.banjjakpet.com<?= img_link_change($artist_photo) ?>" alt=""></div>
+                        </div>
+                        <div class="info-wrap">
+                            <div class="info-inner">
+                                <div class="item-title"><?php echo $data->shopName; ?></div>
+                                <div class="item-date"><?php echo $startDate; ?> ~ <?php echo $endDate ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- //예약 펫샵 및 일시 -->
+
+                <!-- 예약 내용 -->
+                <div class="view-data-group">
+                    <h5 class="con-title">예약 내용</h5>
+                    <div class="dot-text-list">
+                        <div class="list-cell"><?php echo $product_info[3]; ?></div>
+                        <div class="list-cell"><?php echo $product_info[4]; ?></div>
+                    </div>
+                </div>
+                <!-- //예약 내용 -->
+
+                <!-- 영업시간 및 연락처 -->
+                <div class="view-data-group">
+                    <h5 class="con-title">영업시간 및 연락처</h5>
+                    <div class="store-contact-data">
+                        <div class="txt-data">
+                            <div class="item-time">평일 : <?php echo $working_start; ?>:00 ~ <?php echo $working_end; ?>:00 / 정기휴일 : <?php echo $holiday ?></div>
+                            <div class="item-info">(자세한 영업시간은 예약화면에서 가능합니다)</div>
+                        </div>
+                        <a href="tel:<?php echo $dec_phone; ?>" class="btn-tel">전화하기</a>
+                    </div>
+                </div>
+                <!-- //영업시간 및 연락처 -->
+
+                <!-- 매장 위치 -->
+                <div class="view-data-group">
+                    <h5 class="con-title">매장 위치</h5>
+                    <a href="mypage_reserve_map?payment_log_seq=<?= $payment_log_seq ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="simple-thumb-info">
+                        <div class="thumb-wrap">
+                            <div class="content-thumb small" style="border:none;background:none;width:30px;position:relative;"><img src="/static/pub/images/icon/ic-24-top-location@2x.png" alt="" style="width:30px;height:30px;position:absolute;top:50%;transform:translateY(-50%);"></div>
+                        </div>
+                        <div class="info-wrap">
+                            <div class="info-inner">
+                                <div class="item-address">
+                                    <?= str_replace("|", "", strstr($shop_address, "|")) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- //매장 위치 -->
+
+            </div>
+
+            <div class="page-middle-banner">
+                <a href="#" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/petsofa_list.gif" alt=""/></a>
+            </div>
+
+            <div class="app-footer">
+                <div class="app-download">
+                    <div class="app-icon" style="border:none;"><img src="/static/pub/images/icon/icon-mobile-web-top-logo.png" alt=""/></div>
+                    <div class="device-icon">
+                        <a href="https://play.google.com/store/apps/details?id=m.kr.gobeauty" class="btn-aos"><img src="/static/pub/images/icon/badge-google@2x.png" alt="" width="135"/></a>
+                        <a href="https://apps.apple.com/kr/app/id1436568194" class="btn-ios"><img src="/static/pub/images/icon/badge-app@2x.png" alt="" width="135"/></a>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <div class="info-title">앱 스토어에서 “반짝’을 검색해주세요</div>
+                    <div class="info-txt"><em>반짝, 반려생활의 단짝</em>저희 입점샵을 이용해주셔서 감사합니다. 반짝 앱을 이용하시면 더욱 편하고 다양한 혜택을 누리실 수 있습니다. 감사합니다.</div>
+                </div>
+            </div>
+
+        </div>
+        <!-- //page-body -->
+    </section>
+    <!-- //container -->
+
+
+
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

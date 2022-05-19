@@ -1,0 +1,57 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>          
+            
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약하기</div>
+	<div class="reserve-state-bar">
+		<div class="bar" style="width:66.66%"></div>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="basic-data-group">				
+				<!-- 샵 이름 있을 때 -->
+				<div class="reserve-shop-name con-title-group line">
+					<h3 class="con-title">소망애견 미용실</h3>
+				</div>
+				<!-- //샵 이름 있을 때 -->
+				<div class="con-title-group">
+					<h4 class="con-title">미용선택</h4>
+				</div>
+				<div class="reserve-select-wrap">
+					<!-- 활성화시 actived클래스 추가 -->
+					<button type="button" class="btn-text-button btn-outline-purple actived">첫 예약이에요</button>
+					<button type="button" class="btn-text-button btn-outline-purple btn-before-beauty actived">지난 미용 불러올래요</button>
+				</div>
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<a href="#" class="btn-page-bottom">다음</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

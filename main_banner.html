@@ -1,0 +1,63 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>          
+          
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt">마포구</div></a>
+	</div>
+	<div class="header-right">
+		<a href="#" class="btn-page-ui btn-page-alarm"><div class="icon icon-size-24 icon-page-alarm">알람</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			... 메인 컨텐츠 ...
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<!-- 페이지 공통 배너 -->
+<!--
+// page-banner-wrap 클래스에 actived클래스 추가시 활성화
+-->
+<div class="page-banner-wrap actived">
+	<div class="page-banner-inner">
+		<div class="page-banner-data">
+			<div class="page-banner-slider">
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-page-banner-item"><img src="/static/pub/images/main_banner_sample.png" alt=""/></a></div></div>
+						<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-page-banner-item"><img src="/static/pub/images/main_banner_sample.png" alt=""/></a></div></div>
+						<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-page-banner-item"><img src="/static/pub/images/main_banner_sample.png" alt=""/></a></div></div>
+						<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-page-banner-item"><img src="/static/pub/images/main_banner_sample.png" alt=""/></a></div></div>
+					</div>
+				</div>
+				<div class="swiper-page"></div>
+				<button type="button" class="btn-swiper-slider-prev"></button>
+				<button type="button" class="btn-swiper-slider-next"></button>
+			</div>
+			<div class="page-common-footer">
+				<div class="week-none"><label class="form-checkbox"><input type="checkbox"><span class="form-check-icon"><em>7일간 안 볼래요!</em></span></label></div>
+				<button type="button" class="btn-close" onclick="$('.page-banner-wrap').removeClass('actived');">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- //페이지 공통 배너 -->
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

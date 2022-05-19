@@ -1,0 +1,47 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>      
+
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">아이디/비밀번호 찾기</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- member-find-wrap -->  
+		<div class="member-find-wrap">
+			<div class="wide-tab">
+				<div class="wide-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell"><a href="/find_id_1" class="btn-tab-item">아이디 찾기</a></div>
+					<div class="tab-cell actived"><a href="/find_pw_1" class="btn-tab-item">비밀번호 찾기</a></div>
+				</div>
+			</div>
+			<div class="member-find-data">
+				<div class="common-none-data">
+					<div class="none-inner">
+						<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+						<div class="item-info">인증하신 전화번호는 이미 탈퇴하신 고객입니다.<br><span class="font-color-black">재가입을 원하시면 고객센터(1661-9956)으로 연락 주세요.</span></div>					
+					</div>					
+				</div>
+			</div>
+		</div>
+		<!-- //member-find-wrap -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

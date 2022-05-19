@@ -1,0 +1,501 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+
+$r_top = (isset($_GET['top']))? $_GET['top'] : "";
+$r_middle = (isset($_GET['middle']))? $_GET['middle'] : "";
+$r_lat = (isset($_GET['lat']))? $_GET['lat'] : "";
+$r_lng = (isset($_GET['lng']))? $_GET['lng'] : "";
+$r_tab = (isset($_GET['tab']))? $_GET['tab'] : "";
+$r_selected_sort = (isset($_GET['selected_sort']))? $_GET['selected_sort'] : "강아지";
+$user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
+$user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
+
+// 빅 배너
+$banner_sql = "
+    SELECT a.mb_seq, a.link, b.file_path FROM tb_main_banner AS a
+    INNER JOIN tb_file AS b ON a.banner = b.f_seq
+    WHERE a.is_delete = '2' AND a.is_use = '1' AND a.type REGEXP '2' ORDER BY a.odr_3 ASC, a.reg_dt DESC
+";
+$banner_array = sql_fetch_array($banner_sql);
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl1']);
+$_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
+
+unset($_SESSION['backurl_reserve']);
+$_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
+
+?>
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="reserve_search_area" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-labels"><div class="label label-purple vvlarge border-radius-6"><?=$r_middle?></div></div>
+	<div class="header-right">
+		<a href="reserve_search_area" class="btn-page-ui btn-page-close"><div class="icon icon-size-24 icon-page-close">페이지 닫기</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents" id="page-contents">
+			<div class="reserve-area-result">
+				<!-- 검색결과 있을 때 -->
+				<div class="basic-data-group">
+					<!-- 빅배너 -->
+					<div class="main-big-banner">
+						<div class="swiper-list">
+							<div class="swiper-container">
+								<div class="swiper-wrapper">
+<!--									<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/14-banner-main@2x.png" alt=""/></a></div></div>-->
+<!--									<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/14-banner-main@2x.png" alt=""/></a></div></div>-->
+<!--									<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/14-banner-main@2x.png" alt=""/></a></div></div>-->
+<!--									<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/14-banner-main@2x.png" alt=""/></a></div></div>-->
+                                    <?php
+                                    if(count($banner_array)>0){
+                                        foreach($banner_array as $rs){
+                                            $path = explode(".", $rs['file_path']);
+                                            $path = $path[0]."_1.png";
+                                            ?>
+                                            <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"></a></div></div>-->
+                                            <div class="swiper-slide"><div class="slider-item"><a href="shop_event?seq=<?=$rs['mb_seq'] ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a></div></div>
+                                            <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
+                                            <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+								</div>
+							</div>
+							<div class="swiper-page"></div>
+						</div>
+					</div>
+					<!-- //빅배너 -->
+				</div>				
+				<div class="basic-data-group middle">
+					<div class="con-title-group">
+						<h4 class="con-title" id='con-title'>개의 검색결과</h4>
+					</div>
+					<div class="vertical-list-wrap line shop">
+						<div class="list-inner">
+						</div>
+					</div>
+				</div>
+				<!-- //검색결과 있을 때 -->
+				<!-- 검색결과 없고 근처매장 있을 때 -->
+				<div class="common-none-data">
+					<!-- <div class="none-inner">
+						<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+						<div class="item-info">검색결과가 없습니다.</div>
+						<div class="item-btns"><a href="#" class="btn btn-outline-purple btn-round">이전 페이지로 이동</a></div>
+					</div> -->
+				</div>
+
+				<!-- <div class="basic-data-group middle">
+					<div class="con-title-group">
+						<h4 class="con-title">15개의 고객님 근처 매장이 있습니다.</h4>
+					</div>
+					<div class="vertical-list-wrap line">
+						<div class="list-inner">
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt="">
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">소망애견 미용실</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<!-- 검색결과 없고 근처매장 있을 때 -->
+			</div>
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<script>
+	var tab = ("<?=$r_tab ?>" != "")? "<?=$r_tab ?>" : 1;
+	var r_top = "<?=$r_top ?>";
+	var r_middle = "<?=$r_middle ?>";
+	var r_lat = "<?=$r_lat ?>";
+	var r_lng = "<?=$r_lng ?>";
+
+	var this_page = 0;
+	var selected_sort = "<?=$r_selected_sort ?>";
+    var search_count = 0;
+
+    $(function() {
+        get_shop_list();
+    })
+
+    function get_customer(){
+		return new Promise(function(resolve, reject) {
+			$.ajax({
+				url: './mainpage/index_ajax.php',
+				data: {
+					mode : "get_customer",
+					customer_id : customer_id
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				beforeSend: function(){
+					$("#loading").css("display", "flex");
+				},
+				success: function(data) {
+					if(data.code == "000000"){
+						console.log(data.data);
+						is_artist = parseInt(data.data.is_artist);
+						is_android = parseInt(data.data.is_android);
+
+						resolve();
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.code);
+					}
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			});
+		});
+	}  
+    
+	function get_shop_list(){
+		return new Promise(function(resolve, reject) {
+			// $mainContent.find('.more_shop').remove();
+			console.log(this_page);
+
+			$.ajax({
+				url: 'data/index_ajax.php',
+				data: {
+					mode: "get_shop_list",
+					top: r_top,
+					middle: r_middle,
+					lat: r_lat,
+					lng: r_lng,
+					limit_0: this_page,
+					limit_1: 10,
+					shop_list: ''
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				async: false,
+				success: function(data) {
+					if(data.code == "000000"){
+						var idx = 0;
+						if(this_page == 0){
+							// $mainContent.append('<div class="shop_list_wrap"><div class="title"><span>미용/호텔 펫샵</span></div><ul class="shop_data"></ul></div>');
+						}
+
+						var p = $.when();
+						search_count = 0;
+						$.each(data.data, function(i, v){
+                            search_count++;
+							p = p.then(function(){
+								if(search_count == Object.keys(data.data).length){
+									resolve();
+								}
+                                console.log(v);
+								return get_main_contents(v);
+							});
+						});	
+                        document.getElementById('con-title').innerHTML = search_count + "개의 검색결과";
+                        
+                       if(search_count == 0){
+                            html = '';
+                            html += '<div class="none-inner">'
+                            html += '<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>'
+                            html += '<div class="item-info">검색결과가 없습니다.</div>'
+                            html += '<div class="item-btns"><a href="#" class="btn btn-outline-purple btn-round">이전 페이지로 이동</a></div>'
+                            html += '</div>'
+                            $(".common-none-data").append(html);
+                       }
+						resolve();
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.data);
+					}
+				},
+				complete: function(){
+                    console.log("get_shop_list complete");
+					// if(html_out != ""){
+					// 	$mainContent.find('.shop_list_wrap .shop_data').append('<div class="sub_title">출장가능 샵</div>');
+					// 	$mainContent.find('.shop_list_wrap .shop_data').append(html_out);
+					// }
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			});
+		});
+	}
+
+    function get_main_contents(list){
+		// console.log(list);
+		$.ajax({
+			url: 'data/index_ajax.php',
+			data: {
+				mode: "get_main_contents",
+				customer_id: list.dec_customer_id
+			},
+			type: 'POST',
+			dataType: 'JSON',
+			async: false,
+			success: function(data) {
+				if(data.code == "000000"){
+					console.log(data);
+                    var shop_address = (typeof data.data.shop_address != "undefined")? data.data.shop_address : "";
+                    var photo = "https://image.banjjakpet.com"+img_link_change(list[0].front_image);
+                    var rating = (list[0].rating_avg > 0)? list[0].rating_avg : 0;
+                    var cnt_rating = (list[0].rating_cnt > 0)? list[0].rating_cnt : 0;
+					var tag_list = (data.data.total_service && data.data.total_service.indexOf(',') != -1)? data.data.total_service.split(',') : [data.data.total_service];
+                    var html = '';
+                    html += '<div class="list-cell">'
+                    html +=     '<a href="reserve_view?artist_id='+list.dec_customer_id+'" class="basic-list-item">'
+                    html +=         '<div class="thumb">'
+                    // html +=            '<div class="thumb-label"><div class="label label-pink">당일예약</div></div>'
+                    html +=            '<img src="'+photo+'" alt="">'
+                    html +=        '</div>'
+                    html +=        '<div class="info-wrap">'
+                    html +=            '<div class="item-name">'+list[0].name+'</div>'
+                    html +=            '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'+Math.round(rating)+'</em>('+cnt_rating+')</div>'
+                    html +=            '<div class="item-address">'+shop_address+'</div>'
+                    html +=            '<div class="item-cate">'
+                    for(var _i = 0; _i < tag_list.length; _i++){
+						html += ' ' + tag_list[_i];
+					}
+                    html +=            '</div>'
+                    html +=            '<div class="item-option-group">'
+                    html +=                '<div class="group-inner">'
+                    // html +=                    '<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>'
+                    // html +=                    '<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>'
+                    // html +=                    '<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>'
+                    html +=                     '<div class="tag-item">'+list.workDate.working_start+':00-'+list.workDate.working_end+':00</div>';
+                    html +=                     '<div class="tag-item">'+list.workDate.working_day+'</div>';
+                    html +=                 '</div>'
+                    html +=            '</div>'
+                    html +=        '</div>'
+                    html +=    '</a>'
+                    html += '</div>'
+                    $("#page-contents").find(".vertical-list-wrap .list-inner").append(html);
+
+					                    
+
+				}else{
+					alert(data.data+"("+data.code+")");
+					console.log(data.data);
+				}
+			},
+			error: function(xhr, status, error) {
+				//alert(error + "네트워크에러");
+				if(xhr.status != 0){
+					alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+				}
+			}
+		});
+	}
+    
+</script>
+
+<?
+	//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

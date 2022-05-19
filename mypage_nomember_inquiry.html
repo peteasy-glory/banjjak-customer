@@ -1,0 +1,44 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>  
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">상품 결제 내역</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- mypage-nomember-inquiry -->  
+		<div class="mypage-nomember-inquiry">
+			<div class="form-group">
+				<div class="form-group-cell">
+					<!-- 오류시 valid-error 클래스 추가 -->
+					<div class="form-group-item valid-error">
+						<div class="form-item-label">비회원 주문번호</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" placeholder="입력">
+						</div>
+						<div style="display:block">
+							<div class="form-input-valid font-color-error">주문번호를 다시 확인해주세요.</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- //mypage-nomember-inquiry -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

@@ -1,0 +1,50 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>            
+             
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약 및 취소 내역</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="user-reserve-wrap">
+			<div class="wide-tab">
+				<div class="wide-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell"><a href="#" class="btn-tab-item">예약 내역</a></div>
+					<div class="tab-cell actived"><a href="#" class="btn-tab-item">취소 내역</a></div>
+				</div>
+			</div>
+			<!-- 내용이 있을 때 -->
+			<!-- //내용이 있을 때 -->
+			<!-- 내용이 없을 때 -->
+			<div class="common-none-data">
+				<div class="none-inner">
+					<!-- 20211110 수정 : 이미지명 및 속성 수정 -->
+					<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+					<div class="item-info">취소 내역이 없습니다.</span></div>
+				</div>
+			</div>
+		   <!-- //내용이 없을 때 -->
+		</div>
+
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

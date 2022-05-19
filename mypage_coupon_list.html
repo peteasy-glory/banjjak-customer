@@ -1,0 +1,244 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+
+//보유 쿠폰
+$coupon_query = "SELECT uc.*, c.name FROM tb_user_coupon uc 
+                LEFT OUTER JOIN tb_coupon c ON c.coupon_seq = uc.coupon_seq
+                WHERE uc.customer_id = '{$user_id}' AND uc.given > 0 AND uc.del_yn = 'N'";
+$coupon_result = mysqli_query($connection, $coupon_query);
+
+$coupon_list = array();
+while ($coupon_data = mysqli_fetch_object($coupon_result)) {
+    $coupon_list[] = $coupon_data;
+}
+
+//쿠폰 이력
+$history_query = "SELECT 
+                c.name as coupon_name
+                , DATE_FORMAT(CONCAT(pl.year,'-',pl.month,'-',pl.day,' ',pl.hour,':',IFNULL(pl.minute,'00'),':00'),'%Y-%m-%d %H:%i') as reservation_date
+                , ch.amount as amount
+                , ch.balance as balance
+                , pl.buy_time as use_date
+                , (SELECT nicname FROM tb_artist_list WHERE `name`= pl.worker GROUP BY `name`) as nickname
+                , pl.cancel_time as cancel_date
+                , pl.is_cancel as is_cancel
+                , (SELECT buy_time FROM tb_payment_log WHERE payment_log_seq = uc.payment_log_seq) as buy_date
+                , (SELECT name FROM tb_shop WHERE customer_id = uc.artist_id) as shop_name
+                , pl.product as product
+                , pl.cellphone as cellphone
+            FROM tb_coupon_history ch 
+            LEFT OUTER JOIN tb_payment_log pl ON pl.payment_log_seq = ch.payment_log_seq
+            LEFT OUTER JOIN tb_coupon c ON c.coupon_seq = ch.coupon_seq
+            LEFT OUTER JOIN tb_user_coupon uc ON uc.user_coupon_seq = ch.user_coupon_seq
+            WHERE ch.customer_id = '{$user_id}' AND ch.type = 'U'
+            ORDER BY ch.date DESC";
+$history_result = mysqli_query($connection, $history_query);
+
+$history_array = array();
+while ($history_data = mysqli_fetch_object($history_result)) {
+    $product = $history_data->product;
+    $product_arr = explode("|", $product);
+
+    //펫 이름
+    $pet_name = $product_arr[0];
+
+    //전화번호
+    $cellphone = $history_data->cellphone;
+
+    //펫 정보
+    $tmp_user_sql = "SELECT * FROM tb_tmp_user WHERE cellphone = '{$cellphone}'";
+    $tmp_user_result = mysqli_query($connection, $tmp_user_sql);
+    $tmp_user_data = mysqli_fetch_object($tmp_user_result);
+    $tmp_user_cnt = mysqli_num_rows($tmp_user_result);
+
+    $crypto = new Crypto();
+    $cellphone_encode = $crypto->encode($cellphone, $access_key, $secret_key);
+
+    $customer_query = "SELECT * FROM tb_customer WHERE cellphone = '{$cellphone_encode}'";
+    $customer_result = mysqli_query($connection, $customer_query);
+    $search_data = mysqli_fetch_object($customer_result);
+
+    $user_id = $search_data->id;
+    $pet_data = null;
+    if ($user_id != null && $user_id != "") {
+        //정회원일 때
+        $pet_list_sql = "SELECT * FROM tb_mypet WHERE customer_id = '{$user_id}' AND tmp_yn = 'N' AND name = '{$pet_name}' LIMIT 1";
+        $pet_result = mysqli_query($connection, $pet_list_sql);
+        $pet_data = mysqli_fetch_object($pet_result);
+    } else if ($tmp_user_cnt > 0) {
+        //가회원일 때
+        $pet_list_sql = "SELECT * FROM tb_mypet WHERE tmp_seq = '{$tmp_user_data->tmp_seq}' AND tmp_yn = 'Y' AND name = '{$pet_name}' LIMIT 1";
+        $pet_result = mysqli_query($connection, $pet_list_sql);
+        $pet_data = mysqli_fetch_object($pet_result);
+    }
+
+    if ($pet_data != null && isset($pet_data)) {
+        $pet_type = $pet_data->type;
+
+        if ($pet_type == "dog") {
+            //미용 내역
+            $history_data->product_name = explode(":", $product_arr[4])[0];
+            //추가 내역
+            $history_data->add_product = explode(":", $product_arr[6])[0];
+        } else {
+            //미용 내역
+            $history_data->product_name = $product_arr[3];
+            //추가 내역
+            $history_data->add_product = explode(":", $product_arr[5])[0];
+        }
+    }
+
+    $history_array[] = $history_data;
+}
+
+?>
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">구매 쿠폰</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="mypage-coupon-wrap">
+				<div class="con-title-group">
+					<h3 class="con-title">보유한 쿠폰</h3>
+				</div>
+
+				
+				<div class="user-coupon-list vertical-last-line-list">
+                    <? foreach ($coupon_list as $index => $coupon) { ?>
+					<div class="list-cell">
+						<div class="value-list-item">
+							<div class="item-title"><?= $coupon->name ?></div>
+							<div class="item-value"><strong class="font-color-purple">
+                                <?
+                                echo (($coupon->type == "F") ? "￦" : "");
+                                echo number_format($coupon->given);
+                                echo (($coupon->type == "C") ? "회" : "");
+                                ?>
+                            </strong></div>
+						</div>
+					</div>
+                    <? } ?>
+				</div>
+
+				<!--
+				<div class="user-coupon-list vertical-last-line-list">
+					<div class="list-cell">
+						<div class="value-list-item">
+							<div class="item-title">월 목욕 중형견</div>
+							<div class="item-value"><strong class="font-color-purple">5회</strong></div>
+						</div>
+					</div>
+					<div class="list-cell">
+						<div class="value-list-item">
+							<div class="item-title">미용 정액권</div>
+							<div class="item-value"><strong class="font-color-purple">₩ 43,000</strong></div>
+						</div>
+					</div>
+				</div>
+				-->
+
+				<div class="basic-data-group small">
+					<div class="detail-table-list">
+						<div class="list-header">
+							<div class="list-row">
+								<div class="item-header" style="width:30%">쿠폰명</div>
+								<div class="item-header" style="width:30%">사용일시</div>
+								<div class="item-header" style="width:20%">차감</div>
+								<div class="item-header" style="width:20%">보유</div>
+							</div>
+						</div>
+						<div class="list-body">
+                            <div class="list-row"></div>
+                            <? if(count($history_array) > 0) {  ?>	
+                                <!-- 리스트 있을 때 -->
+								<div class="coupon-detail-view">
+                                <?    
+                                $before_date = "";
+                                foreach ($history_array as $key => $history) {
+                                    $coupon_name = $history->coupon_name;
+                                    $use_date = date("j일 H:i", strtotime($history->use_date));
+                                    $amount = number_format(intval($history->amount));
+                                    $balance = number_format(intval($history->balance));
+                                    $pet_name = $history->pet_name;
+                                    $reservation_date = date("y.n.j H:i", strtotime($history->reservation_date));
+                                    $nickname = $history->nickname;
+                                    $add_product = $history->add_product;
+                                    $cancel_date = ($history->is_cancel == 1) ? date("y.n.j H:i", strtotime($history->cancel_time)) : "";
+                                    $buy_date = date("y.n.j H:i", strtotime($history->buy_date));
+                                    $shop_name = $history->shop_name;
+
+                                    $prefix = "";
+                                    if ($amount > 0) {
+                                        $prefix = "+";
+                                    }
+                    
+                                    $use_date_group = date("y년 m월", strtotime($history->use_date));
+                                    if ($before_date != $use_date_group) {
+                                    ?>													
+									<div class="detail-date"><?= $use_date_group ?></div>
+                                    <? } ?>
+                                    <div class="detail-list-row">
+                                        <div class="item-body justify-content-start" style="width:30%"><?= $coupon_name ?></div>
+                                        <div class="item-body justify-content-start" style="width:30%"><?= $use_date ?></div>
+                                        <div class="item-body justify-content-end" style="width:20%"><?= $prefix . $amount ?></div>
+                                        <div class="item-body justify-content-end" style="width:20%"><?= $balance ?></div>
+                                    </div>
+                                <? } ?>
+								</div>
+								<!-- //리스트 있을 때 -->
+							
+                            <? } else { ?>
+                                <!-- 리스트 없을 때 -->
+								<div class="coupon-detail-view">
+									<div class="detail-date"></div>
+									<div class="common-none-data">
+										<div class="none-inner">
+											<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
+											<div class="item-info">결제 내역이 없습니다.</div>
+										</div>
+									</div>
+								</div>
+								<!-- //리스트 없을 때 -->
+                            <? } ?>
+                            </div>
+						</div>
+					</div>
+				</div>
+				
+			
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

@@ -1,0 +1,124 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+?>          
+           
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">포인트</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="mypage-point-wrap">
+				<div class="user-point-data">
+                    <?php
+                    $point = new Point;
+                    $result = $point->select_point($user_id);
+                    $curPoint = 0;
+                    if ($result == true) {
+                        $curPoint = $point->get_point();
+                    }
+                    ?>
+					<div class="item-title">현재 포인트<a href="#" class="btn btn-outline-purple btn-round btn-inline btn-charge"><em>충전하기</em></a></div>
+					<div class="item-value"><?= number_format($curPoint) ?>P</div>
+				</div>
+				<div class="wide-tab">
+					<div class="wide-tab-inner">
+						<!-- 활성화시 actived클래스 추가 -->
+						<div class="tab-cell"><a href="mypage_point_save_list" class="btn-tab-item">적립 내역</a></div>
+						<div class="tab-cell"><a href="mypage_point_use_list" class="btn-tab-item">사용 내역</a></div>
+						<div class="tab-cell actived"><a href="#" class="btn-tab-item">취소 내역</a></div>
+					</div>
+				</div>
+				
+				<!-- 포인트 리스트 -->
+				<div class="user-point-list">
+                    <?
+                    $total_spend = 0;
+                    $select_sql = "select spending_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'CANCEL';";
+                    $select_result = mysqli_query($connection, $select_sql);
+                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                        $total_spend += $result_datas->spending_point;
+                    }
+                    ?>
+					<div class="user-point-list-item total">
+						<div class="item-title">총 취소 반환 포인트</div>
+						<div class="item-value"><?= number_format($total_spend) ?>P</div>
+					</div>		
+				</div>
+				<!-- //포인트 리스트 -->
+
+				<div class="user-detail-list">
+					<div class="con-title-group">
+						<h5 class="con-title">상세내역</h5>
+					</div>
+					<div>
+						<!-- 리스트 내용 있을 때 -->
+						<div class="point-detail-list">
+                            <?
+                            $select_sql = "select * from tb_point_history where customer_id = '" . $user_id . "' and type = 'CANCEL' order by update_time desc;";
+                            //print_r("* 아래라인 때문에 에러");
+                            $select_result = mysqli_query($connection, $select_sql);
+                            for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                                $spending_point = $result_datas->spending_point;
+                                $payment_log_seq = $result_datas->payment_log_seq;
+                                $update_time = $result_datas->update_time;
+                                $artist_id = $result_datas->artist_id;
+                                $artist_name = $result_datas->name;
+                                $total_price = $result_datas->total_price;
+                                $type = $result_datas->type;
+
+								if ($type == 'EVENT') {
+									$title = "구매 취소";
+								}
+                            ?>
+							<div class="point-detail-item">
+								<div class="item-title"><?= $title ?></div>
+								<div class="item-date"><?= $update_time ?></div>
+								<div class="item-value"><?= number_format($total_price) ?>P</div>
+							</div>
+							<? } ?>
+						</div>
+						<!-- //리스트 내용 있을 때 -->
+						<!-- 리스트 내용 없을 때 -->
+                        <!-- <? if($ch_index == 0) { ?>  -->
+						<div class="none-simple-data">내역이 없습니다.</div>
+                        <!-- <? } ?> -->
+						<!-- //리스트 내용 없을 때 -->
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

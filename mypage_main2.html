@@ -1,0 +1,99 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>          
+                        
+
+<!-- header -->
+<header id="header">	
+	<!-- page-title 클래스의 태그가 div일 경우 가운데 정렬 , h1일 경우 왼쪽 정렬 -->
+	<h1 class="page-title">마이반짝</h1>
+	<div class="header-right">
+		<a href="#" class="btn-page-ui btn-page-search"><div class="icon icon-size-24 icon-page-search">검색</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">		
+		<!--
+		// user-main-info클래스에 actived클래스 추가시 수정 활성화
+		-->
+		<div class="user-main-info actived">
+			<div class="info-item-wrap">
+				<div class="thumb-data">
+					<!-- 20211121 수정 -->
+					<div class="user-thumb large"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+					<!-- //20211121 수정 끝 -->
+					<button type="button" class="btn-picture-modify">사진편집</button>
+				</div>
+				<div class="txt-data">
+					<div class="txt-data-inner">
+						<!-- 20211121 수정 -->
+						<div class="user-info-view">
+							<div class="user-name">슈퍼 빅파파<button type="button" class="btn-ui btn-user-modify" onclick="$('.user-main-info').addClass('actived');">닉네임수정</button></div>
+							<div class="user-mail">username@petesasy.kr</div>
+							<div class="user-phone">01012341234<a href="#"  class="btn-ui btn-user-modify">폰번호 수정</a></div>
+						</div>
+						<div class="user-info-modify">
+							<div class="form-group">
+								<div class="form-group-cell">
+									<div class="form-group-item">
+										<div class="form-item-label">닉네임</div>
+										<div class="form-item-data">
+											<div class="form-control-btns">
+												<input type="text" class="form-control" placeholder="placeholder">											
+												<button type="button" class="btn btn-outline-black btn-round btn-inline align-self-end">완료</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<button type="button" class="btn-data-close" onclick="$('.user-main-info').removeClass('actived');"><div class="icon icon-size-24 icon-page-close"></div></button>
+						</div>
+						<!-- //20211121 수정 끝 -->
+					</div>
+				</div>
+			</div>
+			<div class="info-list-wrap">
+				<div class="list-cell"><a href="#"><div class="title">포인트</div><div class="value">3,000</div></a></div>
+				<div class="list-cell"><a href="#"><div class="title">쿠폰</div><div class="value">3</div></a></div>
+				<div class="list-cell"><a href="#"><div class="title">단골</div><div class="value">24</div></a></div>
+				<div class="list-cell"><a href="#"><div class="title">후기</div><div class="value">20</div></a></div>
+			</div>
+		</div>
+		<div class="user-main-pet-list">
+			<div class="con-title-group">
+				<h4 class="con-title">등록한 펫</h4>
+			</div>
+			<div class="user-pet-list-wrap">
+				<div class="list-inner">
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item add"><div class="icons"></div><div class="txt">추가</div></a></div>
+				</div>				
+			</div>
+		</div>
+		<div class="single-btns-list">
+			<!-- 20211025 수정 : 아이콘들 추가 -->
+			<div class="list-cell"><a href="#" class="btn-single-item large"><div class="icon icon-size-20 icon-document-small-black"></div><div class="txt">이용상담내역</div></a></div>
+			<div class="list-cell"><a href="#" class="btn-single-item large"><div class="icon icon-size-20 icon-check-small-black"></div><div class="txt">예약내역</div></a></div>
+			<div class="list-cell"><a href="#" class="btn-single-item large"><div class="icon icon-size-20 icon-card-small-black"></div><div class="txt">상품결제내역</div></a></div>
+			<div class="list-cell"><a href="#" class="btn-single-item large"><div class="icon icon-size-20 icon-chat-small-black"></div><div class="txt">문의하기</div></a></div>
+			<div class="list-cell"><a href="#" class="btn-single-item large"><div class="icon icon-size-20 icon-set-small-black"></div><div class="txt">상세 설정</div></a></div>
+		</div>
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

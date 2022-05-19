@@ -1,0 +1,79 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>            
+         
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">1:1 문의하기</div>
+
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="inquiry-input-wrap">
+			<div class="form-group">
+
+				<div class="form-group-cell">
+					<div class="form-group-item">
+						<div class="form-item-label">문의 유형</div>
+						<div class="form-item-data type-3">
+							<div class="form-check-group">
+								<div class="form-check-inner">
+									<div class="check-cell"><label class="form-radiobox" for="inquiryType1"><input type="radio" id="inquiryType1" name="inquiryType"><span class="form-check-icon"><em>오류/장애</em></span></label></div>
+									<div class="check-cell"><label class="form-radiobox" for="inquiryType2"><input type="radio" id="inquiryType2" name="inquiryType"><span class="form-check-icon"><em>예약/결제</em></span></label></div>
+									<div class="check-cell"><label class="form-radiobox" for="inquiryType3"><input type="radio" id="inquiryType3" name="inquiryType"><span class="form-check-icon"><em>기타</em></span></label></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-cell">
+					<div class="form-group-item">
+						<div class="form-item-label">제목</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" placeholder="">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-cell">
+					<div class="form-group-item">
+						<div class="form-item-label">문의 내용</div>
+						<div class="form-item-data">
+							<textarea class="form-control"></textarea>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+	</div>
+	<!-- //page-body -->
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom">문의 접수</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

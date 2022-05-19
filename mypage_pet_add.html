@@ -1,0 +1,460 @@
+<?
+
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$user_id = $_SESSION['gobeauty_user_id'];
+//$mypet_name = $_REQUEST['mypet_name'];
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$pet_seq = isset($_GET["pet_seq"])? $_GET["pet_seq"] : "";
+
+
+
+$p_type = "";
+$p_pet_type = "";
+$p_pet_type2 = "";
+$p_year = "";
+$p_month = "";
+$p_day = "";
+$p_gender = "";
+$p_weight = "";
+$p_neutral = 0;
+
+
+
+if($pet_seq) {
+    $pet_sql = "select * from tb_mypet where customer_id = '" . $user_id . "' and pet_seq = '" . $pet_seq . "';";
+    $pet_result = mysqli_query($connection, $pet_sql);
+
+    if ($pet_rows = mysqli_fetch_object($pet_result)) {
+        $p_type = $pet_rows->type;
+        $mypet_name = $pet_rows->name;
+        $p_pet_type = $pet_rows->pet_type;
+        $p_pet_type2 = $pet_rows->pet_type2;
+        $p_year = $pet_rows->year;
+        $p_month = $pet_rows->month;
+        $p_day = $pet_rows->day;
+        $p_gender = $pet_rows->gender;
+        $p_weight = $pet_rows->weight;
+		$p_neutral = $pet_rows->neutral;
+        $p_beauty =  $pet_rows->beauty_exp;
+        $p_vaccination =  $pet_rows->vaccination;
+        $p_luxation =  $pet_rows->luxation;
+        $p_bite =  $pet_rows->bite;
+    }
+}
+
+//var_dump($p_gender);
+
+?>         
+            
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_pet_list" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">펫 추가하기</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="user-pet-add">
+			<form class="form-group" id="next_form" method="POST">
+                <input type="hidden" name="pet_seq" value="<?=$pet_seq?>">
+				<div class="form-group-cell">
+					<div class="form-group-item">
+						<div class="form-item-label">펫 이름</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" placeholder="펫 이름 입력" name="mypet_name" id="mypet_name" value="<?= $mypet_name ?>">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-cell">
+					<div class="form-group-item">
+						<div class="form-item-label">품종</div>
+						<div class="form-item-data type-2">
+							<div class="pet-breed-select">
+								<div class="breed-select">
+									<label class="form-toggle-box" for="breed1"><input type="radio" name="pet_kind" id="pet_dog" value="dog" onclick="get_pet_type_list();" <?php
+                                        if (!$p_type || $p_type == "dog") {
+                                            echo "checked";
+                                        }
+                                        ?>  ><em><span>강아지</span></em></label>
+									<label class="form-toggle-box" for="breed2"><input type="radio" name="pet_kind" id="pet_cat" value="cat" onclick="get_pet_type_list();" <?php
+                                        if ($p_type == "cat") {
+                                            echo "checked";
+                                        }
+                                        ?> ><em><span>고양이</span></em></label>
+								</div>
+								<!-- 강아지 -->
+								<div style="display:block">
+                                    <select name="mypet_type" id="mypet_type" ></select><br>
+                                    <input style="display:none;" type="text" placeholder="품종입력" name="mypet_type2" id="mypet_type2" value="<?= $p_pet_type2 ?>">
+								</div>
+								<!-- //강아지 -->
+								<!-- 고양이 -->
+								<div style="display:none">
+									<select>
+										<option value="">고양이</option>
+									</select>
+								</div>
+								<!-- //고양이 -->
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group-cell pup" style="display:block;">
+					<div class="form-group-item">
+						<div class="form-item-label">생일</div>
+						<div class="form-item-data type-2">
+							<div class="grid-layout margin-12">
+								<div class="grid-layout-inner">
+									<div class="grid-layout-cell grid-3">
+										<select name="mypet_b_year" id="mypet_b_year" >
+                                            <?php
+                                            for ($i = intval(date("Y")); $i > intval(date("Y")) - 40; $i--) {
+                                                echo "<option value='$i'";
+                                                if ($i == intval($p_year)) {
+                                                    echo "selected";
+                                                }
+                                                echo ">$i 년</option>";  
+                                            }
+                                            ?>
+										</select>
+									</div>
+									<div class="grid-layout-cell grid-3">
+										<select name="mypet_b_month" id="mypet_b_month" >
+											<?php
+                                            for ($i = 1; $i < 13; $i++) {
+                                                echo "<option value='$i'";
+                                                if ($i == intval($p_month)) {
+                                                    echo "selected";
+                                                }
+                                                echo ">$i 월</option>";
+                                            }
+                                            ?>
+										</select>
+									</div>
+									<div class="grid-layout-cell grid-3">
+										<select name="mypet_b_day" id="mypet_b_day">
+                                            <?php
+                                            for ($i = 1; $i < 32; $i++) {
+                                                echo "<option value='$i'";
+                                                if ($i == intval($p_day)) {
+                                                    echo "selected";
+                                                }
+                                                echo ">$i 일</option>";
+                                            }
+                                            ?>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-cell pup" style="display:block;">
+					<div class="form-group-item">
+						<div class="form-item-label">성별 선택</div>
+						<div class="form-item-data type-2">
+							<div class="grid-layout toggle-button-group">
+								<div class="grid-layout-inner">
+									<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="gender1"><input type="radio" name="gender" id="gender1" value="남아" <? if($p_gender == "남아"){ echo("checked"); } ?> ><em>남아</em></label></div>
+									<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="gender2"><input type="radio" name="gender" id="gender2" value="여아" <? if($p_gender == "여아"){ echo("checked"); } ?>><em>여아</em></label></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-cell pup" style="display:block;">
+					<div class="form-group-item">
+						<div class="form-item-label">중성화</div>
+						<div class="form-item-data type-2">
+							<div class="grid-layout toggle-button-group">
+								<div class="grid-layout-inner">
+									<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="neutralize1"><input type="radio" name="neutralize" id="neutralize1" value="0" <? if($p_neutral == 0){ echo("checked"); } ?> ><em>X</em></label></div>
+									<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="neutralize2"><input type="radio" name="neutralize" id="neutralize2" value="1" <? if($p_neutral == 1){ echo("checked"); } ?> ><em>O</em></label></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group-cell pup" style="display:block;">
+					<div class="form-group-item">
+						<div class="form-item-label">몸무게</div>
+                        <?php
+                        $p_w1 = "";
+                        $p_w2 = "";
+                        if ($p_weight) {
+                            $array_w = explode(".", $p_weight);
+                            $p_w1 = $array_w[0];
+                            $p_w2 = $array_w[1];
+                        }
+                        ?>
+						<div class="form-item-data type-2">
+							<div class="form-flex">
+								<select class="inline-block"  name="mypet_weight1" id="mypet_weight1">
+									<?php
+                                    for ($i = 0; $i < 51; $i++) {
+                                        echo "<option value='$i'";
+                                        if ($i == intval($p_w1)) {
+                                            echo "selected";
+                                        }
+                                        echo ">$i</option>";
+                                    }
+                                    ?>
+								</select>
+								<div class="form-unit-point">.</div>
+								<select class="inline-block" name="mypet_weight2" id="mypet_weight2">
+									<?php
+                                    for ($i = 0; $i < 10; $i++) {
+                                        echo "<option value='$i'";
+                                        if ($i == intval($p_w2)) {
+                                            echo "selected";
+                                        }
+                                        echo ">$i</option>";
+                                    }
+                                    ?>
+								</select>
+								<div class="form-unit-label">kg</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 20220111 수정 : 입력필드 추가 -->
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">미용 경험</div>
+						<div class="form-item-data type-2">
+							<select id="beauty_exp" name="beauty_exp">
+								<option value="0">선택</option>
+								<option value="없음">없음</option>
+								<option value="1회">1회</option>
+								<option value="2회">2회</option>
+								<option value="3회">3회 이상</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">예방 접종</div>
+						<div class="form-item-data type-2">
+							<select id="vaccination" name="vaccination">
+								<option value="0">선택</option>
+								<option value="2차">2차 이하</option>
+								<option value="3차">3차 완료</option>
+								<option value="4차">4차 완료</option>
+								<option value="5차">5차 완료</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">입질</div>
+						<div class="form-item-data type-2">
+							<select id="bite" name="bite">
+								<option value="0">선택</option>
+								<option value="안해요">안해요</option>
+								<option value="해요">해요</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">슬개골 탈구</div>
+						<div class="form-item-data type-2">
+							<select id="luxation" name="luxation">
+								<option value="0">선택</option>
+								<option value="없음">없음</option>
+								<option value="1기">1기</option>
+								<option value="2기">2기</option>
+								<option value="3기">3기</option>
+								<option value="4기">4기</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">특이사항</div>
+						<div class="form-item-data type-2">
+							<div class="grid-layout toggle-button-group">
+								<div class="grid-layout-inner">
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special1"><input type="checkbox" name="special" id="special1"><em>피부병</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special2"><input type="checkbox" name="special" id="special2"><em>심장질환</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special3"><input type="checkbox" name="special" id="special3"><em>마킹</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special3"><input type="checkbox" name="special" id="special3"><em>마운팅</em></label></div>
+									<div class="grid-layout-cell grid-1">
+										<input type="text" class="form-control" placeholder="메모를 입력해주세요">											
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //20220111 수정 -->
+
+			</form>
+		</div>
+
+
+	</div>
+	<!-- //page-body -->
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom" onclick="check_all();">마이 펫 프로필 저장</a>
+	</div>
+	<!-- //page-bottom -->	
+    <script>
+
+        $(document).ready(function(){
+            $("#beauty_exp").val("<?=$p_beauty?>").prop("selected",true);
+            $("#vaccination").val("<?=$p_vaccination?>").prop("selected",true);
+            $("#bite").val("<?=$p_bite?>").prop("selected",true);
+            $("#luxation").val("<?=$p_luxation?>").prop("selected",true);
+        })
+
+        function get_pet_type_list() {
+            var pet_kind = $('input[name="pet_kind"]:checked').val();
+            var post_data = 'pet_type=' + pet_kind;
+
+            $.ajax({
+                url: '/data/get_pet_type.php',
+                data: post_data,
+                type: 'POST',
+                success: function(data) {
+                    var array_middle = data.split(",");
+                    var select = document.getElementById('mypet_type');
+                    select.options.length = 0; // clear out existing items
+                    for (var i = 0; i < array_middle.length; i++) {
+                        var d = array_middle[i];
+                        d = $.trim(d);
+                        select.options.add(new Option(d, d));
+                        if (d == '<?= trim($p_pet_type) ?>') {
+                            $("#mypet_type").val(d.trim()).prop("selected", true);
+                        }
+
+                    }
+                    document.getElementById("mypet_type2").value = "";
+                    document.getElementById("mypet_type2").style.display = "none";
+                    //$("#middle_region").val().prop("selected", true);
+                },
+                error: function(xhr, status, error) {}
+            });
+        }
+        get_pet_type_list();
+
+        var select = document.getElementById('mypet_type');
+        select.addEventListener('change', function(e) {
+            if (select.value.trim() == "기타") {
+                document.getElementById("mypet_type2").style.display = "block";
+            } else {
+                document.getElementById("mypet_type2").value = "";
+                document.getElementById("mypet_type2").style.display = "none";
+            }
+        });
+
+        function check_all() {
+            if (!$('#mypet_name').val()) {
+                alert("이름을 입력해주세요.");
+                // $.MessageBox({
+                //     buttonDone: "확인",
+                //     message: "이름을 입력해주세요."
+                // }).done(function() {
+                //     // $('#mypet_name').focus();
+                // });
+                return;
+            } else if (select.value.trim() == "기타") {
+                if (!$('#mypet_type2').val()) {
+                    alert("품종을 입력해주세요.");
+                    // $.MessageBox({
+                    //     buttonDone: "확인",
+                    //     message: "품종을 입력해주세요."
+                    // }).done(function() {});
+                    return;
+                }
+            } else if ($('#gender1').is(":checked") == false && $('#gender2').is(":checked") == false) {
+                alert("성별을 선택하세요.");
+                // $.MessageBox({
+                //     buttonDone: "확인",
+                //     message: "성별을 선택하세요."
+                // }).done(function() {});
+                return;
+            } else if ($('#neutralize1').is(":checked") == false && $('#neutralize2').is(":checked") == false) {
+                alert("중성화 여부를 선택하세요.");
+                // $.MessageBox({
+                //     buttonDone: "확인",
+                //     message: "중성화 여부를 선택하세요."
+                // }).done(function() {});
+                return;
+            } else if ($('#mypet_weight1').val() == '0' && $('#mypet_weight2').val() == '0') {
+                alert("몸무게를 바르게 선택하세요.");
+                // $.MessageBox({
+                //     buttonDone: "확인",
+                //     message: "몸무게를 바르게 선택하세요."
+                // }).done(function() {});
+                return;
+            } 
+            else if ($('#beauty_exp').val() == "" || $('#beauty_exp').val() == "0") {
+                    alert("미용 경험을 선택해주세요.");
+                return;
+            } else if ($('#vaccination').val() == "" || $('#vaccination').val() == "0") {
+                    alert("예방 접종을 선택해주세요.");
+                return;
+            } else if ($('#bite').val() == "" || $('#bite').val() == "0") {
+                    alert("입질 여부를 선택해주세요.");
+                return;
+            } else if ($('#luxation').val() == "" || $('#luxation').val() == "0") {
+                    alert("탈구 여부를 선택해주세요.");
+                return;
+            }
+
+            // $("#loading").show();
+            $.ajax({
+
+                url: "/data/save_mypet.php",
+                type: 'POST',
+                dataType: 'JSON',
+                data: $("#next_form").serialize(),
+                success: function(data) {
+                    console.log("save_mypet success ", data);
+                    location.href = "mypage_pet_list";
+                    
+                },
+                error: function(xhr, status) {
+                    console.log("save_mypet failed");
+                    location.href = "mypage_pet_list";
+                }
+            });
+        }
+
+
+    </script>
+</section>
+<!-- //container -->
+
+	
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

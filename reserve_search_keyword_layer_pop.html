@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<div class="page-tab">
+			<div class="page-tab-inner">
+				<!-- 활성화시 actived클래스 추가 -->
+				<div class="tab-cell actived"><a href="#" class="btn-tab-item"><span>키워드</span></a></div>
+				<div class="tab-cell"><a href="#" class="btn-tab-item"><span>지역</span></a></div>
+			</div>
+		</div>
+	</div>
+	<div class="header-right">
+		<a href="#" class="btn-page-ui btn-page-close"><div class="icon icon-size-24 icon-page-close">페이지 닫기</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('locationConfirm');"><em>위치 확인</em></button>
+	</div>
+	<!-- //page-body -->	
+	
+	<!--  내위치 -->
+	<article id="locationConfirm" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">고객님의 위치가 마포구로 확인되었습니다.<br>검색하시겠습니까?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //내위치 -->
+
+</section>
+<!-- //container -->
+
+<script src="/static/pub/js/jquery-ui.min.js"></script>
+<script src="/static/pub/js/jquery.ui.touch-punch.min.js"></script>
+<script>
+$(function(){
+	$( "#slider-range" ).slider({
+		range: 'min',
+		value : 0,
+		min: 1,
+		max: 30,
+		step : 1,
+		slide: function( event, ui ) {
+			$('#slider-value').html(ui.value);
+		//설정된 최소 , 최대값 가져오기
+		//$( "#range-min" ).html(ui.values[ 0 ] + "%");
+		//$( "#range-max" ).html(ui.values[ 1 ] + "%");
+		}
+	});
+});
+</script>
+
+</body>
+</html>

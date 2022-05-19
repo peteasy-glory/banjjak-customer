@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">산책하기</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<div class="page-contents">
+			<button type="button" class="btn btn-purple" onclick="common.toastPopOpen('walkSave');"><em>적립</em></button>
+			<button type="button" class="btn btn-purple" onclick="common.toastPopOpen('walkMission');"><em>미션</em></button>
+		</div>
+	</div>
+	<!-- //page-body -->	
+
+	<!-- 적립 완료 팝업 -->
+	<div id="walkSave" class="toast-pop-wrap">
+		<div class="toast-pop-data"><div>3포인트 적립이 완료되었습니다.</div><div class="font-color-yellow">획득한 산책 적립금 : 3P</div></div>
+	</div>
+	<!-- //적립 완료 팝업 -->
+
+	<!-- 미션 완료 팝업 -->
+	<div id="walkMission" class="toast-pop-wrap">
+		<div class="toast-pop-data"><div>30분 미션 클리어!<br>60포인트 적립이 완료되었습니다.</div><div class="font-color-yellow">획득한 산책 적립금 : 120p</div></div>
+	</div>
+	<!-- //미션 완료 팝업 -->
+
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

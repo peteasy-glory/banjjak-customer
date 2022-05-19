@@ -1,0 +1,99 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>          
+     
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">포인트 충전하기</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			
+			<div class="mypage-point-wrap">
+				<div class="point-charge-select">				
+					<div class="select-cell"><label class="form-toggle-box" for="pointCharge1"><input type="radio" name="pointCharge" class="rp" id="pointCharge1" point="30000"><em>3만원 충전</em></label></div>
+					<div class="select-cell"><label class="form-toggle-box" for="pointCharge2"><input type="radio" name="pointCharge" class="rp" id="pointCharge2" point="50000"><em>5만원 충전</em></label></div>
+					<div class="select-cell"><label class="form-toggle-box" for="pointCharge3"><input type="radio" name="pointCharge" class="rp" id="pointCharge3" point="100000"><em>10만원 충전</em></label></div>
+					<div class="select-cell"><label class="form-toggle-box" for="pointCharge4"><input type="radio" name="pointCharge" class="rp" id="pointCharge4" point="200000"><em>20만원 충전</em></label></div>
+					<div class="select-cell"><label class="form-toggle-box" for="pointCharge5"><input type="radio" name="pointCharge" class="rp" id="pointCharge5" point="300000"><em>30만원 충전</em></label></div>
+					<div class="select-cell"><label class="form-toggle-box" for="pointCharge6"><input type="radio" name="pointCharge" class="rp" id="pointCharge6" point="500000"><em>50만원 충전</em></label></div>
+				</div>
+
+				<div class="point-charge-state">
+					<?php
+						$point = new Point;
+						$result = $point->select_point($user_id);
+						$curPoint = 0;
+						if ($result == true) {
+							$curPoint = $point->get_point();
+						}
+                    ?>
+
+					<div class="point-charge-state-item"><div class="item-title">현재 포인트</div><div class="item-value"><?= number_format($curPoint) ?>P</div></div>
+					<div class="point-charge-state-item font-color-purple"><div class="item-title">충전 포인트</div><div class="item-value" id="add_point">0P</div></div>
+					<div class="point-charge-state-item total"><div class="item-title">충전 후 포인트</div><div class="item-value" id="after_point">0P</div></div>
+				</div>
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom">결제하기</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+<script>
+	$(".rp").click(function(){
+		var point = <?= $curPoint ?>;
+		point = parseInt(point);
+	
+		//선태 포인트
+		var add_point = $(this).attr("point");
+		add_point = parseInt(add_point);
+		console.log(add_point);
+
+		//충전 포인트
+		sp = intToStringNumber(add_point) + "P";
+		$("#add_point").html(sp);
+
+		//충전 후 포인트
+		var after_point = point + add_point;
+		after_point = parseInt(after_point);
+		sp = intToStringNumber(after_point) + "P";
+		$("#after_point").html(sp);
+	});
+
+	//숫자에 3자리 마다 콤마 넣기
+	function intToStringNumber(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+	//3자리 마다 콤마 숫자 문자열을 숫자로
+	function stringNumberToInt(stringNumber){
+		return parseInt(stringNumber.replace(/,/g , ''));
+	}
+</script>
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

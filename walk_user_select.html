@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- container -->
+<section id="container"> 
+	<div class="walk-map-wrap">
+		<div class="map-user-wrap">
+			<div class="map-user-card">
+				<div class="user-info-data">
+					<div class="thumb-wrap">
+						<div class="user-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+					</div>
+					<div class="info-wrap">
+						<div class="info-inner">
+							<div class="item-name"><div class="name"><div class="ellipsis">픽몬테스트픽몬테스트픽몬테스트</div></div><div class="age">(31세 / 남)</div></div>
+							<div class="item-info">푸들 / 5세 / 중성화 O 푸들 / 5세 / 중성화 O 푸들 / 5세 / 중성화 O</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="map" class="walk-map-area">지도 영역</div>
+		<button type="button" class="btn-map-gps">gps 켜기</button>
+		<div id="mapDisplay" class="record-display map-display">
+			<div class="state-item">
+				<div class="state-item-value">0</div>
+				<div class="state-item-label">P</div>
+			</div>
+			<div class="state-item">
+				<div class="state-item-value">0</div>
+				<div class="state-item-label">Km</div>
+			</div>
+			<div class="state-item">
+				<div class="state-item-value">00:00</div>
+				<div class="state-item-label">분</div>
+			</div>
+		</div>
+		<div id="mapController" class="map-controller actived">
+			<button type="button" id="btnMapController"><span class="icon icon-handler"></span>컨트롤러 토글버튼</button>
+			<div class="record-display controller-display">
+				<div class="state-item">
+					<div class="state-item-value">0</div>
+					<div class="state-item-label">P</div>
+				</div>
+				<div class="state-item">
+					<div class="state-item-value">0</div>
+					<div class="state-item-label">Km</div>
+				</div>
+				<div class="state-item">
+					<div class="state-item-value">00:00</div>
+					<div class="state-item-label">분</div>
+				</div>
+			</div>
+			<div class="map-controller-btns">
+				<!-- 
+				//	각 버튼에 actived클래스 추가시 활성화
+				//  각 버튼에 hide클래스 추가시 비활성화
+				// 각 버튼에 diasbled속성 추가시 사용불가
+				-->
+				<button type="button" id="btnMapControllerDefeccate" class="btn-control-nav" disabled>
+					<span class="icon icon-defecate-off off"></span>
+					<span class="icon icon-defecate-on on"></span>
+					배변버튼
+				</button>
+				<button type="button" id="btnMapControllerPause" class="btn-control-nav actived" disabled>
+					<span class="icon icon-walk-pause-off off"></span>
+					<span class="icon icon-walk-pause-on on"></span>
+					정지버튼
+				</button>
+				<button type="button" id="btnMapControllerPlay" class="btn-control-nav hide" disabled>
+					<span class="icon icon-walk-play-on"></span>
+					재생버튼
+				</button>
+				<button type="button" id="btnMapControllerCapture" class="btn-control-nav" disabled>
+					<span class="icon icon-capture-off off"></span>
+					<span class="icon icon-capture-on on"></span>
+					캡쳐버튼
+				</button>
+			</div>
+			<div class="map-controller-action">
+				<!-- 각 버튼에 actived클래스 추가시 활성화 -->
+				<button type="button" class="btn btn-middle btn-yellow btn-round actived">산책 시작</button>
+				<button type="button" class="btn btn-middle btn-purple btn-round">산책 종료</button>
+			</div>
+			<div class="page-middle-banner">
+				<a href="#" class="btn-banner-item"><img src="/static/pub/images/mypage_banner.png" alt=""></a>
+			</div>
+		</div>
+	</div>
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<div class="common-navigation">
+			<!--
+				btn-navigation-item 클래스에 actived클래스 추가시 활성화
+			-->
+			<a href="#" class="btn-navigation-item navigation-1"><div class="icon"></div><div class="txt">홈</div></a>
+			<a href="#" class="btn-navigation-item navigation-2"><div class="icon"></div><div class="txt">예약</div></a>
+			<a href="#" class="btn-navigation-item navigation-3"><div class="icon"></div><div class="txt">쇼핑</div></a>
+			<a href="#" class="btn-navigation-item navigation-4 actived"><div class="icon"></div><div class="txt">산책</div></a>
+			<a href="#" class="btn-navigation-item navigation-5"><div class="icon"></div><div class="txt">마이반짝</div></a>
+		</div>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

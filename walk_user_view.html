@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title"><div class="user-top-name">복실이맘</div><div class="user-block-state">차단된 사용자</div></div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="walk-user-view">
+				<div class="user-data-wrap basic-item">
+					<div class="user-info-data">
+						<div class="thumb-wrap">
+							<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+						</div>
+						<div class="info-wrap">
+							<div class="info-inner">
+								<div class="item-name"><div class="name"><div class="ellipsis">픽몬테스트픽몬테스트픽몬테스트</div></div><div class="age">(31세 / 남)</div></div>
+								<div class="item-info">
+									<div class="option">
+										<div class="ellipsis">푸들 / 5세 / 중성화 O 푸들 / 5세 / 중성화 O 푸들 / 5세 / 중성화 O</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="info-ui">
+							<button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
+							<div class="basic-item-ui-list">
+								<a href="#" class="btn-basic-item-ui-item">신고하기</a>
+								<a href="#" class="btn-basic-item-ui-item">차단하기</a>
+								<a href="#" class="btn-basic-item-ui-item">차단 해제하기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="user-pet-list-wrap">
+					<div class="list-inner">
+						<!-- btn-user-pet-item 클래스에 actived클래스 추가시 활성화 -->
+						<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이</div></a></div>
+						<div class="list-cell"><a href="#" class="btn-user-pet-item actived"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이</div></a></div>
+						<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이</div></a></div>
+					</div>				
+				</div>
+				<div class="view-data">
+					<div class="recode-card-item">
+						<div class="recode-card-name">봄이의 산책카드</div>
+						<div class="recode-card-info">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-rank">
+										<div class="item-rank-value">상위<strong>100%</strong></div>
+										<button type="button" class="btn-desc-question"></button>
+									</div>
+									<!-- bar클래스에 inline-style방식으로 width값을 0~100%로 지정 -->
+									<div class="item-progress"><div class="bar" style="width:50%;"></div></div>
+									<div class="item-msg">아이에게 산책을 선물하세요</div>
+								</div>
+							</div>
+						</div>
+						<div class="recode-card-data">
+							<div class="recode-card-data-item">
+								<div class="recode-card-data-title">전체 산책</div>
+								<div class="record-display">
+									<div class="state-item">
+										<div class="state-item-value">0</div>
+										<div class="state-item-label">회</div>
+									</div>
+									<div class="state-item">
+										<div class="state-item-value">0</div>
+										<div class="state-item-label">Km</div>
+									</div>
+									<div class="state-item">
+										<div class="state-item-value">0</div>
+										<div class="state-item-label">분</div>
+									</div>
+								</div>
+							</div>
+							<div class="recode-card-data-item">
+								<div class="recode-card-data-title">평균/1회 산책</div>
+								<div class="record-display">
+									<div class="state-item">
+										<div class="state-item-value">0</div>
+										<div class="state-item-label">Km</div>
+									</div>
+									<div class="state-item">
+										<div class="state-item-value">0</div>
+										<div class="state-item-label">분</div>
+									</div>
+									<div class="state-item">
+										<div class="state-item-value">0</div>
+										<div class="state-item-label"><img src="/static/pub/images/icon/icon_defecate.png" alt="" width="24"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom">메시지 보내기</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

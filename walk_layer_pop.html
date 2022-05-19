@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('ingPet');"><em>산책중인 아이들</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('dischargeSelect');"><em>용변 선택</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('urinationSelect');"><em>쉬한 아이 선택</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('defecationSelect');"><em>응가한 아이 선택</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('walkMsg1');"><em>산책종료</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('walkMsg2');"><em>산책 조기종료</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('walkMsg3');"><em>가족공유</em></button>
+	</div>
+	<!-- //page-body -->	
+	<!--  산책중인 아이들  -->
+	<article id="ingPet" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="walk-pet-select-wrap">
+							<div class="select-title">산책중인 아이들</div>
+							<div class="walk-pet-select-list">
+								<div class="list-scroller">
+									<!-- 2개 이하일때 list-inner 클래스에 justify-content-center 클래스 추가 -->
+									<div class="list-inner">
+										<!-- 활성화시 btn-user-pet-item 클래스에 actived클래스 추가 -->
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+										<div class="list-cell">
+											<div class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //산책중인 아이들 -->	
+	<!-- 용변 선택 -->
+	<article id="dischargeSelect" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<h4 class="con-title">용변 선택</h4>
+						<div class="discharge-select">
+							<!-- actived클래스 추가시 활성화 -->
+							<button type="button" class="btn-discharge-nav actived">
+								<span class="icons"><span class="icon icon-urination-off off"></span><span class="icon icon-urination-on on"></span></span>
+								<span class="txt">응가!</span>
+							</button>
+							<button type="button" class="btn-discharge-nav">
+								<span class="icons"><span class="icon icon-defecation-off off"></span><span class="icon icon-defecation-on on"></span></span>
+								<span class="txt">쉬~</span>
+							</button>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //용변 선택 -->	
+	<!-- 산책종료 -->
+	<article id="walkMsg1" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">산책을 종료합니다. </div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //산책종료 -->
+	<!-- 산책종료2  -->
+	<article id="walkMsg2" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">산책을 종료하시겠어요?<br>포인트적립과 산책저장은 1분 이상의 산책만 적용됩니다.</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //산책종료2 -->
+	<!-- 가족공유  -->
+	<article id="walkMsg3" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">오늘 산책을<br>가족에게 공유할까요?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">나중에 하기</button>
+						<button type="button" class="btn btn-confirm" onclick="">지금하기</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //가족공유 -->
+	<!--  응가한 아이 선택  -->
+	<article id="defecationSelect" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="walk-pet-select-wrap">
+							<div class="select-title">응가한 아이</div>
+							<div class="walk-pet-select-list">
+								<div class="list-scroller">
+									<!-- 2개 이하일때 list-inner 클래스에 justify-content-center 클래스 추가 -->
+									<div class="list-inner">
+										<!-- 활성화시 btn-user-pet-item 클래스에 actived클래스 추가 -->
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item actived">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //응가한 아이 선택 -->
+	<!--  쉬한 아이 선택  -->
+	<article id="urinationSelect" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="walk-pet-select-wrap">
+							<div class="select-title">쉬한 아이</div>
+							<div class="walk-pet-select-list">
+								<div class="list-scroller">
+									<!-- 2개 이하일때 list-inner 클래스에 justify-content-center 클래스 추가 -->
+									<div class="list-inner">
+										<!-- 활성화시 btn-user-pet-item 클래스에 actived클래스 추가 -->
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item actived">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+										<div class="list-cell">
+											<a href="#" class="btn-user-pet-item">
+												<div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div><div class="txt">봄이봄이봄이봄이봄이봄이봄이봄이봄이봄이</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+						<button type="button" class="btn btn-confirm" onclick="">확인</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //쉬한 아이 선택 -->
+</section>
+<!-- //container -->
+
+</body>
+</html>

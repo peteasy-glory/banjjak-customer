@@ -1,0 +1,538 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$r_top = (isset($_GET['top']))? $_GET['top'] : "서울";
+$r_middle = (isset($_GET['middle']))? $_GET['middle'] : "";
+$user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
+$user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
+
+$r_tab = (isset($_GET['tab']))? $_GET['tab'] : "tab1";
+
+?>    
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<div class="page-tab">
+			<div class="page-tab-inner">
+				<!-- 활성화시 actived클래스 추가 -->
+<!--				<div class="tab-cell"><a href="#" class="btn-tab-item"><span>키워드</span></a></div>-->
+				<div class="tab-cell actived"><a href="#" class="btn-tab-item"><span>지역</span></a></div>
+			</div>
+		</div>
+	</div>
+	<div class="header-right">
+		<a href="<?=$_SESSION['backurl_home']?>" class="btn-page-ui btn-page-close"><div class="icon icon-size-24 icon-page-close">페이지 닫기</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="reserve-area-request">
+				<div class="basic-data-group basic-search-wrap">
+					<div class="search-info-txt">펫샵 검색</div>
+					<div class="grid-layout toggle-button-group">
+						<div class="grid-layout-inner">
+							<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="service1"><input type="radio" onclick="location.href='reserve_search_area?tab=tab1'" name="gender" id="service1" <?php echo ($r_tab == 'tab1')? "checked" : ""; ?>><em>지역 검색</em></label></div>
+							<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="service2"><input type="radio" onclick="location.href='reserve_search_area?tab=tab2'" name="gender" id="service2" <?php echo ($r_tab == 'tab2')? "checked" : ""; ?>><em>내주변 검색</em></label></div>
+						</div>
+					</div>
+					<div class="area-select-wrap">
+                        <div class="map-data" id="map"></div>
+					</div>
+                    <input type="hidden" name="top" value="<?=$r_top ?>" />
+                    <input type="hidden" name="middle" value="<?=$r_middle ?>" />
+				</div>
+			</div>
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-reserve">검색하기</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=21wrh1y95y&submodules=geocoder"></script>
+<script>
+    var tab = "<?=$r_tab?>";
+    var location_top = "<?=$r_top ?>";
+    var location_middle = "<?=$r_middle ?>";
+    var timerId = "";
+    var is_timer = 0;
+
+    var addrTop = "";
+    var addrMiddle = "";
+    var map = null;
+    var lat = 0;
+    var lng = 0;
+
+    var defaultLat = 37.517305;
+    var defaultLng = 127.047502;
+
+    var defultLimitKm = 10;
+    var page = -1;
+    var isListLoging = false;
+    var isPageEnd = false;
+
+    var timer;
+    var timerDe;
+    var lastValue = 10;
+
+    $(document).ready(function() {
+        if(tab == 'tab1'){
+            add_top();
+        }else{
+      //      setTabMenu(tab);
+            myLocate();
+        }
+    });
+
+    //$("radio[name=gender").click(function(){
+       //$(this).attr('checked',true);
+    //});
+
+    function add_top() {
+        $.ajax({
+            url: 'data/index_ajax.php',
+            data: {
+                mode : 'get_location_top'
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data) {
+                if(data.code == '000000'){
+                    // console.log(data.data);
+                    var html = '';
+                    var top_region = (location_top != "")? location_top : "서울";
+
+                    $.each(data.data, function(i, v){
+                        html += (i % 3 == 0)? '<div class="area-select-row">' : '';
+                        html += (i % 3 == 0)? '<div class="area-select-tab">' : '';
+                        html += '<button type="button" class="btn-area-select-tab" data-region="'+v.top+'"><span>'+v.top+'</span></button>';
+                        html += (i % 3 == 2)? '</div>' : '';
+                        html += (i % 3 == 2)? '</div>' : '';
+                    });
+                    
+                    $('.area-select-wrap').html(html);
+                    $('.btn-area-select-tab[data-region="'+top_region+'"]').addClass('actived');
+                    add_middle(top_region);
+                }else{
+                    alert(data.data+'('+data.code+')');
+                    console.log(data.data);
+                }
+            },
+            error: function(xhr, status, error) {}
+        });
+    }
+
+    function add_middle(top_region) {
+        $.ajax({
+            url: 'data/index_ajax.php',
+            data: {
+                mode : 'get_location_middle',
+                top_region : top_region
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data) {
+
+                if(data.code == '000000'){
+                    // console.log(data.data);
+                    var html = '';
+
+                    html += '<div class="area-select-detail actived">';
+                    html += '<div class="area-select-detail-data actived">';
+                    html += '<div class="area-select-detail-list">';
+                    $.each(data.data, function(i, v){
+                        html += '<button type="button" class="btn-area-select-detail-nav" data-top="'+top_region+'" data-middle="'+v.middle+'">'+v.middle+'</button>';
+                    });
+                    html += '</div>';
+                    html += '<div class="area-select-detail-info">*입점샵이 있는 지역만 표시됩니다.</div>';
+                    html += '</div>';
+                    html += '</div>';
+                    
+                    $('.area-select-detail').remove();
+                    $('.btn-area-select-tab[data-region="'+top_region+'"]').parent().parent().after(html);
+                    // 전달된 값이 있으면 선택처리
+                    if(location_top != "" && location_middle != ""){
+                        $('.btn-area-select-detail-nav[data-middle="'+location_middle+'"]').addClass('actived');
+                    }
+                }else{
+                    alert(data.data+'('+data.code+')');
+                    console.log(data.data);
+                }
+            },
+            error: function(xhr, status, error) {}
+        });
+    }
+
+    $(document).on('click', '.btn-area-select-tab', function(){
+        var top_region = $(this).data('region');
+        console.log(top_region);
+        if($(this).hasClass('actived')){
+            $(this).removeClass('actived');
+            $('.area-select-detail').remove();
+        }else{
+            $('.btn-area-select-tab').removeClass('actived');
+            $(this).addClass('actived');
+            add_middle(top_region);
+        }
+    });
+
+    $(document).on('click', '.btn-area-select-detail-nav', function(){
+        var top = $(this).data('top');
+        var middle = $(this).data('middle');
+        $('.btn-area-select-detail-nav').removeClass('actived');
+        $(this).addClass('actived');
+        $('.basic-data-group input[name="top"]').val(top);
+        $('.basic-data-group input[name="middle"]').val(middle);
+        // console.log(top, middle);
+    });
+
+
+    $(document).on('click', '.btn-reserve', function(){
+        if(tab == "tab1"){
+            var top = $('.basic-data-group input[name="top"]').val();
+            var middle = $('.basic-data-group input[name="middle"]').val();
+            console.log("##" ,top, middle);
+            if(top != "" && middle != ""){
+                location.href = 'reserve_search_area_list?tab=2&top='+top+'&middle='+middle;
+            }else{
+                //popalert.open('firstRequestMsg1', '지역을 선택해주세요.');
+                $('#firstRequestMsg1').find('.msg-txt').text('지역을 선택해주세요.');
+                pop.open('firstRequestMsg1');
+            }
+        }else{
+            if((lat == "" || lat == "0" || lat == "0.0") && (lng == "" || lng == "0" || lng == "0.0")){
+                //$.MessageBox("위치 데이터를 불러오는 중입니다.");
+                myLocate();
+            }else{
+                location.href = 'reserve_main?tab=distance';
+            }
+        }
+    });
+
+
+    /////////////////////////// 지도 ////////////////////////
+    function initValue() {
+        page = -1;
+        isListLoging = false;
+        isPageEnd = false;
+        $("#listArea").html('');
+    }
+
+
+/*    function setTabMenu(menu, isChangeTab){
+        tab = menu
+        // if ( tab == "best" ) {
+        //     $("#bestTab").addClass("actived");
+        //     $("#distanceTab").removeClass("actived");
+        //     $("#distanceDivTxt").css('display','none');
+        // } else {
+        //     $("#bestTab").removeClass("actived");
+        //     $("#distanceTab").addClass("actived");
+        //     $("#distanceDivTxt").css('display','block');
+        // }
+
+        insertParam("tab",tab);
+
+        if (isChangeTab) {
+            lastValue = 10;
+            initValue();
+            setMap(lastValue);
+        }
+    }
+    */
+
+    function resMyLocate(_lat, _lng){
+        console.log(_lat, _lng);
+        lat = _lat;
+        lng = _lng;
+        setMap(lastValue);
+    }    
+
+    var location_cnt = 0;
+    function myLocate() {
+        // 위치값 세번 호출
+        //if(location_cnt < 3){
+            var deviceType = checkMobile();
+            try {
+                if (deviceType == "in_app_and") {
+                    //lat = window.Android.myLocate('lat');
+                    //lng = window.Android.myLocate(null);
+                    //setMap(lastValue);
+                    window.Android.reqMyLocate();
+                } else if (deviceType == "in_app_ios") {
+                    window.webkit.messageHandlers.isGps.postMessage('a');
+                    if (timerDe) {
+                        clearTimeout(timerDe);
+                    }
+                    timerDe = setTimeout(function() {
+                        getiOSLacation();
+                    }, 300);
+                } else {
+                    getLocation();
+                }
+            } catch(e) {
+    
+            }
+         // 세번 호출 뒤 locationClose
+        /*}else{
+            var deviceType = checkMobile();
+            if(deviceType == "in_app_and"){	//
+                window.Android.myLocateClose();
+                // 20210602 by migo - console.log() 사용시, GPS 내위치 조회에서 오류가 발생함, 사용하면 안 됨 
+            }else if(deviceType == "android"){
+
+            }else if(deviceType == "in_app_ios"){
+
+            }else if(deviceType == "ios"){
+
+            }else{
+
+            }
+        }*/
+    }
+
+    function isGps(_data){
+        // to do something..
+        //alert(_data);
+        if(_data == "false"){
+            alert("GPS가 비활성화 상태입니다. GPS를 활성화 하세요.");
+        }else{
+            window.webkit.messageHandlers.myLocate.postMessage('a');
+            window.webkit.messageHandlers.myLocate.postMessage('');
+        }
+    }
+
+    function checkMobile() {
+        var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if (varUA.indexOf("app_gobeauty_and") > -1) {
+            //APP
+            return "in_app_and";
+        } else if (varUA.indexOf("app_gobeauty_ios") > -1) {
+            //안드로이드
+            return "in_app_ios";
+        } else if (varUA.indexOf('android') > -1) {
+            //안드로이드
+            return "android";
+        } else if (varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1 || varUA.indexOf("ipod") > -1) {
+            //IOS
+            return "ios";
+        } else {
+            //아이폰, 안드로이드 외
+            return "other";
+        }
+    }
+
+    function searchAddressToCoordinate(address) {
+        naver.maps.Service.geocode({
+            query: address
+        }, function(status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+                setMapDefultLoction();
+                if (!address) {
+                    return alert('Geocode Error, Please check address');
+                }
+                return alert('Geocode Error, address:' + address);
+            }
+
+            if (response.v2.meta.totalCount === 0) {
+                return alert('No result.');
+            }
+
+            // var htmlAddresses = [],
+            item = response.v2.addresses[0],
+                point = new naver.maps.Point(item.x, item.y);
+
+            lat = item.y;
+            lng = item.x;
+            setMap(defultLimitKm);
+        });
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, err);
+        } else {
+            setMapDefultLoction();
+            layerPop.alert("위치 정보 서비스를 지원하지 않는 기기입니다.");
+        }
+    }
+
+    function getiOSLacation() {
+        if ( lat == "" && lng == "" ) {
+            setMapDefultLoction();
+        } else {
+            setMap(lastValue);
+        }
+    }
+
+    function showPosition(position) {
+        lat = position.coords.latitude;
+        lng = position.coords.longitude;
+        setMap(defultLimitKm);
+        // setMap();
+    }
+
+    function setMapDefultLoction() {
+        lat = defaultLat;
+        lng = defaultLng;
+
+        addrTop = "서울";
+        addrMiddle = "강남구";
+        setMap(defultLimitKm);
+    }
+
+    function searchCoordinateToAddress(latlng, limitKm) {
+
+        naver.maps.Service.reverseGeocode({
+            coords: latlng,
+            orders: [
+                naver.maps.Service.OrderType.ADDR,
+                naver.maps.Service.OrderType.ROAD_ADDR
+            ].join(',')
+        }, function(status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+                setMapDefultLoction();
+                /*
+                if (!latlng) {
+                    return alert('ReverseGeocode Error, Please check latlng');
+                }
+                if (latlng.toString) {
+                    return alert('ReverseGeocode Error, latlng:' + latlng.toString());
+                }
+                if (latlng.x && latlng.y) {
+                    return alert('ReverseGeocode Error, x:' + latlng.x + ', y:' + latlng.y);
+                }
+                return alert('ReverseGeocode Error, Please check latlng');
+                */
+            }
+
+            try {
+                var checkArray = ["고양시","성남시", "수원시","안산시","안양시","용인시","포항시","창원시","전주시","청주시","천안시"];
+                var address = response.v2.address;
+
+                console.log(response.v2.address);
+                var jbSplit = String(address.jibunAddress).split(' ');
+                console.log(jbSplit);
+
+                var isLoadListData = (addrTop == "" && addrMiddle == "");
+
+                addrTop = jbSplit['0'];
+                addrMiddle = jbSplit['1'];
+
+                if(jQuery.inArray(jbSplit['1'], checkArray) !== -1){
+                    addrMiddle = addrMiddle + " "+ jbSplit['2'];
+                }
+
+                console.log(addrMiddle);
+
+                if ( isLoadListData ) {
+                    // setList(limitKm);
+                    // setMarker(limitKm);
+                }
+
+                $("#areaTxt").text(addrMiddle);
+
+
+            } catch (e) {}
+        });
+    }
+
+    function err(e) {
+        setMapDefultLoction();
+        var errors = {
+            1: '위치 정보 권한이 없습니다.<br>휴대폰 설정에서 위치(GPS)사용을 허용해주세요.',
+            2: '위치 서비스를 사용할 수 없습니다.<br>잠시 후 다시 시도해주세요.',
+            3: '요청시간을 초과하였습니다.<br>잠시 후 다시 시도해주세요.'
+        };
+        layerPop.alert(errors[e.code]);
+        // alert("Error: " + errors[e.code]);
+    }
+
+    function locationLatitude(_lat) {
+       // alert("보이시나요?");
+        lat = _lat;
+        if (timerDe) {
+            clearTimeout(timerDe);
+        }
+        timerDe = setTimeout(function() {
+            getiOSLacation();
+        }, 300);
+    }
+
+    function locationLongitude(_lng) {
+        lng = _lng;
+        if (timerDe) {
+            clearTimeout(timerDe);
+        }
+        timerDe = setTimeout(function() {
+            getiOSLacation();
+        }, 300);
+    }
+
+
+    function setMap(limitKm) {
+        if (lat > 0 && lng > 0) {
+            var position = new naver.maps.LatLng(lat, lng);
+
+            if ( map != null ) {
+                map.destroy();
+            }
+
+            map = new naver.maps.Map("map", {
+                center: position,
+                zoom: 14,
+                mapTypeControl: true
+            });
+            map.setOptions("mapTypeControl", false);
+
+            searchCoordinateToAddress(position, limitKm);
+            if ((addrTop != "" && addrMiddle != "") || tab == "distance" ) {
+                // setList(limitKm);
+                // setMarker(limitKm);
+            }
+
+            var myPostionMarker = new naver.maps.Marker({
+                position: position,
+                map: map,
+                title: 'MY',
+                icon: {
+                    content: '<div class="map-gps-pin yellow"></div>',
+                    size: new naver.maps.Size(46, 46),
+                    anchor: new naver.maps.Point(0, 0),
+                },
+                draggable: false
+            });
+        }
+
+        // 3번 실행
+        /*
+        setTimeout(function() {
+            console.log('reLocation');
+            location_cnt += 1;
+            myLocate();
+        }, 300);
+        */
+    }
+
+</script>
+
+<?
+//	include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

@@ -1,0 +1,71 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");   
+
+$user_id = $_SESSION['gobeauty_user_id'];
+
+$push = new Push();
+$is_push = $push->is_push($user_id);
+
+?>
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">설정</div>
+
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="app-set-wrap">
+				<div class="single-btns-list">
+					<div class="list-cell"><a href="mypage_pw_change" class="btn-single-item arrow"><div class="txt">비밀번호 변경</div></a></div>
+					<div class="list-cell"><div class="btn-single-item"><div class="txt">알림 수신</div><div class="item-ui"><label for="switch-toggle" class="form-switch-toggle"><input type="checkbox" id="switch-toggle" 
+                        <? if($is_push) {echo "checked";} ?> ><span class="bar"></span></label></div></div></div>
+					<div class="list-cell"><a href="/data/logout_process.php" class="btn-single-item arrow"><div class="txt">로그아웃</div></a></div>
+					<div class="list-cell"><a href="/terms3" class="btn-single-item arrow"><div class="txt">개인정보보호지침</div></a></div>
+					<div class="list-cell"><a href="/terms4" class="btn-single-item arrow"><div class="txt">이용 약관</div></a></div>
+					<div class="list-cell"><a href="/terms1" class="btn-single-item arrow"><div class="txt">위치기반서비스 이용약관</div></a></div>
+					<div class="list-cell"><a href="mypage_hack" class="btn-single-item arrow"><div class="txt">탈퇴하기</div></a></div>
+				</div>
+			</div>
+		</div>
+		<!-- //page-contents -->
+		
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+<script>
+    function change_push() {
+        $.ajax({
+            url: '/data/change_user_push.php',
+            type: 'POST',
+            success: function(data) {
+                console.log("## ", data);
+                location.reload();
+            },
+            error: function(xhr, status, error) {}
+        });
+    }
+
+    var check = $("input[type='checkbox']");
+    check.click(function() {
+        change_push();
+    });
+</script>
+
+
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

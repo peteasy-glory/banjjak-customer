@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">장바구니</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('cartDelPop');"><em>삭제하기</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('cartBuyPop');"><em>주문진행</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('cartModifyPop');"><em>주문내역 수정</em></button>
+
+	</div>
+	<!-- //page-body -->	
+	
+	<!--  삭제하기 -->
+	<article id="cartDelPop" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">삭제하시겠습니까?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //삭제하기 -->
+	
+	<!--  주문진행-->
+	<article id="cartBuyPop" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">일시품절 상품을 제외하고 주문을 진행하시겠습니까?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //주문진행 -->
+	
+	<!-- 주문내역 수정 -->
+	<article id="cartModifyPop" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data alert-pop-data">
+					<div class="pop-header">
+						<h4 class="con-title">주문내역 수정</h4>
+					</div>
+					<div class="pop-body type-2">
+						<div class="product-option-wrap">
+							<!-- 타이틀과 선택 있을 경우 안의 태그 노출 -->
+							<div class="product-option-title">옵션선택</div>
+							<div class="product-option-select">
+								<select>
+									<option value="">올리브</option>
+									<option value="">올리브</option>
+									<option value="">올리브</option>
+								</select>
+								<button type="button" class="btn btn-outline-gray btn-middle-size btn-round btn-inline">옵션선택</button>
+							</div>
+							<!-- //타이틀과 선택 있을 경우 안의 태그 노출 -->
+							<div class="product-option-list">
+								<div class="product-option-items">
+									<div class="product-option-items-name">[도기프렌드] 강아지 건조 수제 간식세트 올리브 첨가</div>
+									<div class="product-option-amount">
+										<button type="button" class="btn-product-option-minus">감소</button>
+										<input type="number" value="1" readonly/>
+										<button type="button" class="btn-product-option-plus">증가</button>
+									</div>
+									<button type="button" class="btn-product-option-del"><span class="icon icon-size-16 icon-close-small-gray"></span></button>
+								</div>
+								<div class="product-option-items">
+									<div class="product-option-items-name">옵션명</div>
+									<div class="product-option-amount">
+										<button type="button" class="btn-product-option-minus">감소</button>
+										<input type="number" value="1" readonly/>
+										<button type="button" class="btn-product-option-plus">증가</button>
+									</div>
+									<button type="button" class="btn-product-option-del"><span class="icon icon-size-16 icon-close-small-gray"></span></button>
+								</div>
+							</div>
+						</div>
+						<div class="price-data-wrap">
+							<div class="price-data-group">
+								<div class="price-data-list">	
+									<div class="price-data-list-cell">	
+										<div class="price-data-list-title">총 주문금액</div>
+										<div class="price-data-list-value">6,000원</div>
+									</div>
+									<div class="price-data-list-cell total small">	
+										<div class="price-data-list-title">총 합계</div>
+										<div class="price-data-list-value">8,500원</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="basic-data-group vmiddle">
+							<button type="button" class="btn btn-outline-purple btn-middle-size btn-round">주문내역 수정하기</button>
+						</div>
+					</div>
+					<button type="button" class="btn-pop-close" onclick="pop.close();">닫기</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<!-- //주문내역 수정 -->
+
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

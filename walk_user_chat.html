@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<div class="chat-user-wrap">
+	<div class="chat-header">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<div class="user-info-data">
+			<div class="thumb-wrap">
+				<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+			</div>
+			<div class="info-wrap">
+				<div class="info-inner">
+					<div class="item-name"><div class="name"><div class="ellipsis">픽몬테스트픽몬테스트픽몬테스트</div></div><div class="age">(31세 / 남)</div></div>
+					<div class="item-info">
+						<div class="option">
+							<div class="ellipsis">푸들 / 5세 / 중성화 O 푸들 / 5세 / 중성화 O 푸들 / 5세 / 중성화 O</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="chat-body">
+		<div class="chat-scroller">
+			<!-- 내용이 있을 때 -->
+			<div class="chat-scroller-inner">
+				<!-- 날짜별 그룹 -->
+				<div class="chat-day-group">
+					<div class="chat-date"><div class="date">2021.09.03</div></div>
+					<div class="chat-item-list">
+						<!-- 본인일 경우 -->
+						<div class="chat-item me">
+							<div class="chat-data">
+								<div class="chat-txt">안녕하세요~ 반갑습니다! 복실이가 참 복스럽게도 생겼어요! 함께 산책하지 않을래요? 재미있을거 같아요.</div>
+							</div>
+							<div class="chat-time">11:13<br>2021.08.25</div>
+						</div>
+						<!-- //본인일 경우 -->
+						<!-- 상대방일 경우 -->
+						<div class="chat-item person">
+							<div class="chat-data">
+								<div class="chat-txt">저도 만나서 반갑습니다. 이 동네는 처음이라서 같이 산책하면 좋겠어요~</div>
+							</div>
+							<div class="chat-time">11:13<br>2021.08.25</div>
+						</div>
+						<!-- //상대방일 경우 -->
+					</div>
+				</div>
+				<!-- //날짜별 그룹 -->
+				<!-- 날짜별 그룹 -->
+				<div class="chat-day-group">
+					<div class="chat-date"><div class="date">2021.09.03</div></div>
+					<div class="chat-item-list">
+						<!-- 상대방일 경우 -->
+						<div class="chat-item person">
+							<div class="chat-data">
+								<div class="chat-txt">산책 고?</div>
+							</div>
+							<div class="chat-time">11:13<br>2021.08.25</div>
+						</div>
+						<!-- //상대방일 경우 -->
+						<!-- 본인일 경우 -->
+						<div class="chat-item me">
+							<div class="chat-data">
+								<div class="chat-txt">얍얍</div>
+							</div>
+							<div class="chat-time">11:13<br>2021.08.25</div>
+						</div>
+						<!-- //본인일 경우 -->
+					</div>
+				</div>
+				<!-- //날짜별 그룹 -->
+			</div>
+			<!-- //내용이 있을 때 -->
+			<!-- 내용이 없을 때
+			<div class="common-none-data">
+				<div class="none-inner">
+					<div class="item-visual"><img src="/static/pub/images/user_pet_none_visual.png" alt=""></div>
+					<div class="item-info">취소 내역이 없습니다.</div>
+				</div>
+			</div>
+			//내용이 없을 때 -->
+		</div>
+	</div>
+	<div class="chat-footer">
+		<div class="chat-input-wrap">
+			<div class="text-input"><textarea id="chat-input" placeholder="메시지를 입력하세요."></textarea></div>
+			<button type="button" id="chat-send" onclick="chatSend();"></button>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	$('#chat-input').on('keydown keyup change' , function(e){
+		if($(this).val().length > 0){
+			$('#chat-send').addClass('actived');
+		}else{	
+			$('#chat-send').removeClass('actived');
+		}
+
+		$(this).height(1).height($(this).prop('scrollHeight'));
+
+
+	});
+});
+
+function chatSend(){
+	if($('#chat-send').hasClass('actived')){
+		chatInputReset();
+	}
+};
+
+function chatInputReset(){
+	
+	$('#chat-input').val('');
+	$('#chat-send').removeClass('actived');
+};
+</script>
+	
+</body>
+</html>

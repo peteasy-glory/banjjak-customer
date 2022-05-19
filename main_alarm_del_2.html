@@ -1,0 +1,36 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>          
+             
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">반짝 알림</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<div class="page-contents">
+			<button type="button" class="btn btn-purple" onclick="common.toastPopOpen('alarmDelete');"><em>알림 삭제 완료</em></button>
+		</div>
+	</div>
+	<!-- //page-body -->	
+
+	<!-- 사용가능 아이디 팝업 -->
+	<div id="alarmDelete" class="toast-pop-wrap">
+		<div class="toast-pop-data"><span class="small">알림 1개가 삭제되었어요</span><button type="button" class="btn-alarm-cancel">실행취소</button></div>
+	</div>
+	<!-- //사용가능 아이디 팝업 -->
+</section>
+<!-- //container -->
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

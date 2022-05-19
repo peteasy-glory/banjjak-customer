@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- container -->
+<section id="container"> 
+	<div class="walk-map-wrap">
+		<div id="map" class="walk-map-area">지도 영역</div>		
+		<div class="walk-main-wrap">
+			<div class="con-title-group">
+				<h3 class="con-title">누적 산책기록</h3>				
+				<a href="#" class="btn btn-outline-purple btn-small-size btn-round btn-inline">산책일지</a>
+			</div>
+			<div class="record-display">
+				<div class="state-item">
+					<div class="state-item-value">5회</div>
+					<div class="state-item-label">횟수</div>
+				</div>
+				<div class="state-item">
+					<div class="state-item-value">32.23km</div>
+					<div class="state-item-label">거리</div>
+				</div>
+				<div class="state-item">
+					<div class="state-item-value">134분</div>
+					<div class="state-item-label">시간</div>
+				</div>
+			</div>
+			<div class="user-point-list">
+				<div class="user-point-list-item font-color-purple">
+					<div class="item-title">산책포인트 <button type="button" class="btn-desc-question"></button></div>
+					<div class="item-value">8,000P</div>
+				</div>
+				<div class="user-point-list-item">
+					<div class="item-title">기타포인트</div>
+					<div class="item-value">888P</div>
+				</div>
+				<div class="user-point-list-item total">
+					<div class="item-title">총 보유포인트</div>
+					<div class="item-value">88,888P</div>
+				</div>
+			</div>
+			<div class="page-middle-banner">
+				<a href="#" class="btn-banner-item"><img src="/static/pub/images/mypage_banner.png" alt=""></a>
+			</div>
+			<a href="#" class="btn btn-yellow btn-middle-size btn-walk-go"><strong>산책하기</strong></a>
+			<button type="button" id="btnWalkMainToggle"><span class="icon icon-handler"></span>컨트롤러 토글버튼</button>
+		</div>
+	</div>
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<div class="common-navigation">
+			<!--
+				btn-navigation-item 클래스에 actived클래스 추가시 활성화
+			-->
+			<a href="#" class="btn-navigation-item navigation-1"><div class="icon"></div><div class="txt">홈</div></a>
+			<a href="#" class="btn-navigation-item navigation-2"><div class="icon"></div><div class="txt">예약</div></a>
+			<a href="#" class="btn-navigation-item navigation-3"><div class="icon"></div><div class="txt">쇼핑</div></a>
+			<a href="#" class="btn-navigation-item navigation-4 actived"><div class="icon"></div><div class="txt">산책</div></a>
+			<a href="#" class="btn-navigation-item navigation-5"><div class="icon"></div><div class="txt">마이반짝</div></a>
+		</div>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

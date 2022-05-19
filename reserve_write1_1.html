@@ -1,0 +1,198 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/user/data/get_artist_id.php");
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$artist_name = isset($_GET['artist_name']) ? $_GET['artist_name'] : "";
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+$_SESSION['reservation_artist_name'] = $artist_name;
+$artist_id = get_artist_id(addslashes($artist_name));
+
+?>         
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약하기</div>
+	<div class="reserve-state-bar">
+		<div class="bar" style="width:66.66%"></div>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="basic-data-group">				
+				<!-- 샵 이름 있을 때 -->
+				<div class="reserve-shop-name con-title-group line">
+					<h3 class="con-title"><?= $artist_name ?></h3>
+				</div>
+				<!-- //샵 이름 있을 때 -->
+				<div class="con-title-group">
+					<h4 class="con-title">미용선택</h4>
+				</div>
+				<div class="reserve-select-wrap">
+					<!-- 활성화시 actived클래스 추가 -->
+					<button type="button" onclick="click_button('true');" id="first_request" class="btn-text-button btn-outline-purple btn-before-beauty">예약하기</button>
+					<button type="button" onclick="click_button('else');" id="last_request" class="btn-text-button btn-outline-purple btn-before-beauty">지난 미용 불러올래요</button>
+				</div>
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<a onclick="click_next()" class="btn-page-bottom">다음</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+<script>
+    var artist_name = '<?=$artist_name ?>';
+    var customer_id = '<?=$user_id ?>';
+    var artist_id = '<?=$artist_id ?>';
+
+    var is_vat = 0;
+    var type = "dog";
+
+    $(function(){
+        
+        get_shop();
+    });
+
+    // 펫샵 호출
+    function get_shop(){
+        $.ajax({
+            url: 'data/reservation_ajax',
+            data: {
+                mode: "get_shop",
+                artist_name: artist_name
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data) {
+                if(data.code == "000000"){                    
+                    is_vat = (data.data.is_vat != "")? data.data.is_vat : 0;
+                    
+                    get_is_counsel(data.data);
+                }else{
+                    alert(data.data+"("+data.code+")");
+                }
+            },
+            error: function(xhr, status, error) {
+                //alert(error + "네트워크에러");
+                if(xhr.status != 0){
+                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                }
+            }
+        });
+    };    
+
+    //버튼 클릭 시
+    function click_button(first){
+        if(first === "true"){        
+            $("#first_request").css({"backgroundColor":"#6840b1","color":"white"});
+            $("#last_request").css({"backgroundColor":"white","color":"#6840b1"});
+        }else{
+            $("#last_request").css({"backgroundColor":"#6840b1","color":"white"});
+            $("#first_request").css({"backgroundColor":"white","color":"#6840b1"});    
+        }
+    }
+
+    //다음 버튼 클릭 시
+    function click_next(){        
+        if($("#first_request").css("backgroundColor") != "rgb(104, 64, 177)" && $("#last_request").css("backgroundColor") != "rgb(104, 64, 177)"){
+            alert("미용을 선택해 주세요");
+        }else if($("#first_request").css("backgroundColor") == "rgb(104, 64, 177)"){
+            location.replace("reserve_write2?artist_name=<?= urlencode($artist_name) ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>");
+        }else{
+            //location.replace("reserve_write2?artist_name=<?= urlencode($artist_name) ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>");
+        }
+    }
+
+    // 첫 이용상담 여부
+    function get_is_counsel(shop_data){
+        console.log(customer_id)
+        console.log(artist_id)
+        $.ajax({
+            url: 'data/reservation_ajax',
+            data: {
+                mode: "get_is_counsel",
+                customer_id: customer_id,
+                artist_id: artist_id
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data) {
+                if(data.code == "000000"){
+                    console.log(data.data);
+                    //뒤로가기 url
+                    var backurl = "<?=$_SERVER['REQUEST_URI'] ?>";
+                    var backurl_list = (backurl && backurl.indexOf('&') != -1)? backurl.split('&') : [];
+                    if(backurl_list.length > 0){
+                        $.each(backurl_list, function(i, v){
+                            if(v.indexOf('backurl') != -1){
+                                backurl = '&'+v;
+                            }
+                        });
+                    }
+
+                    console.log("data.data: " + data.data + " / " + "<?= $artist_name ?>");
+                    if(data.data == "none"){
+                        // 첫미용상담
+                        document.getElementById("last_request").disabled = true;
+                        
+                    }else{
+                        if(data.data == 0){
+                            // $.MessageBox({
+                            //     buttonDone: "확인",
+                            //     message: "상담 대기 중입니다. 조금만 더 기다려 주세요! 12시간 안에 상담이 완료됩니다."
+                            // }).done(function() {
+                            //     window.history.back();
+                            // });
+                        }else if(data.data == 3){
+                            // $.MessageBox({
+                            //     buttonDone: "확인",
+                            //     message: "펫샵의 사정으로 예약을 진행할 수 없습니다. 다른샵 방문을 위해 메인으로 이동합니다."
+                            // }).done(function() {
+                            //     location.href = "<?= $mainpage_directory ?>/index.php";
+                            // });
+                        }else{
+                            // get_customer(shop_data);
+                        }
+                    }
+ 
+                } else {
+                    alert(data.data+"("+data.code+")");
+                    console.log(data.data);
+                }
+            },
+            error: function(xhr, status, error) {
+                //alert(error + "네트워크에러");
+                if(xhr.status != 0){
+                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                }
+
+            }
+        });
+    };
+</script>
+
+	
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

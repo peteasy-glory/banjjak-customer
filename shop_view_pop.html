@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">상품보기</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<button type="button" class="btn btn-purple" onclick="pop.open('shopCartMsg');"><em>장바구니 담기</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('shopSelectMsg');"><em>상품선택</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('shopShare');"><em>공유하기</em></button>
+		<button type="button" class="btn btn-purple" onclick="pop.open('mobileWeb');"><em>모바일웹 접근시</em></button>
+	</div>
+	<!-- //page-body -->	
+	
+	<!--  장바구니 담기 완료 -->
+	<article id="shopCartMsg" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">장바구니에 잘 담았습니다. <br>지금 이동하시겠어요?</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //장바구니 담기 완료 -->
+	
+	<!--  상품을 선택해주세요. -->
+	<article id="shopSelectMsg" class="layer-pop-wrap">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+
+				<div class="pop-data alert-pop-data">
+					<div class="pop-body">
+						<div class="msg-txt">상품을 선택해주세요.</div>
+					</div>
+					<div class="pop-footer">
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+						<button type="button" class="btn btn-confirm" onclick="pop.close();">취소</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</article>
+	<!-- //상품을 선택해주세요. -->
+
+	<!-- 공유하기 -->
+	<article id="shopShare" class="layer-pop-wrap bottom">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data">
+					<div class="pop-header">
+						<h4 class="con-title">공유하기</h4>
+					</div>
+					<div class="pop-body">
+						<div class="shop-share-wrap">
+							<a href="#"><div class="icon icon-shop-share-kakao"></div><div class="txt">카카오톡</div></a>
+							<a href="#"><div class="icon icon-shop-share-link"></div><div class="txt">URL 복사</div></a>
+							<a href="#"><div class="icon icon-shop-share-more"></div><div class="txt">더보기</div></a>
+						</div>
+					</div>
+					<button type="button" class="btn-pop-close" onclick="pop.close();">닫기</button>
+				</div>
+			</div>
+		</div>
+	</article>
+	<!-- //공유하기 -->
+
+	<!-- 모바일웹 접근시 -->
+	<article id="mobileWeb" class="layer-pop-wrap bottom">
+		<div class="layer-pop-parent">
+			<div class="layer-pop-children">
+				<div class="pop-data">
+					<div class="mobile-web-wrap">
+						<div class="mobile-web-info">
+							<div class="logo"><img src="/static/pub/images/icon/icon-logo.png" alt="반짝" width="88"/></div>
+							<div class="info-wrap">
+								<div class="info-title">앱에서는 1초만에!<br>간편하게 로그인하기</div>
+								<div class="info-txt">
+									<div class="info-star">
+										<span class="icon icon-size-16 icon-star-yellow"></span>
+										<span class="icon icon-size-16 icon-star-yellow"></span>
+										<span class="icon icon-size-16 icon-star-yellow"></span>
+										<span class="icon icon-size-16 icon-star-yellow"></span>
+										<span class="icon icon-size-16 icon-star-yellow"></span>
+									</div>
+									<div class="info-value">특가, 쿠폰 등 앱 전용 혜택까지</div>
+								</div>
+							</div>
+						</div>
+						<a href="#" class="btn btn-yellow btn-round btn-middle-size btn-app-view"><strong>편리한 앱으로 보기</strong></a>
+						<button type="button" class="btn-web-view" onclick="pop.close();">불편하지만 모바일 웹으로 볼래요</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+	<!-- //모바일웹 접근시 -->
+
+</section>
+<!-- //container -->
+
+</body>
+</html>

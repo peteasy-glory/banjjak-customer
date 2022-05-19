@@ -1,0 +1,631 @@
+<?
+include($_SERVER['DOCUMENT_ROOT'] . "/include/global.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/include/skin/header.php");
+
+$r_lat = (isset($_GET['lat']) && $_GET['lat'] && $_GET['lat'] != "") ? $_GET['lat'] : "";
+$r_lng = (isset($_GET['lng']) && $_GET['lng'] && $_GET['lng'] != "") ? $_GET['lng'] : "";
+$r_tab = (isset($_GET['tab'])) ? $_GET['tab']:"distance";
+$user_id = isset($_SESSION['gobeauty_user_id']) ? $_SESSION['gobeauty_user_id'] : "";
+$user_name = isset($_SESSION['gobeauty_user_nickname']) ? $_SESSION['gobeauty_user_nickname'] : "";
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl_reserve']);
+$_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
+
+unset($_SESSION['backurl1']);
+$_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
+
+unset($_SESSION['backurl_home']);
+$_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
+
+?>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=21wrh1y95y&submodules=geocoder"></script>
+<script>
+	//37.517305, 127.047502 강남구
+	var addrTop = "";
+	var addrMiddle = "";
+	var tabMenu = "<?=$r_tab?>";
+	var map = null;
+	var lat = 0;
+	var lng = 0;
+
+	var defaultLat = 37.517305;
+	var defaultLng = 127.047502;
+
+	var defultLimitKm = 10;
+	var page = -1;
+	var isListLoging = false;
+	var isPageEnd = false;
+
+	var timer;
+	var timerDe;
+
+	function initValue() {
+		page = -1;
+		isListLoging = false;
+		isPageEnd = false;
+		$("#listArea").html('');
+	}
+
+	$(document).ready(function() {
+
+		setTabMenu(tabMenu);
+		myLocate();
+		$(".page-body").on('scroll',function(){
+			if(pop.isActive) {
+				productSelectedPopClose();
+			}
+			if (this.offsetHeight + this.scrollTop >= (this.scrollHeight - 200)) {  
+				if (!timer) {
+					timer = setTimeout(function() {
+						timer = null;
+						setList(lastValue);		
+					}, 100);
+				}
+			} 
+		});
+	});
+
+	function setTabMenu(menu, isChangeTab){
+		tabMenu = menu
+		if ( tabMenu == "best" ) {
+			$("#bestTab").addClass("actived");
+			$("#distanceTab").removeClass("actived");
+			$("#distanceDivTxt").css('display','none');
+            history.replaceState('', '', window.location.pathname+"?tab=best");
+		} else {
+			$("#bestTab").removeClass("actived");
+			$("#distanceTab").addClass("actived");
+			$("#distanceDivTxt").css('display','block');			
+            history.replaceState('', '', window.location.pathname+"?tab=distance");
+		}	
+
+		//insertParam("tab",tabMenu);
+
+		if (isChangeTab) {
+			lastValue = 10;
+			initValue();
+			setMap(lastValue);
+		}
+	}
+
+    function resMyLocate(_lat, _lng){
+        console.log(_lat, _lng);
+        lat = _lat;
+        lng = _lng;
+        setMap(lastValue);
+    }
+
+    var location_cnt = 0;
+    function myLocate() {
+        // 위치값 세번 호출
+        //if(location_cnt < 3){
+            var deviceType = checkMobile();
+            try {
+                if (deviceType == "in_app_and") {
+                    //lat = window.Android.myLocate('lat');
+                    //lng = window.Android.myLocate(null);
+                    //setMap(lastValue);
+                    window.Android.reqMyLocate();
+                } else if (deviceType == "in_app_ios") {
+                    window.webkit.messageHandlers.isGps.postMessage('a');
+                    if (timerDe) {
+                        clearTimeout(timerDe);
+                    }
+                    timerDe = setTimeout(function() {
+                        getiOSLacation();
+                    }, 300);
+                } else {
+                    getLocation();
+                }
+            } catch(e) {
+
+            }
+            // 세번 호출 뒤 locationClose
+        /*}else{
+            var deviceType = checkMobile();
+            if(deviceType == "in_app_and"){	//
+                window.Android.myLocateClose();
+                // 20210602 by migo - console.log() 사용시, GPS 내위치 조회에서 오류가 발생함, 사용하면 안 됨
+            }else if(deviceType == "android"){
+
+            }else if(deviceType == "in_app_ios"){
+
+            }else if(deviceType == "ios"){
+
+            }else{
+
+            }
+        }*/
+    }
+	
+    function isGps(_data){
+        // to do something..
+        //alert(_data);
+        if(_data == "false"){
+            alert("GPS가 비활성화 상태입니다. GPS를 활성화 하세요.");
+        }else{
+            window.webkit.messageHandlers.myLocate.postMessage('a');
+            window.webkit.messageHandlers.myLocate.postMessage('');
+        }
+    }
+
+	function checkMobile() {
+		var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+		if (varUA.indexOf("app_gobeauty_and") > -1) {
+			//APP
+			return "in_app_and";
+		} else if (varUA.indexOf("app_gobeauty_ios") > -1) {
+			//안드로이드
+			return "in_app_ios";
+		} else if (varUA.indexOf('android') > -1) {
+			//안드로이드
+			return "android";
+		} else if (varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1 || varUA.indexOf("ipod") > -1) {
+			//IOS
+			return "ios";
+		} else {
+			//아이폰, 안드로이드 외
+			return "other";
+		}
+	}
+
+	function searchAddressToCoordinate(address) {
+		naver.maps.Service.geocode({
+			query: address
+		}, function(status, response) {
+			if (status === naver.maps.Service.Status.ERROR) {
+				setMapDefultLoction();
+				if (!address) {
+					return alert('Geocode Error, Please check address');
+				}
+				return alert('Geocode Error, address:' + address);
+			}
+
+			if (response.v2.meta.totalCount === 0) {
+				return alert('No result.');
+			}
+
+			// var htmlAddresses = [],
+			item = response.v2.addresses[0],
+				point = new naver.maps.Point(item.x, item.y);
+
+			lat = item.y;
+			lng = item.x;
+			setMap(defultLimitKm);
+		});
+	}
+
+	function getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition, err);
+		} else {
+			setMapDefultLoction();
+			layerPop.alert("위치 정보 서비스를 지원하지 않는 기기입니다.");
+		}
+	}
+
+	function getiOSLacation() {
+		if ( lat == "" && lng == "" ) {
+			setMapDefultLoction();
+		} else {
+			setMap(lastValue);
+		}
+	}
+
+	function showPosition(position) {
+		lat = position.coords.latitude;
+		lng = position.coords.longitude;
+		setMap(defultLimitKm);
+		// setMap();
+	}
+
+	function setMapDefultLoction() {
+		lat = defaultLat;
+		lng = defaultLng;
+		
+		addrTop = "서울";
+		addrMiddle = "강남구";
+		setMap(defultLimitKm);
+	}
+
+	function searchCoordinateToAddress(latlng, limitKm) {
+
+		naver.maps.Service.reverseGeocode({
+			coords: latlng,
+			orders: [
+				naver.maps.Service.OrderType.ADDR,
+				naver.maps.Service.OrderType.ROAD_ADDR
+			].join(',')
+		}, function(status, response) {
+			if (status === naver.maps.Service.Status.ERROR) {
+				setMapDefultLoction();
+                /*
+				if (!latlng) {
+					return alert('ReverseGeocode Error, Please check latlng');
+				}
+				if (latlng.toString) {
+					return alert('ReverseGeocode Error, latlng:' + latlng.toString());
+				}
+				if (latlng.x && latlng.y) {
+					return alert('ReverseGeocode Error, x:' + latlng.x + ', y:' + latlng.y);
+				}
+				return alert('ReverseGeocode Error, Please check latlng');
+                */
+			}
+
+			try {
+				var checkArray = ["고양시","성남시", "수원시","안산시","안양시","용인시","포항시","창원시","전주시","청주시","천안시"];
+				var address = response.v2.address;
+				
+				console.log(response.v2.address);
+				var jbSplit = String(address.jibunAddress).split(' ');
+				console.log(jbSplit);
+
+				var isLoadListData = (addrTop == "" && addrMiddle == "");
+				
+				addrTop = jbSplit['0'];
+				addrMiddle = jbSplit['1'];
+			
+				if(jQuery.inArray(jbSplit['1'], checkArray) !== -1){
+					addrMiddle = addrMiddle + " "+ jbSplit['2'];
+				}
+
+				console.log(addrMiddle);
+
+				if ( isLoadListData ) {
+					setList(limitKm);
+					setMarker(limitKm);
+				}
+
+				$("#areaTxt").text(addrMiddle);
+
+				
+			} catch (e) {}
+		});
+	}
+
+	function err(e) {
+		setMapDefultLoction();
+		var errors = {
+			1: '위치 정보 권한이 없습니다.<br>휴대폰 설정에서 위치(GPS)사용을 허용해주세요.',
+			2: '위치 서비스를 사용할 수 없습니다.<br>잠시 후 다시 시도해주세요.',
+			3: '요청시간을 초과하였습니다.<br>잠시 후 다시 시도해주세요.'
+		};
+		layerPop.alert(errors[e.code]);
+		// alert("Error: " + errors[e.code]);
+	}
+
+	function locationLatitude(_lat) {
+		//alert("보이시나요?");
+        lat = _lat;
+		if (timerDe) {
+			clearTimeout(timerDe);
+		}
+		timerDe = setTimeout(function() {
+			getiOSLacation();
+		}, 300);
+	}
+
+	function locationLongitude(_lng) {
+		lng = _lng;
+		if (timerDe) {
+			clearTimeout(timerDe);
+		}
+		timerDe = setTimeout(function() {
+			getiOSLacation();
+		}, 300);
+	}
+
+
+	function setMap(limitKm) {
+		if (lat > 0 && lng > 0) {
+			var position = new naver.maps.LatLng(lat, lng);
+
+			if ( map != null ) {
+				map.destroy();
+			}
+
+			map = new naver.maps.Map("map", {
+				center: position,
+				zoom: 14,
+				mapTypeControl: true
+			});
+			map.setOptions("mapTypeControl", false);
+			
+			searchCoordinateToAddress(position, limitKm);
+			if ((addrTop != "" && addrMiddle != "") || tabMenu == "distance" ) {
+				setList(limitKm);
+				setMarker(limitKm);
+			}	
+
+			var myPostionMarker = new naver.maps.Marker({
+				position: position,
+				map: map,
+				title: 'MY',
+				icon: {
+					content: '<div class="map-gps-pin yellow"></div>',
+					size: new naver.maps.Size(46, 46),
+					anchor: new naver.maps.Point(0, 0),
+				},
+				draggable: false
+			});
+		}
+        /*setTimeout(function() {
+            console.log('reLocation');
+            location_cnt += 1;
+            myLocate();
+        }, 300);    */
+    }
+
+	function setList(limtKm) {
+		if (isListLoging || isPageEnd) {
+			return false;
+		}
+		page++;
+		isListLoging = true;
+		$.ajax({
+			url: './mainpage/index_ajax.php',
+			data: {
+				mode: "getDistanceShopList",
+				lat: lat,
+				lng: lng,
+				limtKm : limtKm,
+				page : page,
+				pageLimit : 10,
+				tabMenu : tabMenu,
+				addrTop : addrTop,
+				addrMiddle : addrMiddle
+			},
+			type: 'POST',
+			dataType: 'JSON',
+			success: function(data) {
+				if (data.code == "000000") {
+					if (data.data.length <= 0) {
+						isPageEnd = true;
+					}
+					var list = $("#listArea");
+					for (var i = 0; i < data.data.length; i++) {
+						var kmTxt = ``;
+						if (tabMenu != "best") {
+							kmTxt = `(`+data.data[i].distance+` Km)`;
+						}
+						var photo = "https://image.banjjakpet.com"+img_link_change(data.data[i].front_image);
+                        var rating = (data.data[i].rating > 0)? data.data[i].rating : 0;
+						var backUrl = encodeURIComponent(window.location.pathname+'?tab='+tabMenu+'&top='+addrTop+'&middle='+addrMiddle+'&lat='+lat+'&lng='+lng);
+						var html = `
+						<div class="list-cell">
+							<a href="reserve_view?type=beauty&artist_id=`+data.data[i].customer_id+`" class="basic-list-item">
+								<div class="thumb">
+									<img src="` + photo + `" alt="" onerror="this.style.display='none';">
+								</div>
+								<div class="info-wrap">
+									<div class="item-name">`+data.data[i].name+kmTxt+`</div>
+									<div class="item-grade">
+										<div class="icon icon-size-16 icon-star-yellow"></div><em>`+Math.round(rating)+`</em>(`+data.data[i].commentCnt+`)
+									</div>
+									<div class="item-address">`+data.data[i].addr+`</div>
+									<div class="item-cate">`+data.data[i].totalService+`</div>
+									<div class="item-option-group">
+										<div class="group-inner">
+											<div class="tag-item">`+data.data[i].workDate.working_start+`:00-`+data.data[i].workDate.working_end+`:00</div>
+											<div class="tag-item">`+data.data[i].workDate.working_day+`</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>`;
+						list.append(html);
+					}
+					
+				} else {
+					layerPop.alert("일시적 오류입니다.");
+				}
+			},
+			error: function(xhr, status, error) {
+				if (xhr.status != 0) {
+					layerPop.alert("code = " + xhr.status + " message = " + xhr.responseText + " error = " + error);
+				}
+			}
+		}).done(function() {
+			isListLoging = false;
+		});
+	}
+
+	function setMarker(limtKm) {
+		$.ajax({
+			url: './mainpage/index_ajax.php',
+			data: {
+				mode: "getDistanceShopMarker",
+				lat: lat,
+				lng: lng,
+				limtKm : limtKm,
+				tabMenu : tabMenu,
+				addrTop : addrTop,
+				addrMiddle : addrMiddle
+			},
+			type: 'POST',
+			dataType: 'JSON',
+			success: function(data) {
+				if (data.code == "000000") {
+					if (data.data == null || data.data.length <= 0) {
+						return false;
+					}
+					for (var i = 0; i < data.data.length; i++) {
+						var myPostionMarker = new naver.maps.Marker({
+							position: new naver.maps.LatLng(data.data[i].lat, data.data[i].lng),
+							map: map,
+							title: 's',
+							icon: {
+								content: [
+									'<div class="map-text-pin" onclick="javascript:getShopInfo(\'' + data.data[i].customer_id + '\');"> ',
+									'<div class="map-text-pin-inner">',
+									'<div class="map-text-pin-icon"><div class="icon icon-map-pin-hair"></div></div> ',
+									'<div class="map-text-pin-info">' + data.data[i].name + '</div>',
+									'</div>',
+									'</div>'
+								].join(''),
+								size: new naver.maps.Size(83, 28),
+								anchor: new naver.maps.Point(0, 0),
+							},
+							draggable: false
+						});
+					}
+				} else {
+					layerPop.alert("일시적 오류입니다.");
+				}
+			},
+			error: function(xhr, status, error) {
+				if (xhr.status != 0) {
+					layerPop.alert("code = " + xhr.status + " message = " + xhr.responseText + " error = " + error);
+				}
+			}
+		});
+	}
+
+	function getShopInfo(email) {
+		$.ajax({
+			url: './mainpage/index_ajax.php',
+			data: {
+				mode: "getDetailShop",
+				email: email
+			},
+			type: 'POST',
+			dataType: 'JSON',
+			success: function(data) {
+				if (data.code == "000000") {
+					var detailHtml = `<a href="reserve_view?type=beauty&artist_id=`+email+`" class="basic-list-item">
+						<div class="thumb">
+							<img src="https://image.banjjakpet.com` + data.data.front_image + `" alt="" onerror="this.style.display='none';"> 
+						</div>
+						<div class="info-wrap">
+							<div class="item-name">` + data.data.name + `</div>
+							<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>`+data.data.rating+`</em>(` + data.data.commentCnt + `)</div>
+							<div class="item-address">` + data.data.addr + `</div>
+							<div class="item-cate">` + data.data.totalService + `</div>
+							<div class="item-option-group">
+								<div class="group-inner">
+									<div class="tag-item">평일 `+data.data.workDate.working_start+`:00-`+data.data.workDate.working_end+`:00</div>
+									<div class="tag-item">`+data.data.workDate.working_day+`</div>
+								</div>
+							</div>
+						</div>
+					</a>`;
+
+					$("#detailView").html(detailHtml);
+					pop.open('productSelectedPop');
+				} else {
+					layerPop.alert("일시적 오류입니다.");
+				}
+			},
+			error: function(xhr, status, error) {
+				if (xhr.status != 0) {
+					layerPop.alert("code = " + xhr.status + " message = " + xhr.responseText + " error = " + error);
+				}
+			}
+		});
+	}
+</script>
+<script src="/static/pub/js/jquery-ui.min.js"></script>
+<script src="/static/pub/js/jquery.ui.touch-punch.min.js"></script>
+<script>
+	var lastValue = 10;
+
+	function oepnSetDistance() {
+		if(pop.isActive) {
+			productSelectedPopClose();
+		}
+
+		layerPop.selectDistance(lastValue);
+		setSlider();
+	}
+
+	function selectDistanceAction() {
+		$('#distanceTxt').text(lastValue + "Km 이내");
+		
+		initValue();
+		setMap(lastValue);
+	}
+
+	function setSlider() {
+		$("#slider-range").slider({
+			range: 'min',
+			value: lastValue,
+			min: 0,
+			max: 30,
+			step: 0.1,
+			slide: function(event, ui) {
+				lastValue = (ui.value <= 0) ? 0.1 : ui.value;
+				$('#slider-value').html(lastValue);
+			}
+		});
+	}
+	function productSelectedPopClose() {
+		pop.isActive = false;
+		$("#productSelectedPop").removeClass("actived");
+	}
+</script>
+<!-- header -->
+<header id="header">
+	<div class="header-left">
+		<a href="reserve_search_area" class="btn-page-ui btn-page-map">
+			<div class="icon icon-size-24 icon-page-map"></div>
+			<div class="txt" id="areaTxt"></div>
+		</a>
+	</div>
+	<div class="header-right">
+		<a href="reserve_search_area" class="btn-page-ui btn-page-search">
+			<div class="icon icon-size-24 icon-page-search">검색</div>
+		</a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container">
+	<!-- page-body -->
+	<div class="page-body">
+		<div class="map-wrap">
+			<div class="map-data" id="map"></div>
+		</div>
+		<div class="reserve-list-wrap">
+			<!-- 20220115 수정 : 구조 변경 및 거리셀렉트 추가 -->
+			<div class="sort-group">
+				<div class="sort-tab">
+					<div class="sort-tab-inner">
+						<!-- 활성화시 actived클래스 추가 -->
+						<div id="bestTab" class="tab-cell "><a href="reserve_main?tab=best" class="btn-tab-item">인기순</a></div>
+						<div id="distanceTab" class="tab-cell "><a href="reserve_main?tab=distance" class="btn-tab-item">거리순</a></div>
+					</div>
+				</div>
+				<div id="distanceDivTxt">
+					<span id="distanceTxt" class="arrow type-2" onclick="javascript:oepnSetDistance();">10Km 이내</span>
+				</div>
+			</div>
+			<!-- //20220115 수정 -->
+
+			<div class="vertical-list-wrap line shop">
+				<div class="list-inner" id="listArea">
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //page-body -->
+	<!-- 선택된 팝업 -->
+	<!--
+	// actived클래스 추가시 활성화
+	-->
+	<div id="productSelectedPop" class="layer-pop-wrap layer-pop-bottom">
+		<div class="pop-header">
+			<div class="pop-header-title">선택하신 매장</div>
+		</div>
+		<div class="pop-body" id="detailView">
+
+		</div>
+		<button type="button" class="btn-pop-close" onclick="productSelectedPopClose();">팝업 닫기</button>
+	</div>
+</section>
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">		
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">취소요청</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- user-pay-wrap -->  
+		<div class="shop-cancel-wrap">
+			<div class="con-title-group">
+				<h3 class="con-title">3. 취소정보 / 회수확인</h3>
+			</div>
+			<div class="shop-cancel-step-info">취소 정보를 확인해 주세요.</div>
+			
+			<!-- 취소상품 -->
+			<div class="basic-data-group">
+				<div class="con-title-group">
+					<h4 class="con-title">취소상품</h4>
+				</div>
+				<div class="shop-cart-list shop-cancel-view-list">
+					<div class="shop-cart-list-cell">
+						<div class="shop-cart-items">
+							<div class="shop-cart-body">
+								<div class="item-info-wrap">
+									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+									<div class="item-data">
+										<div class="item-data-inner">
+											<div class="item-name">[도기프렌드] 수제 간식세트</div>
+											<div class="item-option">
+												<div>올리브</div>
+												<div class="item-option-division">/</div>
+												<div>1개</div>
+											</div>
+											<div class="item-price">7,500원</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group vmiddle">
+					<div class="form-group">
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">취소 사유</div>
+								<div class="form-item-data type-2">
+									<div class="gray-box-txt">단순변심</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //취소상품 -->
+			
+			<!-- 배송정보 -->
+			<div class="basic-data-group">
+				<div class="con-title-group">
+					<h4 class="con-title">배송정보</h4>
+				</div>
+				<div class="flex-table read">
+					<div class="flex-table-cell">
+						<div class="flex-table-item">
+							<div class="flex-table-title"><div class="txt">받으시는 분</div></div>
+							<div class="flex-table-data">
+								<div class="flex-table-data-inner">
+									김반짝									
+								</div>		
+							</div>
+						</div>
+					</div>
+					<div class="flex-table-cell">
+						<div class="flex-table-item">
+							<div class="flex-table-title"><div class="txt">연락처</div></div>
+							<div class="flex-table-data">
+								<div class="flex-table-data-inner">
+									010-1234-1234								
+								</div>		
+							</div>
+						</div>
+					</div>
+					<div class="flex-table-cell">
+						<div class="flex-table-item">
+							<div class="flex-table-title"><div class="txt">받으시는 곳</div></div>
+							<div class="flex-table-data">
+								<div class="flex-table-data-inner">
+									경기 수원시 권선구 입북로 87 경기 수원시 권선구 입북로 87							
+								</div>		
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group vmiddle">
+					<button type="button" class="btn btn-outline-gray btn-middle-size btn-round">배송지정보 수정</button>
+				</div>
+				<div class="basic-data-group middle">
+					<div class="form-group">
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">배송요청사항</div>
+								<div class="form-item-data">
+									<div class="read-input">택배함에 넣어주세요.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //배송정보 -->
+			
+			<!-- 환불정보 -->
+			<div class="basic-data-group">
+				<div class="con-title-group">
+					<h4 class="con-title">환불정보</h4>
+				</div>
+				<div class="price-data-wrap type-3">
+					<div class="price-data-group">
+						<div class="price-data-list">	
+							<div class="price-data-list-cell read">	
+								<div class="price-data-list-title">상품금액</div>
+								<div class="price-data-list-value">4,000원</div>
+							</div>
+							<div class="price-data-list-cell read">	
+								<div class="price-data-list-title">포인트사용</div>
+								<div class="price-data-list-value">0원</div>
+							</div>
+							<div class="price-data-list-cell read">	
+								<div class="price-data-list-title">취소비용(차감)</div>
+								<div class="price-data-list-value">-0원</div>
+							</div>
+							<div class="price-data-list-cell total read">	
+								<div class="price-data-list-title"><span class="font-color-red">환불 예상금액</span></div>
+								<div class="price-data-list-value"><span class="font-color-red">4,000원</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group small line">
+					<div class="form-group">
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">환불수단</div>
+								<div class="form-item-data type-2">
+									<select>
+										<option value="">선택</option>
+										<option value="">선택</option>
+										<option value="">선택</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group-cell">
+							<div class="form-group-item">
+								<div class="form-item-label">계좌이체 / 4,000원</div>
+								<div class="form-item-data">
+									<input type="text" class="form-control" placeholder="계좌번호를 입력해주세요"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //환불정보 -->
+			
+			
+			<div class="shop-cancel-ui">
+				<div class="grid-layout btn-grid-group">
+					<div class="grid-layout-inner">
+						<div class="grid-layout-cell grid-2"><a href="#" class="btn btn-outline-gray btn-middle-size btn-round">이전단계</a></div>
+						<div class="grid-layout-cell grid-2"><a href="#" class="btn btn-outline-purple btn-middle-size btn-round">취소접수</a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- //user-pay-wrap -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+	
+</body>
+</html>

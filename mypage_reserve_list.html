@@ -1,0 +1,692 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+$type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
+
+
+?>         
+           
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약 및 취소 내역</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="user-reserve-wrap">
+			<div class="wide-tab">
+				<div class="wide-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell <? echo (($type == "reservation")? "actived" :"") ?>" ><a href="?type=reservation" class="btn-tab-item">예약 내역</a></div>
+					<div class="tab-cell <? echo (($type == "cancel")? "actived" :"") ?>"><a href="?type=cancel" class="btn-tab-item">취소 내역</a></div>
+				</div>
+			</div>
+			<!-- 내용이 있을 때 -->
+            <? if($type == "cancel"){?>
+                <div class="user-reserve-info">*카드 취소의 경우 PG사에서 카드사로 취소 반영에 2~3일 소요될 수 있으니 양해부탁드립니다.</div>
+            <? } ?>
+			<div class="user-receipt-list" style="margin-top:25px;">
+               <?php
+                $str_minute = "";
+                $str_to_minute = "";
+                $type_query = "";
+                if ($type == "reservation") {
+                    $type_query = "AND tpl.is_cancel = 0";
+                } else {
+                    $type_query = "AND tpl.is_cancel = 1";
+                }
+                // 20200910 ulmo 진행중(RO)은 표시되지 않도록 추가
+                $login_insert_sql = "SELECT *, tpl.is_vat as is_vat, tpl.update_time as d_time 
+                                    FROM tb_payment_log tpl LEFT JOIN tb_shop ts ON ts.customer_id = tpl.artist_id
+                                    WHERE tpl.customer_id = '" . $user_id . "' 
+                                          AND tpl.approval = 1 
+                                          AND tpl.status != 'R0'
+                                          $type_query 
+                                    ORDER BY tpl.year DESC, tpl.month DESC, tpl.day DESC, tpl.hour DESC, tpl.minute DESC;";
+
+                $session_id = "";
+                $artist_id = "";
+                $artist_name = "";
+                $customer_id = "";
+                $status = "";
+                $top_region = "";
+                $middle_region = "";
+                $bottom_region = "";
+                $year = "";
+                $month = "";
+                $day = "";
+                $hour = "";
+                $minute = "";
+                $to_hour = "";
+                $to_minute = "";
+                $product = "";
+                $address1 = "";
+                $address2 = "";
+                $cellphone = "";
+                $pay_type = "";
+                $card = "";
+                $plan = "";
+                $bank = "";
+                $cash_type = "";
+                $cash_key = "";
+                $cash_value = "";
+                $per_diem = "";
+                $update_time = "";
+                $expire_time = "";
+                $is_only_point = "";
+                $total_price = "";
+                $spend_point = "";
+                $payment_log_seq = "";
+                $go_2_offline = "";
+                $is_vat = "";
+                $d_time = "";
+                $is_cancel = "";
+                $cancel_time = "";
+
+                $result = mysqli_query($connection, $login_insert_sql);
+                for ($ch_index = 0; $result_datas = mysqli_fetch_object($result); $ch_index++) {
+                    $session_id = $result_datas->session_id;
+                    $artist_id = $result_datas->artist_id;
+                    $artist_name = $result_datas->name;
+                    $customer_id = $result_datas->customer_id;
+                    $status = $result_datas->status;
+                    $top_region = $result_datas->top_region;
+                    $middle_region = $result_datas->middle_region;
+                    $bottom_region = $result_datas->bottom_region;
+                    $year = $result_datas->year;
+                    $month = $result_datas->month;
+                    $day = $result_datas->day;
+                    $hour = $result_datas->hour;
+                    $minute = $result_datas->minute;
+                    $to_hour = $result_datas->to_hour;
+                    $to_minute = $result_datas->to_minute;
+                    $product = $result_datas->product;
+                    $address1 = $result_datas->address1;
+                    $address2 = $result_datas->address2;
+                    $cellphone = $result_datas->cellphone;
+                    $pay_type = $result_datas->pay_type;
+                    $card = $result_datas->card;
+                    $plan = $result_datas->plan;
+                    $bank = $result_datas->bank;
+                    $cash_type = $result_datas->cash_type;
+                    $cash_key = $result_datas->cash_key;
+                    $cash_value = $result_datas->cash_value;
+                    $per_diem = $result_datas->per_diem;
+                    $update_time = $result_datas->update_time;
+                    $expire_time = $result_datas->expire_time;
+                    $is_only_point = $result_datas->is_only_point;
+                    $total_price = $result_datas->total_price;
+                    $spend_point = $result_datas->spend_point;
+                    $payment_log_seq = $result_datas->payment_log_seq;
+                    $go_2_offline = $result_datas->go_2_offline;
+                    $is_vat = $result_datas->is_vat;
+                    $d_time = $result_datas->d_time;
+                    $is_cancel = $result_datas->is_cancel;
+                    $cancel_time = date("Y년 m월 d일 H시", strtotime($result_datas->cancel_time));
+                ?>   
+                
+                <?php
+                if ($minute == 0) {
+                    $str_minute = "";
+                } else {
+                    $str_minute = $minute . "분";
+                }
+
+                if ($to_minute == 0) {
+                    $str_to_minute = "";
+                } else {
+                    $str_to_minute = $to_minute . "분";
+                }
+
+				$timediff = 0;
+				if($hour != "" && $to_hour != "" && $minute != "" && $to_minute != ""){
+					$_s_date = date($year."-".$month."-".$day." ".$hour.":".$minute.":00");
+					$_e_date = date($year."-".$month."-".$day." ".$to_hour.":".$to_minute.":00");
+					$timediff = (strtotime($_e_date) - strtotime($_s_date)) / 60; // minute
+				}
+                ?>
+                <a href="#" class="user-receipt-item">
+                    <? if ($is_cancel == 1) { ?>
+					<div class="receipt-cancel-date">예약취소일자 : <? echo $cancel_time ?></div>
+                    <? } ?>
+					<!-- 예약 정보 -->
+					<div class="receipt-reserve-option">
+						<div class="option-cell">
+							<div class="option-title">매장명</div>
+							<div class="option-value"><strong><?= $artist_name ?></strong></div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">결제타입</div>
+                            <? if($is_only_point) { ?>
+							<div class="option-value">포인트</div>
+                            <? } else if($pay_type == "card") { ?>
+                            <div class="option-value">카드</div>
+                            <? } else if($pay_type == "bank") { ?>
+                            <div class="option-value">계좌이체</div>
+                            <? } else { ?>
+                            <div class="option-value">매장결제</div>    
+                            <? }?>                
+						</div>
+						<div class="option-cell">
+							<div class="option-title">예약일시</div>
+							<div class="option-value"><?= $year ?>년 <?= $month ?>월 <?= $day ?>일 <?= $hour ?>시 <?= $str_minute ?> ~ <?= ($to_hour) ?>시 <?= $str_to_minute ?></div>
+						</div>
+						<div class="option-cell">
+                            <?php
+                            if($go_2_offline){
+                                $crypto = new Crypto();
+                                $enc_artist_id = $crypto->encode(trim($artist_id), $access_key, $secret_key);
+                                $off_sql1 = "select * from tb_request_artist where customer_id = '" . $enc_artist_id . "';";
+                                $off_result1 = mysqli_query($connection, $off_sql1);
+                                if ($off_rows = mysqli_fetch_object($off_result1)) {
+                                    if ($off_rows->is_got_offline_shop == 1) {
+                                        $address_off = $crypto->decode($off_rows->offline_shop_address, $access_key, $secret_key);
+                                        if ($address_off) {
+                            ?>
+							<div class="option-title">매장주소</div>
+                            <div class="option-value"><?= str_replace("|", "", strstr($address_off, "|")) ?></div>
+                            <?php
+                            } } } } else {
+                            ?>
+							<div class="option-title">방문정보</div>
+                            <div class="option-value">
+                                출장요청지 : <?= str_replace("|", "", strstr($address1 . $address2, "|")) ?><br>
+                                전화번호 : <?= $cellphone ?>
+                            </div>
+                            <? } ?>
+							
+						</div>
+					</div>
+					<!-- 예약 정보 -->
+					<!-- 결제 상품 -->
+					<div class="receipt-buy-product">
+						<div class="item-title">결제상품</div>
+                        <?php
+                        $total_price = $per_diem;
+                        $product_info = $product;
+
+                        $service_infos = explode("|", $product_info);
+
+                        //-----Start line >> 견주 고객이 설정한 펫이름으로 조회
+                        $customer_infos_sql = "";
+                        $product_pet_name = "";
+                        $customer_pet_name = "";
+
+                        $product_pet_name = $service_infos[0];
+                        if (isset($product_pet_name)) {
+                            $customer_infos_sql =
+                                "SELECT *
+                                        FROM tb_mypet
+                                        WHERE customer_id = '" . $user_id . "'
+                                        AND name = '" . $product_pet_name . "';";
+                            $customer_infos_result = mysqli_query($connection, $customer_infos_sql);
+                            // error_log('-----$customer_infos_result : ' . $customer_infos_result);
+
+                            if ($customer_infos_rows = mysqli_fetch_object($customer_infos_result)) {
+                                $customer_pet_name = $customer_infos_rows->name_for_owner;
+                            }
+                        }
+                        ?>
+                        <div class="item-title"><?= $customer_pet_name ?>/<?= $service_infos[1] ?></div>
+                        <? if ($service_infos[1] == "개") { ?>
+						<div class="item-data-list">
+                            <?
+                            $num4 = explode(":", $service_infos[4]);
+                            $num5 = explode(":", $service_infos[5]); 
+                            ?>
+							<div class="list-cell">
+								<div class="list-title"><?= $service_infos[3] ?>/<?= $num4[0] ?>/<?="~ ".$num5[0]."Kg" ?></div>
+								<div class="list-value">
+                                    <?php
+									$dog_total_i_price = 0;
+                                    $basic_a_p = 0;
+                                    if(count($num4)>1){
+                                        $basic_a_p += intval($num4[1]);
+                                    }
+                                    if(count($num5)>1){
+                                        $basic_a_p += intval($num5[1]);
+                                    }
+									$total_price = $total_price + $basic_a_p;
+									$dog_total_i_price = $dog_total_i_price + $basic_a_p;
+									echo number_format($basic_a_p) . "원";
+    								?>
+                                </div>
+							</div>
+                            <?php //if (!startsWith($service_infos[4], "부분미용")) { 
+                                if($service_infos[8] != ""){
+                                    $ahbaci_arr = explode(",", $service_infos[8]);
+                                    $ahbaci = 0;
+                                    $ahbaci_name = "";
+                                    foreach($ahbaci_arr AS $key => $value){
+                                        $price = explode(":", $value);
+                                        if(count($price)>1){
+                                            $ahbaci += intval($price[1]);
+                                        }
+                                        $ahbaci_name .= explode(":", $value)[0].",";
+                                    }
+                                    
+                                    $ahbaci_name = substr($ahbaci_name, 0, -1);
+                            ?>
+							<div class="list-cell">
+								<div class="list-title"><?= $ahbaci_name ?></div>
+								<div class="list-value">
+                                    <?php
+									$total_price = $total_price + $ahbaci;
+									$dog_total_i_price = $dog_total_i_price + $ahbaci;
+									echo number_format($ahbaci) . "원";
+								    ?>
+                                </div>
+							</div>
+                            <? } ?>
+                            <? 
+                            $info = explode(":", $service_infos[7]) ;
+                            if(count($info) > 1 && $info[1] != "") {
+                            ?>
+							<div class="list-cell">
+								<div class="list-title"><?= $info[0] ?>mm</div>
+								<div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+									$total_price = $total_price + $ahbaci;
+									$dog_total_i_price = $dog_total_i_price + $ahbaci;
+									echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+							</div>
+                            <? } ?>
+                            <?
+                            $info = explode(":", $service_infos[6]);
+                            if(count($info) > 1 && $info[1] != "") { 
+                            ?>
+							<div class="list-cell">
+								<div class="list-title"><?= $info[0] ?></div>
+								<div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+									$total_price = $total_price + $ahbaci;
+									$dog_total_i_price = $dog_total_i_price + $ahbaci;
+									echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+							</div>
+                            <? } ?>
+                            <? if(strlen($service_infos[9]) > 0 ) { ?>
+                            <div class="list-cell">
+                                <div class="list-title">발톱</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($service_infos[9]);
+									$total_price = $total_price + $ahbaci;
+									$dog_total_i_price = $dog_total_i_price + $ahbaci;
+									echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?> 
+                            <? if(strlen($service_infos[10]) > 0) { ?>
+                            <div class="list-cell">
+                                <div class="list-title">장화</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($service_infos[10]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>  
+                            <? if(strlen($service_infos[11]) > 0) { ?>
+                            <div class="list-cell">
+                                <div class="list-title">방울</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($service_infos[11]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>  
+                            <? 
+                            $info = explode(":", $service_infos[12]);
+                            if(strlen($service_infos[12]) > 0 && count($info) > 1) { 
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title">염색(<?= $info[0] ?> 포인트)</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>   
+                            <?
+                            $option_count = intval($service_infos[14]);
+                            for ($option_ii = 0; $option_ii < $option_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[14 + ($option_ii + 1)])
+                            ?>  
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[0] ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <?
+                            $spa_p_index = 14 + $option_count + 1;                       
+                            $spa_option_count = intval($service_infos[$spa_p_index]);
+                            for ($option_ii = 0; $option_ii < $spa_option_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[$spa_p_index + ($option_ii + 1)])
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[0] ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <?
+                            $dyeing_p_index = ($spa_p_index + 1) + $spa_option_count;                       
+                            $dyeing_option_count = intval($service_infos[$dyeing_p_index]);
+                            for ($option_ii = 0; $option_ii < $dyeing_option_count; $option_ii = $option_ii + 1) {
+                                $info =  explode(":", $service_infos[$dyeing_p_index + ($option_ii + 1)]);
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[0] ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <?
+                            $other_p_index = ($dyeing_p_index + 1) + $dyeing_option_count;
+                            
+                            $other_option_count = intval($service_infos[$other_p_index]);
+                            for ($option_ii = 0; $option_ii < $other_option_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[$other_p_index + ($option_ii + 1)]);
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[0] ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <?php
+                            $etc_p_index = ($other_p_index + 1) + $other_option_count;                         
+                            $etc_count = intval($service_infos[$etc_p_index]);
+                            for ($option_ii = 0; $option_ii < $etc_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[$etc_p_index + ($option_ii + 1)]);
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[1]." [".number_format($info[2])."원x".$info[3]."개]" ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[2] * $info[3]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <!-- 아래 인덱스가 이상함 일단주석 service_infos의 갯수와 $coupon_p_index가 같다  -->
+                            <?
+//                            $coupon_p_index = ($etc_p_index + 1) + $etc_count;
+//                            $coupon_count = intval($service_infos[$coupon_p_index]);
+//                            for ($option_ii = 0; $option_ii < $coupon_count; $option_ii = $option_ii + 1) {
+//                                $info = explode(":", $service_infos[$coupon_p_index + ($option_ii + 1)]);
+                            ?>
+                            <!-- <div class="list-cell">
+                                <div class="list-title">쿠폰 : <?= $info[1] ?></div>
+                                <div class="list-value"> -->
+                                    <?
+//                                    $ahbaci = intval($info[2]);
+//                                    $total_price = $total_price + $ahbaci;
+//                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
+//                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                <!-- </div>
+                            </div> -->
+                            <? 
+//                            } 
+                            ?>
+                            <div class="total-price">합산 금액 : <?= number_format($dog_total_i_price) ?> 원</div>
+						</div>
+                        <? } else { //cat ?>
+                        <div class="item-data-list">
+                            <?
+                            $num4 = explode(":", $service_infos[4]);
+                            $num5 = explode(":", $service_infos[5]); 
+                            ?>
+							<div class="list-cell">
+								<div class="list-title"><?= $service_infos[3] ?><?= "/".$num5[0] ?><?= ($num4[0] != "all")? "/~" . $num4[0] . "Kg" : "" ?></div>
+								<div class="list-value">
+                                    <?php
+									$cat_total_i_price = 0;
+                                    $basic_a_p = 0;
+                                    if(count($num4)>1){
+                                        $basic_a_p += intval($num4[1]);
+                                    }
+                                    if(count($num5)>1){
+                                        $basic_a_p += intval($num5[1]);
+                                    }
+									$total_price = $total_price + $basic_a_p;
+									$cat_total_i_price = $cat_total_i_price + $basic_a_p;
+									echo number_format($basic_a_p) . "원";
+    								?>
+                                </div>
+							</div>
+                            
+                            <? if(strlen($service_infos[6]) > 0 ) { ?>
+                            <div class="list-cell">
+                                <div class="list-title">발톱</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($service_infos[6]);
+									$total_price = $total_price + $ahbaci;
+									$cat_total_i_price = $cat_total_i_price + $ahbaci;
+									echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?> 
+                            <? if(strlen($service_infos[7]) > 0) { ?>
+                            <div class="list-cell">
+                                <div class="list-title">단모 목욕</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($service_infos[7]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $cat_total_i_price = $cat_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>  
+                            <? if(strlen($service_infos[11]) > 0) { ?>
+                            <div class="list-cell">
+                                <div class="list-title">방울</div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($service_infos[11]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $cat_total_i_price = $cat_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>  
+                            
+                            <?
+                            $option_count = intval($service_infos[9]);
+                            for ($option_ii = 0; $option_ii < $option_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[14 + ($option_ii + 1)])
+                            ?>  
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[0] ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[1]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $cat_total_i_price = $cat_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <?php
+                            $etc_p_index = 10 + $option_count;                         
+                            $etc_count = intval($service_infos[$etc_p_index]);
+                            for ($option_ii = 0; $option_ii < $etc_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[$etc_p_index + ($option_ii + 1)]);
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title"><? $info[1]." [".number_format($info[2])."원x".$info[3]."개]" ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[2] * $info[3]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $cat_total_i_price = $cat_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? } ?>
+                            <?
+                            $coupon_p_index = ($etc_p_index + 1) + $etc_count;
+                            $coupon_count = intval($service_infos[$coupon_p_index]);
+                            for ($option_ii = 0; $option_ii < $coupon_count; $option_ii = $option_ii + 1) {
+                                $info = explode(":", $service_infos[$coupon_p_index + ($option_ii + 1)]);
+                            ?>
+                            <div class="list-cell">
+                                <div class="list-title">쿠폰 : <?= $info[1] ?></div>
+                                <div class="list-value">
+                                    <?
+                                    $ahbaci = intval($info[2]);
+                                    $total_price = $total_price + $ahbaci;
+                                    $cat_total_i_price = $cat_total_i_price + $ahbaci;
+                                    echo number_format($ahbaci) . "원";
+                                    ?>
+                                </div>
+                            </div>
+                            <? 
+                            } 
+                            ?>
+                            <div class="total-price">합산 금액 : <?= number_format($cat_total_i_price) ?> 원</div>
+						</div>    
+                        <? } ?>    
+					</div>
+					<!-- //결제 상품 -->
+                    <!-- 최종 가격 -->
+                    <div class="receipt-total">
+                        <div class="total-option-list">
+                            <div class="total-option"> 출장비 : <?= number_format($per_diem) ?>원</div>
+                            <?
+                            $vat_price = 0;
+                            if ($is_vat) {
+                                $vat_price = ($total_price / 10);
+                                $total_price = $total_price + $vat_price;
+                            ?>
+                            <div class="total-option"> 부가세 10% : <?= number_format($vat_price) ?>원</div>
+                            <? } ?>
+                            <div class="total-option font-color-purple"> 사용포인트 : <?
+                            if (isset($spend_point)) {
+                                $spend_point = floatval($spend_point);
+                                echo number_format($spend_point);
+                            }
+                            ?>점</div>
+                        </div>
+                    
+                        <div class="total-price"><?
+                            if ($pay_type == "offline") {
+                                echo "최종 결제예상금액 : ";
+                            } else {
+                                echo "최종 결제금액 : ";
+                            }
+                            
+                            ?> <?= number_format($total_price - $spend_point) ?>원
+                        </div>                    
+                    </div>
+                    <!-- //최종 가격 -->					
+				</a>
+
+                
+
+                <? } ?>
+                
+			</div>
+			<!-- //내용이 있을 때 -->
+
+
+			<!-- 내용이 없을 때 -->
+            <? if ($ch_index == 0) { ?>                
+			<div class="common-none-data">
+				<div class="none-inner">
+					<div class="item-visual"><img src="/static/pub/images/user_pet_none_visual.png" alt=""></div>
+                    <? if($type == "cancel"){?>
+                        <div class="item-info">취소 내역이 없습니다.</span></div>
+                    <? } ?>
+
+                    <? if($type == "reservation"){?>
+                        <div class="item-info">예약 내역이 없습니다.</span></div>
+                    <? } ?>
+
+        
+				</div>
+			</div>
+            <? } ?>
+		   <!-- //내용이 없을 때  -->
+		</div>
+
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

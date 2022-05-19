@@ -1,0 +1,144 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$url_scheme = $_SERVER['HTTPS']=='on'?'https':'http';
+$artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$payment_log_seq = isset($_GET['payment_log_seq']) ? $_GET['payment_log_seq'] : "";
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "#";
+
+?>         
+             
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="<?=$backurl?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">지도 보기</div>
+</header>
+<!-- //header -->
+
+<?php
+$address = "";
+$lat = "";
+$lng = "";
+if ($payment_log_seq) {
+	$o_sql = "select * from tb_payment_log where payment_log_seq = '".$payment_log_seq."';";
+	$o_result = mysqli_query($connection, $o_sql);
+	if ($rows = mysqli_fetch_object($o_result)) {
+		$address = $rows->address1;
+		$address = str_replace("|", "", strstr($address, "|"));
+		$address = $address." ".$rows->address2;
+	}
+} else if ($artist_id) {
+	$crypto = new Crypto();
+	$enc_artist_id = $crypto->encode(trim($artist_id), $access_key, $secret_key);
+        $o_sql = "select * from tb_request_artist where customer_id = '".$enc_artist_id."';";
+        $o_result = mysqli_query($connection, $o_sql);
+        if ($rows = mysqli_fetch_object($o_result)) {
+		$address = $crypto->decode($rows->offline_shop_address, $access_key, $secret_key);
+		if ($address) {
+	                $address = str_replace("|", "", strstr($address, "|"));
+					$lat = $rows->lat;
+					$lng = $rows->lng;
+		}
+	}
+}
+?>
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<div class="full-map-wrap">
+			<div class="map-title"><?=$address ?></div>
+			<div class="map-wrap">
+				<div id="map" class="map-detail"></div>
+				<!-- <a href="#" class="btn-map-gps">gps 켜기</a>
+				<a href="#" class="btn-map-location">내위치 찾기</a> -->
+			</div>
+		</div>
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f2cf1f3b7e2ca88cb298196078ef550f&libraries=services"></script>
+<script>
+var view_address = '<?=$address?>';
+var artist_id = '<?=$artist_id ?>'; // s27nsulove@naver.com <- 이분만 좌표값으로 표시
+var lat = '<?=$lat ?>';
+var lng = '<?=$lng ?>';
+console.log(lat,lng);
+var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
+var mapOption = {
+		center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+		level: 3 // 지도의 확대 레벨
+	};
+
+if(artist_id == "s27nsulove@naver.com"){
+	// 지도를 생성합니다
+	var map = new daum.maps.Map(mapContainer, mapOption);
+
+	// 주소-좌표 변환 객체를 생성합니다
+	var geocoder = new daum.maps.services.Geocoder();
+
+	var coords = new daum.maps.LatLng(lat, lng);
+
+	// 결과값으로 받은 위치를 마커로 표시합니다
+	var marker = new daum.maps.Marker({
+		map: map,
+		position: coords
+	});
+	// 인포윈도우로 장소에 대한 설명을 표시합니다
+	var infowindow = new daum.maps.InfoWindow({
+		content: '<div style="width: 300px;text-align:center;padding:6px 0;">'+view_address+'</div>'
+	});
+	infowindow.open(map, marker);
+
+	// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	map.setCenter(coords);
+}else{
+	// 지도를 생성합니다
+	var map = new daum.maps.Map(mapContainer, mapOption);
+
+	// 주소-좌표 변환 객체를 생성합니다
+	var geocoder = new daum.maps.services.Geocoder();
+
+	// 주소로 좌표를 검색합니다
+	geocoder.addressSearch(view_address, function(result, status) {
+
+		// 정상적으로 검색이 완료됐으면
+		 if (status === daum.maps.services.Status.OK) {
+
+			var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+
+			// 결과값으로 받은 위치를 마커로 표시합니다
+			var marker = new daum.maps.Marker({
+				map: map,
+				position: coords
+			});
+
+			// 인포윈도우로 장소에 대한 설명을 표시합니다
+			var infowindow = new daum.maps.InfoWindow({
+				content: '<div style="width: 300px;text-align:center;padding:6px 0;">'+view_address+'</div>'
+			});
+			infowindow.open(map, marker);
+
+			// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+			map.setCenter(coords);
+		}
+	});
+}
+
+
+
+
+</script>
+
+	
+	
+<?
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

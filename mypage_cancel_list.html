@@ -1,0 +1,167 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+?>            
+          
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약 및 취소 내역</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		
+		<div class="user-reserve-wrap">
+			<div class="wide-tab">
+				<div class="wide-tab-inner">
+					<!-- 활성화시 actived클래스 추가 -->
+					<div class="tab-cell"><a href="#" class="btn-tab-item">예약 내역</a></div>
+					<div class="tab-cell actived"><a href="#" class="btn-tab-item">취소 내역</a></div>
+				</div>
+			</div>
+			<!-- 내용이 있을 때 -->
+			<div class="user-reserve-info">*카드 취소의 경우 PG사에서 카드사로 취소 반영에 2~3일 소요될 수 있으니 양해부탁드립니다.</div>
+			<div class="user-receipt-list">
+
+				<a href="#" class="user-receipt-item">
+					<div class="receipt-cancel-date">예약취소일자 : 2021.09.03 11:00</div>
+					<!-- 예약 정보 -->
+					<div class="receipt-reserve-option">
+						<div class="option-cell">
+							<div class="option-title">매장명</div>
+							<div class="option-value"><strong>반짝펫살롱</strong></div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">결제타입</div>
+							<div class="option-value">매장결제</div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">예약일시</div>
+							<div class="option-value">2020.10.10 11:00 ~ 12:30</div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">매장주소</div>
+							<div class="option-value">경기 수원시 권선구 입북로77번길 62 (입북동, 서수원 레이크 푸르지오 1단지) 231-31</div>
+						</div>
+					</div>
+					<!-- 예약 정보 -->
+					<!-- 결제 상품 -->
+					<div class="receipt-buy-product">
+						<div class="item-title">결제상품</div>
+						<div class="item-data-list">
+							<div class="list-cell">
+								<div class="list-title">소형견미용/목욕/~3Kg</div>
+								<div class="list-value">20,000원</div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title">장모_목욕</div>
+								<div class="list-value">5,000원</div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title">기본얼굴컷</div>
+								<div class="list-value">5,000원</div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title">장화</div>
+								<div class="list-value">10,000원</div>
+							</div>
+						</div>
+						<div class="total-price">합산 금액 : 40,000원</div>
+					</div>
+					<!-- //결제 상품 -->
+					<!-- 최종 가격 -->
+					<div class="receipt-total">
+						<div class="total-option-list">
+							<div class="total-option">출장비 : 0원</div>
+							<div class="total-option font-color-purple">사용포인트 : 100원</div>
+						</div>
+						<div class="total-price">합산 금액 : 39,900원</div>
+					</div>
+					<!-- //최종 가격 -->
+				</a>
+
+				<a href="#" class="user-receipt-item">
+					<div class="receipt-cancel-date">예약취소일자 : 2021.09.03 11:00</div>
+					<!-- 예약 정보 -->
+					<div class="receipt-reserve-option">
+						<div class="option-cell">
+							<div class="option-title">매장명</div>
+							<div class="option-value"><strong>반짝펫살롱</strong></div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">결제타입</div>
+							<div class="option-value">매장결제</div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">예약일시</div>
+							<div class="option-value">2020.10.10 11:00 ~ 12:30</div>
+						</div>
+						<div class="option-cell">
+							<div class="option-title">매장주소</div>
+							<div class="option-value">경기 수원시 권선구 입북로77번길 62 (입북동, 서수원 레이크 푸르지오 1단지) 231-31</div>
+						</div>
+					</div>
+					<!-- 예약 정보 -->
+					<!-- 결제 상품 -->
+					<div class="receipt-buy-product">
+						<div class="item-title">결제상품</div>
+						<div class="item-data-list">
+							<div class="list-cell">
+								<div class="list-title">소형견미용/목욕/~3Kg</div>
+								<div class="list-value">20,000원</div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title">장모_목욕</div>
+								<div class="list-value">5,000원</div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title">기본얼굴컷</div>
+								<div class="list-value">5,000원</div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title">장화</div>
+								<div class="list-value">10,000원</div>
+							</div>
+						</div>
+						<div class="total-price">합산 금액 : 40,000원</div>
+					</div>
+					<!-- //결제 상품 -->
+					<!-- 최종 가격 -->
+					<div class="receipt-total">
+						<div class="total-option-list">
+							<div class="total-option">출장비 : 0원</div>
+							<div class="total-option font-color-purple">사용포인트 : 100원</div>
+						</div>
+						<div class="total-price">합산 금액 : 39,900원</div>
+					</div>
+					<!-- //최종 가격 -->
+				</a>
+
+			</div>
+			<!-- //내용이 있을 때 -->
+			<!-- 내용이 없을 때 
+			<div class="common-none-data">
+				<div class="none-inner">
+					<div class="item-visual"><img src="/static/pub/images/user_pet_none_visual.png" alt=""></div>
+					<div class="item-info">예약 내역이 없습니다.</span></div>
+				</div>
+			</div>
+		   //내용이 없을 때 -->
+		</div>
+
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

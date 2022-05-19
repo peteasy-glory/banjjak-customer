@@ -1,0 +1,549 @@
+<?php
+	include "../include/top.php";
+	include "../include/Crypto.class.php";
+
+	$cl_result = include "../include/check_login.php";
+	if ($cl_result == 0) {
+		return false;
+	}
+
+	$r_startDate = ($_GET["startDate"] && $_GET["startDate"] != "")? $_GET["startDate"] : Date('Y-m-d');
+	$r_endDate = ($_GET["endDate"] && $_GET["endDate"] != "")? $_GET["endDate"] : Date('Y-m-d');
+	$user_id = $_SESSION['gobeauty_user_id'];
+	$user_name = $_SESSION['gobeauty_user_nickname'];
+?>
+<script src="<?= $js_directory ?>/fontawesome.min.js"></script>
+<style>
+	@font-face {font-family: 'NL2GR';src: url('../fonts/NEXON_Lv2_Gothic.woff') format('woff');}
+	/* init */
+	#manage_payment_log { width: 100%; height: 100%; position: relative; border: 0px; padding: 0px; margin: 0px; font-family: 'NL2GR'; font-weight: normal; font-size: 14px; }
+	#manage_payment_log h1,h2,h3,h4,h5,h6 { margin: 0px; padding: 0px; font-size: 14px; }
+	#manage_payment_log select { font-size: 14px; border: 1px solid #ccc; padding: 0px 10px; height: 30px; border-radius: 5px; background-color: #fff; }
+	#manage_payment_log input[type='text'] { font-size: 14px; border: 1px solid #ccc; border-radius: 5px; height: 30px; padding: 0px 10px; background-color: #fff; }
+	#manage_payment_log input[type='checkbox'] { display: none; }
+	#manage_payment_log input[type='checkbox']+label { display: inline-block; padding: 0px 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #eee; height: 30px; line-height: 30px; text-align: center; }
+	#manage_payment_log input[type='checkbox']:checked+label { border: 1px solid #f5bf2e; background-color: #f5bf2e; color: #fff; font-weight: Bold; }
+	#manage_payment_log ul { list-style: none; margin: 0px; padding: 0px; }
+	#manage_payment_log button { border: 1px solid #ccc; background-color: #eee; border-radius: 5px; padding: 0px 10px; height: 30px; }
+
+	/* header */
+	#manage_payment_log .header { position: sticky; top: 0px; height: 50px; width: 100%; line-height: 50px; text-align: center; background-color: #fff; z-index: 100; font-size: 18px; }
+	#manage_payment_log .header .h_left { position: absolute; display: flex; justify-content: center; align-items: center; left: 0px; top: 0px; min-width: 50px; height: 50px; cursor: pointer; }
+	#manage_payment_log .header .h_center>h2 { font-size: 18px; }
+	#manage_payment_log .header .h_right { position: absolute; display: flex; justify-content: center; align-items: center; right: 0px; top: 0px; min-width: 50px; height: 50px; }
+
+	/* content */
+	#manage_payment_log .content { width: 100%; height: 100%; position: relative; padding-bottom: 50px; }
+	#manage_payment_log .content .search_wrap { width: calc(100% - 20px); padding: 10px; overflow-x: auto; background-color: #f9f9f9; }
+	#manage_payment_log .content .search_wrap ul.table { display: table; width: 100%; }
+	#manage_payment_log .content .search_wrap ul.table li { display: table-cell; white-space: nowrap; text-align: center; padding: 0px 10px; }
+	#manage_payment_log .content .search_wrap ul.table li input[type='text'] { width: 100px; }
+	#manage_payment_log .content .search_wrap ul.table li input + button { background-color: #fff; width: 30px; height: 30px; line-height: 30px; border: 0px; vertical-align: top; padding: 0px; }
+	#manage_payment_log .content .search_wrap ul.table li input + button>img { vertical-align: middle; width: 100%; }
+	#manage_payment_log .content .search_wrap ul.table li input[type='checkbox']+label {  }
+	#manage_payment_log .content .payment_log_summary { font-size: 14px; padding-left: 10px; margin: 10px 0px; }
+	#manage_payment_log .content table { width: 100%; border-collapse: collapse; font-size: 12px; border-bottom: 5px solid #999; }
+	#manage_payment_log .content table tr:nth-child(odd) { background-color: #f9f9f9; }
+	#manage_payment_log .content table tr:hover { background-color: #ffe; }
+	#manage_payment_log .content table tr th { position: sticky; top: 50px; background-color: #eee; padding: 5px; white-space: nowrap; }
+	#manage_payment_log .content table tr td { font-size: 10px; padding: 2px 5px; text-align: center; }
+	#manage_payment_log .content table tr td.lft { text-align: left; }
+	#manage_payment_log .content table tr td.rht { text-align: right; }
+	#manage_payment_log .content table tr td.no_data { padding: 50px 0px; color: #999; background-color: #f9f9f9; }
+	#manage_payment_log .content table tr:hover td.no_data { background-color: #f9f9f9; }
+	#manage_payment_log .content table tr td .gray { color: #999; }
+</style>
+<div id="manage_payment_log">
+</div>
+<script>
+	var $manage_payment_log = $("#manage_payment_log");
+	var admin_id = '<?=$user_id ?>';
+	var start_date = '<?=$r_startDate ?>';
+	var end_date = '<?=$r_endDate ?>';
+	var summary = [0, 0, 0, 0]; // 갯수, 금액, 정회원, 가회원
+	var artist_list = []; // 펫샵
+	var pay_type = {POS: 0, CARD: 0, CASH: 0, OFFLINE: 0}; // 결제수단(매장접수, 카드, 현금, 매장결제)
+
+	$(function(){
+		get_customer()
+			.then(init_html);
+	});
+
+	$manage_payment_log.on("click", ".get_search_btn", function(){
+		$(this).html('<i class="fas fa-spinner"></i>');
+		summary = [0, 0, 0, 0]; // 갯수, 금액, 정회원, 가회원
+		artist_list = []; // 펫샵
+		pay_type = {POS: 0, CARD: 0, CASH: 0, OFFLINE: 0}; // 결제수단(매장접수, 카드, 현금, 매장결제)
+
+		get_payment_log_summary()
+			.then(get_beauty_payment_log_cnt);
+			//.then(get_beauty_payment_log);
+	});
+
+	$manage_payment_log.on("click", ".get_reset_btn", function(){
+		$manage_payment_log.find("#search input[name='startDate']").val(start_date);
+		$manage_payment_log.find("#search input[name='endDate']").val(end_date);
+		$manage_payment_log.find("#search input[name='customer_id']").val('');
+		$manage_payment_log.find("#search input[name='artist_id']").val('');
+		$manage_payment_log.find("#search input[name='pay_type[]']").prop('checked', false);
+		$manage_payment_log.find('.content table.payment_log').remove();
+		$manage_payment_log.find('.content div.payment_log_summary').remove();
+		$manage_payment_log.find('.payment_log_summary').remove();
+	});
+	
+	$manage_payment_log.on("click", ".admin_main_btn", function(){
+		location.href = "<?=$admin_directory ?>/index.php";
+	});
+	
+
+	function get_payment_log_summary(){
+		return new Promise(function(resolve, reject) {
+			$manage_payment_log.find('.content div.payment_log_summary').remove();
+			var html = '';
+
+			html += '<div class="payment_log_summary">';
+			html += '	총 <span class="total_cnt">0건</span>, ';
+			html += '	<span class="total_price">0원</span> | ';
+			html += '	펫샵 수 <span class="shop_cnt">0명</span> | ';
+			html += '	정회원 수 <span class="customer_cnt">0명</span> / ';
+			html += '	가회원 수 <span class="tmp_cnt">0명</span> | ';
+			html += '	앱 결제 수 <span class="pay_type_cnt">[0건]</span>';
+			html += '</div>';
+
+			$manage_payment_log.find('.content').append(html);
+			resolve();
+			/*
+			var start_date = $manage_payment_log.find("#search input[name='startDate']").val();
+			var end_date = $manage_payment_log.find("#search input[name='endDate']").val();
+			var customer_id = $manage_payment_log.find("#search input[name='customer_id']").val();
+			var artist_id = $manage_payment_log.find("#search input[name='artist_id']").val();
+
+			$.ajax({
+				url: 'manage_payment_logs_ajax.php',
+				data: {
+					mode: 'get_payment_log_summary',
+					start_date: start_date,
+					end_date: end_date,
+					customer_id: customer_id,
+					artist_id: artist_id
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					if(data.code == "000000"){
+						console.log(data.data);
+						var html = '';
+
+						html += '<div class="payment_log_summary">';
+						html += '	<div class=""></div>';
+						html += '</div>';
+
+						$manage_payment_log.find('.content').append(html);
+						resolve();
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.code);
+					}
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			});
+			*/
+		});
+	}
+
+	function get_beauty_payment_log_cnt(){
+		return new Promise(function(resolve, reject) {
+			$manage_payment_log.find('.content table.payment_log').remove();
+			var start_date = $manage_payment_log.find("#search input[name='startDate']").val();
+			var end_date = $manage_payment_log.find("#search input[name='endDate']").val();
+			var customer_id = $manage_payment_log.find("#search input[name='customer_id']").val();
+			var artist_id = $manage_payment_log.find("#search input[name='artist_id']").val();
+			var _pay_type = [];
+			$manage_payment_log.find("#search input[name='pay_type[]']").each(function(i, v){
+				if($(this).is(":checked") == true){
+					_pay_type.push($(this).val());
+				}
+			});
+
+			$.ajax({
+				url: 'manage_payment_logs_ajax.php',
+				data: {
+					mode: 'get_payment_log_cnt',
+					start_date: start_date,
+					end_date: end_date,
+					customer_id: customer_id,
+					artist_id: artist_id,
+					pay_type: _pay_type
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					if(data.code == "000000"){
+						console.log(data.data);
+						var html = '';
+
+						html += '<table class="payment_log">';
+						html += '	<thead>';
+						html += '		<tr>';
+						html += '			<th>구매일</th>';
+						html += '			<th>변경일</th>';
+						html += '			<th>고객</th>';
+						html += '			<th>아티스트</th>';
+						html += '			<th>상품</th>';
+						html += '			<th>총가격</th>';
+						html += '			<th>포인트사용</th>';
+						html += '			<th>출장비</th>';
+						html += '			<th>VAT</th>';
+						html += '			<th>출장정보</th>';
+						html += '			<th>예약정보</th>';
+						html += '			<th>결제정보</th>';
+						html += '			<th>취소</th>';
+						html += '			<th>취소일</th>';
+						html += '		</tr>';
+						html += '	</thead>';
+						html += '	<tbody>';
+						html += '	</tbody>';
+						html += '</table>';
+						$manage_payment_log.find('.content').append(html);
+
+						if(parseInt(data.data.cnt) > 2000){
+							$.MessageBox({
+								buttonDone: "확인",
+								buttonFail: "취소",
+								message: "검색 데이터 수가 2000건 이상입니다.("+data.data.cnt+"건) <br/> 조회를 계속 하시겠습니까?"
+							}).done(function(){
+								get_beauty_payment_log({limit_0: 0, limit_1: 100, cnt: data.data.cnt});
+							});
+						}else if(parseInt(data.data.cnt) <= 0){
+							html = '';
+							html += '<tr>';
+							html += '	<td colspan="14" class="no_data">구매내역이 없습니다.</td>';
+							html += '</tr>';
+							$manage_payment_log.find('.content table tbody').append(html);
+							$manage_payment_log.find(".get_search_btn").text("검색");
+						}else{
+							get_beauty_payment_log({limit_0: 0, limit_1: 100, cnt: data.data.cnt});
+						}
+
+						resolve(); // {limit_0: 0, limit_1: 100, cnt: data.data.cnt}
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.code);
+					}
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			});
+		});
+	}
+
+	function get_beauty_payment_log(post_data){
+		return new Promise(function(resolve, reject) {
+			var start_date = $manage_payment_log.find("#search input[name='startDate']").val();
+			var end_date = $manage_payment_log.find("#search input[name='endDate']").val();
+			var customer_id = $manage_payment_log.find("#search input[name='customer_id']").val();
+			var artist_id = $manage_payment_log.find("#search input[name='artist_id']").val();
+			var _pay_type = [];
+			$manage_payment_log.find("#search input[name='pay_type[]']").each(function(i, v){
+				if($(this).is(":checked") == true){
+					_pay_type.push($(this).val());
+				}
+			});
+			var limit_0 = post_data.limit_0;
+			var limit_1 = post_data.limit_1;
+
+			$.ajax({
+				url: 'manage_payment_logs_ajax.php',
+				data: {
+					mode: 'get_payment_log',
+					start_date: start_date,
+					end_date: end_date,
+					customer_id: customer_id,
+					artist_id: artist_id,
+					pay_type: _pay_type,
+					limit_0: limit_0,
+					limit_1: limit_1
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					if(data.code == "000000"){
+						console.log(data.data);
+						var html = '';
+						$.each(data.data, function(i, v){
+							var _product = v.product.split('|');
+							var _is_vat = (v.is_vat == "1")? '부가세 10%' : '-';
+							var _customer_id = (v.customer_id && v.customer_id != "")? v.customer_id : '<span class="gray">'+v.cellphone+' (가)</span>';
+							var _go_2_offline = (v.go_2_offline == "1")? '매장방문' : v.address1+v.address2+v.cellphone;
+							var _service = _product[0];
+							var _local_price = (v.local_price && v.local_price > 0)? parseInt(v.local_price) : 0;
+							var _total_price = (v.total_price && v.total_price > 0)? v.total_price.format() : 0;
+							var _spend_point = (v.spend_point && v.spend_point > 0)? v.spend_point.format() : 0;
+							var _per_diem = (v.per_diem && v.per_diem > 0)? v.per_diem.format() : 0;
+							var _pay_type = '';
+							var _is_cancel = (v.is_cancel == "1")? '취소' : '-';
+							var _cancel_time = (v.cancel_time && v.cancel_time != "")? v.cancel_time : '';
+							if(_product[1] == "개"){
+								_service += (_product[3] != "")? '/'+_product[3] : '';
+								_service += (_product[4] != "")? '/'+_product[4] : '';
+								_service += (_product[5].split(':')[0] != "" && _product[5].split(':')[1] >= 0)? '/'+_product[5].split(':')[0]+'Kg, '+_product[5].split(':')[1].format()+'원' : '';
+							}
+							if(v.pay_type.indexOf("pos") != -1){
+								_pay_type = 'POS';
+							}else if(v.pay_type.indexOf("offline") != -1){
+								_pay_type = 'OFFLINE';
+							}else if(v.pay_type == "card"){
+								_pay_type = 'CARD';
+							}else if(v.pay_type == "cash"){
+								_pay_type = 'CASH';
+							}
+							html += '<tr>';
+							html += '	<td><span class="gray">'+v.buy_time.split(' ')[0]+'</span><br/>'+v.buy_time.split(' ')[1]+'</td>';
+							html += '	<td><span class="gray">'+v.update_time.split(' ')[0]+'</span><br/>'+v.update_time.split(' ')[1]+'</td>';
+							html += '	<td>'+_customer_id+'</td>';
+							html += '	<td>'+v.artist_id+'</td>';
+							html += '	<td>'+_service+'</td>';
+							html += '	<td class="rht">'+_total_price+'</td>';
+							html += '	<td class="rht">'+_spend_point+'</td>';
+							html += '	<td class="rht">'+_per_diem+'</td>';
+							html += '	<td>'+_is_vat+'</td>';
+							html += '	<td>'+_go_2_offline+'</td>';
+							html += '	<td><span class="gray">'+v.year+'-'+fillZero(2, v.month)+'-'+fillZero(2, v.day)+'</span><br/>'+fillZero(2, v.hour)+':'+fillZero(2, v.minute)+'~'+fillZero(2, v.to_hour)+':'+fillZero(2, v.to_minute)+'</td>';
+							html += '	<td>'+_pay_type+'</td>';
+							html += '	<td>'+_is_cancel+'</td>';
+							html += '	<td>'+_cancel_time+'</td>';
+							html += '</tr>';
+
+							summary[0]++; // 건 수
+							summary[1] += ((v.pay_type == 'card' || v.pay_type == 'bank')? (parseInt(v.total_price) - parseInt(v.spend_point)) + _local_price : _local_price); // 거래금액
+							summary[2] += (v.customer_id && v.customer_id != "")? 1 : 0; // 정회원
+							summary[3] += (v.customer_id && v.customer_id != "")? 0 : 1; // 가회원
+							artist_list.push(v.artist_id); // 펫샵
+
+							pay_type[_pay_type]++; // 결제수단
+						});
+						$manage_payment_log.find('.content table tbody').append(html);
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.code);
+					}
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			}).done(function(){
+				console.log(limit_0, limit_1, post_data.cnt);				
+				if(parseInt(limit_0) + parseInt(limit_1) <= parseInt(post_data.cnt)){
+					get_beauty_payment_log({limit_0: (parseInt(limit_0) + parseInt(limit_1)), limit_1: 100, cnt: post_data.cnt});
+				}else{
+					$manage_payment_log.find(".get_search_btn").text("검색");
+				}
+
+				var artistArr = artist_list.filter((element, index) => {
+					return artist_list.indexOf(element) === index;
+				});
+				var pay_type_summary = '';
+				//pay_type_summary += (pay_type['POS'] > 0)? '[매장접수 '+pay_type['POS']+'건]' : '';
+				pay_type_summary += (pay_type['CARD'] > 0)? '[카드결제 '+pay_type['CARD']+'건]' : '';
+				pay_type_summary += (pay_type['CASH'] > 0)? '[계좌이체 '+pay_type['CASH']+'건]' : '';
+				pay_type_summary += (pay_type['OFFLINE'] > 0)? '[매장결제 '+pay_type['OFFLINE']+'건]' : '';
+				pay_type_summary = (pay_type_summary == "")? '[0건]' : pay_type_summary;
+				
+				$manage_payment_log.find(".payment_log_summary .total_cnt").text(summary[0]+'건');
+				$manage_payment_log.find(".payment_log_summary .total_price").text(summary[1].format()+'원');
+				$manage_payment_log.find(".payment_log_summary .customer_cnt").text(summary[2]+'명');
+				$manage_payment_log.find(".payment_log_summary .tmp_cnt").text(summary[3]+'명');
+				$manage_payment_log.find(".payment_log_summary .shop_cnt").text(artistArr.length+'명');
+				$manage_payment_log.find(".payment_log_summary .pay_type_cnt").text(pay_type_summary);
+
+				resolve();
+			});
+		});
+	}
+
+	function get_customer(){
+		return new Promise(function(resolve, reject) {
+			$.ajax({
+				url: 'manage_payment_logs_ajax.php',
+				data: {
+					mode: 'get_customer',
+					admin_id: admin_id
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					if(data.code == "000000"){
+						console.log(data.data);
+						resolve();
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.code);
+					}
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			});
+		});
+	}
+
+	function init_html(){
+		return new Promise(function(resolve, reject) {
+			var html = '';
+			var nextYear = new Date();
+			nextYear.setFullYear(nextYear.getFullYear() + 1);
+			
+			html += '<div class="header">';
+			html += '	<div class="h_left admin_main_btn">';
+			html += '		<i class="fas fa-chevron-left"></i>';
+			html += '	</div>';
+			html += '	<div class="h_center">';
+			html += '		<h2>구매정보 조회(PC)</h2>';
+			html += '	</div>';
+			html += '	<div class="h_right">';
+			html += '	</div>';
+			html += '</div>';
+			html += '<div class="content">';
+			html += '	<div class="search_wrap">';
+			html += '		<form id="search">';
+			html += '			<ul class="table">';
+			html += '				<li>';
+			html += '					<div>';
+			html += '						<input type="text" id="startDate" name="startDate" class="datePicker" value="'+start_date+'" />';
+			html += '					</div>';
+			html += '				</li>';
+			html += '				<li>';
+			html += '					<span>~</span>';
+			html += '				</li>';
+			html += '				<li>';
+			html += '					<div>';
+			html += '						<input type="text" id="endDate" name="endDate" class="datePicker" value="'+end_date+'" />';
+			html += '					</div>';
+			html += '				</li>';
+			html += '				<li>';
+			html += '					<div>';
+			html += '						<span>고객ID</span>';
+			html += '						<input type="text" name="customer_id" value="">';
+			html += '					</div>';
+			html += '				</li>';
+			html += '				<li>';
+			html += '					<div>';
+			html += '						<span>펫샵ID</span>';
+			html += '						<input type="text" name="artist_id" value="">';
+			html += '					</div>';
+			html += '				</li>';
+			html += '				<li>';
+			html += '					<div>';
+			html += '						<span>결제수단</span>';
+			html += '						<input type="checkbox" id="pay_type_pos" name="pay_type[]" value="pos">';
+			html += '						<label for="pay_type_pos"><span></span>매장접수</label>';
+			html += '						<input type="checkbox" id="pay_type_offline" name="pay_type[]" value="offline">';
+			html += '						<label for="pay_type_offline"><span></span>매장결제</label>';
+			html += '						<input type="checkbox" id="pay_type_card" name="pay_type[]" value="card">';
+			html += '						<label for="pay_type_card"><span></span>신용카드</label>';
+			html += '						<input type="checkbox" id="pay_type_cash" name="pay_type[]" value="cash">';
+			html += '						<label for="pay_type_cash"><span></span>계좌이체</label>';
+			html += '					</div>';
+			html += '				</li>';
+			html += '				<li>';
+			html += '					<div class="btn_wrap">';
+			html += '						<button type="button" class="get_search_btn">검색</button>';
+			html += '						<button type="button" class="get_reset_btn">초기화</button>';
+			html += '					</div>';
+			html += '				</li>';
+			html += '			</ul>';
+			html += '		</form>';
+			html += '	</div>';
+			html += '</div>';
+			html += '<div class="footer">';
+			html += '</div>';
+			$manage_payment_log.html(html);
+
+			$("#startDate").datepicker({
+				dateFormat: "yy-mm-dd",
+				dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+				dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+				monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+				monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+				showMonthAfterYear: true,
+				yearSuffix: "년",
+				nextText: "다음달",
+				prevText: "이전달",
+				showOn: "both",
+				buttonImage: "<?= $image_directory ?>/calendar_ico.png",
+				onClose: function(selectedDate) {
+					if (selectedDate != "") {
+						$("#endDate").datepicker("option", "minDate", selectedDate);
+						$(".quk_date").removeClass("on");
+						$("input[name='quk']").val("");
+					}
+				}
+			});
+
+			$("#endDate").datepicker({
+				dateFormat: "yy-mm-dd",
+				dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+				dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+				monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+				monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+				showMonthAfterYear: true,
+				yearSuffix: "년",
+				nextText: "다음달",
+				prevText: "이전달",
+				showOn: "both",
+				buttonImage: "<?= $image_directory ?>/calendar_ico.png",
+				onClose: function(selectedDate) {
+					if (selectedDate != "") {
+						$("#startDate").datepicker("option", "maxDate", selectedDate);
+						$(".quk_date").removeClass("on");
+						$("input[name='quk']").val("");
+					}
+				}
+			});
+			resolve();
+		});
+	}
+
+	// 세자리 숫자 콤마
+	Number.prototype.format = function() {
+		if (this == 0) return 0;
+
+		var reg = /(^[+-]?\d+)(\d{3})/;
+		var n = (this + '');
+
+		while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+
+		return n;
+	};
+
+	// 문자열 타입에서 쓸 수 있도록 format() 함수 추가
+	String.prototype.format = function() {
+		var num = parseFloat(this);
+		if (isNaN(num)) return "0";
+
+		return num.format();
+	};
+
+	//남는 길이만큼 0으로 채움
+	function fillZero(width, str){
+		var str = String(str);//문자열 변환
+		return str.length >= width ? str:new Array(width-str.length+1).join('0')+str;
+	}
+</script>
+
+<?php include "../include/bottom.php"; ?>

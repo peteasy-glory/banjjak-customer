@@ -1,0 +1,272 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+// $_SESSION['reservation_artist_name'] = $artist_name;
+$artist_name = get_artist_id($artist_id);
+
+?>
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">지난 이용 내역</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="reserve-request-wrap">
+                <?php
+                $pet_sql = "
+                    SELECT * FROM tb_payment_log WHERE artist_id = 'itseokbeom@gmail.com' AND customer_id = 'itseokbeom@gmail.com'
+                    AND is_cancel = 0 AND NOT product = '' AND ((local_price>0 OR local_price_cash>0) OR (total_price>0 OR spend_point>0))
+                ";
+                $pet_result = mysqli_query($connection, $pet_sql);
+                ?>
+				<div class="basic-data-group">
+					<div class="customer-card-item type2 user-receipt-item">
+						<h5 class="con-title">2021.10.31</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                
+				<div class="basic-data-group">
+					<div class="customer-card-item type2 user-receipt-item">
+						<h5 class="con-title">2021.10.31</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group">
+					<div class="customer-card-item type2 user-receipt-item">
+						<h5 class="con-title">2021.10.31</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group">
+					<div class="customer-card-item type2 user-receipt-item">
+						<h5 class="con-title">2021.10.31</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group">
+					<div class="customer-card-item type2 user-receipt-item">
+						<h5 class="con-title">2021.10.31</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group">
+					<div class="customer-card-item type2 user-receipt-item">
+						<h5 class="con-title">2021.10.31</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+
+</section>
+<!-- //container -->
+
+</body>
+</html>

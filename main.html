@@ -1,0 +1,1030 @@
+<?
+
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+
+
+$user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
+$user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
+
+
+
+// 빅 배너
+$banner_sql = "
+    SELECT a.mb_seq, a.link, b.file_path FROM tb_main_banner AS a
+    INNER JOIN tb_file AS b ON a.banner = b.f_seq
+    WHERE a.is_delete = '2' AND a.is_use = '1' AND a.type REGEXP '1' ORDER BY a.odr_1 ASC, a.reg_dt DESC
+";
+$banner_array = sql_fetch_array($banner_sql);
+
+// 많이 이용했어요
+$mainShop_sql = "
+    SELECT * FROM tb_shop a
+    LEFT JOIN (
+      SELECT artist_id, AVG(rating) rating_avg, COUNT(artist_id) AS rating_cnt 
+      FROM tb_usage_reviews WHERE rating IS NOT NULL AND is_delete = '0' GROUP BY artist_id
+    ) b ON b.artist_id = a.customer_id
+    WHERE a.is_mainshop_recommend = '1'
+    ORDER BY RAND()
+";
+$mainShop_array = sql_fetch_array($mainShop_sql);
+
+// 베스트 후기
+$bestReview_sql = "
+    SELECT a.*, b.name, c.rating_cnt,
+    (SELECT COUNT(*) FROM tb_payment_log WHERE artist_id = a.artist_id AND customer_id = a.customer_id) use_cnt
+     FROM tb_usage_reviews a
+    LEFT JOIN tb_shop b ON a.artist_id = b.customer_id
+    LEFT JOIN (
+          SELECT artist_id, COUNT(artist_id) AS rating_cnt 
+          FROM tb_usage_reviews WHERE rating IS NOT NULL AND is_delete = '0' GROUP BY artist_id
+        ) c ON c.artist_id = a.artist_id
+    WHERE a.review_seq IN (
+        SELECT review_seq
+        FROM tb_review_best as rb
+        WHERE rb.is_delete = '1'
+        AND rb.order_num != '0' 
+    )
+    ORDER BY a.update_time DESC, a.reg_time DESC
+    LIMIT 3
+";
+$bestReview_array = sql_fetch_array($bestReview_sql);
+
+// 엠디 추천 아이템
+$md_item_sql = "
+    SELECT * FROM tb_item_list a
+     LEFT JOIN (
+         SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
+         FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
+     ) b ON b.p_no = a.product_no
+    WHERE a.is_delete = '1' AND a.is_view_main_1 = '1' AND a.is_soldout = '1' ORDER BY a.update_dt desc
+";
+$md_item_array = sql_fetch_array($md_item_sql);
+
+// new 쇼핑템
+$new_item_sql = "
+    SELECT * FROM tb_item_list a
+    LEFT JOIN (
+        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
+        FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
+        ) b ON b.p_no = a.product_no
+    WHERE a.is_delete = '1' AND a.is_view_main_2 = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30 
+";
+$new_item_array = sql_fetch_array($new_item_sql);
+
+// 새로 입점했어요
+$new_shop_sql = "
+
+SELECT group_concat(a.second_type) type, b.name name, b.front_image photo, c.offline_shop_address address,     
+d.working_start start_time, d.working_end end_time, d.rest_public_holiday public_holiday, e.*
+FROM tb_product_dog_static a
+LEFT JOIN tb_shop b ON a.customer_id = b.customer_id
+LEFT JOIN tb_request_artist c ON c.customer_id = a.customer_id
+LEFT JOIN tb_working_schedule d ON d.customer_id = a.customer_id
+LEFT JOIN tb_regular_holiday e ON e.customer_id = a.customer_id
+WHERE b.is_mainshop_new = '1' GROUP BY customer_id ORDER BY RAND()
+";
+$new_shop_array = sql_fetch_array($new_shop_sql);
+
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl_shop']);
+$_SESSION['backurl_shop'] = 'main';
+
+unset($_SESSION['backurl_reserve']);
+$_SESSION['backurl_reserve'] = 'main';
+
+unset($_SESSION['backurl_event']);
+$_SESSION['backurl_event'] = 'main';
+
+unset($_SESSION['backurl1']);
+$_SESSION['backurl1'] = 'main';
+
+unset($_SESSION['backurl_home']);
+$_SESSION['backurl_home'] = 'main';
+
+// 최초 앱 실행시 토큰 저장
+if($_SESSION['is_token'] == "1"){
+    $_SESSION['is_token'] == "0";
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    if ($user_agent) {
+        $token_index_and = strpos($user_agent, "APP_GOBEAUTY_AND");
+        $token_index_ios = strpos($user_agent, "APP_GOBEAUTY_iOS");
+        if($token_index_and > 0){ // 안드로이드일때
+            ?>
+            <script>
+                var token = window.Android.onAppGetToken();
+                //alert(token);
+                $.ajax({
+                    url: 'include/save_token.php',
+                    data: {
+                        id : "<?=$_SESSION['gobeauty_user_id']?>",
+                        token : token,
+                        is_android : "yes"
+                    },
+                    type: 'POST',
+                    success: function(data){
+                        //alert(data+"1");
+                        //location.reload();
+                        if($.trim(data) == "OK"){
+                            //location.replace("../home_main");
+                            //alert("ok");
+                        }else{
+                            alert(data);
+                        }
+                    },
+                    error : function(xhr, status, error) {
+                    }
+                });
+            </script>
+            <?php
+        }else if($token_index_ios > 0){ // ios 일때
+            ?>
+            <script>
+                function SaveTokeniOS(userid, usertoken){
+                    //alert(usertoken);
+                    $.ajax({
+                        url: 'include/save_token',
+                        data: {
+                            id : "<?=$_SESSION['gobeauty_user_id']?>",
+                            token : usertoken,
+                            is_android : "no"
+                        },
+                        type: 'POST',
+                        success: function(data){
+                            //alert(data+"1");
+                            //location.reload();
+                            if($.trim(data) == "OK"){
+                                //location.replace("../home_main");
+                                //alert("ok");
+                            }else{
+                                alert(data);
+                            }
+                        },
+                        error : function(xhr, status, error) {
+                        }
+                    });
+                }
+                //var token = window.webkit.onAppGetToken();
+                //alert(token);
+            </script>
+            <?php
+        }
+    }
+}
+?>
+
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=21wrh1y95y&submodules=geocoder"></script>
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="reserve_search_area" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt" id="areaTxt"></div></a>
+	</div>
+	<div class="header-right">
+<!--		<a href="#" class="btn-page-ui btn-page-alarm"><div class="icon icon-size-24 icon-page-alarm">알람</div></a>-->
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->   
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents" style="padding:0px;">
+			<div class="main-wrap">
+				<!-- 오늘의 메세지 -->
+				<!--<div class="main-today-banner">
+					<a href="#" class="btn-main-today-item"><img src="/static/pub/images/14-banner-main-message@2x.png" alt=""/></a>
+				</div>-->
+				<!-- //오늘의 메세지 -->
+
+
+                <!-- 빅배너 -->
+                <div class="main-big-banner">
+                    <div class="swiper-list">
+                         <div class="swiper-container">
+                             <div class="swiper-wrapper" >
+                                <?php
+                                if(count($banner_array)>0){
+                                    foreach($banner_array as $rs){
+                                        $path = explode(".", $rs['file_path']);
+                                        $path = $path[0]."_1.png";
+                                        
+                                        ?>
+                                        <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"></a></div></div>-->
+                                        
+                                        <div class="swiper-slide" > 
+                                            <div class="slider-item"> 
+                                                <a href="shop_event?seq=<?=$rs['mb_seq'] ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a> 
+                                            </div> 
+                                        </div>
+                                        
+                                                                            <!--<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
+                                                                            <!--<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div> 
+                        </div>
+                        <div class="swiper-page"></div>
+                    </div>
+                </div>
+                <!-- //빅배너 -->
+				<!-- 많이 이용했어요 -->
+				<div class="main-use-banner">
+					<div class="con-title-group">
+						<div class="con-title">많이 이용했어요</div>
+					</div>
+					<div class="horizontal-swiper-scoller">
+                        <div class="scroller-inner" style="overflow: auto;">
+                        <?php
+                        if(count($mainShop_array)>0){
+                            foreach($mainShop_array as $rs){
+                                ?>
+                                    <div class="scroller-item">
+                                        <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="picture-item">
+                                            <div class="thumb"><img src="https://image.banjjakpet.com<?=img_link_change($rs['front_image'])?>"></div>
+                                            <div class="info-wrap">
+                                                <div class="item-name"><?=$rs['name']?></div>
+                                                <div class="item-option-group">
+                                                    <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=round($rs['rating_avg'])?></em>(<?=$rs['rating_cnt']?>)</div>
+<!--                                                    <div class="item-distance">0.15km</div>-->
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </div>
+					</div>
+				</div>
+				<!-- //많이 이용했어요 -->
+				<!-- 지금 예약가능해요 -->
+				<!--<div class="main-reserve-wrap">
+					<div class="con-title-group">
+						<div class="con-title">지금 예약가능해요</div>
+						<a href="#" class="btn-content-more">전체보기</a>
+					</div>
+					<div class="current-km">현재 위치 10km 내</div>					
+					<div class="vertical-list-wrap line">
+						<div class="list-inner">
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">폴리파크 홍대점</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>-->
+										<!-- 20211024 수정 : item-option-group 클래스로 수정 (리스트 이하 동일) -->
+										<!--<div class="item-option-group">
+											<div class="group-inner">-->
+												<!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->
+												<!--<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="list-cell">
+								<a href="#" class="basic-list-item">
+									<div class="thumb">
+										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+										<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+									</div>
+									<div class="info-wrap">
+										<div class="item-name">폴리파크 홍대점</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
+										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+										<div class="item-option-group">
+											<div class="group-inner">
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>-->
+				<!-- //지금 예약가능해요 -->
+				<!-- 반려 미용 명인을 모아봣어요 -->
+				<!--<div class="main-master-banner">
+					<div class="con-title-group">
+						<div class="con-title">반려 미용 명인을 모아봣어요</div>
+						<a href="#" class="btn-content-more">전체보기</a>
+					</div>					
+					<div class="horizontal-swiper-scoller wide">
+						<div class="scroller-inner">
+							<div class="scroller-item">-->
+								<!--
+								// 배경색상 지정해서 사용(기본은 #000값)
+								-->
+								<!--<a href="#" class="bg-color-item" style="background-color:#6840b1;">
+									<div class="info-wrap">
+										<div class="item-name">다시태어나개</div>
+										<div class="item-info">미용을 꺼리는 아이의 마음을 읽는 명인이 미용하는 곳</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-white"></div><em>5.0</em></div>
+									</div>
+									<div class="thumb">
+										<div class="obj"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>-->
+										<!--
+										// 테두리 지정해서 사용(기본은 #000값)
+										-->
+										<!--<div class="user-thumb" style="border-color:#6840b1;"><img src="/static/pub/images/user_thumb.png" alt=""/></div>
+									</div>
+								</a>
+							</div>
+							<div class="scroller-item">-->
+								<!--
+								// 배경색상 지정해서 사용(기본은 #000값)
+								-->
+								<!--<a href="#" class="bg-color-item" style="background-color:#ffe030;">
+									<div class="info-wrap">
+										<div class="item-name">다시태어나개</div>
+										<div class="item-info">미용을 꺼리는 아이의 마음을 읽는 명인이 미용하는 곳</div>
+										<div class="item-grade"><div class="icon icon-size-16 icon-star-white"></div><em>5.0</em></div>
+									</div>
+									<div class="thumb">
+										<div class="obj"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>-->
+										<!--
+										// 테두리 지정해서 사용(기본은 #000값)
+										-->
+										<!--<div class="user-thumb" style="border-color:#ffe030;"><img src="/static/pub/images/user_thumb.png" alt=""/></div>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>-->
+				<!-- //반려 미용 명인을 모아봣어요 -->
+				<!-- BEST 미용후기 -->
+				<div class="main-best-wrap">
+					<div class="con-title-group">
+						<div class="con-title">BEST 미용후기</div>
+					</div>									
+					<div class="vertical-list-wrap">
+						<div class="list-inner" id="beauty_comment">
+                            <?php
+                            if(count($bestReview_array)>0){
+                                foreach($bestReview_array as $rs){
+                                    $photo = explode('|', $rs['review_images']);
+                                ?>
+                                <div class="list-cell">
+                                    <a href="reserve_view?type=beauty&artist_id=<?=$rs['artist_id']?>&rev=<?=$rs['review_seq']?>" class="basic-list-item">
+                                        <div class="thumb">
+                                            <img src="https://image.banjjakpet.com<?=img_link_change($photo[0])?>">
+                                        </div>
+                                        <div class="info-wrap">
+                                            <div class="item-name"><?=$rs['name']?></div>
+                                            <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=$rs['rating']?></em>(<?=$rs['rating_cnt']?>)<div class="hit">총 <?=$rs['use_cnt']?>회 이용</div></div>
+                                            <div class="item-desc"><?=$rs['review']?></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <?php
+                                }
+                            }
+                            ?>
+						</div>
+					</div>
+                    <div class="page-middle-banner">
+                        <a href="shop_event?seq=9" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/best_review.png" alt=""/></a>
+                    </div>
+				</div>
+				<!-- //BEST 미용후기 -->
+				<!-- MD추천 쇼핑템 -->
+				<div class="main-md-wrap">
+					<div class="con-title-group">
+						<div class="con-title">MD 추천 쇼핑템</div>
+						<!--<a href="#" class="btn-content-more">전체보기</a>-->
+					</div>				
+					<div class="horizontal-swiper-scoller">
+                        <div class="scroller-inner" style="overflow: auto;">
+                            <?php
+                            if(count($md_item_array)>0){
+                                foreach($md_item_array as $rs){
+                                    // 메인사진 구하기
+                                    $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
+                                    $file_result = sql_query($file_sql);
+                                    $file_row = sql_fetch($file_result);
+                                    $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
+
+                                    //할인율 구하기
+                                    $percent = ($rs['product_price'] == 0 || $rs['sale_price'] == 0)? 0 : 100 - ($rs['sale_price'] / $rs['product_price'] * 100);
+                                    ?>
+                                    <div class="scroller-item">
+                                        <a href="shop_view?product_no=<?=$rs['product_no']?>" class="product-item">
+                                            <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
+                                            <div class="info-wrap">
+                                                <div class="item-name"><?= $rs['product_name']?></div>
+                                                <div class="item-price-group">
+                                                    <div class="price-sale"><?=round($percent)?>%</div>
+                                                    <div class="price-value"><?=number_format($rs['sale_price'])?>원</div>
+                                                </div>
+                                                <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=round($rs['rating_avg'])?></em>(<?php echo ($rs['rating_cnt']>0)?$rs['rating_cnt']:0; ?>)</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </div>
+					</div>	
+				</div>
+				<!-- //MD추천 쇼핑템 -->
+				<!-- NEW 쇼핑템 -->
+				<div class="main-new-wrap" id="new_item_parent">
+					<div class="con-title-group">
+						<div class="con-title">NEW 쇼핑템</div>
+						<!--<a href="#" class="btn-content-more">전체보기</a>-->
+					</div>			
+					<div class="horizontal-swiper-scoller group">
+						<div class="scroller-inner" id="new_item_1">
+                            <div class="scroller-mulity-group" style="overflow: auto;">
+                                <div class="scroller-mulity-inner">
+                                    <?php
+                                    for($i=0;$i<count($new_item_array);$i=$i+2){
+                                        // 메인사진 구하기
+                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$new_item_array[$i]['product_img']}) LIMIT 1";
+                                        $file_result = sql_query($file_sql);
+                                        $file_row = sql_fetch($file_result);
+                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $new_item_array[$i]['goodsRepImage'];
+
+                                        //할인율 구하기
+                                        $percent = ($new_item_array[$i]['product_price'] == 0 || $new_item_array[$i]['sale_price'] == 0)? 0 : 100 - ($new_item_array[$i]['sale_price'] / $new_item_array[$i]['product_price'] * 100);
+                                        ?>
+                                        <div class="scroller-item">
+                                            <a href="shop_view?product_no=<?=$new_item_array[$i]['product_no']?>" class="product-item">
+                                                <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
+                                                <div class="info-wrap">
+                                                    <div class="item-name"><?=$new_item_array[$i]['product_name']?></div>
+                                                    <div class="item-price-group">
+                                                        <div class="price-sale"><?=round($percent)?>%</div>
+                                                        <div class="price-value"><?=number_format($new_item_array[$i]['sale_price'])?>원</div>
+                                                    </div>
+                                                    <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=round($new_item_array[$i]['rating_avg'])?></em>(<?php echo ($new_item_array[$i]['rating_cnt']>0)?$new_item_array[$i]['rating_cnt']:0; ?>)</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                                <div class="scroller-mulity-inner">
+                                    <?php
+                                    for($i=1;$i<count($new_item_array);$i=$i+2){
+                                        // 메인사진 구하기
+                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$new_item_array[$i]['product_img']}) LIMIT 1";
+                                        $file_result = sql_query($file_sql);
+                                        $file_row = sql_fetch($file_result);
+                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $new_item_array[$i]['goodsRepImage'];
+
+                                        //할인율 구하기
+                                        $percent = ($new_item_array[$i]['product_price'] == 0 || $new_item_array[$i]['sale_price'] == 0)? 0 : 100 - ($new_item_array[$i]['sale_price'] / $new_item_array[$i]['product_price'] * 100);
+                                        ?>
+                                        <div class="scroller-item">
+                                            <a href="shop_view?product_no=<?=$new_item_array[$i]['product_no']?>" class="product-item">
+                                                <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
+                                                <div class="info-wrap">
+                                                    <div class="item-name"><?=$new_item_array[$i]['product_name']?></div>
+                                                    <div class="item-price-group">
+                                                        <div class="price-sale"><?=round($percent)?>%</div>
+                                                        <div class="price-value"><?=number_format($new_item_array[$i]['sale_price'])?>원</div>
+                                                    </div>
+                                                    <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=round($new_shop_array[$i]['rating_avg'])?></em>(<?php echo ($new_shop_array[$i]['rating_cnt']>0)?$new_shop_array[$i]['rating_cnt']:0; ?>)</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+						</div>
+					</div>			
+					<div class="horizontal-swiper-scoller">
+						<div class="scroller-inner" id="new_item_2">
+
+							
+
+						</div>
+					</div>				
+				</div>
+				<!-- //NEW 쇼핑템 -->
+				<!-- 새로 입점했어요 -->
+				<div class="main-store-wrap">
+					<div class="con-title-group">
+						<div class="con-title">새로 입점했어요!</div>
+						<!-- <a href="#" class="btn-content-more">전체보기</a> --> 
+					</div>					
+					<div class="vertical-list-wrap line shop">
+						<div class="list-inner" id="new_beauty_shop">
+                            <?php
+                            if(count($new_shop_array)>0){
+                                foreach($new_shop_array as $rs){
+                                    // 주소 구하기
+                                    $shop_address = explode('|',$rs['address']);
+
+                                    // 영업시간 구하기
+                                    $start_time = $rs['start_time'].":00";
+                                    $end_time = $rs['end_time'].":00";
+
+                                    // 휴무일 구하기
+                                    $holiday_txt = "매주 일, 월, 화, 수, 목, 금, 토, ";
+
+                                    if($rs['is_sunday'] == 0){
+                                        $holiday_txt = str_replace("일, ","",$holiday_txt);
+                                    }
+                                    if($rs['is_monday'] == 0){
+                                        $holiday_txt = str_replace("월, ","",$holiday_txt);
+                                    }
+                                    if($rs['is_tuesday'] == 0){
+                                        $holiday_txt = str_replace("화, ","",$holiday_txt);
+                                    }
+                                    if($rs['is_wednesday'] == 0){
+                                        $holiday_txt = str_replace("수, ","",$holiday_txt);
+                                    }
+                                    if($rs['is_thursday'] == 0){
+                                        $holiday_txt = str_replace("목, ","",$holiday_txt);
+                                    }
+                                    if($rs['is_friday'] == 0){
+                                        $holiday_txt = str_replace("금, ","",$holiday_txt);
+                                    }
+                                    if($rs['is_saturday'] == 0){
+                                        $holiday_txt = str_replace("토, ","",$holiday_txt);
+                                    }
+
+                                    if(strpos($holiday_txt, ',') === false){
+                                        $holiday_txt = "연중 무휴"; // 정기휴일 제외하고 안쉼
+                                    }else{
+                                        $holiday_txt = substr($holiday_txt, 0, -2) . " 휴무";
+                                    }
+
+                                    // 미용타입 구하기
+                                    $type_txt = "";
+                                    if(strpos($rs['type'],'소형견미용') !== false){
+                                        $type_txt .= "소형견, ";
+                                    }
+                                    if(strpos($rs['type'],'중형견미용') !== false){
+                                        $type_txt .= "중형견, ";
+                                    }
+                                    if(strpos($rs['type'],'대형견미용') !== false){
+                                        $type_txt .= "대형견, ";
+                                    }
+                                    if(strpos($rs['type'],'특수견미용') !== false){
+                                        $type_txt .= "특수견, ";
+                                    }
+
+                                    if($type_txt != ''){
+                                        $type_txt = substr($type_txt, 0, -2);
+                                    }
+                                ?>
+                                <div class="list-cell">
+                                    <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="basic-list-item store">
+                                        <div class="thumb">
+                                            <img src="https://image.banjjakpet.com<?=img_link_change($rs['photo'])?>">
+                                        </div>
+                                        <div class="info-wrap">
+                                            <div class="item-name"><?=$rs['name']?></div>
+                                            <div class="item-address"><?=$shop_address[1]?></div>
+                                            <div class="item-cate"><?=$type_txt?></div>
+                                            <div class="item-option-group">
+                                                <div class="group-inner">
+                                                    <!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->
+                                                    <div class="tag-item"><?=$start_time?>-<?=$end_time?></div>
+                                                    <div class="tag-item"><?=$holiday_txt?></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <?php
+                                }
+                            }
+                            ?>
+						</div>
+					</div>
+				</div>
+				<!-- //새로 입점했어요 -->
+			</div>
+		</div>
+        <div class="basic-data-group">
+			<div class="common-customer">
+				<div class="item-tel"><a href="tel:1661-9956">고객센터 <em>1661-9956</em></a></div>
+				<div class="item-mail"><a href="mailTo:help@peteasy.kr">help@peteasy.kr</a></div>
+			</div>
+		</div>
+		<!-- //page-contents -->
+        <!-- //하단 배너 -->
+        <div class="page-footer">
+            <div class="footer-business">
+                <button type="button" class="btn-footer-business" style="color:#000;">(주)펫이지 사업자 정보</button>
+                <div class="footer-address">
+                    <div class="footer-address-cell">대표: 신동찬</div>
+                    <div class="footer-address-cell">사업자등록번호: 157-86-01070 사업자정보확인</div>
+                    <div class="footer-address-cell">통신판매업 제 2021-서울종로-0183호</div>
+                    <div class="footer-address-cell">서울시 종로구 종로6 5층 서울창조경제혁신센터</div>
+                    <div class="footer-address-cell">개인정보 담당자: 이석범 privacy@peteasy.kr</div>
+                </div>
+            </div>
+            <div class="footer-customer-menu">
+                <!--<ul>
+                    <li><a href="#">미용샵/호텔입점신청</a></li>
+                    <li><a href="#">쇼핑입점/제휴광고문의</a></li>
+                </ul>-->
+            </div>
+            <div class="footer-etc-menu">
+                <ul>
+                    <li><a href="terms4">이용약관</a></li>
+                    <li><a href="terms3">개인정보처리방침</a></li>
+                </ul>
+            </div>
+            <!--<div class="footer-etc-menu">
+                <ul>
+                    <li><a>고객센터</a></li>
+                    <li><a href="tel:1661-9956">1661-9956</a></li>
+                </ul>
+            </div>
+            <div class="footer-etc-menu">
+                <ul>
+                    <li><a href="mailTo:help@peteasy.kr">help@peteasy.kr</a></li>
+                </ul>
+            </div>-->
+            <div class="footer-copy">©PetEasy Co. Ltd. All rights reserved</div>
+        </div>
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+
+
+<script>
+    //37.517305, 127.047502 강남구
+    var addrTop = "";
+    var addrMiddle = "";
+    //var tabMenu = "<?//=$r_tab?>//";
+    var map = null;
+    var lat = 0;
+    var lng = 0;
+
+    var defaultLat = 37.517305;
+    var defaultLng = 127.047502;
+
+    var defultLimitKm = 10;
+    var page = -1;
+    var isListLoging = false;
+    var isPageEnd = false;
+
+    var timer;
+    var timerDe;
+    var lastValue = 10;
+
+    window.dataLayer = window.dataLayer || [];
+
+    // 클릭시 스크롤 위치 저장하기
+    $(window).click(function(){
+
+        // let date_storage = new Date();
+        // date_storage.setMinutes(date_storage.getMinutes()+5); // 클릭으로부터 5분 뒤 시간
+        // //console.log(date_storage);
+        // localStorage.setItem('timeout', date_storage); // 시간
+        //
+        // var scroll = document.querySelector('html').scrollTop;
+        // localStorage.setItem('main_scroll',scroll); // scroll position
+        // history.replaceState('', '', window.location.pathname);
+        // console.log(localStorage.getItem('main_scroll'));
+        // console.log(scroll);
+        var scroll = $('html').scrollTop();
+        console.log(scroll);
+    });
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-152043924-1');
+
+    function initValue() {
+        page = -1;
+        isListLoging = false;
+        isPageEnd = false;
+        $("#listArea").html('');
+    }
+
+    $(document).ready(function() {
+        /*
+        new Swiper('.swiper-container', {
+            slidesPerView: 'auto',
+            spaceBetween: 30,
+            loopAdditionalSlides: 1,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: true,
+            },
+            loop : true,
+            observeParents: true,
+            pagination: {
+                el: '.swiper-page',
+                type: 'fraction',
+            },
+            on: {
+                slideChangeTransitionEnd: function(){
+                    category_group = this.activeIndex + 1;
+                },
+            },
+
+        });
+         */
+
+        //setTabMenu();
+        myLocate();
+    });
+
+    function setTabMenu(isChangeTab){
+        // tabMenu = menu
+        // if ( tabMenu == "best" ) {
+        //     $("#bestTab").addClass("actived");
+        //     $("#distanceTab").removeClass("actived");
+        //     $("#distanceDivTxt").css('display','none');
+        // } else {
+        //     $("#bestTab").removeClass("actived");
+        //     $("#distanceTab").addClass("actived");
+        //     $("#distanceDivTxt").css('display','block');
+        // }
+
+        // insertParam("tab",tabMenu);
+
+        if (isChangeTab) {
+            lastValue = 10;
+            initValue();
+            setMap(lastValue);
+        }
+    }
+
+    // 안드로이드 위치 출력
+    function resMyLocate(_lat, _lng){
+        console.log(_lat, _lng);
+        lat = _lat;
+        lng = _lng;
+        setMap(lastValue);
+    }
+
+    var location_cnt = 0;
+    function myLocate() {
+        // 위치값 세번 호출
+        //if(location_cnt < 3){
+            var deviceType = checkMobile();
+            try {
+                if (deviceType == "in_app_and") {
+                    //lat = window.Android.myLocate('lat');
+                    //lng = window.Android.myLocate(null);
+                    //setMap(lastValue);
+                    window.Android.reqMyLocate();
+                } else if (deviceType == "in_app_ios") {
+                    window.webkit.messageHandlers.isGps.postMessage('a');
+                    if (timerDe) {
+                        clearTimeout(timerDe);
+                    }
+                    timerDe = setTimeout(function() {
+                        getiOSLacation();
+                    }, 300);
+                } else {
+                    getLocation();
+                }
+            } catch(e) {
+
+            }
+            // 세번 호출 뒤 locationClose
+        /*}else{
+            var deviceType = checkMobile();
+            if(deviceType == "in_app_and"){	//
+                window.Android.myLocateClose();
+                // 20210602 by migo - console.log() 사용시, GPS 내위치 조회에서 오류가 발생함, 사용하면 안 됨 
+            }else if(deviceType == "android"){
+
+            }else if(deviceType == "in_app_ios"){
+
+            }else if(deviceType == "ios"){
+
+            }else{
+
+            }
+        }*/
+    }
+    
+    function isGps(_data){
+        // to do something..
+        //alert(_data);
+        if(_data == "false"){
+            alert("GPS가 비활성화 상태입니다. GPS를 활성화 하세요.");
+        }else{
+            window.webkit.messageHandlers.myLocate.postMessage('a');
+            window.webkit.messageHandlers.myLocate.postMessage('');
+        }
+    }
+
+    function checkMobile() {
+        var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if (varUA.indexOf("app_gobeauty_and") > -1) {
+            //APP
+            return "in_app_and";
+        } else if (varUA.indexOf("app_gobeauty_ios") > -1) {
+            //안드로이드
+            return "in_app_ios";
+        } else if (varUA.indexOf('android') > -1) {
+            //안드로이드
+            return "android";
+        } else if (varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1 || varUA.indexOf("ipod") > -1) {
+            //IOS
+            return "ios";
+        } else {
+            //아이폰, 안드로이드 외
+            return "other";
+        }
+    }
+
+    function searchAddressToCoordinate(address) {
+        naver.maps.Service.geocode({
+            query: address
+        }, function(status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+                setMapDefultLoction();
+                if (!address) {
+                    return alert('Geocode Error, Please check address');
+                }
+                return alert('Geocode Error, address:' + address);
+            }
+
+            if (response.v2.meta.totalCount === 0) {
+                return alert('No result.');
+            }
+
+            // var htmlAddresses = [],
+            item = response.v2.addresses[0],
+                point = new naver.maps.Point(item.x, item.y);
+
+            lat = item.y;
+            lng = item.x;
+            setMap(defultLimitKm);
+        });
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, err);
+        } else {
+            setMapDefultLoction();
+            layerPop.alert("위치 정보 서비스를 지원하지 않는 기기입니다.");
+        }
+    }
+
+    function getiOSLacation() {
+        if ( lat == "" && lng == "" ) {
+            setMapDefultLoction();
+        } else {
+            setMap(lastValue);
+        }
+    }
+
+    function showPosition(position) {
+        lat = position.coords.latitude;
+        lng = position.coords.longitude;
+        setMap(defultLimitKm);
+        // setMap();
+    }
+
+    function setMapDefultLoction() {
+        lat = defaultLat;
+        lng = defaultLng;
+
+        addrTop = "서울";
+        addrMiddle = "강남구";
+        setMap(defultLimitKm);
+    }
+
+    function searchCoordinateToAddress(latlng, limitKm) {
+
+        naver.maps.Service.reverseGeocode({
+            coords: latlng,
+            orders: [
+                naver.maps.Service.OrderType.ADDR,
+                naver.maps.Service.OrderType.ROAD_ADDR
+            ].join(',')
+        }, function(status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+                setMapDefultLoction();
+                /*
+                if (!latlng) {
+                    return alert('ReverseGeocode Error, Please check latlng');
+                }
+                if (latlng.toString) {
+                    return alert('ReverseGeocode Error, latlng:' + latlng.toString());
+                }
+                if (latlng.x && latlng.y) {
+                    return alert('ReverseGeocode Error, x:' + latlng.x + ', y:' + latlng.y);
+                }
+                return alert('ReverseGeocode Error, Please check latlng');
+                */
+            }
+
+            try {
+                var checkArray = ["고양시","성남시", "수원시","안산시","안양시","용인시","포항시","창원시","전주시","청주시","천안시"];
+                var address = response.v2.address;
+
+                console.log(response.v2.address);
+                var jbSplit = String(address.jibunAddress).split(' ');
+                console.log(jbSplit);
+
+                var isLoadListData = (addrTop == "" && addrMiddle == "");
+
+                addrTop = jbSplit['0'];
+                addrMiddle = jbSplit['1'];
+
+                if(jQuery.inArray(jbSplit['1'], checkArray) !== -1){
+                    addrMiddle = addrMiddle + " "+ jbSplit['2'];
+                }
+
+                console.log(addrMiddle);
+
+                if ( isLoadListData ) {
+                    // setList(limitKm);
+                    // setMarker(limitKm);
+                }
+
+                $("#areaTxt").text(addrMiddle);
+
+
+            } catch (e) {}
+        });
+    }
+
+    function err(e) {
+        setMapDefultLoction();
+        var errors = {
+            1: '위치 정보 권한이 없습니다.<br>휴대폰 설정에서 위치(GPS)사용을 허용해주세요.',
+            2: '위치 서비스를 사용할 수 없습니다.<br>잠시 후 다시 시도해주세요.',
+            3: '요청시간을 초과하였습니다.<br>잠시 후 다시 시도해주세요.'
+        };
+        layerPop.alert(errors[e.code]);
+        // alert("Error: " + errors[e.code]);
+    }
+
+    function locationLatitude(_lat) {
+        lat = _lat;
+        if (timerDe) {
+            clearTimeout(timerDe);
+        }
+        timerDe = setTimeout(function() {
+            getiOSLacation();
+        }, 300);
+    }
+
+    function locationLongitude(_lng) {
+        lng = _lng;
+        if (timerDe) {
+            clearTimeout(timerDe);
+        }
+        timerDe = setTimeout(function() {
+            getiOSLacation();
+        }, 300);
+    }
+
+
+    function setMap(limitKm) {
+        if (lat > 0 && lng > 0) {
+            var position = new naver.maps.LatLng(lat, lng);
+
+            searchCoordinateToAddress(position, limitKm);
+
+        }
+        /*setTimeout(function() {
+            console.log('reLocation');
+            location_cnt += 1;
+            myLocate();
+        }, 300);    */
+    }
+
+
+</script>
+
+
+
+	
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+?>

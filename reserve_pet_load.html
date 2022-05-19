@@ -1,0 +1,92 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+
+?>      
+
+<!-- header -->
+<header id="header">	
+	<div class="page-title">펫 불러오기</div>
+	<div class="header-right">
+		<a href='<?= $backurl ?>' class="btn-page-ui btn-page-close"><div class="icon icon-size-24 icon-page-close">페이지 닫기</div></a>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->
+		<div class="page-contents">
+            <?
+                $pet_sql = "select * from tb_mypet where customer_id = '" . $user_id . "';";
+                $pet_result = mysqli_query($connection, $pet_sql);
+                $count = 0;
+                while ($pet_rows = mysqli_fetch_object($pet_result)) {
+                    $count++;
+                    $name_for_owner = $pet_rows->name_for_owner;
+                    $pet_name = ($name_for_owner == "")? $pet_rows->name : $name_for_owner; // 견주용 펫 이름이 null 값이면 shop용 펫 이름 가져오기
+                    $type = $pet_rows->type;
+                    $pet_type = $pet_rows->pet_type;
+                    $pet_type2 = $pet_rows->pet_type2;
+                    $year = $pet_rows->year;
+                    $month = $pet_rows->month;
+                    $day = $pet_rows->day;
+                    $gender = $pet_rows->gender;
+                    $weight = $pet_rows->weight;
+                    $photo = img_link_change($pet_rows->photo);
+                    $pet_seq = $pet_rows->pet_seq;   
+            ?>
+			<a href="<?= $backurl ?>&pet_seq=<?= $pet_seq ?>"  class="customer-card-item pet">
+				<div class="item-info-wrap">
+					<div class="item-thumb">
+						<div class="user-thumb large"><img onerror="this.style.display='none';" src="<?= $photo ?>" alt=""></div>
+					</div>
+					<div class="item-data">
+						<div class="item-data-inner">
+							<div class="item-pet-name"><?= $pet_name ?></div>
+                            <?php
+                                $ttttt = sprintf("%d-%d-%d", $year, $month, $day);
+                                $birth_time   = strtotime($ttttt);
+                                $now          = date('Ymd');
+                                $birthday     = date('Ymd', $birth_time);
+                                $age           = floor(($now - $birthday) / 10000);
+
+                                $nowY = date("Y");
+                                $nowM = date("m");
+                                $postY = $year;
+                                $postM = $month;
+                                $dist = ($nowY - $postY) * 12 + ($nowM - $postM);
+                            ?>
+							<div class="item-pet-date"><?= $year ?>.<?= $month ?>.<?= $day ?><font style="font-size:13px;">(<?php if ($age != 0) {
+                                echo $age . "년";} ?><?= $dist % 12 ?>개월)</font></div>
+                                <div class="item-pet-body"><?= $gender ?> / <?= $weight ?>kg  <?= $pet_type ?> <?= $pet_type2 ?></div>
+						</div>
+					</div>
+				</div>
+			</a>
+            <?
+            }
+            ?>
+
+		</div>
+		<!-- //page-contents -->
+	</div>
+	<!-- //page-body -->
+</section>
+<!-- //container -->
+<script>
+</script>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">예약 신청하기</div>
+	<div class="reserve-state-bar">
+		<div class="bar" style="width:66.66%"></div>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="reserve-request-wrap">				
+				<div class="basic-data-group">
+					<div class="customer-card-item type2">
+						<h5 class="con-title">신청자 정보</h5>
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle"></div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name">이름입니다.</div>
+									<div class="item-pet-date">2015.9.15 출생 (8년 9개월)</div>
+									<div class="item-pet-body">여아 / 3.5kg</div>
+								</div>
+							</div>
+						</div>						
+						<div class="item-modify">
+							<div class="form-control-btns">
+								<div class="form-label-input">	
+									<label>연락처</label>
+									<div class="form-txt">010-1234-5678</div>
+								</div>
+								<button type="button" class="btn btn-outline-purple btn-inline btn-round">변경</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group">
+					<div class="user-receipt-item">
+						<h5 class="con-title">예약 펫샵 및 일시</h5>
+						<div class="simple-thumb-info">
+							<div class="thumb-wrap">
+								<div class="content-thumb small"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+							</div>
+							<div class="info-wrap">
+								<div class="info-inner">
+									<div class="item-title">픽몬테스트</div>
+									<div class="item-date">2021.05.26 (수) 12:00 ~</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basic-data-group">
+					<div class="user-receipt-item">
+						<h5 class="con-title">예약 내용</h5>
+						<div class="receipt-buy-detail">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title">소형견미용/목욕/~3Kg</div>
+									<div class="list-value">20,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장모_목욕</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">기본얼굴컷</div>
+									<div class="list-value">5,000원</div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title">장화</div>
+									<div class="list-value">10,000원</div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail total-price">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title"><strong>합산 금액</strong></div>
+									<div class="list-value"><strong>40,000원</strong></div>
+								</div>
+								<div class="list-cell">
+									<div class="list-title"><strong>부가세 10%</strong></div>
+									<div class="list-value"><strong>4,000원</strong></div>
+								</div>
+							</div>
+						</div>
+						<div class="receipt-buy-detail result-price">
+							<div class="item-data-list">
+								<div class="list-cell">
+									<div class="list-title font-color-purple"><strong>총 결제 합산 금액</strong></div>
+									<div class="list-value font-color-purple"><strong>44,000원</strong></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 20220308 수정 -->
+				<div class="basic-data-group">
+					<div class="con-title-group">
+						<h5 class="con-title">결제방법</h5>
+					</div>
+					<div class="wide-tab card">
+						<div class="wide-tab-inner">
+							<!-- 활성화시 actived클래스 추가 -->
+							<!-- 비활성화시 disabled클래스 추가 -->
+							<div class="tab-cell"><button type="button" class="btn-tab-item">매장결제</button></div>
+							<div class="tab-cell actived"><button type="button"  class="btn-tab-item">지금결제</button></div>
+						</div>
+					</div>
+					<div class="basic-data-group vvsmall3">
+						<div class="tab-data-group">
+							<!-- tab-data-cell 클래스에 actived클래스 추가시 활성화 -->
+							<!-- 매장결제 -->
+							<div class="tab-data-cell">
+								<div class="user-receipt-item">
+									<div class="pay-card-group border-none top">
+										<div class="pay-card-cell all"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em><strong>전체선택</strong></em></span></label></div>
+										<div class="pay-card-cell"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 몸무게, 털엉킴, 사나움, 진드기 등은 현장판단 후 추가 요금이 발생하거나 마음이 중단/거부될 수 있음에 동의합니다.</em></span></label></div>
+										<div class="pay-card-cell"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 예방접종 4회 이상 완료하였습니다.</em></span></label></div>
+										<div class="pay-card-cell"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 노령견, 장시간 서있지 못하는 아이(슬개골 관절 질환), 피부질환이 심한 아이는 미용이 불가할 수 있음에 동의합니다.</em></span></label></div>
+										<div class="pay-card-cell rule">
+											<div class="pay-card-rule-wrap">
+												<div class="pay-card-check">
+													<label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 구매내용과 예약취소 규정을 확인하였습니다.</em></span></label>
+													<button type="button" class="btn-pay-card-toggle"></button>
+												</div>
+												<div class="pay-card-rule">
+													<div class="info">* 예약 취소 규정</div>
+													<div class="rule-table">
+														<table>
+															<colgroup>
+																<col style="width:40%">
+																<col style="width:60%">
+															</colgroup>
+															<thead>
+																<tr>
+																	<th>취소기준일</th>
+																	<th>취소수수료</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>예약 1일전까지</td>
+																	<td>없음<br>(단, 계좌이체로 결제한 경우 결제 취소수수료가 발생할 수 있음)</td>
+																</tr>
+																<tr>
+																	<td>예약당일</td>
+																	<td>50%<br>(단, 결제 당일 바로취소는 취소수수료 없이 취소가능하나 2시간 전까지만 가능합니다.)</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- //매장결제 -->
+							<!-- 지금결제 -->
+							<div class="tab-data-cell actived">
+								<div class="user-receipt-item">
+									<h5 class="con-title">결제수단</h5>
+									<div class="form-check-group">
+										<div class="form-check-inner">
+											<div class="check-cell"><label for="pay1" class="form-radiobox"><input type="radio" id="pay1" name="pay"><span class="form-check-icon"><em>신용/체크카드</em></span></label></div>
+											<div class="check-cell"><label for="pay2" class="form-radiobox"><input type="radio" id="pay2" name="pay"><span class="form-check-icon"><em>무통장입금</em></span></label></div>
+										</div>
+									</div>
+									<div class="pay-group">
+										<!-- 신용/체크카드 -->
+										<div class="pay-group-cell" style="display:block;">
+											<div class="pay-card-group">
+												<div class="pay-card-cell all"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em><strong>전체선택</strong></em></span></label></div>
+												<!-- 20211223 수정 -->
+												<div class="pay-card-cell"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 몸무게, 털엉킴, 사나움, 진드기 등은 현장판단 후 추가 요금이 발생하거나 마음이 중단/거부될 수 있음에 동의합니다.</em></span></label></div>
+												<!-- //20211223 수정 -->
+												<div class="pay-card-cell"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 예방접종 4회 이상 완료하였습니다.</em></span></label></div>
+												<div class="pay-card-cell"><label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 노령견, 장시간 서있지 못하는 아이(슬개골 관절 질환), 피부질환이 심한 아이는 미용이 불가할 수 있음에 동의합니다.</em></span></label></div>
+												<div class="pay-card-cell rule">
+													<div class="pay-card-rule-wrap">
+														<div class="pay-card-check">
+															<label class="form-checkbox"><input type="checkbox" name="payCard"/><span class="form-check-icon"><em>(필수) 구매내용과 예약취소 규정을 확인하였습니다.</em></span></label>
+															<button type="button" class="btn-pay-card-toggle"></button>
+														</div>
+														<div class="pay-card-rule">
+															<div class="info">* 예약 취소 규정</div>
+															<div class="rule-table">
+																<table>
+																	<colgroup>
+																		<col style="width:40%">
+																		<col style="width:60%">
+																	</colgroup>
+																	<thead>
+																		<tr>
+																			<th>취소기준일</th>
+																			<th>취소수수료</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td>예약 1일전까지</td>
+																			<td>없음<br>(단, 계좌이체로 결제한 경우 결제 취소수수료가 발생할 수 있음)</td>
+																		</tr>
+																		<tr>
+																			<td>예약당일</td>
+																			<td>50%<br>(단, 결제 당일 바로취소는 취소수수료 없이 취소가능하나 2시간 전까지만 가능합니다.)</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- //신용/체크카드 -->
+										<!-- 무통장입금 -->
+										<div class="pay-group-cell" style="display:block;">
+											<div class="pay-bank-group">
+												<div class="pay-bank-name">기업은행 054-143076-01-013<br>주식회사 펫이지</div>
+												<div class="form-group">
+													<div class="form-group-cell">
+														<div class="form-group-item">
+															<div class="form-item-label">입금자 성명</div>
+															<div class="form-item-data">
+																<input type="text" placeholder="이름을 입력해 주세요" class="form-control"/>
+																<div class="form-input-info">*계좌이체 시 반드시 입력해 주세요.</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="pay-bank-info">
+													<div class="txt"><strong class="font-color-red">입금기한 : 2021년 10월 13일 10시 19분 52초</strong></div>
+													<div class="txt">*입금기한이 지나면 예약이 자동취소되니 유의해 주시기 바랍니다.</div>
+												</div>
+											</div>
+										</div>
+										<!-- //무통장입금 -->
+									</div>
+								</div>
+							</div>
+							<!-- //지금결제 -->
+						</div>
+					</div>					
+				</div>
+				<!-- //20220308 수정 -->
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom">예약을 신청합니다.</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+</body>
+</html>

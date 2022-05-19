@@ -1,0 +1,88 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
+
+//jin 이거주석 풀면 App이 중복선언되있다고 나옴
+//include($_SERVER['DOCUMENT_ROOT']."/include/App.class.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+//$_SESSION['reservation_artist_name'] = $artist_name;
+$artist_name = get_artist_id(addslashes($artist_id));
+$pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
+?>     
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="reserve_write1?artist_id=<?=$artist_id?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">서비스 선택</div>
+	<div class="reserve-state-bar">
+		<div class="bar" style="width:33.33%"></div>
+	</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+
+			<div class="basic-data-group">				
+				<!-- 샵 이름 있을 때 -->
+				<div class="reserve-shop-name con-title-group line">
+					<h3 class="con-title"><?= $artist_name?></h3>
+				</div>
+				<!-- //샵 이름 있을 때 -->
+				<div class="reserve-select-wrap">
+					<!-- 활성화시 actived클래스 추가 -->
+					<a type="button" id="pet_select" href="reserve_write2_1?artist_id=<?=$artist_id?>"; class="btn-text-button btn-outline-purple">펫을 선택해주세요</a>
+					<a type="button" onclick="onClickService()" class="btn-text-button btn-outline-purple" >서비스를 선택해주세요</a>
+				</div>
+			</div>
+
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<!-- //page-bottom -->
+</section>
+<script>
+	$(function(){
+       let pet_seq = "<?=$pet_seq?>"
+	   if(pet_seq != ""){
+			$("#pet_select").addClass("actived");
+	   }
+
+	   
+    });
+
+	function onClickService(){
+		if($("#pet_select").hasClass("actived")){
+			location.replace("reserve_write2_2?artist_id=<?= urlencode($artist_id) ?>&pet_seq=<?=$pet_seq?>")
+		}else{
+			alert("펫선택을 먼저 진행해주세요");
+		}
+	}
+	//if($("#pet_select").hasClass("actived") === true)
+
+	//$("#search_addr_wrap").dialog('close');
+</script>
+<!-- //container -->
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer_no_gnb.php");
+?>
+

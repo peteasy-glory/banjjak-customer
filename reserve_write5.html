@@ -1,0 +1,622 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
+
+
+//jin 이거주석 풀면 App이 중복선언되있다고 나옴
+//include($_SERVER['DOCUMENT_ROOT']."/include/App.class.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$crypto = new Crypto();
+
+// 무통장 입금 두시간 뒤 시간 구하기
+$now_date = date("Y년 m월 d일 H시 i분 s초");
+//echo "<br><br><br>".$now_date;
+$two_hours = date("Y년 m월 d일 H시 i분 s초", strtotime(strtotime($now_date)."+2 hours"));
+//echo "<br>".$two_hours;
+// 무통장입금 데이터
+$expire_time = date("Y-m-d H:i:s", strtotime(strtotime($now_date)."+2 hours"));
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+//$_SESSION['reservation_artist_name'] = $artist_name;
+$artist_name = get_artist_id(addslashes($artist_id));
+$serviceResultArray = isset($_GET['serviceResultArray']) ? json_encode($_GET['serviceResultArray']) : "";
+$etcResultArray = isset($_GET['etcResultArray']) ? json_encode($_GET['etcResultArray']) : "";
+$timeResultArray = isset($_GET['timeResultArray']) ? json_encode($_GET['timeResultArray']) : "";
+$payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : "";
+$bank_name = isset($_GET['bank_name']) ? $_GET['bank_name'] : "";
+
+
+// 샵정보
+$shop_sql = "
+    SELECT * FROM tb_shop WHERE customer_id = '".$artist_id."'
+";
+$shop_result = mysqli_query($connection, $shop_sql);
+$shop_datas = mysqli_fetch_object($shop_result);
+
+// 유저정보
+$user_sql = "
+    SELECT * FROM tb_customer WHERE id = '".$user_id."'
+";
+$user_result = mysqli_query($connection, $user_sql);
+$user_datas = mysqli_fetch_object($user_result);
+$user_cellphone = $crypto->decode(trim($user_datas->cellphone), $access_key, $secret_key);
+
+// 펫 정보
+$pet_sql = "
+    SELECT * FROM tb_mypet WHERE pet_seq = '".$pet_seq."'
+";
+$pet_result = mysqli_query($connection, $pet_sql);
+$pet_datas = mysqli_fetch_object($pet_result);
+$pet_name = $pet_datas->name_for_owner;
+$pet_birth = $pet_datas->year.".".$pet_datas->month.".".$pet_datas->day;
+$pet_gender = $pet_datas->gender;
+$pet_weight = $pet_datas->weight;
+$pet_photo = img_link_change($pet_datas->photo);
+
+$pet_product_name = $pet_datas->name;
+$pet_product_type = "";
+if($pet_datas->type == 'cat'){
+    $pet_product_type = "고양이";
+}else{
+    $pet_product_type = "개";
+}
+?>
+
+<!-- header -->
+<header id="header">	
+	<div class="page-title">예약 완료</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">		
+		<div class="reserve-complete">
+			<div class="common-none-data">
+				<div class="none-inner">
+					<div class="item-visual"><img src="/static/pub/images/icon/img-illust-1@2x.png" alt="" width="103"></div>
+					<div class="item-info">예약이 완료 되었습니다.<br>
+                        <?if($payment_type == 'shop'){?>
+                        결제는 매장에서 부탁드리겠습니다.
+                        <?}else if($payment_type == 'bank'){?>
+                        아래의 계좌로 입금 부탁드리겠습니다.
+                        <?}?>
+                    </div>
+					<div class="item-desc">예약내역 확인, 변경, 취소는 홈화면의<br>마이 메뉴에서 확인 하실 수 있습니다.</div>
+				</div>
+			</div>
+		</div>
+        <?if($payment_type == 'bank'){?>
+            <!-- 20220313 수정 -->
+            <div class="basic-data-group middle">
+                <div class="con-title-group">
+                    <h4 class="con-title">입금계좌 </h4>
+                </div>
+                <div class="basic-data-group none">
+                    <div class="user-receipt-item">
+                        <div class="bank-info-txt">기업은행<br>054-143076-01-013<br>주식회사 펫이지</div>
+                        <div class="bank-info-txt">입금자 성명 : <?=$bank_name?></div>
+                    </div>
+                </div>
+            </div>
+            <!-- //20220313 수정 -->
+        <?}?>
+		<div class="basic-data-group middle">
+			<div class="con-title-group">
+				<h4 class="con-title">예약/결제상품</h4>
+			</div>
+			<div class="basic-data-group none">
+				<div class="user-receipt-item">
+					<h5 class="con-title">예약 펫샵 및 일시</h5>
+					<div class="simple-thumb-info">
+						<div class="thumb-wrap">
+							<div class="content-thumb small">
+                                <?if($shop_datas->front_image != ''){?>
+                                <img src="<?=img_link_change($shop_datas->front_image)?>" alt="">
+                                <?}?>
+                            </div>
+						</div>
+						<div class="info-wrap">
+							<div class="info-inner">
+								<div class="item-title"><?=$shop_datas->name?></div>
+								<div class="item-date" id="beauty_date"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="basic-data-group vvsmall2">
+				<div class="user-receipt-item">
+					<h5 class="con-title">결제 상품</h5>
+					<div class="customer-card-item type2 none">
+						<div class="item-info-wrap">
+							<div class="item-thumb">
+								<div class="user-thumb middle">
+                                    <?if($pet_photo != ''){?>
+                                        <img src="<?=$pet_photo?>" alt="">
+                                    <?}?>
+                                </div>
+							</div>
+							<div class="item-data">
+								<div class="item-data-inner">
+									<div class="item-pet-name"><?=$pet_name?></div>
+									<div class="item-pet-date"><?=$pet_birth?> 출생 <!--(8년 9개월)--></div>
+									<div class="item-pet-body"><?=$pet_gender?> / <?=$pet_weight?>kg</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="receipt-buy-detail">
+						<div class="item-data-list">
+                            <div class="list-cell" id="main_service_1_cell">
+                                <div class="list-title" id="main_service_1">소형견미용/목욕/~3Kg</div>
+                                <div class="list-value" id="main_service_1_price">20,000원</div>
+                            </div>
+                            <div class="list-cell" id="main_service_2_cell">
+                                <div class="list-title" id="main_service_2"></div>
+                                <div class="list-value" id="main_service_2_price"></div>
+                            </div>
+                            <div class="list-cell" id="main_service_3_cell">
+                                <div class="list-title" id="main_service_3"></div>
+                                <div class="list-value" id="main_service_3_price"></div>
+                            </div>
+                            <div class="list-cell" id="etc_service_1_cell">
+                                <div class="list-title" id="etc_service_1"></div>
+                                <div class="list-value" id="etc_service_1_price"></div>
+                            </div>
+                            <div class="list-cell" id="etc_service_2_cell">
+                                <div class="list-title" id="etc_service_2"></div>
+                                <div class="list-value" id="etc_service_2_price"></div>
+                            </div>
+                            <div class="list-cell" id="etc_service_3_cell">
+                                <div class="list-title" id="etc_service_3"></div>
+                                <div class="list-value" id="etc_service_3_price"></div>
+                            </div>
+                            <div class="list-cell" id="etc_service_4_cell">
+                                <div class="list-title" id="etc_service_4"></div>
+                                <div class="list-value" id="etc_service_4_price"></div>
+                            </div>
+						</div>
+					</div>
+					<div class="receipt-buy-detail total-price">
+                        <div class="item-data-list">
+                            <div class="list-cell" id="total_price_cell">
+                                <div class="list-title"><strong>합산 금액</strong></div>
+                                <div class="list-value"><strong id="total_price"></strong></div>
+                            </div>
+                            <div class="list-cell" id="vat_price_cell">
+                                <div class="list-title"><strong>부가세 10%</strong></div>
+                                <div class="list-value"><strong id="vat_price"></strong></div>
+                            </div>
+                        </div>
+					</div>
+					<!--<div class="receipt-buy-detail total-price">
+						<div class="item-data-list">
+							<div class="list-cell">
+								<div class="list-title"><strong>할인금액</strong></div>
+								<div class="list-value"><strong>(-)660원</strong></div>
+							</div>
+							<div class="list-cell">
+								<div class="list-title"><strong>적립금 사용</strong></div>
+								<div class="list-value"><strong>(-)260원</strong></div>
+							</div>
+						</div>
+					</div>-->
+					<div class="receipt-buy-detail result-price">
+						<div class="item-data-list">
+                            <div class="list-cell" id="result_price_cell">
+                                <div class="list-title font-color-purple"><strong>총 결제 합산 금액</strong></div>
+                                <div class="list-value font-color-purple"><strong id="result_price"></strong></div>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="basic-data-group middle">
+			<a href="/" class="btn btn-yellow btn-round btn-middle-size"><strong>확인</strong></a>
+		</div>
+		<div class="basic-data-group">
+			<div class="con-title-group">
+				<h4 class="con-title">추천 상품</h4>
+			</div>
+			<div class="horizontal-swiper-scoller">
+				<div class="scroller-inner" id="product_list">
+
+					<div class="scroller-item">
+						<a href="#" class="product-item">
+							<div class="thumb"><div class="obj"></div></div>
+							<div class="info-wrap">
+								<div class="item-name">최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다.</div>
+								<div class="item-price-group">
+									<div class="price-sale">50%</div>
+									<div class="price-value">33,000원</div>
+								</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+							</div>
+						</a>
+					</div>
+
+					<!--<div class="scroller-item">
+						<a href="#" class="product-item">
+							<div class="thumb"><div class="obj"><img src="/static/pub/images/product_thumb_1.png" alt=""></div></div>
+							<div class="info-wrap">
+								<div class="item-name">최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다.</div>
+								<div class="item-price-group">
+									<div class="price-sale">50%</div>
+									<div class="price-value">33,000원</div>
+								</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+							</div>
+						</a>
+					</div>
+
+					<div class="scroller-item">
+						<a href="#" class="product-item">
+							<div class="thumb"><div class="obj"><img src="/static/pub/images/product_thumb_1.png" alt=""></div></div>
+							<div class="info-wrap">
+								<div class="item-name">최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다.</div>
+								<div class="item-price-group">
+									<div class="price-sale">50%</div>
+									<div class="price-value">33,000원</div>
+								</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+							</div>
+						</a>
+					</div>
+
+					<div class="scroller-item">
+						<a href="#" class="product-item">
+							<div class="thumb"><div class="obj"><img src="/static/pub/images/product_thumb_1.png" alt=""></div></div>
+							<div class="info-wrap">
+								<div class="item-name">최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다.</div>
+								<div class="item-price-group">
+									<div class="price-sale">50%</div>
+									<div class="price-value">33,000원</div>
+								</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+							</div>
+						</a>
+					</div>
+
+					<div class="scroller-item">
+						<a href="#" class="product-item">
+							<div class="thumb"><div class="obj"><img src="/static/pub/images/product_thumb_1.png" alt=""></div></div>
+							<div class="info-wrap">
+								<div class="item-name">최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다.</div>
+								<div class="item-price-group">
+									<div class="price-sale">50%</div>
+									<div class="price-value">33,000원</div>
+								</div>
+								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+							</div>
+						</a>
+					</div>-->
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<script>
+    // 데이터 꺼내기
+    var serviceResultArray = JSON.parse(<?=$serviceResultArray?>);
+    var etcResultArray = JSON.parse(<?=$etcResultArray?>);
+    var timeResultArray = JSON.parse(<?=$timeResultArray?>);
+
+    // 미용종료시간 구하기
+    var start_time = timeResultArray[0].time;
+    start_time = start_time.replace(':','');
+    console.log(start_time);
+    var beauty_time = serviceResultArray[1].price;
+    for(var i=0;i<beauty_time/30;i++){
+        start_time = parseInt(start_time)+50;
+    }
+    var end_minute = start_time.toString().slice(-2);
+    var end_hour = start_time.toString().replace(end_minute,'');
+    if(end_minute == '50'){
+        end_minute = '30';
+    }else{
+        end_minute = '00';
+    }
+    var end_time = end_hour+":"+end_minute;
+
+    // 요일 구하기
+    var week_txt = ['일', '월', '화', '수', '목', '금', '토'];
+    var week = week_txt[new Date(timeResultArray[0].date).getDay()];
+
+    // 날짜 포멧 바꾸기
+    var beauty_day = timeResultArray[0].date.replace(/-/g,".");
+    $("#beauty_date").html(beauty_day + " (" + week +") " + timeResultArray[0].time + "~" + end_time);
+
+    // 상세 상품정보 넣기
+    var main_service_1 = serviceResultArray[0].name + "/" + serviceResultArray[1].name + "/" + serviceResultArray[2].name;
+    var main_service_1_price = serviceResultArray[2].price + "원";
+    var main_service_2 = serviceResultArray[3].name;
+    var main_service_2_price = serviceResultArray[3].price + "원";
+    var main_service_3 = serviceResultArray[4].name;
+    var main_service_3_price = serviceResultArray[4].price + "원";
+
+    var etc_service_1 = etcResultArray[0].name;
+    var etc_service_1_price = etcResultArray[0].price + "원";
+    var etc_service_2 = etcResultArray[1].name;
+    var etc_service_2_price = etcResultArray[1].price + "원";
+    var etc_service_3 = etcResultArray[2].name;
+    var etc_service_3_price = etcResultArray[2].price + "원";
+    var etc_service_4 = etcResultArray[3].name;
+    var etc_service_4_price = etcResultArray[3].price + "원";
+
+    if(main_service_1 != ''){
+        $("#main_service_1").html(main_service_1);
+        $("#main_service_1_price").html(main_service_1_price);
+        $("#main_service_1_cell").css("display","flex");
+    }
+    if(main_service_2 != ''){
+        $("#main_service_2").html(main_service_2);
+        $("#main_service_2_price").html(main_service_2_price);
+        $("#main_service_2_cell").css("display","flex");
+    }
+    if(main_service_3 != ''){
+        $("#main_service_3").html(main_service_3);
+        $("#main_service_3_price").html(main_service_3_price);
+        $("#main_service_3_cell").css("display","flex");
+    }
+
+    if(etc_service_1 != ''){
+        $("#etc_service_1").html(etc_service_1);
+        $("#etc_service_1_price").html(etc_service_1_price);
+        $("#etc_service_1_cell").css("display","flex");
+    }
+    if(etc_service_2 != ''){
+        $("#etc_service_2").html(etc_service_2);
+        $("#etc_service_2_price").html(etc_service_2_price);
+        $("#etc_service_2_cell").css("display","flex");
+    }
+    if(etc_service_3 != ''){
+        $("#etc_service_3").html(etc_service_3);
+        $("#etc_service_3_price").html(etc_service_3_price);
+        $("#etc_service_3_cell").css("display","flex");
+    }
+    if(etc_service_4 != ''){
+        $("#etc_service_4").html(etc_service_4);
+        $("#etc_service_4_price").html(etc_service_4_price);
+        $("#etc_service_4_cell").css("display","flex");
+    }
+
+    // 총 금액 구하기
+    var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price
+        + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
+    var is_vat = "<?=$shop_datas->is_vat?>";
+    var vat_price = 0;
+    if(is_vat == 1){
+        vat_price = total_price*0.1;
+        $("#vat_price").html(vat_price+"원");
+        $("#vat_price_cell").css("display","flex");
+    }
+    console.log(vat_price);
+    var result_price = total_price + vat_price;
+    if(total_price > 0){
+        $("#total_price").html(total_price+"원");
+        $("#result_price").html(result_price+"원");
+        $("#total_price_cell").css("display","flex");
+        $("#result_price_cell").css("display","flex");
+
+    }
+
+    $(function(){
+        best_item();
+    });
+
+    $("#item_list").on("click", ".best_item .item_link_btn", function(){
+        history.replaceState('', '', window.location.pathname+'?oid=<?=$r_oid ?>');
+        location.href = "../test/test_item_product_page.php?no="+$(this).data("product_no")+"&backurl="+encodeURIComponent(window.location.pathname+'?oid=<?=$r_oid ?>');
+    });
+
+    function best_item(){
+        $.ajax({
+            url: './item/item_list_ajax.php',
+            data: {
+                mode : "get_item_list_after_beauty",
+                is_view_main_6: "1",
+                is_view: "1", // 노출여부
+                flag: 0,
+                cnt: 10
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            beforeSend: function(){
+                //$("#loading").css("display", "flex");
+            },
+            success: function(data) {
+                if(data.code == "000000"){
+                    console.log(data.data);
+
+                    var html = '';
+
+                    if(data.data.list && data.data.list.length > 0){
+                        $.each(data.data.list, function(i, v){
+                            var percent = (parseInt(v.product_price) == 0 || parseInt(v.sale_price) == 0)? 0 : 100 - (parseInt(v.sale_price) / parseInt(v.product_price) * 100);
+                            html += '<div class="scroller-item">';
+                            html +=    '<a href=shop_view?no='+v.product_no+' class="product-item">';
+                            html +=        '<div class="thumb" data-id="'+v.il_seq+'"><div class="obj"><img id="md-banner'+v.il_seq+'"src="" alt=""/></div></div>';
+                            html +=            '<div class="info-wrap">';
+                            html +=                '<div class="item-name">'+v.product_name+'</div>';
+                            html +=                '<div class="item-price-group">';
+                            if(v.is_soldout == "2"){
+                                html +=                    '<div class="price-sale">일시품절</div>';
+
+                            }else{
+                                html +=                    '<div class="price-sale">'+Math.round(percent)+'%</div>';
+                                html +=                    '<div class="price-value">'+v.sale_price.format()+'원</div>';
+                            }
+                            html +=                '</div>';
+                            html +=             '<div class="item-grade" id="item-grade'+v.il_seq+'"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>';
+                            html +=        '</div>';
+                            html +=    '</a>';
+                            html += '</div>';
+
+                        });
+                    }
+                    $("#product_list").html(html);
+
+                    $.each(data.data.list, function(i, v){
+                        // var target = "#best_item";
+                        get_file_list('#md-banner'+v.il_seq, v.il_seq, v.product_img, v.goodsRepImage);
+                        get_item_review('#item-grade'+v.il_seq, v.il_seq, v.product_no);
+                        // if(v.is_use_option == "1" && v.sale_price == "0"){ // 옵션사용 + 가격 0원
+                        // 	get_item_option(target, v.il_seq);
+                        // }
+                    });
+                }else{
+                    alert(data.data+"("+data.code+")");
+                    console.log(data.code);
+                }
+            },
+            error: function(xhr, status, error) {
+                //alert(error + "네트워크에러");
+                if(xhr.status != 0){
+                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                }
+            }
+        });
+    }
+
+    // thumb 이미지 ok
+    function get_file_list(target, il_seq, img_list, goodsRepImage){
+        return new Promise(function(resolve, reject) {
+            //console.log(img_list);
+            // img_loading
+            if(img_list && img_list != ""){
+                $.ajax({
+                    url: './mainpage/fileupload_ajax.php',
+                    data: {
+                        mode : "get_file_list",
+                        file_list: img_list
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if(data.code == "000000"){
+                            //console.log(data.data);
+                            var html = '';
+                            $.each(data.data, function(i, v){
+                                if(i == 0){
+                                    console.log(target,  v.file_path );
+
+                                    //jpg를 png로 변경하는 코드
+                                    //$(target).prop("src", img_link_change(v.file_path).replace(".jpg", ".png"));
+
+                                    $(target).prop("src", img_link_change(v.file_path));
+
+                                }
+                            });
+
+                            resolve(data.data[0].file_path);
+                        }else{
+                            alert(data.data+"("+data.code+")");
+                            //console.log(data.code);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        //alert(error + "네트워크에러");
+                        if(xhr.status != 0){
+                            alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                        }
+                    }
+                });
+            }else{
+                if(goodsRepImage != ""){
+                    $(target).attr("src", goodsRepImage);
+                }else{
+                    $(target).attr("src", "url('../images/product_img.png')");
+                }
+            }
+        });
+    }
+
+    // ok
+    function get_item_review(target, il_seq, product_no){
+        return new Promise(function(resolve, reject) {
+
+            if(product_no != ""){
+                $.ajax({
+                    url: './item/item_list_ajax.php',
+                    data: {
+                        mode : "get_item_review",
+                        product_no: product_no
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if(data.code == "000000"){
+                            //console.log("item_review");
+                            //console.log(data.data);
+                            if(data.data && data.data.length > 0){
+                                var rating = 0;
+                                var sum_rating = 0;
+                                $.each(data.data, function(i, v){
+                                    sum_rating += parseInt(v.rating);
+                                });
+                                rating = Math.round(sum_rating / data.data.length * 10) / 10;
+                                $(target).html('<div class="icon icon-size-16 icon-star-yellow"></div><em>'+rating+'</em>('+data.data.length+'+)');
+                            }
+
+                            resolve();
+                        }else{
+                            alert(data.data+"("+data.code+")");
+                            //console.log(data.code);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        //alert(error + "네트워크에러");
+                        if(xhr.status != 0){
+                            alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    // 세자리 숫자 콤마
+    Number.prototype.format = function() {
+        if (this == 0) return 0;
+
+        var reg = /(^[+-]?\d+)(\d{3})/;
+        var n = (this + '');
+
+        while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+
+        return n;
+    };
+
+    // 문자열 타입에서 쓸 수 있도록 format() 함수 추가
+    String.prototype.format = function() {
+        var num = parseFloat(this);
+        if (isNaN(num)) return "0";
+
+        return num.format();
+    };
+    
+    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+//print_r($_GET);
+//exit; 
+
+$obj = new module();
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+
+$artist_id = isset($_GET['artist_id']) ? addslashes($_GET['artist_id']) : "";
+
+$artist_query = "SELECT * FROM tb_shop WHERE `customer_id` = '{$artist_id}' AND enable_flag = 1 AND open_flag = 1 LIMIT 1";
+$artist_result = mysqli_query($connection, $artist_query);
+$artist_info = mysqli_fetch_object($artist_result);
+
+$blog_list = array();
+if($artist_info != NULL && isset($artist_info)){
+    //블로그 리스트
+    $blog_query = "SELECT * FROM tb_blog WHERE customer_id = '{$artist_id}' AND del_yn = 'N' ORDER BY post_date DESC";
+    $blog_result = mysqli_query($connection, $blog_query);
+    $blog_count = mysqli_num_rows($blog_result);
+
+    while($blog_data = mysqli_fetch_object($blog_result)){
+        $blog_list[] = $blog_data;
+    }
+}
+
+?>       
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="<?=$_SESSION['backurl2']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">블로그 리뷰 <?=$blog_count?></div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<div class="vertical-list-wrap line">
+				<div class="list-inner">
+                    <?
+                    foreach($blog_list as $index => $blog){ 
+                        $image = $blog->thumbnail;
+                        $link = $blog->link;
+                        $title = $blog->title;
+                        //$contents = mb_substr(strip_tags($blog->desc), 0, 60);
+                    ?>
+					<div class="list-cell">
+						<a href="#" onclick="javascript:openView('<?php echo $link; ?>');" class="basic-list-item blog">
+                            <? if($image != null && $image != ""){ ?>
+							<div class="thumb">
+								<img src="<?php echo $image;?>" alt="">
+							</div>
+                            <? } ?>
+							<div class="info-wrap">
+								<div class="item-name"><?php echo $title; ?></div>
+								<div class="item-desc"><?php echo $blog->desc; ?></div>
+								<!-- <div class="item-blog-option">
+									<div class="name"><div class="ellipsis">블로그명 블로그명 블로그명 블로그명 블로그명 블로그명 블로그명 블로그명 블로그명 블로그명</div></div>
+									<div class="date">2020.11.20</div>
+								</div> -->
+							</div>
+						</a>
+					</div>
+                    <?
+                     }
+                    ?>
+				</div>
+			</div>
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->	
+</section>
+<!-- //container -->
+
+<script>
+    function openView(link){
+        window.open(link, "_blank");
+    }
+</script>

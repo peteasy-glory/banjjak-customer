@@ -1,0 +1,661 @@
+<?php
+include "../include/top.php";
+include "../include/Crypto.class.php";
+
+$r_top = ($_GET['top'] && $_GET['top'] != "")? $_GET['top'] : "";
+$r_middle = ($_GET['middle'] && $_GET['middle'] != "")? $_GET['middle'] : "";
+$r_lat = ($_GET['lat'] && $_GET['lat'] != "")? $_GET['lat'] : "";
+$r_lng = ($_GET['lng'] && $_GET['lng'] != "")? $_GET['lng'] : "";
+$user_id = isset($_SESSION['gobeauty_user_id']) ? $_SESSION['gobeauty_user_id'] : "";
+$user_name = isset($_SESSION['gobeauty_user_nickname']) ? $_SESSION['gobeauty_user_nickname'] : "";
+
+$location_txt = ($r_top != "" && $r_middle != "")? $r_top." ".$r_middle : "펫샵 검색";
+$location_txt = ($location_txt == "펫샵 검색" && $r_lat != "" && $r_lng != "")? "내 위치" : $location_txt;
+
+// 회원 여부
+// 사용기종 여부
+// 펫샵 여부
+$is_artist = 0;
+$is_android = "";
+$is_login = false;
+$reg_date;
+$wait_count = 0;
+// $update_date = strtotime("2019-11-03");
+$is_sql = "select * from tb_customer tc, tb_shop ts where tc.id = '" . $user_id . "' and ts.customer_id = '" . $user_id . "';";
+// error_log('-----'.$is_sql);
+$is_result = mysql_query($is_sql);
+if ($is_rows = mysql_fetch_object($is_result)) {
+    $reg_date = $is_rows->registration_time;
+    $reg_date = strtotime($reg_date);
+    $is_login = true;
+    if ($is_rows->token != null && $is_rows->token != "") {
+        if ($is_rows->is_android == 1) {
+            $is_android = "1";
+        }
+    }
+
+    if ($is_rows->my_shop_flag && $is_rows->open_flag) {
+        $is_artist = 1;
+    }
+}
+
+//----- 상담 대기 건수 조회
+if ($is_artist == 1) {
+    $pet_sql =
+        "SELECT count(tpl.payment_log_seq) AS wait_count
+            FROM tb_payment_log tpl, tb_mypet tm, tb_customer tc
+            WHERE tpl.approval = 0
+            AND tpl.pet_seq = tm.pet_seq 
+            AND tpl.customer_id = tc.id
+			AND tc.enable_flag = 1
+            AND timestampdiff(minute, update_time, now()) < 720
+            AND tpl.artist_id = '{$user_id}'";
+    $pet_result = mysql_query($pet_sql);
+    // error_log('----- $pet_sql : ' . $pet_sql);
+    if ($pet_result_rows = mysql_fetch_object($pet_result)) {
+        $wait_count = $pet_result_rows->wait_count;
+    }
+}
+
+?>
+<script src="<?= $js_directory ?>/fontawesome.min.js"></script>
+<script src="<?= $js_directory ?>/jquery.fancybox.js"></script>
+<link rel="stylesheet" type="text/css" href="<?= $css_directory ?>/jquery.fancybox.css?<?= filemtime($upload_static_directory . $css_directory . '/jquery.fancybox.css') ?>">
+<link rel="stylesheet" href="<?= $css_directory ?>/m_new.css?<?= filemtime($upload_static_directory . $css_directory . '/m_new.css') ?>">
+<style>
+	#main-content #review_best ul li { position: relative; }
+	#main-content #review_best .review_use_cnt { position: absolute; right: 0px; bottom: 35px; }
+	#main-content #review_best .review_use_cnt span { background-color: #ddd; padding: 2px 5px; border-radius: 5px; color: #666; font-size: 12px; }
+	.ui-dialog { padding: 0px; z-index: 9801; } 
+	.ui-dialog .ui-dialog-content { padding: 0px; }
+	.ui-dialog-titlebar { display: none; }
+	.ui-widget-overlay { background-color: rgba(0, 0, 0, 0.8); opacity: 1; }
+	.ui-dialog-buttonset { width: 100%; }
+	.ui-dialog .ui-dialog-buttonpane { padding: 0px !important; margin-top: 0px; }
+	.ui-widget.ui-widget-content { border: 0px; }
+	.ui-dialog .ui-dialog-buttonpane button { display: inline-block; width: 50%; height: 50px; padding: 0px; margin: 0px; border: 0px; background-color: #222; padding: 0px !important; margin: 0px !important; border-radius: 0px; border: 0px; font-size: 14px; }
+
+	#popup_wrap { display: none; }
+	#popup_wrap .custom-modal-content { margin: 0px auto; width: 100%; }
+	#popup_wrap .swiper-container_front { margin: 0px auto; overflow: hidden; position: relative; z-index: 1; }
+	#popup_wrap .swiper-container_front .next { position: absolute; left: 10px; top: 50%; color: #000; font-size: 24px; z-index: 1; outline: none; }
+	#popup_wrap .swiper-container_front .next.swiper-button-disabled { color: rgba(0,0,0,0); }
+	#popup_wrap .swiper-container_front .prev { position: absolute; right: 10px; top: 50%; color: #000; font-size: 24px; z-index: 1; outline: none; }
+	#popup_wrap .swiper-container_front .prev.swiper-button-disabled { color: rgba(0,0,0,0); }
+	#popup_wrap .swiper-wrapper { height: auto; }
+	#popup_wrap .swiper-slide { }
+	#popup_wrap .swiper-slide img { width: 100%; height: auto; vertical-align: top; }
+	#popup_wrap .swiper-pagination_front { position: absolute; left: 0px; bottom: 0px; width: 100%; text-align: center; margin-bottom: 20px; z-index: 1; }
+	#popup_wrap .swiper-pagination-bullet { margin: 0px 5px; }
+	#popup_wrap .swiper-pagination-bullet-active { background-color: #999; } 
+</style>
+
+<div id="fixed-menu">
+	<div class="fixed-menu-wrap">
+		<div class="left_logo">
+			<a href="<?= $mainpage_directory ?>/">
+				<img src="<?= $image_directory ?>/main_logo_2021.gif" height="45" /><!--원래 로고 : /main_logo.png" height="24" -->
+			</a>
+		</div>
+		<div class="center_menu">
+			<a href="<?= $mainpage_directory ?>/search_location.php?top=<?=$r_top?>&middle=<?=$r_middle?>&lat=<?=$r_lat?>&lng=<?=$r_lng?>">
+				<?=$location_txt ?>
+				<img src="/pet/images/shop_point.png" />
+			</a>
+		</div>
+		<div class="right_menu">
+			<a href="<?= $mainpage_directory ?>/mainpage_my_menu.php">
+				<img src="<?= $image_directory ?>/mymenu.png" width="30px" />
+			</a>
+		</div>
+	</div>
+</div>
+<div id="mainpage_main_index">
+	<div id="main-content" <?php //echo (strpos($_SERVER['HTTP_USER_AGENT'], 'APP_GOBEAUTY_iOS') !== false)? " style='margin-top: 37px;' " : "" ?>>
+		<!-- 배너 -->
+		<?php include "../mainpage/test_slick.php"; ?>
+		<!-- 베스트후기 -->
+		<div id="mainpage_index">
+			<div class="css_h2_jua">
+				<h2>BEST 후기</h2>
+				<a href="#layer3" class="why_info"><img src="/pet/images/help_button_3.png" style="" width="7%"></a>
+			</div>
+			<div id="review_best"></div>
+		</div>
+
+		<!-- 펫샵리스트 -->
+		<div class="shop_list_wrap"></div>
+	</div>
+
+	<div id="footer-contents">
+		<div class="info_wrap">
+			<div class="info_icon"><img src="../images/icon_call.png"></div>
+			<div class="info_1">고객센터</div>
+			<div class="info_2"><?=$company_help_number?></div>
+			<div class="info_3"><?=$company_help_email?></div>
+		</div>
+		<br>
+		<div class="bottom_notice">
+			<a href="terms_of_service.php">이용약관</a> | <a href="privacy_policy.php">개인정보처리방침</a> | <a href="proprietorship.php">사업자정보확인</a>
+		</div>
+		<div class="f_wrap"> 
+			<div class="bottom_notice">
+				<div class="f_subwrap">
+					<ul>
+						<li>㈜펫이지(PetEasy Co.,Ltd) | 대표자:신동찬</li>
+						<li>사업자등록번호 157-86-01070 </li>
+						<li>통신판매업 제 2021-서울종로-0183호</li>
+						<li>서울시 종로구 종로6 5층 서울창조경제혁신센터</li>
+						<li>개인정보담당자 전영도 privacy@peteasy.kr</li>
+						<li>© PetEasy Co. Ltd. All Rights Reserved.</li>
+					</ul>
+					<ul>
+						<li>반짝은 통신판매중개자이며 통신판매의 당사자가 아닙니다.</li>
+						<li>따라서 반짝은 상품거래정보 및 거래에 대해 책임지지 않습니다. </li>
+						<li>다만 회사가 판매하는 직매입 상품의 경우 판매업체의 지위를 갖게 </li>
+						<li>됩니다.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="footer_btn">
+			<?php
+			if ($is_artist == 1) {
+			?>
+				<div class="quick-btn03"> <a href="<?= $shop_directory ?>/index.php?from=main" class="phone_button">
+						<div><img src="../images/New_btn_myshop_1.png"></div>
+					</a> </div>
+				<div class="quick-btn01"> <a href="<?= $shop_directory ?>/manage_sell_info.php?ch=month&from=main" class="phone_button">
+						<div><img src="../images/New_btn_Reservation_2.png"></div>
+					</a> </div>
+				<div class="quick-btn02"> <a href="<?= $shop_directory ?>/manage_customer_list.php?from=main">
+						<div><img src="../images/New_btn_search_3.png"></div>
+					</a> </div>
+				<div class="quick-btn04"> <a href="<?= $shop_directory ?>/manage_counseling_request.php?from=main">
+						<div class="count_wrap">
+							<div class="count"><?=$wait_count?></div><img src="../images/New_btn_Counseling_4.png">
+						</div>
+					</a> </div>
+			<?php
+			}
+			?>
+		</div>
+	</div>
+</div>
+<!---후기작성 팝업---------->
+<div class="dim-layer">
+    <div class="dimBg"></div>
+    <div id="layer3" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+				<div class="btn-r"> <a href="#" class="btn-layerClose"><img src="../images/popup_close.png" height="15px"></a></div>
+                <p class="ctxt mb20">미용을 마치셨나요?<br/>Best후기에 지금 도전하세요~<br/>Best후기에 선정되시면 <span>5,000 포인트</span>를 드립니다.</p>
+				<button type="button" class="cs_review_go">후기 작성하러 가기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="no_app">
+	<div class="no_app_wrap">
+		<div class="popup_wrap">
+			<a class="link" href="">
+				<table>
+					<colgroup>
+						<col width="*" />
+						<col width="90px" />
+					</colgroup>
+					<tr>
+						<td>앱스토어 후기 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></td>
+						<td rowspan="2" class="img"><img src="/pet/images/app_logo.png" /></td>
+					</tr>
+					<tr>
+						<td><div class="comment">"예약할 때마다<br/>편하게 쓰고 있어요"</div></td>
+					</tr>
+				</table>
+				<button type="button" class="download_app">반짝 앱으로 보기 <i class="fas fa-chevron-right"></i></button>
+			</a>
+			<div class="no_download" style="cursor: pointer;">괜찮아요. 그냥 이걸로 볼게요</div>
+		</div>
+	</div>
+</div>
+
+<div id="popup_wrap">
+	<div class="custom-modal-content">
+		<div class="popup_img">
+			<div class="swiper-container_front">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<a href="<?=$mainpage_directory ?>/view_event_holiday.php">
+							<img src="../images/20201207_holiday_banner.jpg" />
+						</a>
+					</div>
+				</div>
+				<!-- Add Arrows -->
+				<div class="next"><i class="fas fa-chevron-left"></i></div>
+				<div class="prev"><i class="fas fa-chevron-right"></i></div>
+				<div class="swiper-pagination_front"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+var shop_list = [];
+var location_top = "<?=$r_top ?>";
+var location_middle = "<?=$r_middle ?>";
+var location_lat = "<?=$r_lat ?>";
+var location_lng = "<?=$r_lng ?>";
+var html_out = '';
+var this_page = 0;
+
+$(function(){
+	$("#main-content section").addClass("on"); // loading hide > done show
+	get_shop_list();
+});
+
+function get_shop_list(){
+	$('#main-content .more_shop').remove();
+
+	$.ajax({
+		url: 'index_ajax.php',
+		data: {
+			mode: "get_shop_list",
+			top: location_top,
+			middle: location_middle,
+			lat: location_lat,
+			lng: location_lng,
+			limit_0: this_page,
+			limit_1: 10,
+			shop_list: shop_list.join(',')
+		},
+		type: 'POST',
+		dataType: 'JSON',
+		async: false,
+		success: function(data) {
+			if(data.code == "000000"){
+				//console.log(data.data);
+				var idx = 0;
+				
+				$.each(data.data, function(i, v){
+					shop_list.push(v.dec_customer_id);
+					get_main_contents(v);
+					idx++;
+				});
+
+				if(idx == 10){
+					$('#main-content .shop_list_wrap').after('<div class="more_shop" onclick="javascript:get_shop_list();">더보기</div>');
+					this_page += 10;
+				}else if(idx == 0){
+					var html = '';
+					html += '<div class="artist_list">';
+					html += '    <div class="shop_wrap">';
+					html += '		<div class="no_data">';
+					html += '			이 지역에 등록된<br/>';
+					html += '			펫샵/펫스타일리스트가 없습니다.<br/>';
+					html += '			(반짝은 Beta서비스 중이며,<br/>';
+					html += '			조만간 전국서비스로 만나실 수 있습니다.)<br/>';
+					html += '		</div>';
+					html += '    </div>';
+					html += '</div>';
+					$('#main-content .shop_list_wrap').append(html);
+				}
+			}else{
+				alert(data.data+"("+data.code+")");
+				console.log(data.data);
+			}
+		},
+		complete: function(){
+			if(html_out != ""){
+				$('#main-content .shop_list_wrap').append('<div class="sub_title">출장가능 샵</div>');
+				$('#main-content .shop_list_wrap').append(html_out);
+			}
+		},
+		error: function(xhr, status, error) {
+			alert(error + "네트워크에러");
+		}
+	});
+}
+
+function get_main_contents(list){
+	//console.log(list[0].is_recommend);
+	$.ajax({
+		url: 'index_ajax.php',
+		data: {
+			mode: "get_main_contents",
+			customer_id: list.dec_customer_id
+		},
+		type: 'POST',
+		dataType: 'JSON',
+		async: false,
+		success: function(data) {
+			if(data.code == "000000"){
+				//console.log(data.data);
+				var shop_address = (typeof data.data.shop_address != "undefined")? data.data.shop_address : "";
+
+				var html = '';
+				html += '<a href="../artist/?artist_name='+encodeURIComponent(list[0].name)+'&top='+location_top+'&middle='+location_middle+'&lat='+location_lat+'&lng='+location_lng+'">';
+				html += '	<div class="artist_list">';
+				html += '		<div class="shop_wrap">';
+				if(list[0].is_recommend == "1"){
+					html += '			<div class="shop_reco"><img src="<?= $image_directory ?>/shop_recommend.png"></div>';
+				}
+				html += '			<div class="artist_name" style="font-size: 18px; font-weight: Bold;">'+list[0].name+'</div>';
+				html += '		</div>';
+				html += '		<div class="artist_image" style="background-image:url(\''+list[0].front_image+'\');">';
+				if(location_lat != "" && location_lng != ""){
+					html += '			<span class="distance" style="position: absolute; right: 5px; bottom: 5px; font-size: 14px; color: rgba(255,255,255,1); border: 0px; padding: 5px; border-radius: 10px; background-color: rgba(125,125,125,0.6);"><i class="fas fa-map-marker-alt"></i> '+Math.round(list[0].distance*100)/100+' km</span>';
+				}
+				html += '		</div>';
+				html += '		<div class="artist_content">';
+				html += '			<div class="content_01">'+data.data.total_service+'</div>';
+				html += '			<div class="content_02">';
+				html += '				<div class="con_01">';
+				html += '					<div>영업시간</div>';
+				if(list.dec_customer_id == "tami3500@nate.com"){
+					html += '					<div>09:00 ~ 새벽 03:00</div>';
+				}else{
+					html += '					<div>'+data.data.working_start+':00 ~ '+data.data.working_end+':00</div>';
+				}
+				html += '				</div>';
+				html += '				<div class="con_02">';
+				html += '					<div>정기휴일</div>';
+				html += '					<div>'+data.data.working_day+'</div>';
+				html += '				</div>';
+				html += '				<div class="con_03">';
+				html += '					<div>매장위치</div>';
+				html += '					<div>'+shop_address+'</div>';
+				html += '				</div>';
+				html += '			</div>';
+				html += '		</div>';
+				html += '	</div>';
+				html += '</a>';
+
+				if(data.data.out_shop_product == "1" && location_top != "" && location_middle != ""){
+					html_out += html;
+				}
+
+				$('#main-content .shop_list_wrap').append(html);
+			}else{
+				alert(data.data+"("+data.code+")");
+				console.log(data.data);
+			}
+		},
+		error: function(xhr, status, error) {
+			alert(error + "네트워크에러");
+		}
+	});
+}
+</script>
+<script>
+	var best_list_flag = 0;		 // 현재 표시된 갯수 묶음
+	var best_list_page_cnt = 10; // 화면에 표시될 아이템 갯수
+
+	get_review_best_list("1", "");
+	function get_review_best_list(best_list, review_seq){
+		$.ajax({
+			url: '../admin/review_best_ajax.php',
+			data: {
+				mode : "get_review_best_list",
+				flag : best_list_flag,
+				page_cnt : best_list_page_cnt,
+				best_list : best_list,
+				review_seq : review_seq
+			},
+			type: 'POST',
+			dataType: 'JSON',
+			success: function(data) {
+				if(data.code == "000000"){
+					//console.log(data.data);
+					if(best_list != ""){
+						review_best_list = [];
+						$.each(data.data, function(i, v){
+							review_best_list.push(v.review_seq);
+						});
+						write_review_1(data.data);
+					}else{
+						if(review_seq != ""){
+							// to do somethings..
+							/*
+							if(data.data.length > 0){
+								var rb_seq = data.data[0].rb_seq;
+								set_update_review_best(rb_seq, review_seq, "1"); // 수정
+							}else{
+								set_insert_review_best(review_seq); // 입력
+							}
+							*/
+						}else{
+							write_review_3(data.data);
+						}
+					}
+				}else{
+					alert(data.data+"("+data.code+")");
+					console.log(data.code);
+				}
+			},
+			error: function(xhr, status, error) {
+				alert(error + "네트워크에러");
+			}
+		});
+	}
+
+	function write_review_1(data){
+		var html = '';
+		var idx = 0;
+
+		html += '<ul>';
+		$.each(data, function(i, v){
+			var img_list = v.review_images.split("|");
+			if(img_list.length == 1 && img_list[0] == ""){
+				//img_list = ["/pet/images/dog_pet.png"];
+				img_list = "";
+			}
+			var rating_int = parseInt(v.rating);
+
+			html += '	<li data-seq="'+v.review_seq+'" data-rb="'+v.rb_seq+'">';
+			html += '		<div class="cs_line_box">';
+			html += '		<a href="<?=$artist_directory?>/?type=beauty&sequence=1&rev='+v.review_seq+'&artist_name='+encodeURIComponent(v.artist_name)+'">';
+			html += '			<div class="thumbnail_list">';
+			$.each(img_list, function(i2, v2){
+				var count = (img_list.length <= 2)? "once" : "multi";
+					html += '			<div class="'+count+'"><div class="thumbnail" style="background-image: url(\''+v2+'\');background-repeat:no-repeat; "></div></div>';
+				if(count == "once"){
+					return false;
+				}
+				if(count == "multi" && i2 == 2){
+					return false;
+				}
+			});
+			html += '			</div>';
+			html += '				<div class="star_point">';
+			for(var _i = 0; _i < rating_int; _i++){
+				html += '			<img src="../images/img_star_1.png" style="width: 16px; vertical-align: -10%;" />';
+			}
+			if(v.rating % 1 != 0){
+				html += '			<img src="../images/img_star_2.png" style="width: 16px; vertical-align: -10%;" />';
+			}
+			html += '				'+v.rating+'</div>';
+			
+			html += '			<div class="review_txt" style="">&quot;'+v.review.substr(0, 40)+'...</div>';
+			html += '			<div class="review_info"><span class="cs_nanum">'+v.customer_name.substr(0, (v.customer_name.length - 4))+'***</span><span style="color:#666;">'+v.artist_name+'</span>';
+			
+			html += '			</div>';
+			html += '			<div class="review_use_cnt" style=""><span><font style="color:#333; padding: 0px 2px;">'+v.use_cnt+'</font>번 이용</span></div>';
+			html += '		</a>';
+			html += '	</div>';
+			html += '	</li>';
+			idx++;
+		});
+		html += '</ul>';
+
+		if(idx == 0){
+			html  = '<ul>';
+			html += '	<li class="no_review_best">';
+			html += '		<div class="cs_line_box">';
+			html += '			<span>베스트에 선정된 후기가 없습니다.</span>';
+			html += '		</div>';
+			html += '	</li>';
+			html += '</ul>';
+		}
+
+		$("#review_best").append(html);
+	}
+
+	$('.why_info').click(function(){
+        var $href = $(this).attr('href');
+        layer_popup($href);
+    });
+    function layer_popup(el){
+
+        var $el = $(el);        //레이어의 id를 $el 변수에 저장
+        var isDim = $el.prev().hasClass('dimBg');   //dimmed 레이어를 감지하기 위한 boolean 변수
+
+        isDim ? $('.dim-layer').fadeIn() : $el.fadeIn();
+
+        var $elWidth = ~~($el.outerWidth()),
+            $elHeight = ~~($el.outerHeight()),
+            docWidth = $(document).width(),
+            docHeight = $(document).height();
+
+        // 화면의 중앙에 레이어를 띄운다.
+        if ($elHeight < docHeight || $elWidth < docWidth) {
+            $el.css({
+                marginTop: -$elHeight /2,
+                marginLeft: -$elWidth/2
+            })
+        } else {
+            $el.css({top: 0, left: 0});
+        }
+
+        $el.find('a.btn-layerClose').click(function(){
+            isDim ? $('.dim-layer').fadeOut() : $el.fadeOut(); // 닫기 버튼을 클릭하면 레이어가 닫힌다.
+            return false;
+        });
+
+        $('.layer .dimBg').click(function(){
+            $('.dim-layer').fadeOut();
+            return false;
+        });
+    }
+
+	$(document).on("click", ".cs_review_go", function(){
+		location.href = "<?=$mainpage_directory?>/manage_my_postwrite.php";
+		
+	});
+</script>
+<script>
+var tmp_val = checkMobile2();
+
+if(tmp_val == "android" || tmp_val == "ios"){
+	// to do somethings..
+	var link = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+	if(tmp_val == "ios"){
+		link = "https://apps.apple.com/kr/app/id1436568194";
+	}
+
+	$(function(){
+		//if(getCookie_popup("no_app") != "1"){
+			$("#no_app").addClass("on");
+			$("#no_app .link").attr("href", link);
+		//} // 20200706 ulmo 쿠키 상관없이 페이지 접속할때마다 노출 시키도록 수정
+	});
+
+	$(document).on("click", ".no_download", function(){
+		$("#no_app").removeClass("on");
+		setCookie_popup("no_app", 1, 1);
+	});
+}else if((tmp_val == "in_app_and" || tmp_val == "in_app_ios") && "<?=$user_id ?>" != ""){
+	/*
+	if (getCookie_popup("join_popup") != "Y") {
+		var swiper = new Swiper('.swiper-container_front', {
+			navigation: {
+				nextEl: '.prev',
+				prevEl: '.next',
+			}
+		});
+
+		$(function(){
+			$("#popup_wrap").dialog({
+				modal: true,
+				title: "",
+				autoOpen: true,
+				//maxWidth: "96%",
+				//minHeight: Number($(window).height()) - 40,
+				//width: 'auto',
+				//height: 'auto',
+				autoSize: false,
+				resize: 'auto',
+				resizable: false,
+				draggable: false,
+				buttons: {
+					'닫기': function() {
+						//setCookie_popup('guide_beauty_shop', 'Y', 100);
+						$(this).dialog("close");
+					},
+					"7일간 안볼래요!": function() {
+						setCookie_popup('join_popup', 'Y', 7);
+						$(this).dialog("close");
+					}
+				},
+				open: function(event, ui) {
+					swiper.update();
+					$(event.target).parent().css('position', 'fixed'); // dialog fixed
+					$(event.target).parent().css('top', '50%'); // dialog fixed
+					$(event.target).parent().css('left', '50%'); // dialog fixed
+					$(event.target).parent().css('transform', 'translate(-50%, -50%)'); // dialog fixed
+					//$('.ui-dialog').position({ my: "center", at: "center", of: window });
+				},
+				close: function() {
+				}
+			});			
+		});
+	}
+	*/
+}
+
+function checkMobile2(){
+    var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+    if ( varUA.indexOf("app_gobeauty_and") > -1 ) {
+        //APP
+		return "in_app_and";
+	} else if (varUA.indexOf("app_gobeauty_ios") > -1 ) {
+        //안드로이드
+        return "in_app_ios";
+	} else if ( varUA.indexOf('android') > -1 ) {
+        //안드로이드
+        return "android";
+    } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+        //IOS
+        return "ios";
+    } else {
+        //아이폰, 안드로이드 외
+        return "other";
+    }
+}
+
+function setCookie_popup(name, value, expiredays) {
+	var todayDate = new Date();
+	todayDate.setDate(todayDate.getDate() + expiredays);
+	document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure';
+}
+
+function getCookie_popup(name) {
+	var obj = name + "=";
+	var x = 0;
+	while (x <= document.cookie.length) {
+		var y = (x + obj.length);
+		if (document.cookie.substring(x, y) == obj) {
+			if ((endOfCookie = document.cookie.indexOf(";", y)) == -1)
+				endOfCookie = document.cookie.length;
+			return unescape(document.cookie.substring(y, endOfCookie));
+		}
+		x = document.cookie.indexOf(" ", x) + 1;
+		if (x == 0)
+			break;
+	}
+	return "";
+}
+
+</script>
+
+<?php include "../include/bottom.php"; ?>

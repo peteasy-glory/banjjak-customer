@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>반짝</title>
+	<meta name="format-detection" content="telephone=no">
+	<link href="/static/pub/css/style.css" rel="stylesheet">
+	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
+	<script src="/static/pub/js/jquery-ui.min.js"></script>    
+	<script src="/static/pub/js/swiper.min.js"></script>
+	<script src="/static/pub/js/common.js"></script>
+</head>
+<body>        
+
+<!-- header -->
+<header id="header">	
+	<div class="header-left">
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">월별 산책기록</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<!-- page-contents -->  
+		<div class="page-contents">
+			<button type="button" class="btn btn-purple" onclick="gallery.dataSet(); gallery.open();"><em>갤러리 샘플 데이타 생성 후 오픈</em></button>
+		
+		</div>
+		<!-- //page-contents -->  
+	</div>
+	<!-- //page-body -->    
+	
+	<!--  갤러리 -->
+	<div class="gallery-pop-wrap">
+		<div class="gallery-pop-inner">
+			<div class="gallery-pop-data">
+				<div class="gallery-pop-slider">
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide"><div class="slider-item"><img src="/static/pub/images/gate_picture.jpg" alt=""/></div></div>
+							<div class="swiper-slide"><div class="slider-item"><img src="/static/pub/images/gate_picture.jpg" alt=""/></div></div>
+							<div class="swiper-slide"><div class="slider-item"><img src="/static/pub/images/gate_picture.jpg" alt=""/></div></div>
+						</div>
+					</div>
+					<div class="swiper-page"></div>
+					<button type="button" class="btn-swiper-slider-prev"></button>
+					<button type="button" class="btn-swiper-slider-next"></button>
+				</div>
+				<div class="gallery-pop-ui">					
+					<button type="button" class="btn-gallery-pop-nav"><span class="icon icon-size-24 icon-viewall-white"></span></button>
+					<button type="button" class="btn-gallery-pop-nav" onclick="gallery.close();"><span class="icon icon-size-24 icon-close-white"></span></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //갤러리 -->
+</section>
+<!-- //container -->
+
+<script>
+var gallery = {
+	
+	element : null,
+	swiper : null,
+	swiperCur : 0,
+	swiperLen : -1,
+
+	init : function(){
+			gallery.element = $('.gallery-pop-wrap');
+			gallery.swiperLen = gallery.element.find('.swiper-slide').length;
+			gallery.swiper = new Swiper( gallery.element.find('.swiper-container')[0] , {
+				loop : false,
+				slidesPerView : 1 ,
+				spaceBetween : 0,
+				simulateTouch : true,
+				speed : 450,
+				navigation: {
+				  nextEl: gallery.element.find('.btn-swiper-slider-next')[0],
+				  prevEl: gallery.element.find('.btn-swiper-slider-prev')[0]
+				}
+			});
+			gallery.swiper.on('slideChange' , function(){
+				gallery.swiperCur = this.realIndex;
+				gallery.pageSort();
+			});
+			gallery.pageSort();
+	},
+	pageSort : function(){
+		var _value = '<em>' + String((gallery.swiperCur + 1) + '</em> / ' + gallery.swiperLen);
+		gallery.element.find('.swiper-page').html(_value);
+	},
+
+	dataSet : function(){
+		//샘플링 데이타
+		// -> <div class="swiper-slide"><div class="slider-item"><img src="/static/pub/images/gate_picture.jpg" alt=""/></div></div>
+		var i = 0;
+		var len = Math.floor(Math.random() * (14 - 1)) + 1;
+		var result = '';
+		for(i = 0; i < len; i++){
+			result += '<div class="swiper-slide"><div class="slider-item"><span class="test">' + (i + 1) + '</span><img src="/static/pub/images/gate_picture.jpg" alt=""/></div></div>';
+		};
+
+		//데이타 삽입
+		gallery.element.find('.swiper-wrapper').html(result);
+
+		//데이타 삽입 후 재설정
+		gallery.swiperCur = 0;
+		gallery.swiperLen = i;
+
+		//데이타 삽입 후 재정렬
+		gallery.swiper.update();
+		gallery.pageSort();
+
+	},
+
+	open : function(){
+		gallery.element.addClass('actived');
+		gallery.swiper.update();
+		gallery.swiper.slideTo(0,0);
+	},
+	close : function(){
+		gallery.element.removeClass('actived');
+	}
+};
+$(function(){
+	gallery.init();	
+});
+</script>
+
+	
+</body>
+</html>
