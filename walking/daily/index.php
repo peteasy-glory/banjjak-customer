@@ -1,3 +1,13 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+
+
+$user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
+$user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="ko" class="">
 <head>
@@ -19,10 +29,6 @@
 		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">산책일지</div>
-	<div class="header-right">
-		<!-- 챗팅 있을 경우 actived클래스 추가 -->
-		<a href="#" class="btn-page-ui btn-page-chat actived"><div class="icon icon-size-24 icon-page-chat">챗팅</div></a>
-	</div>
 </header>
 <!-- //header -->
 
@@ -35,8 +41,8 @@
 			<div class="user-pet-list-wrap">
 				<div class="list-inner">
 					<!-- btn-user-pet-item 클래스에 actived클래스 추가시 활성화 -->
-					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"></div><div class="txt">봄이</div></a></div>
-					<div class="list-cell"><a href="#" class="btn-user-pet-item actived"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item actived"><div class="icons"></div><div class="txt">봄이</div></a></div>
+					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
 					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
 					<div class="list-cell"><a href="#" class="btn-user-pet-item add"><div class="icons"></div><div class="txt">추가</div></a></div>
 				</div>				
@@ -104,59 +110,6 @@
 					</div>
 				</div>
 				<!-- //자료가 있을 때 -->
-				<div class="basic-data-group middle">
-					<div class="form-group">
-						<div class="form-group-cell middle">
-							<div class="grid-layout basic">
-								<div class="grid-layout-inner">
-									<div class="grid-layout-cell grid-2">
-										<div class="form-group-item">
-											<!-- 20211223 수정 -->
-											<div class="form-item-label">견주 생년</div>
-											<!-- //20211223 수정 -->
-											<div class="form-item-data type-2">
-												<select>
-													<option value="">- 년</option>
-													<option value="">- 년</option>
-													<option value="">- 년</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="grid-layout-cell grid-2">
-										<div class="form-group-item">
-											<!-- 20211223 수정 -->
-											<div class="form-item-label">견주 성별</div>
-											<!-- //20211223 수정 -->
-											<div class="form-item-data type-2">
-												<select>
-													<option value="">선택</option>
-													<option value="">선택</option>
-													<option value="">선택</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>							
-						</div>
-
-						<div class="form-group-cell middle">
-							<div class="form-group-item">
-								<!-- 20211223 수정 -->
-								<div class="form-item-label">함께 산책</div>
-								<!-- //20211223 수정 -->
-								<div class="form-item-data type-2">
-									<select>
-										<option value="">혼자 할래요</option>
-										<option value="">혼자 할래요</option>
-										<option value="">혼자 할래요</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 				<!-- 상세 리스트 자료 없을 때 -->
 				<div class="basic-data-group middle">
 					<div class="recode-none">
@@ -205,6 +158,55 @@
 </section>
 <!-- //container -->
 
-	
+<script>
+    $(".btn-page-prev").click(function(){
+        var mobile = checkMobile2();
+        if(mobile === "in_app_and" || mobile === "in_app_ios"){
+            onBackWalkTop(mobile);
+        }else {
+            window.location.href = "../";
+        }
+    });
+
+    // 기기 체크
+    function checkMobile2(){
+        var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if ( varUA.indexOf("app_gobeauty_and") > -1 ) {
+            //APP
+            return "in_app_and";
+        } else if (varUA.indexOf("app_gobeauty_ios") > -1 ) {
+            //안드로이드
+            return "in_app_ios";
+        } else if ( varUA.indexOf('android') > -1 ) {
+            //안드로이드
+            return "android";
+        } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+            //IOS
+            return "ios";
+        } else {
+            //아이폰, 안드로이드 외
+            return "other";
+        }
+    }
+
+    function onBackWalkTop(device){
+        var id	=  "<?=$_SESSION['gobeauty_user_id']?>";
+        var event = "0";
+        if(device.indexOf("in_app_and") >-1){
+            walking_daily_android.onBackWalkTop(id, event);
+        }
+        else if(device.indexOf("in_app_ios") > -1){
+            let messages = {
+                'id': id,
+                'event': event
+            };
+            webkit.messageHandlers.onBackWalkTop.postMessage(messages);
+        }
+
+    }
+</script>
 </body>
+
+
 </html>
+
