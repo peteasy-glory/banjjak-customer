@@ -1,10 +1,17 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/common/TRestAPI.php");
 
 
 $user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
 
+//$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080");
+$api = new TRestAPI("http://192.168.20.128:8080"
+    , "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
+$mypets = $api->get("/walklog/pet/pettester@peteasy.kr");
+
+$choice_index = 0;
 
 ?>
 
@@ -41,113 +48,150 @@ $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_
 			<div class="user-pet-list-wrap">
 				<div class="list-inner">
 					<!-- btn-user-pet-item 클래스에 actived클래스 추가시 활성화 -->
-					<div class="list-cell"><a href="#" class="btn-user-pet-item actived"><div class="icons"></div><div class="txt">봄이</div></a></div>
-					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
-					<div class="list-cell"><a href="#" class="btn-user-pet-item"><div class="icons"><img src="/static/pub/images/user_pet_thumb.png" alt=""/></div><div class="txt">봄이</div></a></div>
+                    <?
+                        $i = 0;
+                        foreach ($mypets['body'] as $val){
+                            $photo = $val['photo'];
+                            $photo = $photo.str_replace("/pet/upload", "/upload", $photo);
+                            if ($photo == ""){
+                                if($val['type'] == "cat"){
+                                    $photo = "../../images/cat/cat_90x90/cat_90x90@3x.png";
+                                }
+                                else{
+                                    $photo = "../../images/dog/dog_90x90/dog_90x90@3x.png";
+                                }
+                            }else{
+                                $photo = "https://image.banjjakpet.com".$photo;
+                            }
+                            $name = $val['name'];
+                            if ($i == $choice_index) {
+                                $mypet_log = $api->get("/walklog/pet/log/".$val['pet_seq']);
+                                echo '<div class="list-cell" ><a href="#" id="pet_'.$val["pet_seq"].'" class="btn-user-pet-item actived"><div class="icons"><img src="'.$photo.'" alt=""/></div><div class="txt">'.$name.'</div></a></div>';
+                            }else{
+                                echo '<div class="list-cell" ><a href="#" id="pet_'.$val["pet_seq"].'" class="btn-user-pet-item"><div class="icons"><img src="'.$photo.'" alt=""/></div><div class="txt">'.$name.'</div></a></div>';
+                            }
+                            $i++;
+                        }
+                    ?>
 					<div class="list-cell"><a href="#" class="btn-user-pet-item add"><div class="icons"></div><div class="txt">추가</div></a></div>
 				</div>				
 			</div>
 			<!-- 산책 상세 -->
 			<div>
 				<!-- 자료가 있을 때 -->
-				<div class="basic-data-group middle">
-					<div class="recode-card-list">
-						<div class="recode-card-item">
-							<div class="recode-card-name">봄이의 산책카드</div>
-							<div class="recode-card-info">
-								<div class="item-thumb">
-									<div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-								</div>
-								<div class="item-data">
-									<div class="item-data-inner">
-										<div class="item-rank">
-											<div class="item-rank-value">상위<strong>100%</strong></div>
-											<button type="button" class="btn-desc-question"></button>
-										</div>
-										<!-- bar클래스에 inline-style방식으로 width값을 0~100%로 지정 -->
-										<div class="item-progress"><div class="bar" style="width:50%;"></div></div>
-										<div class="item-msg">아이에게 산책을 선물하세요</div>
-									</div>
-								</div>
-							</div>
-							<div class="recode-card-data">
-								<div class="recode-card-data-item">
-									<div class="recode-card-data-title">전체 산책</div>
-									<div class="record-display">
-										<div class="state-item">
-											<div class="state-item-value">0</div>
-											<div class="state-item-label">회</div>
-										</div>
-										<div class="state-item">
-											<div class="state-item-value">0</div>
-											<div class="state-item-label">Km</div>
-										</div>
-										<div class="state-item">
-											<div class="state-item-value">0</div>
-											<div class="state-item-label">분</div>
-										</div>
-									</div>
-								</div>
-								<div class="recode-card-data-item">
-									<div class="recode-card-data-title">평균/1회 산책</div>
-									<div class="record-display">
-										<div class="state-item">
-											<div class="state-item-value">0</div>
-											<div class="state-item-label">Km</div>
-										</div>
-										<div class="state-item">
-											<div class="state-item-value">0</div>
-											<div class="state-item-label">분</div>
-										</div>
-										<div class="state-item">
-											<div class="state-item-value">0</div>
-											<div class="state-item-label"><img src="/static/pub/images/icon/icon_defecate.png" alt="" width="24"/></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //자료가 있을 때 -->
-				<!-- 상세 리스트 자료 없을 때 -->
-				<div class="basic-data-group middle">
-					<div class="recode-none">
-						<div class="con-title-group">
-							<h4 class="con-title">산책 기록이 없습니다.</h4>
-						</div>
-					</div>
-				</div>
-				<!-- //상세 리스트 자료 없을 때 -->
-				<!-- 상세 리스트 자료 있을 때 -->
-				<div class="basic-data-group middle">
-					<div class="con-title-group">
-						<h4 class="con-title">월별 산책기록</h4>		
-						<select class="arrow">
-							<option value="">2021년</option>
-							<option value="">2021년</option>
-							<option value="">2021년</option>
-						</select>
-					</div>
-					<!-- 20220115 수정 -->
-					<a href="#" class="btn btn-middle-size btn-outline-gray btn-round btn-graph-view"><span class="icon icon-graph-view"></span>그래프로 보기</a>
-					<!-- //20220115 수정 -->
-					<!-- 20220115 수정 : 클래스 수정  -->
-					<div class="single-btns-list top-none-line">
-					<!-- //20220115 수정 -->
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.10</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.09</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.08</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.07</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.06</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.05</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.04</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.03</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.02</div></a></div>
-						<div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.01</div></a></div>
-					</div>
-				</div>
-				<!-- //상세 리스트 자료 있을 때 -->
+                <?php
+                    if($mypet_log['body'] != null){
+                 ?>
+                <div class="basic-data-group middle">
+                    <div class="recode-card-list">
+                        <div class="recode-card-item">
+                            <div class="recode-card-name">
+                                <?
+                                $i = 0;
+                                foreach ($mypets['body'] as $val) {
+                                    if ($i == $choice_index) {
+                                        echo $val['name']." 산책카드";
+                                    }
+                                    $i++;
+                                }
+                                ?>
+                            </div>
+                            <div class="recode-card-info">
+                                <div class="item-thumb">
+                                    <div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+                                </div>
+                                <div class="item-data">
+                                    <div class="item-data-inner">
+                                        <div class="item-rank">
+                                            <div class="item-rank-value">상위<strong>100%</strong></div>
+                                            <button type="button" class="btn-desc-question"></button>
+                                        </div>
+                                        <!-- bar클래스에 inline-style방식으로 width값을 0~100%로 지정 -->
+                                        <div class="item-progress"><div class="bar" style="width:50%;"></div></div>
+                                        <div class="item-msg">아이에게 산책을 선물하세요</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recode-card-data">
+                                <div class="recode-card-data-item">
+                                    <div class="recode-card-data-title">전체 산책</div>
+                                    <div class="record-display">
+                                        <div class="state-item">
+                                            <div class="state-item-value"><?=$mypet_log['body'][0]['count']?></div>
+                                            <div class="state-item-label">회</div>
+                                        </div>
+                                        <div class="state-item">
+                                            <div class="state-item-value"><?=$mypet_log['body'][0]['dist']?></div>
+                                            <div class="state-item-label">Km</div>
+                                        </div>
+                                        <div class="state-item">
+                                            <div class="state-item-value"><?=$mypet_log['body'][0]['time']?></div>
+                                            <div class="state-item-label">분</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="recode-card-data-item">
+                                    <div class="recode-card-data-title">평균/1회 산책</div>
+                                    <div class="record-display">
+                                        <div class="state-item">
+                                            <div class="state-item-value">0</div>
+                                            <div class="state-item-label">Km</div>
+                                        </div>
+                                        <div class="state-item">
+                                            <div class="state-item-value">0</div>
+                                            <div class="state-item-label">분</div>
+                                        </div>
+                                        <div class="state-item">
+                                            <div class="state-item-value">0</div>
+                                            <div class="state-item-label"><img src="/static/pub/images/icon/icon_defecate.png" alt="" width="24"/></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="basic-data-group middle">
+                    <div class="con-title-group">
+                        <h4 class="con-title">월별 산책기록</h4>
+                        <select class="arrow">
+                            <option value="">2021년</option>
+                            <option value="">2021년</option>
+                            <option value="">2021년</option>
+                        </select>
+                    </div>
+                    <!-- 20220115 수정 -->
+                    <a href="#" class="btn btn-middle-size btn-outline-gray btn-round btn-graph-view"><span class="icon icon-graph-view"></span>그래프로 보기</a>
+                    <!-- //20220115 수정 -->
+                    <!-- 20220115 수정 : 클래스 수정  -->
+                    <div class="single-btns-list top-none-line">
+                        <!-- //20220115 수정 -->
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.10</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.09</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.08</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.07</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.06</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.05</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.04</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.03</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.02</div></a></div>
+                        <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">2021.01</div></a></div>
+                    </div>
+                </div>
+               <?php
+                    }else{
+                ?>
+                <div class="basic-data-group middle">
+                    <div class="recode-none">
+                        <div class="con-title-group">
+                            <h4 class="con-title">산책 기록이 없습니다.</h4>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                    }
+                ?>
+
 			</div>
 			<!-- //산책 상세 -->
 		</div>
@@ -167,6 +211,31 @@ $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_
             window.location.href = "../";
         }
     });
+
+    $(".btn-user-pet-item").click(function(){
+        const pet_id = $(this).attr("id");
+        $(".btn-user-pet-item").removeClass('actived');
+        $(this).addClass('actived');
+        var _url = 'http://192.168.20.128:8080/walklog/pet/log/65807';
+        $.ajax({
+            url: 'daily/rest_pet_log.php',
+            type: 'POST',
+            data: {
+                id : pet_id,
+            },
+            dataType: 'JSON',
+            success: function(data){
+    			console.log(data['body'][0]['count']);
+                $("#container").load(window.location.href + "#container");
+            },
+            error : function(xhr, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+
+
 
     // 기기 체크
     function checkMobile2(){
