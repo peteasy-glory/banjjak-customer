@@ -13,6 +13,7 @@ $mypets = $api->get("/walklog/pet/".$user_id);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
 $pet_id = $_GET['pet'];
+
 $log_year = $_GET['year'];
 if($log_year == null){
     $log_year = date("Y");
@@ -42,7 +43,7 @@ if($log_year == null){
                             $once = true;
                         foreach ($mypets['body'] as $val){
                             $photo = $val['photo'];
-                            $photo = $photo.str_replace("/pet/upload", "/upload", $photo);
+                            $photo = str_replace("/pet/upload", "/upload", $photo);
                             if ($photo == ""){
                                 if($val['type'] == "cat"){
                                     $photo = "../../images/cat/cat_90x90/cat_90x90@3x.png";
@@ -188,7 +189,7 @@ if($log_year == null){
                         <div class="con-title-group">
                             <h4 class="con-title">산책 기록이 없습니다.</h4>
                         </div>
-                    </div>음
+                    </div>
                 </div>
                 <?php
                     }
