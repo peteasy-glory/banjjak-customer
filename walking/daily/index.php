@@ -188,7 +188,7 @@ if($log_year == null){
                         <div class="con-title-group">
                             <h4 class="con-title">산책 기록이 없습니다.</h4>
                         </div>
-                    </div>음
+                    </div>
                 </div>
                 <?php
                     }
