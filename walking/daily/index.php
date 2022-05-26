@@ -215,8 +215,7 @@ function jsAlert($year){
         if(mobile === "in_app_and" || mobile === "in_app_ios"){
             onBackWalkTop(mobile);
         }else {
-            //location.href = <?=$_SESSION['backurl1']?>;
-            popalert.open('firstRequestMsg1', '로그인 후 이용해주세요.');
+            location.href = "/";
         }
     });
 
