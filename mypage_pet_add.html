@@ -8,7 +8,7 @@ $user_id = $_SESSION['gobeauty_user_id'];
 //$mypet_name = $_REQUEST['mypet_name'];
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
 $pet_seq = isset($_GET["pet_seq"])? $_GET["pet_seq"] : "";
-
+$mainback = isset($_GET['mainback']) ? $_GET['mainback'] : "";
 
 
 $p_type = "";
@@ -53,7 +53,13 @@ if($pet_seq) {
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
-		<a href="mypage_pet_list" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href=<?php
+                    if($mainback == ""){
+                        echo '"mypage_pet_list"';
+                    }else{
+                        echo '"mypage_pet_list?mainback='.$mainback.'"';
+                    }
+                ?> class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">펫 추가하기</div>
 </header>
@@ -350,7 +356,7 @@ if($pet_seq) {
                         var d = array_middle[i];
                         d = $.trim(d);
                         select.options.add(new Option(d, d));
-                        if (d == '<?= trim($p_pet_type) ?>') {
+                        if (d === '<?= trim($p_pet_type) ?>') {
                             $("#mypet_type").val(d.trim()).prop("selected", true);
                         }
 
@@ -438,12 +444,23 @@ if($pet_seq) {
                 data: $("#next_form").serialize(),
                 success: function(data) {
                     console.log("save_mypet success ", data);
-                    location.href = "mypage_pet_list";
-                    
+                    const main_back = '<?=$mainback?>';
+                    if( main_back === ""){
+                        location.href = "mypage_pet_list";
+                    }else{
+                        location.href = "mypage_pet_list?mainback=<?=$mainback?>";
+                    }
+
+
                 },
                 error: function(xhr, status) {
                     console.log("save_mypet failed");
-                    location.href = "mypage_pet_list";
+                    const main_back = '<?=$mainback?>';
+                    if( main_back === ""){
+                        location.href = "mypage_pet_list";
+                    }else{
+                        location.href = "mypage_pet_list?mainback=<?=$mainback?>";
+                    }
                 }
             });
         }

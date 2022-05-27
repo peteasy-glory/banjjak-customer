@@ -42,7 +42,7 @@ if($log_year == null){
                             $once = true;
                         foreach ($mypets['body'] as $val){
                             $photo = $val['photo'];
-                            $photo = $photo.str_replace("/pet/upload", "/upload", $photo);
+                            $photo = str_replace("/pet/upload", "/upload", $photo);
                             if ($photo == ""){
                                 if($val['type'] == "cat"){
                                     $photo = "../../images/cat/cat_90x90/cat_90x90@3x.png";
@@ -57,6 +57,8 @@ if($log_year == null){
                             if ($once || $pet_id == $val["pet_seq"]) {
                                 $once = false;
                                 $pet_id = $val["pet_seq"];
+                                $pet_name = $val["name"];
+                                $pet_thumb = $photo;
                                 $mypet_log = $api->get("/walklog/pet/log/".$val['pet_seq']);
                                 echo '<div class="list-cell" ><a href="#" id="pet_'.$val["pet_seq"].'" class="btn-user-pet-item actived"><div class="icons"><img src="'.$photo.'" alt=""/></div><div class="txt">'.$name.'</div></a></div>';
                             }else{
@@ -77,17 +79,11 @@ if($log_year == null){
                     <div class="recode-card-list">
                         <div class="recode-card-item">
                             <div class="recode-card-name" id="card_name">
-                                <?
-                                foreach ($mypets['body'] as $val) {
-                                    if ($pet_id == null || $pet_id == $val["pet_seq"]) {
-                                        echo $val['name']." 산책카드";
-                                    }
-                                }
-                                ?>
+                                <?= $pet_name?> 산책카드
                             </div>
                             <div class="recode-card-info">
                                 <div class="item-thumb">
-                                    <div class="user-thumb middle"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+                                    <div class="user-thumb middle"><img src="<?=$pet_thumb?>" alt=""></div>
                                 </div>
                                 <div class="item-data">
                                     <div class="item-data-inner">
@@ -96,7 +92,7 @@ if($log_year == null){
                                             <button type="button" class="btn-desc-question" ></button>
                                         </div>
                                         <!-- bar클래스에 inline-style방식으로 width값을 0~100%로 지정 -->
-                                        <div class="item-progress"><div class="bar" style="width:50%;"></div></div>
+                                        <div class="item-progress"><div class="bar" style="width:<?=100-$mypet_log['body'][0]['per']?>%;"></div></div>
                                         <div class="item-msg">아이에게 산책을 선물하세요</div>
                                     </div>
                                 </div>
@@ -214,17 +210,36 @@ function jsAlert($year){
         if(mobile === "in_app_and" || mobile === "in_app_ios"){
             onBackWalkTop(mobile);
         }else {
-            //location.href = <?=$_SESSION['backurl1']?>;
-            popalert.open('firstRequestMsg1', '로그인 후 이용해주세요.');
+            location.href = "/";
         }
     });
 
     $(".btn-user-pet-item").click(function(){
-        var pet_id = $(this).attr("id");
-        pet_id = pet_id.substr(4);
-        $(".btn-user-pet-item").removeClass('actived');
-        $(this).addClass('actived');
-        location.href = "?pet="+pet_id;
+        if($(this).attr("id") == null){
+            //location.href = "/mypage_pet_list"
+            // $.post("/mypage_pet_list"
+            //     ,{from_walk_daily:"walk/daily/"}
+            //     ,function(data, status){
+            //     });
+
+            var form = document.createElement('form');
+            var objs = document.createElement('input');
+            objs.setAttribute('type', 'hidden');
+            objs.setAttribute('name', 'from_walk_daily');
+            objs.setAttribute('value', "walking/daily/");
+            form.appendChild(objs);
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', "/mypage_pet_list");
+            document.body.appendChild(form);
+            form.submit();
+
+        }else{
+            var pet_id = $(this).attr("id");
+            pet_id = pet_id.substr(4);
+            $(".btn-user-pet-item").removeClass('actived');
+            $(this).addClass('actived');
+            location.href = "?pet="+pet_id;
+        }
     });
 
     $(".btn-desc-question").click(function(){

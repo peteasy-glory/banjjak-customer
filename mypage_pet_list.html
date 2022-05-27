@@ -12,13 +12,28 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 
+$to_back_url = "";
+if(isset($_POST['from_walk_daily'])){
+    $to_back_url = $_POST['from_walk_daily'];
+}else if(isset($_GET['mainback'])){
+    $to_back_url = $_GET['mainback'];
+}
+
 ?>         
             
 
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
-		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href=
+           <?php
+                if($to_back_url == ""){
+                    echo '"mypage_main"';
+                }else{
+                    echo $to_back_url;
+                }
+           ?>
+           class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">마이펫 관리</div>
 </header>
@@ -89,7 +104,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 							</div>
 						</div>
 						<div class="item-btns">
-							<a href="#" class="btn btn-outline-gray btn-small-size btn-border-radius-4" onclick="location.href='/mypage_pet_add?pet_seq=<?= $pet_seq ?>';">정보 수정</a>
+							<a href="#" class="btn btn-outline-gray btn-small-size btn-border-radius-4" onclick="location.href='/mypage_pet_add?pet_seq=<?= $pet_seq ?>&mainback=<?=$to_back_url?>';">정보 수정</a>
 							<a href="#" class="btn btn-outline-gray btn-small-size btn-border-radius-4 btn_del" pet_seq="<?= $pet_seq ?>">삭제</a>
 						</div>
 					</div>
@@ -139,7 +154,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 		// - a태그는 disabled 클래스 추가
 		// - button 태그는 disabled 속성 추가
 		-->
-		<a href="mypage_pet_add?backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-page-bottom">마이 펫 등록하기</a>
+		<a href="mypage_pet_add?backurl=<?= urlencode($_SERVER['REQUEST_URI'])?>&mainback=<?=$to_back_url?>" class="btn-page-bottom">마이 펫 등록하기</a>
 	</div>
 	<!-- //page-bottom -->	
 </section>
@@ -179,9 +194,20 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
                 del_pet_seq = "";
                 var varUA = navigator.userAgent.toLowerCase();
                 if ( varUA.indexOf('android') > -1) 
-                    location.href = "../mypage_pet_list"
-                else
-                    window.location.reload();
+                    //location.href = "../mypage_pet_list"
+                    if("<?=$to_back_url?>" === ""){
+                        ocation.href = "../mypage_pet_list"
+                    }else{
+                        location.href = "../mypage_pet_list?mainback=<?=$to_back_url?>";
+                    }
+                else {
+                    if("<?=$to_back_url?>" === ""){
+                        window.location.reload();
+                    }else{
+                        location.href = "mypage_pet_list?mainback=<?=$to_back_url?>";
+                    }
+                }
+
             },
             error:function(request,status,error){
                 alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
@@ -248,8 +274,11 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 								alert("에러 발생");
 							}
 
-							location.reload();
-
+                            if("<?=$to_back_url?>" === ""){
+                                location.reload();
+                            }else{
+                                location.href = "mypage_pet_list?mainback=<?=$to_back_url?>";
+                            }
 
 			},
 			error: function(xhr, status, error) {
@@ -295,7 +324,11 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
             success: function(data) {
 
                 if(data != "Fail") { // 성공
-                    location.reload();
+                    if("<?=$to_back_url?>" === ""){
+                        location.reload();
+                    }else{
+                        location.href = "mypage_pet_list?mainback=<?=$to_back_url?>";
+                    }
 
                 } else {
                     alert('미용사진 업로드에 실패하였습니다.');
