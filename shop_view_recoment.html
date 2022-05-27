@@ -37,6 +37,25 @@ $total_reviews = mysqli_num_rows($review_result);
                 <div class="list-inner">
                     <?
                     while($review_rows = mysqli_fetch_object($review_result)){
+                        // 아이디 가리기
+                        $nickname = ($review_rows->name && $review_rows->name != "")? $review_rows->name : $review_rows->nickname;
+                        $seq_cnt = ($review_rows->ir_seq % 5) + 1; // *처리시 ir_seq 기준으로 고정 * 갯수
+                        $blur_cnt = strlen($nickname) - 5;
+                        $blur_text = "**";
+                        $nick_cnt = 0;
+                        while($nick_cnt < $seq_cnt){
+                            $blur_text .="*";
+                            $nick_cnt++;
+                        }
+                        if(strlen($nickname) < 6 && $nickname != ""){
+                            $nickname = substr($nickname, 0,strlen($nickname) - 2) . "***";
+                        }else{
+                            if($seq_cnt >= 3){
+                                $nickname = substr($nickname, 0,4) . $blur_text;
+                            }else if($seq_cnt < 3){
+                                $nickname = substr($nickname, 0,3) . $blur_text . "*";
+                            }
+                        }
                     ?>
                     <div class="list-cell">
                         <div id="review_<?=$review_rows->review_seq?>" class="comment-cell">
@@ -51,7 +70,7 @@ $total_reviews = mysqli_num_rows($review_result);
                                     </div>
                                     <div class="user-data">
                                         <div class="data-inner">
-                                            <div class="user-name"><?= $review_rows->name ?></div>
+                                            <div class="user-name"><?= $nickname ?></div>
                                             <div class="user-grade">
                                                 <div class="icon-star-group">
                                                     <?

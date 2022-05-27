@@ -92,7 +92,7 @@ $reason_type_arr = array(
 		<!-- user-pay-view -->  
 		<div class="user-pay-view">
 			<div class="con-title-group">
-				<h3 class="con-title">입금대기 &amp; 결제완료</h3>
+				<h3 class="con-title"><?php echo ($row['order_status'] == '3')? "결제완료" : "입금대기"; ?></h3>
 			</div>
 			<!-- 주문번호 -->
 			<div class="user-pay-number"><em>주문번호</em><p><?=$order_num ?></p></div>
@@ -128,7 +128,7 @@ $reason_type_arr = array(
 							<div class="flex-table-title"><div class="txt">받으시는 곳</div></div>
 							<div class="flex-table-data">
 								<div class="flex-table-data-inner">
-                                    <?=$row['shipping_addr']." ".$row['shipping_addr'] ?>
+                                    <?=$row['shipping_addr']." ".$row['shipping_addr2'] ?>
 								</div>		
 							</div>
 						</div>
@@ -177,7 +177,7 @@ $reason_type_arr = array(
 									<div class="price-data-list-value"><?=number_format($row['point_price']) ?>원</div>
 								</div>
 								<div class="price-data-list-cell total line">	
-									<div class="price-data-list-title"><span class="font-color-gray">총 결제예정 금액</span></div>
+									<div class="price-data-list-title"><span class="font-color-gray">총 결제 금액</span></div>
 									<div class="price-data-list-value"><?=number_format($row['total_price']) ?>원</div>
 								</div>
 							</div>
@@ -193,192 +193,25 @@ $reason_type_arr = array(
 					<h4 class="con-title">주문상품</h4>
 				</div>
 				<div class="user-pay-list product_list">
-					<div class="user-pay-list-cell">
-						<div class="shop-cart-items">
-							<div class="shop-cart-body">
-								<div class="item-info-wrap">
-									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-									<div class="item-data">
-										<div class="item-data-inner">
-											<div class="item-name">[도기프렌드] 수제 간식세트</div>
-											<div class="item-option">
-												<div>올리브</div>
-												<div class="item-option-division">/</div>
-												<div>1개</div>
-											</div>
-											<div class="item-price">7,500원</div>
-										</div>
-									</div>
-									<div class="label label-shop-state">입금대기중</div>
-								</div>
-							</div>
-						</div>
-						<button type="button" class="btn btn-middle-size btn-outline-gray btn-round btn-user-pay-action">취소 요청</button>
-					</div>
-					<div class="user-pay-list-cell">
-						<div class="shop-cart-items">
-							<div class="shop-cart-body">
-								<div class="item-info-wrap">
-									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-									<div class="item-data">
-										<div class="item-data-inner">
-											<div class="item-name">[도기프렌드] 수제 간식세트</div>
-											<div class="item-option">
-												<div>올리브</div>
-												<div class="item-option-division">/</div>
-												<div>1개</div>
-											</div>
-											<div class="item-price">7,500원</div>
-										</div>
-									</div>
-									<div class="label label-shop-state">배송준비중</div>
-								</div>
-							</div>
-						</div>
-						<button type="button" class="btn btn-middle-size btn-outline-gray btn-round btn-user-pay-action">취소 요청</button>
-					</div>
-					<div class="user-pay-list-cell">
-						<div class="shop-cart-items">
-							<div class="shop-cart-body">
-								<div class="item-info-wrap">
-									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-									<div class="item-data">
-										<div class="item-data-inner">
-											<div class="item-name">[도기프렌드] 수제 간식세트</div>
-											<div class="item-option">
-												<div>올리브</div>
-												<div class="item-option-division">/</div>
-												<div>1개</div>
-											</div>
-											<div class="item-price">7,500원</div>
-										</div>
-									</div>
-									<div class="label label-shop-state">배송중</div>
-								</div>
-							</div>
-						</div>
-						<button type="button" class="btn btn-middle-size btn-outline-purple btn-round btn-user-pay-action">수취확인</button>
-					</div>
-					<div class="user-pay-list-cell">
-						<div class="shop-cart-items">
-							<div class="shop-cart-body">
-								<div class="item-info-wrap">
-									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-									<div class="item-data">
-										<div class="item-data-inner">
-											<div class="item-name">[도기프렌드] 수제 간식세트</div>
-											<div class="item-option">
-												<div>올리브</div>
-												<div class="item-option-division">/</div>
-												<div>1개</div>
-											</div>
-											<div class="item-price">7,500원</div>
-										</div>
-									</div>
-									<div class="label label-shop-state"><span class="font-color-purple">배송완료</span></div>
-								</div>
-							</div>
-						</div>
-						<div class="grid-layout btn-grid-group btn-user-pay-action">
-							<div class="grid-layout-inner">
-								<div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">구매확정</button></div>
-								<div class="grid-layout-cell grid-2"><button type="button" class="btn btn-outline-gray btn-middle-size btn-round">반품요청</button></div>
-							</div>
-						</div>
-					</div>
-					<div class="user-pay-list-cell">
-						<div class="shop-cart-items">
-							<div class="shop-cart-body">
-								<div class="item-info-wrap">
-									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-									<div class="item-data">
-										<div class="item-data-inner">
-											<div class="item-name">[도기프렌드] 수제 간식세트</div>
-											<div class="item-option">
-												<div>올리브</div>
-												<div class="item-option-division">/</div>
-												<div>1개</div>
-											</div>
-											<div class="item-price">7,500원</div>
-										</div>
-									</div>
-									<div class="label label-shop-state"><span class="font-color-red">반품</span></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="user-pay-list-cell">
-						<div class="shop-cart-items">
-							<div class="shop-cart-body">
-								<div class="item-info-wrap">
-									<div class="item-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
-									<div class="item-data">
-										<div class="item-data-inner">
-											<div class="item-name">[도기프렌드] 수제 간식세트</div>
-											<div class="item-option">
-												<div>올리브</div>
-												<div class="item-option-division">/</div>
-												<div>1개</div>
-											</div>
-											<div class="item-price">7,500원</div>
-										</div>
-									</div>
-									<div class="label label-shop-state"><span class="font-color-red">취소</span></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>			
+				</div>
 				<div class="basic-data-group vmiddle line">
 					<div class="price-data-wrap">
 						<div class="price-data-group">
 							<div class="price-data-list">
-                                <?php if($row["pay_type"] == "2"){ ?>
+                                <?php if($row["pay_type"] == "2" && $row["order_status"] != "3"){ ?>
 								<div class="price-data-list-cell read">	
 									<div class="price-data-list-title">입금자명</div>
 									<div class="price-data-list-value"><?=$row['bank_name'] ?></div>
 								</div>
 								<div class="price-data-list-cell read">	
 									<div class="price-data-list-title">입금계좌</div>
-									<div class="price-data-list-value">신한은행 232-23-2342-1234<br>주) 펫이지</div>
+									<div class="price-data-list-value">기업은행 054-143076-01-013<br>주식회사 펫이지</div>
 								</div>
 								<div class="price-data-list-cell read">	
 									<div class="price-data-list-title">입금마감일시</div>
 									<div class="price-data-list-value"><?=$expire_dt ?></div>
 								</div>
                                 <?php } ?>
-								<!--<div class="price-data-list-cell read">
-									<div class="price-data-list-title">반품사유</div>
-									<div class="price-data-list-value">김반짝</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">반품내역</div>
-									<div class="price-data-list-value">계좌이체</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">환불은행</div>
-									<div class="price-data-list-value">기업은행</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">환불계좌</div>
-									<div class="price-data-list-value">232-23-2342-1234</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">환불금액</div>
-									<div class="price-data-list-value">4,000원</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">환불일시</div>
-									<div class="price-data-list-value">2021.10.08 오전 11:27:30</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">취소사유</div>
-									<div class="price-data-list-value">김반짝</div>
-								</div>
-								<div class="price-data-list-cell read">	
-									<div class="price-data-list-title">취소내역</div>
-									<div class="price-data-list-value">계좌이체</div>
-								</div>-->
 							</div>
 						</div>
 					</div>
@@ -404,7 +237,7 @@ $reason_type_arr = array(
         get_item_payment_log_product();
     });
 
-    function get_item_payment_log_product(post_data){
+    function get_item_payment_log_product(){
         $.ajax({
             url: 'data/item_ajax.php',
             data: {
@@ -420,8 +253,7 @@ $reason_type_arr = array(
 
                     $.each(data.data, function(i, v) {
                         var option = JSON.parse(v.option_data);
-                        //var img_link = (v.file_path != '')? "https://image.banjjakpet.com"+img_link_change(v.file_path) : v.goodsRepImage;
-                        //var img_link = (v.file_path != '' || v.file_path == null)? "https://image.banjjakpet.com"+img_link_change(v.file_path) : v.goodsRepImage;
+                        //var img_link = (v.file_path != '' || v.file_path != null)? "https://image.banjjakpet.com"+img_link_change(v.file_path) : v.goodsRepImage;
                         var img_link = (v.file_path == '' || v.file_path == null)? v.goodsRepImage : "https://image.banjjakpet.com"+img_link_change(v.file_path);
                         html += '<div class="user-pay-list-cell">';
                         html += '    <div class="shop-cart-items">';
@@ -431,14 +263,18 @@ $reason_type_arr = array(
                         html += '                <div class="item-data">';
                         html += '                    <div class="item-data-inner">';
                         html += '                        <div class="item-name">'+v.product_name+'</div>';
+
+                        // product_price가 0일때(옵션상품이면)
+                        var sum_option_price = 0;
                         $.each(option, function(i_,v_){
                             html += '                        <div class="item-option">';
                             html += '                            <div>'+v_.txt+'</div>';
                             html += '                            <div class="item-option-division">/</div>';
                             html += '                            <div>'+v_.amount+'개</div>';
                             html += '                        </div>';
+                            sum_option_price = parseInt(sum_option_price) + parseInt(v_.value);
                         });
-                        html += '                        <div class="item-price">'+v.product_price+'원</div>';
+                        html += '                        <div class="item-price">'+((v.product_price == 0)? sum_option_price : v.product_price).format()+'원</div>';
                         html += '                    </div>';
                         html += '                </div>';
                         html += '                <div class="label label-shop-state">'+pay_status_arr[v.pay_status]+'</div>';
@@ -446,23 +282,23 @@ $reason_type_arr = array(
                         html += '        </div>';
                         html += '    </div>';
                         if(v.pay_status == "1"){
-                            html += '    <button type="button" class="btn btn-middle-size btn-outline-gray btn-round btn-user-pay-action">취소 요청</button>';
+                            html += '    <button type="button" onclick="javascript:location.href=\'shop_cancel_1?no=<?=$order_num?>\'" class="btn btn-middle-size btn-outline-gray btn-round btn-user-pay-action">취소 요청</button>';
                         }else if(v.pay_status == "2"){
                             html += '    <div class="grid-layout btn-grid-group btn-user-pay-action">';
                             html += '        <div class="grid-layout-inner">';
-                            html += '           <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">배송조회</button></div>';
-                            html += '           <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-outline-gray btn-middle-size btn-round">취소요청</button></div>';
+                            html += '           <div class="grid-layout-cell grid-2"><button type="button" onclick="shipping_chk(\''+v.shipping_company+'\',\''+v.shipping_invoice+'\')" class="btn btn-purple btn-middle-size btn-round">배송조회</button></div>';
+                            html += '           <div class="grid-layout-cell grid-2"><button type="button" onclick="javascript:location.href=\'shop_cancel_1?no=<?=$order_num?>\'" class="btn btn-outline-gray btn-middle-size btn-round">취소요청</button></div>';
                             html += '       </div>';
                             html += '    </div>';
                         }else if(v.pay_status == "3"){
                             html += '    <div class="grid-layout btn-grid-group btn-user-pay-action">';
                             html += '        <div class="grid-layout-inner">';
-                            html += '           <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">배송조회</button></div>';
-                            html += '           <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-outline-gray btn-middle-size btn-round">반품요청</button></div>';
+                            html += '           <div class="grid-layout-cell grid-2"><button type="button" onclick="shipping_chk(\''+v.shipping_company+'\',\''+v.shipping_invoice+'\')" class="btn btn-purple btn-middle-size btn-round">배송조회</button></div>';
+                            html += '           <div class="grid-layout-cell grid-2"><button type="button" onclick="javascript:location.href=\'shop_return_1?no=<?=$order_num?>\'" class="btn btn-outline-gray btn-middle-size btn-round">반품요청</button></div>';
                             html += '       </div>';
                             html += '    </div>';
                         }else if(v.pay_status == "4"){
-                            html += '    <button type="button" class="btn btn-middle-size btn-outline-gray btn-round btn-user-pay-action">반품요청</button>';
+                            html += '    <button type="button" onclick="javascript:location.href=\'shop_return_1?no=<?=$order_num?>\'" class="btn btn-middle-size btn-outline-gray btn-round btn-user-pay-action">반품요청</button>';
                         }else if(v.pay_status == "8"){
                             // 반품사유
                         }else if(v.pay_status == "9"){
@@ -488,6 +324,37 @@ $reason_type_arr = array(
                 alert(error + "네트워크에러");
             }
         });
+    }
+
+    function go_cancel(){
+
+        $('#firstRequestMsg1').find('.msg-txt').text('1대1 문의나 고객센터(1661-9956)를 이용해 주세요.');
+        pop.open("firstRequestMsg1");
+    }
+
+    // 배송조회
+    function shipping_chk(shipping_company,shipping_invoice){ // 배송조회
+
+        if(shipping_company == "2"){ // 우체국
+//		window.open("https://service.epost.go.kr/iservice/usr/trace/usrtrc001k01.jsp", "_BLANK");
+            window.open("http://service.epost.go.kr/trace.RetrieveRegiPrclDeliv.postal?sid1="+shipping_invoice, "_BLANK");
+        }else if(shipping_company == "1"){ // 대한통운
+            window.open("https://www.cjlogistics.com/ko/tool/parcel/newTracking?gnbInvcNo="+shipping_invoice, "_BLANK");
+            //window.open("https://www.cjlogistics.com/ko/tool/parcel/tracking", "_BLANK");
+            //window.open("http://nplus.doortodoor.co.kr/web/detail.jsp?slipno="+shipping_invoice, "_BLANK");
+        }else if(shipping_company == "0"){ // 한진택배
+//		html = '';
+//		html += '<form id="send_shipping_data" method="post" action="https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do" style="display: none;">';
+////		html += '	<input type="text" id="div" name="div" value="B" />';
+////		html += '	<input type="text" id="show" name="show" value="true" />';
+//		html += '	<input type="text" id="mCode" name="mCode" value="MN038" />';
+//		html += '	<input type="text" id="schLang" name="schLang" value="KR" />';
+//		html += '	<input type="text" id="wblNum" name="wblnum" value="'+shipping_invoice+'" />';
+//		html += '</form>';
+//		$(document).find("#item_order_detail").after(html);
+//		$(document).find("#send_shipping_data").submit();
+            window.open("https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnum="+shipping_invoice, "_BLANK");
+        }
     }
 
     // 세자리 숫자 콤마

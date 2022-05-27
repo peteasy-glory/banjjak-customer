@@ -16,8 +16,10 @@ function make_password_hash($pass){
 function make_user_directory($static_directory,$user_id){
 	$mkdir = $static_directory."/".$user_id."/";
 	if (!is_dir($mkdir)) {
-       		mkdir($mkdir);
-       		chmod($mkdir,777);
+        $old = umask(0);
+		mkdir($mkdir);
+		chmod($mkdir,0777);
+		umask($old);
 	}
 	//echo $mkdir;
 	return 1;

@@ -30,6 +30,76 @@
                 $_SESSION['is_token'] = "1";
 //				$_SESSION['my_shop_flag'] = $row[my_shop_flag];
 
+                // 최초 앱 실행시 토큰 저장
+                if($_SESSION['is_token'] == "1"){
+                    $_SESSION['is_token'] == "0";
+                    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+                    if ($user_agent) {
+                        $token_index_and = strpos($user_agent, "APP_GOBEAUTY_AND");
+                        $token_index_ios = strpos($user_agent, "APP_GOBEAUTY_iOS");
+                        if($token_index_and > 0){ // 안드로이드일때
+                            ?>
+                            <script>
+                                var token = window.Android.onAppGetToken();
+                                //alert(token);
+                                $.ajax({
+                                    url: 'save_token.php',
+                                    data: {
+                                        id : "<?=$_SESSION['gobeauty_user_id']?>",
+                                        token : token,
+                                        is_android : "yes"
+                                    },
+                                    type: 'POST',
+                                    success: function(data){
+                                        //alert(data+"1");
+                                        //location.reload();
+                                        if($.trim(data) == "OK"){
+                                            //location.replace("../home_main");
+                                            //alert("ok");
+                                        }else{
+                                            alert("no");
+                                        }
+                                    },
+                                    error : function(xhr, status, error) {
+                                    }
+                                });
+                            </script>
+                            <?php
+                        }else if($token_index_ios > 0){ // ios 일때
+                            ?>
+                            <script>
+                                function SaveTokeniOS(userid, usertoken){
+                                    //alert(usertoken);
+                                    $.ajax({
+                                        url: 'save_token',
+                                        data: {
+                                            id : "<?=$_SESSION['gobeauty_user_id']?>",
+                                            token : usertoken,
+                                            is_android : "no"
+                                        },
+                                        type: 'POST',
+                                        success: function(data){
+                                            //alert(data+"1");
+                                            //location.reload();
+                                            if($.trim(data) == "OK"){
+                                                //location.replace("../home_main");
+                                                //alert("ok");
+                                            }else{
+                                                alert("no");
+                                            }
+                                        },
+                                        error : function(xhr, status, error) {
+                                        }
+                                    });
+                                }
+                                //var token = window.webkit.onAppGetToken();
+                                //alert(token);
+                            </script>
+                            <?php
+                        }
+                    }
+                }
+
                 if($my_shop_flag == '1'){
 					?>
 					<script>
