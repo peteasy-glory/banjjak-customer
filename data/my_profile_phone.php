@@ -40,16 +40,42 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
   $new_phone = $_REQUEST["phone"];
   $crypto = new Crypto();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+    //이전 번호 가져오기
+//  $sql = "select cellphone from tb_customer where id = '".$user_id."';";
+//  $old_phone = mysqli_query($connection, $sql);
+
+  //global $connection;
+=======
+=======
+>>>>>>> 703065cf3935c269ff9fb507ae44b3994e716ad9
   //이전 번호 가져오기
   $sql = "select cellphone from tb_customer where id = '".$user_id."';";
   $old_phone = mysqli_query($connection, $sql);
 
 //global $connection;
+<<<<<<< HEAD
+>>>>>>> 703065cf3935c269ff9fb507ae44b3994e716ad9
+=======
+>>>>>>> 703065cf3935c269ff9fb507ae44b3994e716ad9
   $sql = "update tb_customer set cellphone = '".$No."' where id = '".$user_id."';";
   $result = mysqli_query($connection, $sql);
 
   if($result){
       //발신자 번호 수정
+<<<<<<< HEAD
+<<<<<<< HEAD
+ //     $sql = "update tb_sent_cell_id set cellphone = '".$No."' where cellphone = '".$old_phone."';";
+ //     $result = mysqli_query($connection, $sql);
+ //     if($result){
+          echo "<script>alert('전화번호가 변경되었습니다.'); location.replace('../mypage_main');</script>";
+ //     }else{
+          //echo "<script>alert('전화번호 변경에 실패했습니다..'); location.replace('../mypage_phone_modify');</script>";
+ //     }
+=======
+=======
+>>>>>>> 703065cf3935c269ff9fb507ae44b3994e716ad9
       $sql = "update tb_sent_cell_id set cellphone = '".$No."' where cellphone = '".$old_phone."';";
       $result = mysqli_query($connection, $sql);
       if($result){
@@ -57,6 +83,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
       }else{
           //echo "<script>alert('전화번호 변경에 실패했습니다..'); location.replace('../mypage_phone_modify');</script>";
       }
+<<<<<<< HEAD
+>>>>>>> 703065cf3935c269ff9fb507ae44b3994e716ad9
+=======
+>>>>>>> 703065cf3935c269ff9fb507ae44b3994e716ad9
   }else{
       echo "<script>alert('전화번호 변경에 실패했습니다..'); location.replace('../mypage_phone_modify');</script>";
   }

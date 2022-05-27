@@ -6,14 +6,14 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 $user_id = $_SESSION['gobeauty_user_id'];
 $pet_seq = $_POST['pet_seq'];
 
-$mypet_name = $_POST['mypet_name'];
+$mypet_name = $_POST['pet_name'];
 $mypet_name = trim($mypet_name);
 $pet_type = $_POST['pet_kind'];
 $mypet_type = $_POST['mypet_type'];
 $mypet_type2 = $_POST['mypet_type2'];
-$mypet_b_year = $_POST['mypet_b_year'];
-$mypet_b_month = $_POST['mypet_b_month'];
-$mypet_b_day = $_POST['mypet_b_day'];
+$mypet_b_year = $_POST['pet_year'];
+$mypet_b_month = $_POST['pet_month'];
+$mypet_b_day = $_POST['pet_day'];
 $pet_gender = $_POST['gender'];
 $mypet_neutral = $_POST['neutralize'];
 

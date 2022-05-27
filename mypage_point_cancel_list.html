@@ -18,7 +18,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
-		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href="mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">포인트</div>
 </header>
@@ -41,7 +41,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
                         $curPoint = $point->get_point();
                     }
                     ?>
-					<div class="item-title">현재 포인트<a href="#" class="btn btn-outline-purple btn-round btn-inline btn-charge"><em>충전하기</em></a></div>
+					<div class="item-title">현재 포인트<!--<a href="#" class="btn btn-outline-purple btn-round btn-inline btn-charge"><em>충전하기</em></a>--></div>
 					<div class="item-value"><?= number_format($curPoint) ?>P</div>
 				</div>
 				<div class="wide-tab">
@@ -120,5 +120,5 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
 	
 <?
-include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
 ?>

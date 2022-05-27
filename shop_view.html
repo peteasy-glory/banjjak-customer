@@ -54,7 +54,7 @@ $img_array = sql_fetch_array($img_sql);
 
 // 리뷰 정보
 $review_sql = "
-    SELECT a.*, b.photo FROM tb_item_review a
+    SELECT a.*, b.photo, b.nickname FROM tb_item_review a
     LEFT JOIN tb_customer b ON a.customer_id = b.id
     WHERE a.product_no = '".$product_no."'
     AND a.is_delete = '2' AND a.is_blind = '2' ORDER BY a.reg_dt DESC
@@ -68,6 +68,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
 
 ?>
+
 
 <!-- header -->
 <header id="header">	
@@ -291,6 +292,26 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                         for($i=0;$i<$cnt;$i++){
                             // 리뷰작성자 프로필 사진
                             $user_photo = ($review_array[$i]['photo'])? "https://image.banjjakpet.com".img_link_change($review_array[$i]['photo']) : "";
+
+                            // 아이디 가리기
+                            $nickname = ($review_array[$i]['name'] && $review_array[$i]['name'] != "")? $review_array[$i]['name'] : $review_array[$i]['nickname'];
+                            $seq_cnt = ($review_array[$i]['ir_seq'] % 5) + 1; // *처리시 ir_seq 기준으로 고정 * 갯수
+                            $blur_cnt = strlen($nickname) - 5;
+                            $blur_text = "**";
+                            $nick_cnt = 0;
+                            while($nick_cnt < $seq_cnt){
+                                $blur_text .="*";
+                                $nick_cnt++;
+                            }
+                            if(strlen($nickname) < 6 && $nickname != ""){
+                                $nickname = substr($nickname, 0,strlen($nickname) - 2) . "***";
+                            }else{
+                                if($seq_cnt >= 3){
+                                    $nickname = substr($nickname, 0,4) . $blur_text;
+                                }else if($seq_cnt < 3){
+                                    $nickname = substr($nickname, 0,3) . $blur_text . "*";
+                                }
+                            }
                             ?>
                             <div class="comment-cell">
                                 <div class="comment-item">
@@ -304,7 +325,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                         </div>
                                         <div class="user-data">
                                             <div class="data-inner">
-                                                <div class="user-name"><?=$review_array[$i]['name']?></div>
+                                                <div class="user-name"><?=$nickname ?></div>
                                                 <div class="user-grade">
                                                     <div class="icon-star-group">
                                                         <?php
@@ -321,7 +342,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                                         }
                                                         ?>
                                                     </div>
-                                                    <div class="time"><?=$review_array[$i]['reg_dt']?></div>
+                                                    <div class="time"><?=explode(' ',$review_array[$i]['reg_dt'])[0] ?></div>
                                                 </div>
                                             </div>
                                         </div>

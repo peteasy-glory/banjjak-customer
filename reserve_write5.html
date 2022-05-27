@@ -63,7 +63,8 @@ $pet_name = $pet_datas->name_for_owner;
 $pet_birth = $pet_datas->year.".".$pet_datas->month.".".$pet_datas->day;
 $pet_gender = $pet_datas->gender;
 $pet_weight = $pet_datas->weight;
-$pet_photo = img_link_change($pet_datas->photo);
+//$pet_photo = img_link_change($pet_datas->photo);
+$pet_photo = ($pet_datas->photo)? "https://image.banjjakpet.com".img_link_change($pet_datas->photo) : "";
 
 $pet_product_name = $pet_datas->name;
 $pet_product_type = "";
@@ -125,7 +126,7 @@ if($pet_datas->type == 'cat'){
 						<div class="thumb-wrap">
 							<div class="content-thumb small">
                                 <?if($shop_datas->front_image != ''){?>
-                                <img src="<?=img_link_change($shop_datas->front_image)?>" alt="">
+                                <img src="<?="https://image.banjjakpet.com".img_link_change($shop_datas->front_image)?>" alt="">
                                 <?}?>
                             </div>
 						</div>
@@ -522,7 +523,7 @@ if($pet_datas->type == 'cat'){
                                     //jpg를 png로 변경하는 코드
                                     //$(target).prop("src", img_link_change(v.file_path).replace(".jpg", ".png"));
 
-                                    $(target).prop("src", img_link_change(v.file_path));
+                                    $(target).prop("src", "https://image.banjjakpet.com"+img_link_change(v.file_path));
 
                                 }
                             });

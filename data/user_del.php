@@ -16,7 +16,8 @@
 
 	//회원정보
 	$sql = "UPDATE tb_customer
-	        SET enable_flag = 0
+	        SET enable_flag = 0,
+            delete_time = NOW()
 		    WHERE id = '{$user_id}'";
 	$result = mysqli_query($connection, $sql);
 

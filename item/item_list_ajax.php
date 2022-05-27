@@ -1075,7 +1075,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				$_SESSION["RECEIPT_ID"] = ""; // init
 				$ip_log_seq = mysqli_insert_id($connection);
 				if($r_point_price > 0){ // 포인트 결제 사용시 포인트 감소
-					include "../include/Point.class.php";
+					//include "../include/Point.class.php";
 					$point = new Point;
 					$result = $point->select_point($r_customer_id);
 					$point->spend_point($r_point_price, $ip_log_seq, "product_".$r_order_num);
@@ -1087,7 +1087,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				$pushImage = "";
 				$pushPayType = ($r_pay_type == "1")? "카드" : "계좌이체";
 				$admin_message = substr($cellphone, -4) . "(".$r_customer_email."@".$r_customer_email_suffix.")님이 [".$r_product_name."]을 구매(".$pushPayType."). 상품결제 관리를 확인하세요";
-				a_push("pickmon@pickmon.com", "반짝_상품구매알림", $admin_message, $pushPath, $pushImage);
+				a_push("pickmon@pickmon.com", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
+                a_push("joseph@peteasy.kr", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
 
 				// 알림톡 발송
 				if($r_pay_type == "1"){ // 신용카드
@@ -1673,7 +1674,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 					$result = mysqli_query($connection,$sql);
 					$row = mysqli_fetch_assoc($result);
 					if($row["point_price"] > 0){
-						include "../include/Point.class.php";
+						//include "../include/Point.class.php";
 						$point = new Point;
 						$sql = "
 							SELECT *
@@ -2154,7 +2155,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 					$pushImage = "";
 					$pushPayType = ($row["pay_type"] == "1")? "카드" : "계좌이체";
 					$admin_message = substr($row["cellphone"], -4) . "(".explode(",", $row["guest_info"])[1].")님이 [".$row["product_name"]."]을 구매(".$pushPayType."). 상품결제 관리를 확인하세요";
-					a_push("pickmon@pickmon.com", "반짝_상품구매알림", $admin_message, $pushPath, $pushImage);
+					a_push("pickmon@pickmon.com", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
+                    a_push("joseph@peteasy.kr", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
 
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{
@@ -3527,13 +3529,19 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 		$ch = curl_init(); //curl 사용 전 초기화 필수(curl handle)
 
 		curl_setopt($ch, CURLOPT_URL, $P_REQ_URL);			// URL 지정하기
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		// 결과를 노출(0-print, 1-변수저장)
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);	// https ssl 인증서 확인 하지 않도록 함
-		curl_setopt($ch, CURLOPT_SSLVERSION,3);				// 주소가 https가 아니라면 지울것
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);		// header 정보 전달
+		//curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		// 결과를 노출(0-print, 1-변수저장)
+		//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);	// https ssl 인증서 확인 하지 않도록 함
+		//curl_setopt($ch, CURLOPT_SSLVERSION,3);				// 주소가 https가 아니라면 지울것
+		//curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);		// header 정보 전달
         
-		curl_setopt($ch, CURLOPT_POST, 1);					// 0이 default 값이며 POST 통신을 위해 1로 설정해야 함
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);	// POST로 보낼 데이터 지정하기
+		//curl_setopt($ch, CURLOPT_POST, 1);					// 0이 default 값이며 POST 통신을 위해 1로 설정해야 함
+		//curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);	// POST로 보낼 데이터 지정하기
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    //요청 결과를 문자열로 반환
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);     //connection timeout 10초
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);           //원격 서버의 인증서가 유효한지 검사 안함
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);    //POST 로 $data 를 보냄
+        curl_setopt($ch, CURLOPT_POST, 1);
 
 		$response = curl_exec($ch);
 	
@@ -3564,7 +3572,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 						$pushImage = "";
 						$pay_type = ($row["pay_type"] == "1")? "카드" : "계좌이체";
 						$admin_message = substr($row["cellphone"], -4) . " (".$row["guest_info"].")님이 [".$row["product_name"]."]을 구매취소(".$pay_type."). 상품결제 관리를 확인하세요.";
-						a_push("pickmon@pickmon.com", "반짝_상품결제취소알림", $admin_message, $pushPath, $pushImage);
+						a_push("pickmon@pickmon.com", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
+                        a_push("joseph@peteasy.kr", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
 					}
 				}
 
@@ -3584,13 +3593,19 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 
 		$ch = curl_init(); //curl 사용 전 초기화 필수(curl handle)
 		curl_setopt($ch, CURLOPT_URL, $P_REQ_URL);			// URL 지정하기
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		// 결과를 노출(0-print, 1-변수저장)
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);	// https ssl 인증서 확인 하지 않도록 함
-		curl_setopt($ch, CURLOPT_SSLVERSION,3);				// 주소가 https가 아니라면 지울것
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);		// header 정보 전달
+		//curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		// 결과를 노출(0-print, 1-변수저장)
+		//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);	// https ssl 인증서 확인 하지 않도록 함
+		//curl_setopt($ch, CURLOPT_SSLVERSION,3);				// 주소가 https가 아니라면 지울것
+		//curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);		// header 정보 전달
 
-		curl_setopt($ch, CURLOPT_POST, 1);					// 0이 default 값이며 POST 통신을 위해 1로 설정해야 함
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);	// POST로 보낼 데이터 지정하기
+		//curl_setopt($ch, CURLOPT_POST, 1);					// 0이 default 값이며 POST 통신을 위해 1로 설정해야 함
+		//curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);	// POST로 보낼 데이터 지정하기
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    //요청 결과를 문자열로 반환
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);     //connection timeout 10초
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);           //원격 서버의 인증서가 유효한지 검사 안함
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);    //POST 로 $data 를 보냄
+        curl_setopt($ch, CURLOPT_POST, 1);
 
 		$response = curl_exec($ch);
 		$tmp_arr = json_decode($response, true); //결과값 확인하기

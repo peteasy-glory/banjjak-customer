@@ -13,6 +13,7 @@ $mypets = $api->get("/walklog/pet/".$user_id);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
 $pet_id = $_GET['pet'];
+
 $log_year = $_GET['year'];
 if($log_year == null){
     $log_year = date("Y");

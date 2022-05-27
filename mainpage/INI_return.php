@@ -189,7 +189,7 @@
 						a_push($artist_id, "반짝, 반려생활의 단짝. 신규 예약 알림", $message, $path, $image);
 
 						$admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약하였습니다. ".$row['year']."년".$row['month']."월".$row['day']."일 신규 예약등록. 작업스케줄을 관리하세요.";
-						a_push("itseokbeom@gmail.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
+						a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 신규 예약 알림(견주앱)", $admin_message, $path, $image);
                         
 						// 거래완료 페이지 이동
 						?>
@@ -493,7 +493,8 @@
 						$pushImage = "";
 						$pushPayType = ($row["pay_type"] == "1")? "카드" : "계좌이체";
 						$admin_message = substr($row["cellphone"], -4) . "(".explode(",", $row["guest_info"])[1].")님이 [".$row["product_name"]."]을 구매(".$pushPayType."). 상품결제 관리를 확인하세요";
-						a_push("itseokbeom@gmail.com", "반짝_상품구매알림", $admin_message, $pushPath, $pushImage);
+						a_push("pickmon@pickmon.com", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
+                        a_push("joseph@peteasy.kr", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
 
 						// 거래완료 페이지 이동
 						?><script language="javascript">
