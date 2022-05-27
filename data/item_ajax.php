@@ -194,11 +194,17 @@ if($mode){
     }else if($mode == "get_cart_cnt"){
         $r_customer_id	   = ($_POST["customer_id"] && $_POST["customer_id"] != "")? $_POST["customer_id"] : "";
 
+        if($r_customer_id != ''){
+            $where_qy = "AND customer_id = '".$r_customer_id."' ";
+        }else{
+            $where_qy = "AND session_id = '".$sessionid."' ";
+        }
+
         $sql = "
 					SELECT *
 					FROM tb_item_cart
 					WHERE is_delete = '1'
-					AND (customer_id = '".$r_customer_id."' OR session_id = '".$sessionid."')
+                    ".$where_qy."
                     AND direct_chk = 0
 				";
         $result = mysqli_query($connection, $sql);
@@ -435,14 +441,12 @@ if($mode){
 
         if($r_customer_id != ""){
             $sql = "
-					SELECT * 
-					FROM tb_item_payment_log 
-					WHERE is_delete = '1' 
-						AND customer_id = '".$r_customer_id."' 
-						AND receipt_id IS NOT NULL 
-						AND pay_status IN ('2', '3', '4', '5', '6') 
-						AND total_price > 0
-						AND pay_dt > '2021-01-22 00:00:00'
+                SELECT *
+					FROM tb_item_payment_log
+					WHERE 1 = 1
+					AND (customer_id = '".$r_customer_id."' and pay_type = '1' AND receipt_id IS NOT NULL AND pay_status IN ('2', '3', '4', '5', '6') AND is_delete = '1')
+					OR (customer_id = '".$r_customer_id."' and pay_type = '2' AND is_cancel = '1' AND is_return = '1' AND is_delete = '1')
+					AND reg_dt > '2021-01-01 00:00:00'
 				";
             $result = mysqli_query($connection,$sql);
             $cnt = mysqli_num_rows($result);
@@ -548,7 +552,7 @@ if($mode){
 
         if($where_qy != ""){	// is_delete - 삭제여부(1-미삭제, 2-삭제)
             $sql = "
-					SELECT a.iplp_seq, a.product_price, a.option_data, b.product_name, c.file_path, a.pay_status, b.goodsRepImage FROM tb_item_payment_log_product a
+                    SELECT a.*, b.product_name, c.file_path, b.goodsRepImage FROM tb_item_payment_log_product a
                     LEFT JOIN tb_item_list b ON b.product_no = a.product_no
                     LEFT JOIN tb_file c ON c.f_seq = b.product_img
 					WHERE a.is_delete = '1'

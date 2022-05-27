@@ -72,9 +72,9 @@ $INI_url = array(
 $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
 
 
-
-
 ?>
+
+
 <!-- 상용 JS(가맹점 MID 변경 시 주석 해제, 테스트용 JS 주석 처리 필수!) -->
 <script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
 <!-- header -->
@@ -186,7 +186,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
 					<label class="form-checkbox"><input type="checkbox" id="same_order_name" class="same_order_name" name=""><span class="form-check-icon"><em>주문자명과 동일</em></span></label>
 				</div>
 				<div class="form-group">
-                    <?php if($user_id != ""){ ?>
+                    <?php if($user_id == "itseokbeom@gmail.com"){ ?>
 					<div class="form-group-cell">
 						<div class="form-group-item">
 							<div class="form-item-label">배송지 선택</div>
@@ -497,8 +497,14 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
             window.history.back();
         }
     }
+
     // 바로구매 카트는 삭제
+    // 바로구매 카트는 삭제
+    // 페이스북 이벤트때문에 일단 주석
+    // 장바구니랑 구분 해놔서 사실상 삭제는 불필요
+
     function direct_delete(back){
+        /*
         $.ajax({
             url: 'data/item_ajax.php',
             data: {
@@ -524,6 +530,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 }
             }
         });
+        */
     }
 
     $(function(){

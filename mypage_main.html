@@ -339,44 +339,47 @@ if($user_id != ""){
 
         //안드에서 업로드가 끝나면 무조건 호출..
         function uploadEnd(fileName) {
-            //alert("uploadEnd");
-            var post_data = 'filename=' + fileName;
+            // var filename = $("input[name=imgupfile]")[0].files[0].name;
+            var newfilename = GetPhotoFilename('customer_photo', '<?= $user_id ?>', fileName);
+            //              alert(newfilename);
+
+
+
+            /*$('#myfile').val(myfile);
+            $('#filepath').val(filepath);
+            $('#pet_seq').val(_pet_seq);
+            $('#payment_log_seq').val(_payment_log_seq);
+            $('#artist_id').val(_artist_id);*/
+            var formData = new FormData();
+            formData.append("file", fileName);
+            formData.append("filepath", newfilename);
+            //formData.append("pet_seq", _pet_seq);
+            // formData.append("payment_log_seq", _payment_log_seq);
+            //formData.append("artist_id", _artist_id);
+            //formData.append("prnt_title", _prnt_titl);
+
+
+
+            //document.f.submit();
+            //alert(fileName+' : '+newfilename+' : '+_pet_seq+' : '+_payment_log_seq+' : '+_artist_id)
             $.ajax({
-                url: 'common/file_bridge.php',	// 미용사진 갤러리 전용 업로드
-                data: post_data,
+                url: 'data/my_profile_photo_byapp.php',	// 미용사진 갤러리 전용 업로드
+                data: formData,
+                processData: false,
+                contentType: false,
                 cache: false,
                 type: 'POST',
-               success: function (data){
-                   var newfilename = GetPhotoFilename('customer_photo', '<?= $user_id ?>', fileName);
-                   var formData = new FormData();
-                   formData.append("file", fileName);
-                   formData.append("filepath", newfilename);
-                   $.ajax({
-                       url: 'data/my_profile_photo_byapp.php',	// 미용사진 갤러리 전용 업로드
-                       data: formData,
-                       processData: false,
-                       contentType: false,
-                       cache: false,
-                       type: 'POST',
-                       success: function(data) {
+                success: function(data) {
 
-                           if(data != "Fail") { // 성공
-                               location.reload();
+                    if(data != "Fail") { // 성공
+                        location.reload();
 
-                           } else {
-                               alert('미용사진 업로드에 실패하였습니다.');
-                               //rv = false;
-                           }
+                    } else {
+                        alert('미용사진 업로드에 실패하였습니다.');
+                        //rv = false;
+                    }
 
-                       },
-                       error: function(xhr, status, error) {
-                           alert(error + "네트워크에러");
-                           if(xhr.status != 0){
-                               alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-                           }
-                       }
-                   });
-               },
+                },
                 error: function(xhr, status, error) {
                     alert(error + "네트워크에러");
                     if(xhr.status != 0){
@@ -384,62 +387,7 @@ if($user_id != ""){
                     }
                 }
             });
-
         }
-
-    function uploadEnd2(fileName) {
-        // var filename = $("input[name=imgupfile]")[0].files[0].name;
-        var newfilename = GetPhotoFilename('customer_photo', '<?= $user_id ?>', fileName);
-        //              alert(newfilename);
-
-
-
-        /*$('#myfile').val(myfile);
-        $('#filepath').val(filepath);
-        $('#pet_seq').val(_pet_seq);
-        $('#payment_log_seq').val(_payment_log_seq);
-        $('#artist_id').val(_artist_id);*/
-        var formData = new FormData();
-        formData.append("file", fileName);
-        formData.append("filepath", newfilename);
-        //formData.append("pet_seq", _pet_seq);
-        // formData.append("payment_log_seq", _payment_log_seq);
-        //formData.append("artist_id", _artist_id);
-        //formData.append("prnt_title", _prnt_titl);
-
-
-
-        //document.f.submit();
-        //alert(fileName+' : '+newfilename+' : '+_pet_seq+' : '+_payment_log_seq+' : '+_artist_id)
-        $.ajax({
-            url: 'data/my_profile_photo_byapp.php',	// 미용사진 갤러리 전용 업로드
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            type: 'POST',
-            success: function(data) {
-
-                if(data != "Fail") { // 성공
-                    location.reload();
-
-                } else {
-                    alert('미용사진 업로드에 실패하였습니다.');
-                    //rv = false;
-                }
-
-            },
-            error: function(xhr, status, error) {
-                alert(error + "네트워크에러");
-                if(xhr.status != 0){
-                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-                }
-            }
-        });
-    }
-
-
-
         ////////////////
 
 		function toggleUserMainInfoElement() {

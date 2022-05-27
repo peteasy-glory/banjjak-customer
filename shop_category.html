@@ -580,7 +580,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
                         var rating_cnt = (v.rating_cnt != '' && v.rating_cnt)? v.rating_cnt : 0; // 후기 수
 
                         html += '<div class="list-cell">';
-                        html += '    <a href="#" class="product-item">';
+                        html += '    <a href="shop_view?product_no='+v.product_no+'" class="product-item">';
                         html += '        <div class="thumb"><div class="obj"><img src="'+data.data['photo'][i]+'" alt="">'+soldout+'</div></div>';
                         html += '        <div class="info-wrap">';
                         html += '            <div class="item-name">'+v.product_name+'</div>';

@@ -346,8 +346,8 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 							<div class="form-item-data type-2">
 								<div class="grid-layout toggle-button-group">
 									<div class="grid-layout-inner">
-										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="gender1"><input type="radio" name="gender" id="gender1" <?= $male_chk ?> ><em>남아</em></label></div>
-										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="gender2"><input type="radio" name="gender" id="gender2" <?= $female_chk ?>><em>여아</em></label></div>
+										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="gender1"><input type="radio" name="gender" value="남아" id="gender1" <?= $male_chk ?> ><em>남아</em></label></div>
+										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="gender2"><input type="radio" name="gender" value="여아" id="gender2" <?= $female_chk ?>><em>여아</em></label></div>
 									</div>
 								</div>
 							</div>
@@ -359,8 +359,8 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 							<div class="form-item-data type-2">
 								<div class="grid-layout toggle-button-group">
 									<div class="grid-layout-inner">
-										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="neutralize1"><input type="radio" name="neutralize" id="neutralize1" <?= $neutral_true ?> ><em>X</em></label></div>
-										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="neutralize2"><input type="radio" name="neutralize" id="neutralize2" <?= $neutral_false ?> ><em>O</em></label></div>
+										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="neutralize1"><input type="radio" name="neutralize" value="0" id="neutralize1" <?= $neutral_true ?> ><em>X</em></label></div>
+										<div class="grid-layout-cell grid-2"><label class="form-toggle-box middle" for="neutralize2"><input type="radio" name="neutralize" value="1" id="neutralize2" <?= $neutral_false ?> ><em>O</em></label></div>
 									</div>
 								</div>
 							</div>

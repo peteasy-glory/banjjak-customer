@@ -30,10 +30,10 @@ if ($rows = mysqli_fetch_object($result)) {
     $update_time = $rows->update_time;
     $review_images = $rows->review_images;
 }
-?>         
+?>
 
 <!-- header -->
-<header id="header">	
+<header id="header">
 	<div class="header-left">
 		<a href="mypage_review_beauty_list" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
@@ -43,9 +43,9 @@ if ($rows = mysqli_fetch_object($result)) {
 
 <!-- container -->
 <form id="container" action="mainpage/insert_usage_review.php" method="post">
-	<!-- page-body -->    
+	<!-- page-body -->
 	<div class="page-body">
-		<!-- page-contents -->  
+		<!-- page-contents -->
 		<div class="page-contents">
 			<div class="review-write-wrap">
 				<div class="page-info-desc">귀여운 아이사진으로<br>생생한 이용후기를 전하세요</div>
@@ -71,7 +71,7 @@ if ($rows = mysqli_fetch_object($result)) {
 										<button type="button" onclick="rating_star(3);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
 										<button type="button" onclick="rating_star(4);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
 										<button type="button" onclick="rating_star(5);" class="btn-grade-select"><div class="icon icon-size-36 icon-star-off-yellow"></div></button>
-									</div>									
+									</div>
 								</div>
 							</div>
 						</div>
@@ -85,8 +85,8 @@ if ($rows = mysqli_fetch_object($result)) {
 											<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>
 											<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>
 											<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img src="/static/pub/images/user_pet_thumb.png" alt=""></div></div></div>-->
-											<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>
-										</div>				
+											<div class="list-cell"><a href="javascript:onClickProfileUpdate();" class="btn-picture-register">사진등록</a></div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -104,13 +104,13 @@ if ($rows = mysqli_fetch_object($result)) {
 				</div>
 			</div>
 		</div>
-		<!-- //page-contents -->  
+		<!-- //page-contents -->
 	</div>
-	<!-- //page-body -->	
+	<!-- //page-body -->
 	<!-- page-bottom -->
 	<div class="page-bottom">
-		<!-- 
-		//	비활성화시 
+		<!--
+		//	비활성화시
 		// - a태그는 disabled 클래스 추가
 		// - button 태그는 disabled 속성 추가
 		-->
@@ -127,7 +127,7 @@ if ($rows = mysqli_fetch_object($result)) {
                         <div class="msg-txt">해당 사진을 삭제하시겠습니까?</div>
                     </div>
                     <div class="pop-footer">
-                        <button type="button" id="delete_ok" class="btn btn-confirm" onclick="popalert.close();">저장</button>
+                        <button type="button" id="delete_ok" class="btn btn-confirm" onclick="popalert.close();">삭제</button>
                         <button type="button" class="btn btn-confirm" onclick="popalert.close();">취소</button>
                     </div>
                 </div>
@@ -151,7 +151,7 @@ if ($rows = mysqli_fetch_object($result)) {
                 for (i = 0; i < review_img_arr.length; i++) {
                     review_img_output += '<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img id="img_arr_' + i + '" src="https://image.banjjakpet.com' + img_link_change(review_img_arr[i]) + '" onclick="review_img_delete(' + i + ')"></div></div></div>';
                 }
-                review_img_output += '<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>';
+                review_img_output += '<div class="list-cell"><a href="javascript:onClickProfileUpdate();" class="btn-picture-register">사진등록</a></div>';
                 $(".review_img_view").html(review_img_output);
             }
         }
@@ -274,7 +274,7 @@ if ($rows = mysqli_fetch_object($result)) {
                         for (i = 0; i < review_img_arr.length; i++) {
                             review_img_output += '<div class="list-cell"><div class="picture-register-view"><div class="picture-obj"><img id="img_arr_' + i + '" src="' + review_img_arr[i] + '" onclick="review_img_delete(' + i + ')"></div></div></div>';
                         }
-                        review_img_output += '<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>';
+                        review_img_output += '<div class="list-cell"><a href="javascript:onClickProfileUpdate();" class="btn-picture-register">사진등록</a></div>';
                         $(".review_img_view").html(review_img_output);
                         $(".review_img_view").show();
                     }
@@ -305,10 +305,10 @@ if ($rows = mysqli_fetch_object($result)) {
         $.ajax({
             url: 'mainpage/delete_usages_review_photo.php',
             data: {
-                'src': $("#img_arr_" + idx).attr("src"),
-                'payment_log_seq': '<?= $payment_log_seq ?>',
-                'artist_id': '<?= $artist_id ?>',
-                'user_id': '<?= $user_id ?>'
+                src: $("#img_arr_" + idx).attr("src"),
+                payment_log_seq: '<?= $payment_log_seq ?>',
+                artist_id: '<?= $artist_id ?>',
+                user_id: '<?= $user_id ?>'
             },
             type: 'POST',
             success: function(data) {
@@ -316,7 +316,7 @@ if ($rows = mysqli_fetch_object($result)) {
                 review_img_view = $(".review_img_view").html();
                 replace_str = '<img id="img_arr_' + idx + '" src="' + this_src + '" onclick="review_img_delete(' + idx + ')">';
                 review_img_view = review_img_view.replace(replace_str, '');
-                review_img_output += '<div class="list-cell"><a href="javascript:MemofocusNcursor();" class="btn-picture-register">사진등록</a></div>';
+                //review_img_output += '<div class="list-cell"><a href="javascript:onClickProfileUpdate();" class="btn-picture-register">사진등록</a></div>';
                 $(".review_img_view").html(review_img_view);
 
                 var review_images_split = $("#review_images").val();
@@ -379,6 +379,33 @@ if ($rows = mysqli_fetch_object($result)) {
         $("#addimgfile").trigger("click");
     }
 
+    function onClickProfileUpdate() {
+        var is_android = checkMobile();
+        if(is_android == true){
+            galleryup();
+        } else {
+            MemofocusNcursor();
+        }
+
+    }
+
+    function checkMobile(){
+
+        var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+        if ( varUA.indexOf('android') > -1) {
+            //안드로이드
+            return true;
+        } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+            //IOS
+            return 'ios';
+        } else {
+            //아이폰, 안드로이드 외
+            return 'other';
+        }
+
+    }
+
     function galleryup() {
         //alert("갤러리")
         window.Android.openGallery();
@@ -402,7 +429,7 @@ if ($rows = mysqli_fetch_object($result)) {
             '&artist_id=' + '<?= $artist_id ?>';
 
         $.ajax({
-            url: 'upload_usages_review_photo_byapp.php',
+            url: 'mainpage/upload_usages_review_photo_byapp.php',
             data: post_data,
             type: 'POST',
             success: function(data) {
@@ -448,7 +475,7 @@ if ($rows = mysqli_fetch_object($result)) {
 
 
 </script>
-	
+
 <?
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
 ?>

@@ -56,8 +56,11 @@
             }else if(mobile == "ios"){
                 popalert.confirm('pop2', "산책 서비스는 반짝 앱에서 이용가능합니다.", "https://apps.apple.com/kr/app/id1436568194");
             }else{
+                window.location.href = "/walking/daily";
+                /*
                 $('#firstRequestMsg1').find('.msg-txt').text('산책 서비스는 반짝 앱에서 이용가능합니다.');
                 pop.open('firstRequestMsg1');
+                 */
             }
 
 			/*
