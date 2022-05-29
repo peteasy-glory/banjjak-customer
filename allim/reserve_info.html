@@ -7,8 +7,8 @@ $payment_log_seq = (isset($_GET['payment_log_seq']))? $_GET['payment_log_seq'] :
 if($payment_log_seq == ""){
     ?>
     <script>
-        alert("잘못된 접근입니다. 메인페이지로 이동합니다.");
-        location.href = "/";
+        alert("잘못된 접근입니다.");
+        //location.href = "/";
     </script>
     <?php
 }
@@ -177,7 +177,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
                     <h5 class="con-title">영업시간 및 연락처</h5>
                     <div class="store-contact-data">
                         <div class="txt-data">
-                            <div class="item-time">평일 : <?php echo $working_start; ?>:00 ~ <?php echo $working_end; ?>:00 / 정기휴일 : <?php echo $holiday ?></div>
+                            <div class="item-time"><?php echo $working_start; ?>:00 ~ <?php echo $working_end; ?>:00 / 정기휴일 : <?php echo $holiday ?></div>
                             <div class="item-info">(자세한 영업시간은 예약화면에서 가능합니다)</div>
                         </div>
                         <a href="tel:<?php echo $dec_phone; ?>" class="btn-tel">전화하기</a>
@@ -188,7 +188,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
                 <!-- 매장 위치 -->
                 <div class="view-data-group">
                     <h5 class="con-title">매장 위치</h5>
-                    <a href="mypage_reserve_map?payment_log_seq=<?= $payment_log_seq ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="simple-thumb-info">
+                    <a href="../mypage_reserve_map?artist_id=<?= $artist_id ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="simple-thumb-info">
                         <div class="thumb-wrap">
                             <div class="content-thumb small" style="border:none;background:none;width:30px;position:relative;"><img src="/static/pub/images/icon/ic-24-top-location@2x.png" alt="" style="width:30px;height:30px;position:absolute;top:50%;transform:translateY(-50%);"></div>
                         </div>
@@ -206,7 +206,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
             </div>
 
             <div class="page-middle-banner">
-                <a href="#" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/petsofa_list.gif" alt=""/></a>
+                <a href="https://customer.banjjakpet.com/shop_view?product_no=CN-BANJJAK-A01" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/petsofa_list.gif" alt=""/></a>
             </div>
 
             <div class="app-footer">
