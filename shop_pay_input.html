@@ -492,7 +492,8 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
     // 백키 누를때
     function go_back(){
         if(direct_buy == "1"){
-            direct_delete("1");
+            //direct_delete("1");
+            window.history.back();
         }else{
             window.history.back();
         }
