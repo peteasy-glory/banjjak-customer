@@ -161,7 +161,7 @@ if($log_year == null){
                             echo '<a href="#" class="btn btn-middle-size btn-outline-gray btn-round btn-graph-view"><span class="icon icon-graph-view"></span>그래프로 보기</a>';
                             echo '<div class="single-btns-list top-none-line">';
                             foreach ($month_log['body'] as $val){
-                                echo ' <div class="list-cell"><a href="#" class="btn-single-item arrow"><div class="txt">'.$val['ymonth'].'</div></a></div>';
+                                echo ' <div class="list-cell"><a href="#" class="btn-single-item arrow" id="'.$val['ymonth'].'"><div class="txt">'.$val['ymonth'].'</div></a></div>';
                             }
                             echo '</div>';
                         }else{
@@ -217,12 +217,6 @@ function jsAlert($year){
 
     $(".btn-user-pet-item").click(function(){
         if($(this).attr("id") == null){
-            //location.href = "/mypage_pet_list"
-            // $.post("/mypage_pet_list"
-            //     ,{from_walk_daily:"walk/daily/"}
-            //     ,function(data, status){
-            //     });
-
             var form = document.createElement('form');
             var objs = document.createElement('input');
             objs.setAttribute('type', 'hidden');
@@ -233,7 +227,6 @@ function jsAlert($year){
             form.setAttribute('action', "/mypage_pet_list");
             document.body.appendChild(form);
             form.submit();
-
         }else{
             var pet_id = $(this).attr("id");
             pet_id = pet_id.substr(4);
@@ -244,11 +237,22 @@ function jsAlert($year){
     });
 
     $(".btn-desc-question").click(function(){
-        $('#firstRequestMsg1').find('.msg-txt').text('전체 이용자 중 하루 평균 산책 시간을 기준으로 아이의 평균찬책 시간을 백분위로 표시하였습니다.');
+        $('#firstRequestMsg1').find('.msg-txt').text('전체이용자 중 하루 평균 산책시간을 기준으로 아이의 평균산책시간을 백분위로 표시하였습니다.');
         pop.open('firstRequestMsg1');
     });
 
-
+    $(".btn-single-item").click(function(){
+        var form = document.createElement('form');
+        var objs = document.createElement('input');
+        objs.setAttribute('type', 'hidden');
+        objs.setAttribute('name', 'month_log');
+        objs.setAttribute('value', $(this).attr("id"));
+        form.appendChild(objs);
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', "/walking/daily/history");
+        document.body.appendChild(form);
+        form.submit();
+    });
 
     $(document).on("change", ".arrow", function(){
         const year = $(this).children("option:selected").text().substr(0, 4);

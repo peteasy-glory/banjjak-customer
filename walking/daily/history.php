@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="ko" class="">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>반짝</title>
-	<meta name="format-detection" content="telephone=no">
-	<link href="/static/pub/css/style.css" rel="stylesheet">
-	<script src="/static/pub/js/jquery-3.4.1.min.js"></script>    
-	<script src="/static/pub/js/jquery-ui.min.js"></script>    
-	<script src="/static/pub/js/swiper.min.js"></script>
-	<script src="/static/pub/js/common.js"></script>
-</head>
-<body>        
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/common/TRestAPI.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
+
+?>
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
