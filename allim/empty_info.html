@@ -2,12 +2,84 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
+$no = (isset($_GET['no']))? $_GET['no'] : "8";
+
+$query = "SELECT a.photo_path, b.message, c.customer_id, c.name, c.front_image, d.offline_shop_phonenumber, d.offline_shop_address
+            FROM tb_sale_free_time_mgr a
+            LEFT JOIN tb_partner_message b ON a.msg_idx = b.idx
+            LEFT JOIN tb_shop c ON a.artist_id = c.customer_id
+            LEFT JOIN tb_request_artist d ON a.artist_id = d.customer_id
+            WHERE a.idx =  '{$no}'";
+$result = mysqli_query($connection,$query);
+$data = mysqli_fetch_object($result);
+$dec_phone = add_hyphen($data->offline_shop_phonenumber);
+$shop_address = $data->offline_shop_address;
+$artist_id = $data->customer_id;
+$shop_name = $data->name;
+$message = $data->message;
+$photo_path = $data->photo_path;
+$front_image = $data->front_image;
+
+$worker_sql = "SELECT worker FROM tb_sale_free_time_product WHERE mgr_idx = '{$no}' GROUP BY worker";
+$worker_array = sql_fetch_array($worker_sql);
+
+foreach ($worker_array as $index=>$value){
+    $time_sql = "SELECT * FROM tb_sale_free_time_product WHERE mgr_idx = '$no}' AND worker = '{$value}'";
+    $time_array = sql_fetch_array($time_sql);
+
+}
+
+
+$worker = array();
+if(count($time_array)>0){
+    foreach ($time_array as $key => $value){
+        //array_push($worker[$value['worker']], $value['st_date']."~".$value['fi_date']);
+        $worker[$value['worker']] = $value['st_date']."~".$value['fi_date'];
+    }
+}
+foreach ($worker as $test){
+    echo "<br><br><br>".$test;
+}
+
+
+$working_sql = "select * from tb_working_schedule tws, tb_regular_holiday trh where tws.customer_id = '" . $artist_id . "' and trh.customer_id = '" . $artist_id . "';";
+$working_result = mysqli_query($connection,$working_sql);
+if ($working_datas = mysqli_fetch_object($working_result)) {
+    $working_start = $working_datas->working_start;
+    $working_end = $working_datas->working_end;
+    $rest_public_holiday = $working_datas->rest_public_holiday;
+    $holiday = "";
+    if ($working_datas->is_monday) {
+        $holiday.= " 월요일";
+    }
+    if ($working_datas->is_tuesday) {
+        $holiday.= " 화요일";
+    }
+    if ($working_datas->is_wednesday) {
+        $holiday.= " 수요일";
+    }
+    if ($working_datas->is_thursday) {
+        $holiday.= " 목요일";
+    }
+    if ($working_datas->is_friday) {
+        $holiday.= " 금요일";
+    }
+    if ($working_datas->is_saturday) {
+        $holiday.= " 토요일";
+    }
+    if ($working_datas->is_sunday) {
+        $holiday.= " 일요일";
+    }
+    if (!$working_datas->is_monday && !$working_datas->is_tuesday && !$working_datas->is_wednesday && !$working_datas->is_thursday && !$working_datas->is_friday && !$working_datas->is_saturday && !$working_datas->is_sunday) {
+        $holiday= "없음";
+    }
+}
 ?>
 
 <!-- header -->
 <header id="header">
     <div class="header-left">
-        <a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+        <a href="/" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
     <!-- page-title 클래스의 태그가 div일 경우 가운데 정렬 , h1일 경우 왼쪽 정렬 -->
     <div class="page-title">고객 혜택 안내</div>
@@ -19,19 +91,40 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
     <!-- page-body -->
     <div class="page-body">
         <div class="reserve-landing-wrap">
-            <div class="reserve-landing-visual"><img src="/static/pub/images/gate_picture.jpg" alt=""></div>
+            <div class="reserve-landing-visual"><img src="<?=$photo_path?>" alt=""></div>
             <div class="basic-data-group vvsmall3">
                 <div class="con-title-group">
-                    <h4 class="con-title">비비숑 펫살롱 고객님 안녕하세요? </h4>
+                    <h4 class="con-title"><?=$shop_name?> 고객님 안녕하세요? </h4>
                 </div>
-                <div class="reserve-landing-info">고객님의 성원에 감사한 마음을 담아 타임특가 서비스를 제공합니다. 아래의 시간에 예약을 주시면 30% 할인된 가격에 서비스를 받으실 수 있습니다. (쿠폰발급) 예약고객이 많은 점 고려하셔서 빠르게 신청해보세요. </div>
+                <div class="reserve-landing-info"><?=$message?></div>
             </div>
             <div class="basic-data-group vmiddle">
                 <div class="con-title-group">
                     <h4 class="con-title">★ 특가 서비스 시간</h4>
                 </div>
                 <div class="time-msg-group">
+                    <?php
+                    if(count($time_array)>0){
+                        foreach ($time_array as $rs){
+                            ?>
+                            <div class="time-msg-items">
+                                <div class="con-title-group"><h5 class="con-title"><?=$rs['worker']?></h5></div>
+                                <h5 class="con-title">10.10 (일)</h5>
+                                <div class="time-msg-detail">
+                                    <div class="detail-title">오전</div>
+                                    <div class="detail-value">12:00 / 01:00 / 02:00 / 03:00 / 04:00 / 05:00 / 06:00</div>
+                                </div>
+                                <div class="time-msg-detail">
+                                    <div class="detail-title">오후</div>
+                                    <div class="detail-value">12:00 / 01:00 / 02:00 / 03:00 / 04:00 / 05:00 / 06:00</div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
                     <div class="time-msg-items">
+                        <div class="con-title-group"><h5 class="con-title">미용사</h5></div>
                         <h5 class="con-title">10.10 (일)</h5>
                         <div class="time-msg-detail">
                             <div class="detail-title">오전</div>
@@ -42,6 +135,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
                             <div class="detail-value">12:00 / 01:00 / 02:00 / 03:00 / 04:00 / 05:00 / 06:00</div>
                         </div>
                     </div>
+
+
                     <div class="time-msg-items">
                         <h5 class="con-title">10.11 (일)</h5>
                         <div class="time-msg-detail">
@@ -68,60 +163,62 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
                             </div>
                             <div class="info-wrap">
                                 <div class="info-inner">
-                                    <div class="item-title">비비숑 펫살롱</div>
-                                    <div class="item-info">평일 : 오전 10:00 ~ 오후 09:00<br>정기휴일 : 월요일<br><span>(자세한 영업시간은 예약화면에서 가능합니다)</span></div>
+                                    <div class="item-title"><?=$shop_name?></div>
+                                    <div class="item-info"><?php echo $working_start; ?>:00 ~ <?php echo $working_end; ?>:00<br>정기휴일 : <?php echo $holiday ?><br><span>(자세한 영업시간은 예약화면에서 가능합니다)</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="view-data-group">
                         <h5 class="con-title">매장 위치</h5>
-                        <div class="simple-thumb-info">
+                        <a href="../mypage_reserve_map?artist_id=<?= $artist_id ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="simple-thumb-info">
                             <div class="thumb-wrap">
-                                <div class="content-thumb small"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+                                <div class="content-thumb small" style="border:none;background:none;width:30px;position:relative;"><img src="/static/pub/images/icon/ic-24-top-location@2x.png" alt="" style="width:30px;height:30px;position:absolute;top:50%;transform:translateY(-50%);"></div>
                             </div>
                             <div class="info-wrap">
                                 <div class="info-inner">
-                                    <div class="item-address">서울 종로구 종로 6 (서린동) 5층 펫이지</div>
+                                    <div class="item-address"><?= str_replace("|", "", strstr($shop_address, "|")) ?></div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="view-data-group">
                         <h5 class="con-title">연락처</h5>
                         <div class="store-contact-data">
                             <div class="txt-data">
-                                <div class="item-time">010-1234-1234</div>
+                                <div class="item-time"><?php echo $dec_phone; ?></div>
                             </div>
-                            <a href="#" class="btn-tel">전화하기</a>
+                            <a href="tel:<?php echo $dec_phone; ?>" class="btn-tel">전화하기</a>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="basic-data-group">
-                <div class="mobile-web-wrap">
-                    <div class="mobile-web-info">
-                        <div class="logo"><img src="/static/pub/images/icon/icon-logo.png" alt="반짝" width="88"/></div>
-                        <div class="info-wrap">
-                            <div class="info-title">앱에서는 1초만에!<br>간편하게 로그인하기</div>
-                            <div class="info-txt">
-                                <div class="info-star">
-                                    <span class="icon icon-size-16 icon-star-yellow"></span>
-                                    <span class="icon icon-size-16 icon-star-yellow"></span>
-                                    <span class="icon icon-size-16 icon-star-yellow"></span>
-                                    <span class="icon icon-size-16 icon-star-yellow"></span>
-                                    <span class="icon icon-size-16 icon-star-yellow"></span>
-                                </div>
-                                <div class="info-value">특가, 쿠폰 등 앱 전용 혜택까지</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#" class="btn btn-outline-purple btn-round btn-middle-size btn-app-view"><strong>편리한 앱으로 보기</strong></a>
-                    <button type="button" class="btn-web-view" onclick="pop.close();">불편하지만 모바일 웹으로 볼래요</button>
                 </div>
             </div>
         </div>
     </div>
+    <article id="pop5" class="layer-pop-wrap bottom">
+        <div class="basic-data-group">
+            <div class="mobile-web-wrap">
+                <div class="mobile-web-info">
+                    <div class="logo"><img src="/static/pub/images/icon/icon-logo.png" alt="반짝" width="88"/></div>
+                    <div class="info-wrap">
+                        <div class="info-title">앱에서는 1초만에!<br>간편하게 로그인하기</div>
+                        <div class="info-txt">
+                            <div class="info-star">
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                            </div>
+                            <div class="info-value">특가, 쿠폰 등 앱 전용 혜택까지</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-outline-purple btn-round btn-middle-size btn-app-view"><strong>편리한 앱으로 보기</strong></a>
+                <button type="button" class="btn-web-view" onclick="pop.close();">불편하지만 모바일 웹으로 볼래요</button>
+            </div>
+        </div>
+    </article>
     <!-- //page-body -->
     <!-- page-bottom -->
     <div class="page-bottom">
