@@ -6,7 +6,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 $user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
 
-$year_month = $_POST['month_log'];
+$year_month = $_POST['year'];
 $year = substr($year_month, 0, 4);
 $month = substr($year_month, 4, 6);
 $pet_id = $_POST['pet_id'];

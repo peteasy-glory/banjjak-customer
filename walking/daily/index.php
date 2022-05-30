@@ -288,7 +288,7 @@ function jsAlert($year){
         form.appendChild(objs1);
 
         form.setAttribute('method', 'post');
-        form.setAttribute('action', "/walking/daily/graph.php");
+        form.setAttribute('action', "/walking/daily/history.php");
         document.body.appendChild(form);
         form.submit();
     });
