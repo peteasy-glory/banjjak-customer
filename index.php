@@ -4,12 +4,21 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // 과거 아무 때나 잡으
 header("Cache-Control: no-cache, must-revalidate");
 header("Pragma: no-cache");
 
+<<<<<<< HEAD
 //$param_arr	= explode("&", explode("?", $_SERVER['REQUEST_URI'])[1]);
 //
 //foreach($param_arr as $key => $val){
 //    $tmp	= explode("=", $val);
 //    $_GET[$tmp[0]]	= urldecode($tmp[1]);
 //}
+=======
+$param_arr	= explode("&", explode("?", $_SERVER['REQUEST_URI'])[1]);
+
+foreach($param_arr as $key => $val){
+    $tmp	= explode("=", $val);
+    $_GET[$tmp[0]]	= urldecode($tmp[1]);
+}
+>>>>>>> 30bd66d3cd343c090982c892221f95fa67574073
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); //호출한 uri을 가져옴
 $uri = explode('/', $uri);

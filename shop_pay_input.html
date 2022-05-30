@@ -492,14 +492,20 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
     // 백키 누를때
     function go_back(){
         if(direct_buy == "1"){
-            direct_delete("1");
+            //direct_delete("1");
+            window.history.back();
         }else{
             window.history.back();
         }
     }
 
+<<<<<<< HEAD
     // 바로구매 카트는 삭제
     // 바로구매 카트는 삭제
+=======
+    // 바로구매 카트는 삭제
+    // 바로구매 카트는 삭제
+>>>>>>> 30bd66d3cd343c090982c892221f95fa67574073
     // 페이스북 이벤트때문에 일단 주석
     // 장바구니랑 구분 해놔서 사실상 삭제는 불필요
 

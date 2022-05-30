@@ -195,7 +195,7 @@ $okurlgo = "https://$site/data/my_profile_phone.php";
 
 	function updateCellPhone(phone){
 
-		$.post("/data/my_profile_phone", { phone })
+		$.post("/data/my_profile_phone.php", { phone })
 			.done((response) => { 
 				const isSuccess = response == "true";
 
