@@ -7,7 +7,7 @@ $user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'
 $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
 
 //$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080");
-$api = new TRestAPI("http://192.168.20.128:8080"
+$api = new TRestAPI("http://192.168.45.31:8080"
     , "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
 $mypets = $api->get("/walklog/pet/pettester@peteasy.kr");
 
@@ -77,7 +77,7 @@ $choice_index = 0;
 				</div>				
 			</div>
 			<!-- 산책 상세 -->
-			<div>
+			<div id="pet_card">
 				<!-- 자료가 있을 때 -->
                 <?php
                     if($mypet_log['body'] != null){
@@ -216,6 +216,10 @@ $choice_index = 0;
         const pet_id = $(this).attr("id");
         $(".btn-user-pet-item").removeClass('actived');
         $(this).addClass('actived');
+        var log = "<?$mypet_log = $api->get("/walklog/pet/log/".$val['pet_seq'])?>";
+        $("#pet_card").load(window.location.href + " #pet_card");
+
+        /*
         var _url = 'http://192.168.20.128:8080/walklog/pet/log/65807';
         $.ajax({
             url: 'daily/rest_pet_log.php',
@@ -226,12 +230,13 @@ $choice_index = 0;
             dataType: 'JSON',
             success: function(data){
     			console.log(data['body'][0]['count']);
-                $("#container").load(window.location.href + "#container");
+                $("#pet_card").load(window.location.href + " #pet_card");
             },
             error : function(xhr, status, error) {
                 alert(error);
             }
         });
+         */
     });
 
 
