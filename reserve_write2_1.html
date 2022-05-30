@@ -55,7 +55,8 @@ $is_cat = mysqli_num_rows($result);
                     $day = $pet_rows->day;
                     $gender = $pet_rows->gender;
                     $weight = $pet_rows->weight;
-                    $photo = i"https://image.banjjakpet.com".mg_link_change($pet_rows->photo);
+                    //$photo = "https://image.banjjakpet.com".img_link_change($pet_rows->photo);
+                    $photo = ($pet_rows->photo)? "https://image.banjjakpet.com".img_link_change($pet_rows->photo) : "";
                     $pet_seq = $pet_rows->pet_seq;
 
                     if($is_cat == 0 && $type == 'cat'){

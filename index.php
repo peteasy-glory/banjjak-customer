@@ -4,8 +4,6 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // 과거 아무 때나 잡으
 header("Cache-Control: no-cache, must-revalidate");
 header("Pragma: no-cache");
 
-
-
 $param_arr	= explode("&", explode("?", $_SERVER['REQUEST_URI'])[1]);
 
 foreach($param_arr as $key => $val){
@@ -15,19 +13,17 @@ foreach($param_arr as $key => $val){
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); //호출한 uri을 가져옴
 $uri = explode('/', $uri);
-#echo $_SERVER['DOCUMENT_ROOT'];
- 
+//echo $_SERVER['DOCUMENT_ROOT'];
+
 $share = (isset($_GET["share"]) && $_GET["share"] != '')? $_GET["share"] : ""; // 사진 공유하기
 
 if($share != ""){
     include($_SERVER['DOCUMENT_ROOT']."/share_photo.html");
 }else{
     if($uri[1]=="login"){
-
         include($_SERVER['DOCUMENT_ROOT']."/login.html");
 
     }else if(is_file($_SERVER['DOCUMENT_ROOT']."/".$uri[1].".html")){
-
         include($_SERVER['DOCUMENT_ROOT']."/".$uri[1].".html");
 
     }else if(isset($uri[2]) && is_file($_SERVER['DOCUMENT_ROOT']."/".$uri[1]."/".$uri[2].".php")){

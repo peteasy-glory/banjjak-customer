@@ -325,6 +325,7 @@ foreach($partner_array as $rs){
         var item_cart_cnt = 0;
         var cart = [];
         var _height = 220; // 팝업창 높이 default 220
+        var sofa = 0; // 소파 가격
 
         $(function(){
             get_partner_list()
@@ -494,6 +495,10 @@ foreach($partner_array as $rs){
                                     html +=                     '<div class="item-name">'+v.product_name+'</div>'
 
                                     $.each(parse_cart_data, function(i2, v2){
+                                        // 소파 무배에서 제외
+                                        if(cart_data.product_no == "CN-BANJJAK-A01"){
+                                            sofa += parseInt(v2.value*v2.amount);
+                                        }
 
                                         html +=                     '<div class="item-option">'
                                         html +=                         '<div>'+v2.txt+'</div>'
@@ -640,7 +645,7 @@ foreach($partner_array as $rs){
                         // 선택한 상품이 있을때
                         }else{
                             // 선택 가격이 무료배송시작금액보다 클 경우
-                            if(is_free_shipping_price[i] >= is_free_shipping_limit[i]){
+                            if(is_free_shipping_price[i] - sofa >= is_free_shipping_limit[i]){
                                 _shipping_price[i] = 0;
                                 if(i == 1){ // 업체배송일때
                                     $item_cart.find('.out_product .delivery-process-info p').html('무료배송');
@@ -684,8 +689,8 @@ foreach($partner_array as $rs){
                                         $item_cart.find('.out_product .delivery-process-info p').html((is_free_shipping_limit[i] - is_free_shipping_price[i]).format()+'원 추가하면 무료배송');
                                         $item_cart.find('.out_product .delivery-process-bar .bar').animate({width: Math.round(is_free_shipping_price[i] / is_free_shipping_limit[i] * 100)+'%'}, 100);
                                     }else if(i == 2){ // 직배송일때
-                                        $item_cart.find('.in_product .delivery-process-info p').html((is_free_shipping_limit[i] - is_free_shipping_price[i]).format()+'원 추가하면 무료배송');
-                                        $item_cart.find('.in_product .delivery-process-bar .bar').animate({width: Math.round(is_free_shipping_price[i] / is_free_shipping_limit[i] * 100)+'%'}, 100);
+                                        $item_cart.find('.in_product .delivery-process-info p').html((is_free_shipping_limit[i] - is_free_shipping_price[i] + sofa).format()+'원 추가하면 무료배송');
+                                        $item_cart.find('.in_product .delivery-process-bar .bar').animate({width: Math.round((is_free_shipping_price[i] - sofa) / is_free_shipping_limit[i] * 100)+'%'}, 100);
                                     }else {
                                         $item_cart.find('.special_product .item_total_price_'+i).text('상품 '+is_free_shipping_price[i].format()+'원 + '+shipping_price[i].format()+'원 = '+is_free_shipping_price[i].format()+'원');
                                         if(is_free_shipping_do[i] > 0) {

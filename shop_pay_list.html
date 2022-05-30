@@ -523,7 +523,7 @@ $pay_status_arr_old = array(
                 });
             }else{
                 if(goodsRepImage != ""){
-                    $item_order_list.find(target+"[data-id='"+product_no+"'] .item_image").attr("src", "'https://image.banjjakpet.com"+img_link_change(goodsRepImage));
+                    $item_order_list.find(target+"[data-id='"+product_no+"'] .item_image").attr("src", goodsRepImage);
                 }else{
                     $item_order_list.find(target+"[data-id='"+product_no+"'] .item_image").attr("src", "../images/product_img.png");
                 }

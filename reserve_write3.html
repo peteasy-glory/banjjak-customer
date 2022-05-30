@@ -69,7 +69,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
-		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href="reserve_write2_2?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">예약 신청하기</div>
 	<div class="reserve-state-bar">
@@ -105,7 +105,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
 								</div>
 							</div>			
 						</li>       
-						<li class="accordion-cell">			
+						<li class="accordion-cell actived">			
 							<button type="button" class="btn-accordion-menu">
 								<span class="accordion-menu-subject"><strong>디자이너<span class="symbol-dot"></span>시간</strong></span>
 							</button>
@@ -441,15 +441,15 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                 }
                 $(check).prop('checked', true);
             }
-            if(is_disabled_brfore < 3 && is_disabled_brfore > 0){
+            if(is_disabled_brfore < 4 && is_disabled_brfore > 1){
                 $("input[name=time1]").prop('checked', false);
-                console.log("no0");
+                console.log("앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!");
             }else if(is_disabled == 1){
                 $("input[name=time1]").prop('checked', false);
                 console.log("no1");
             }else if(is_id == 1){
                 $("input[name=time1]").prop('checked', false);
-                console.log("no2");
+                console.log("미용가용시간만큼 비어있는 시간이 없습니다.");
             }else{
                 console.log("yes");
                 timeResultArray.map(result => {
