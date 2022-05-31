@@ -104,7 +104,11 @@ if (count($dist_arr) > 0){
             <div class="basic-data-group vvsmall3">
                 <div class="con-title-group">
                     <h5 class="con-title">월 선택</h5>
-                    <select class="arrow" id="choice_month">
+                    <?php
+                        if(count($graph_month) > 0){
+                           echo  '<select class="arrow" id="choice_month">';
+                        }
+                    ?>
                         <?php
                         for($i=0; $i < count($graph_month); $i++){
                             if($graph_month[$i] == $select_month){
@@ -114,7 +118,11 @@ if (count($dist_arr) > 0){
                             }
                         }
                         ?>
-                    </select>
+                    <?php
+                    if(count($graph_month) > 0){
+                        echo  '</select>';
+                    }
+                    ?>
                 </div>
             </div>
 		</div>

@@ -48,7 +48,7 @@ foreach ($year_log['body'] as $val){
 				<div class="con-title-option">
 					<div class="option-cell"><?=number_format(intval($sum_dist)/1000,2)?>Km</div>
 					<div class="option-cell"><?=number_format(intVal($sum_time)/60,2)?>분</div>
-					<div class="option-cell"><div class="icon icon-defecation-gray-small"></div><?=number_format($sum_poo)?>회</div>
+					<div class="option-cell"><div class="icon icon-defecation-gray-small"></div><?=number_format($sum_poo+$sum_pee)?>회</div>
 				</div>
 				<!-- //20220115 수정 -->
 			</div>
@@ -68,7 +68,7 @@ foreach ($year_log['body'] as $val){
                                     '<div class="accordion-content">'.
                                         '<div class="record-accordion-data">';
 //                                        if($val["track_map_path"] != null){
-                                echo         '<div class="record-accordion-detail"><img src="'.$val["track_map_path"].'" alt=""/></div>';
+                                echo         '<div class="record-accordion-detail" ><img src="'.$val["track_map_path"].'" alt=""/></div>';
 //                                        }else{
                                 echo        '<div class="record-accordion-header" style="background: #8f8f8f">'.
                                             '<div class="item-sort">'.
@@ -80,11 +80,11 @@ foreach ($year_log['body'] as $val){
                                             '</div>'.
                                             '<div class="item-sort">'.
                                             '<div class="icon icon-size-24 icon-defecate-small-white"></div>'.
-                                            '<div class="item-value">'.number_format($val["sum_poo"]).'회'.'</div>'.
+                                            '<div class="item-value">'.number_format($val["sum_poo"]+$val["sum_pee"]).'회'.'</div>'.
                                             '</div>'.
                                             '</div>';
                                         if($val["track_map_path"] != null) {
-                                echo        '<button type="button" class="btn-record-kakao-share"></button>';
+                                echo        '<button type="button" class="btn-record-general-share" data-map_url="'.$val["track_map_path"].'"></button>';
                                         }
                                 echo    '</div>';
 //                                        }
@@ -104,7 +104,71 @@ foreach ($year_log['body'] as $val){
 
 </section>
 <!-- //container -->
+<!--  기본 메세지 팝업(버튼2) -->
+<article id="pop_app_dw" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
 
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt">텍스트 입니다.</div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">다음에</button>
+                    <button type="button" class="btn btn-confirm btn-cf">지금 다운로드</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
+<script>
+    $(".btn-record-general-share").click(function(){
+        var mobile = checkMobile2();
+        if(mobile === "in_app_and" || mobile === "in_app_ios"){
+            onWalkingLogMapShare(mobile, $(this).data('map_url'));
+        }else if(mobile === "android") {
+            popalert.confirm('pop_app_dw', "공유 기능은 반짝앱에서 사용 할 수 있습니다.", "https://play.google.com/store/apps/details?id=m.kr.gobeauty");
+        }else if(mobile === "ios") {
+            popalert.confirm('pop_app_dw', "공유 기능은 반짝앱에서 사용 할 수 있습니다.", "https://apps.apple.com/kr/app/id1436568194");
+        }else{
+            $('#firstRequestMsg1').find('.msg-txt').text('공유 기능은 반짝앱에서 사용 할 수 있습니다.');
+            pop.open('firstRequestMsg1');
+        }
+    });
+
+    // 기기 체크
+    function checkMobile2(){
+        const varUA = window.navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if ( varUA.indexOf("app_gobeauty_and") > -1 ) {
+            return "in_app_and";
+        } else if (varUA.indexOf("app_gobeauty_ios") > -1 ) {
+            return "in_app_ios";
+        } else if ( varUA.indexOf('android') > -1 ) {
+            return "android";
+        } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+            return "ios";
+        } else {
+            return "other";
+        }
+    }
+
+    function onWalkingLogMapShare(device, map_url){
+        const id	=  "map";
+        const event = map_url;
+        if(device.indexOf("in_app_and") >-1){
+            walking_daily_android.onWalkingLogMapShare(id, event);
+        }
+        else if(device.indexOf("in_app_ios") > -1){
+            let messages = {
+                'id': id,
+                'event': map_url
+            };
+            webkit.messageHandlers.onWalkingLogMapShare.postMessage(messages);
+        }
+
+    }
+</script>
 	
 </body>
 </html>

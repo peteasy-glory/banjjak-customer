@@ -13,7 +13,7 @@ $api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170
 $mypets = $api->get("/walklog/pets/".$user_id);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
-$pet_id = $_GET['pet'];
+$pet_id = (isset($_GET['pet'])) ? $_GET['pet'] : "";
 
 $log_year = $_GET['year'];
 if($log_year == null){
@@ -131,7 +131,7 @@ if($log_year == null){
                                             <div class="state-item-label">분</div>
                                         </div>
                                         <div class="state-item">
-                                            <div class="state-item-value"><?=number_format(intval($mypet_log['body'][0]['poo']/$mypet_log['body'][0]['count']))?></div>
+                                            <div class="state-item-value"><?=number_format(intval($mypet_log['body'][0]['poo']/$mypet_log['body'][0]['count'])+intval($mypet_log['body'][0]['pee']/$mypet_log['body'][0]['count']))?></div>
                                             <div class="state-item-label"><img src="/static/pub/images/icon/icon_defecate.png" alt="" width="24"/></div>
                                         </div>
                                     </div>
@@ -214,7 +214,6 @@ function jsAlert($year){
         if(mobile === "in_app_and" || mobile === "in_app_ios"){
             onBackWalkTop(mobile);
         }else {
-            alert(location.href)
             location.href = "/";
         }
     });
@@ -246,8 +245,9 @@ function jsAlert($year){
     });
 
     $(document).on("change", ".arrow", function(){
+        if('<?=$pet_id?>' === "") return;
         const year = $(this).children("option:selected").text().substr(0, 4);
-        location.href = "?pet="+<?=$pet_id?>+"&year="+year;
+        location.href = "?pet=<?=$pet_id?>&year="+year;
     });
 
     $(".btn-graph-view").click(function(){
@@ -297,33 +297,28 @@ function jsAlert($year){
     function checkMobile2(){
         var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
         if ( varUA.indexOf("app_gobeauty_and") > -1 ) {
-            //APP
             return "in_app_and";
         } else if (varUA.indexOf("app_gobeauty_ios") > -1 ) {
-            //안드로이드
             return "in_app_ios";
         } else if ( varUA.indexOf('android') > -1 ) {
-            //안드로이드
             return "android";
         } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-            //IOS
             return "ios";
         } else {
-            //아이폰, 안드로이드 외
             return "other";
         }
     }
 
     function onBackWalkTop(device){
-        var id	=  "<?=$_SESSION['gobeauty_user_id']?>";
-        var event = "0";
+        const id	=  "back";
+        const event = "0";
         if(device.indexOf("in_app_and") >-1){
             walking_daily_android.onBackWalkTop(id, event);
         }
         else if(device.indexOf("in_app_ios") > -1){
             let messages = {
-                'id': id,
-                'event': event
+                'id': "back",
+                'event': "0"
             };
             webkit.messageHandlers.onBackWalkTop.postMessage(messages);
         }
