@@ -84,11 +84,11 @@ if ($pay_data != NULL) {
 
 $artist_id = '';
 $artist_photo = "";
-$artist_sql = "select *, shop.photo as photo2 from tb_shop shop, tb_customer customer where shop.customer_id = '" . $data->artist_id . "' and shop.customer_id = customer.id;";
+$artist_sql = "SELECT * FROM tb_shop WHERE customer_id = '". $data->artist_id ."';";
 $artist_result = mysqli_query($connection,$artist_sql);
 if ($artist_datas = mysqli_fetch_object($artist_result)) {
     $artist_id = $artist_datas->customer_id;
-    $artist_photo = $artist_datas->photo2;
+    $artist_photo = $artist_datas->front_image;
     $is_vat = $artist_datas->is_vat;
 }
 

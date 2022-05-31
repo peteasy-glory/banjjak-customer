@@ -13,8 +13,8 @@ include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
 //    return false;
 //}
 
-$date = date('Y-n-j');
-$tomorrow = date('Y-n-j', strtotime($date."+1days"));
+$date = date('Y-m-d');
+$tomorrow = date('Y-m-d', strtotime($date."+1days"));
 $week = date('w', strtotime($tomorrow));
 
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
@@ -204,12 +204,12 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
     console.log(serviceResultArray[1].price); // 서비스 이용시간
     let seviceTime = (serviceResultArray[1].price)/30;
 
-    let timeResultArray = new Array();
-    timeResultArray.push({"date" : "", "time" : "", "worker" : ""});
-
     // 내일날짜 및 요일구하기
     var tomorrow = "<?=$tomorrow?>";
     var week = "<?=$week?>";
+
+    let timeResultArray = new Array();
+    timeResultArray.push({"date" : tomorrow, "time" : "", "worker" : ""});
 
     // 정기휴일 구해서 datepicker에 비활성화시키기
     var holiday_code = "";
@@ -505,6 +505,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                 // console.log(new Date(date));
                 // if(today.getTime() == date.getTime()){alert("당일예약 노노")}; // 당일예약 방지이지만 datepicker에서 아예 선택 불가능하게 막아놓음
                 getDesigner(date);
+                console.log(date);
             }
 
         });

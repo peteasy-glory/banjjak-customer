@@ -101,6 +101,7 @@ $shop_sql = "
 ";
 $shop_result = mysqli_query($connection, $shop_sql);
 $shop_datas = mysqli_fetch_object($shop_result);
+$is_vat = $shop_datas->is_vat;
 
 // 유저정보
 $user_sql = "
@@ -192,9 +193,10 @@ $INI_url = array(
 <!--script language="javascript" type="text/javascript" src="https://stgstdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script-->
 
 <!-- header -->
+<!--reserve_write3?artist_id=--><?//=$artist_id?><!--&pet_seq=--><?//=$pet_seq?><!--&timeResultArray=--><?//=$timeResultArray?><!--&serviceResultArray=--><?//=$serviceResultArray?><!--&etcResultArray=--><?//=$etcResultArray?>
 <header id="header">
     <div class="header-left">
-        <a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+        <a href="javascript:history.back();" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
     <div class="page-title">예약 신청하기</div>
     <div class="reserve-state-bar">
@@ -618,7 +620,8 @@ $INI_url = array(
 
         // 요일 구하기
         var week_txt = ['일', '월', '화', '수', '목', '금', '토'];
-        var week = week_txt[new Date(timeResultArray[0].date).getDay()];
+        var week_num = new Date(timeResultArray[0].date).getDay();
+        var week = week_txt[week_num];
 
         // 날짜 포멧 바꾸기
         var beauty_day = timeResultArray[0].date.replace(/-/g,".");
@@ -689,7 +692,7 @@ $INI_url = array(
         // 총 금액 구하기
         var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price
                         + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
-        var is_vat = "<?=$shop_datas->is_vat?>";
+        var is_vat = ("<?=$is_vat?>" == '1')? 1 : 0;
         var vat_price = 0;
         if(is_vat == 1){
             vat_price = total_price*0.1;
@@ -788,8 +791,9 @@ $INI_url = array(
             dataType: 'JSON',
             success: function(data){
                 console.log(data.data);
-                if(data.data != 0){
-                    alert("중복입니다 메인페이지로 이동하겠음");
+                if($.trim(data.data) != 0){
+                    alert("중복입니다 메인페이지로 이동하겠습니다.");
+                    location.replace('main');
                 }else{
                     if(type == 'shop'){
                         paymentShop();
@@ -914,13 +918,14 @@ $INI_url = array(
             type : 'POST',
             dataType: 'JSON',
             success: function(data){
-                if(data.data == "ok"){
+                if($.trim(data.data) == "ok"){
                     console.log("sucess");
                     location.href = `reserve_write5?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&payment_type=shop&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
-                }else if(data.data == 'fail'){
+                }else if($.trim(data.data) == 'fail'){
                     console.log("fail");
                 }else{
-                    console.log("???");
+                    alert("예약과정에서 에러가 났습니다. 메인페이지로 이동합니다.");
+                    location.replace('main');
                     console.log(data.data);
                 }
             }

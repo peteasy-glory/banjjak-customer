@@ -114,6 +114,16 @@ if($mode){
                         '".$product."', '".$cellphone."', 'bank', 0, now(), now(), '".$expire_time."'
                     )";
             $result = mysqli_query($connection, $sql);
+
+            // 알림톡 발송 / PUSH 발송
+            $artist_name = explode("|", $product);
+            $artist_name = $artist_name[2];
+            $path = "https://www.gopet.kr/pet/shop/manage_sell_info.php?yy=".$year."&mm=".$month."&dd=".$day;
+            //$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
+            $image = "";
+            $admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약(계좌이체 결제 진행중)하였습니다. ".$year."년".$month."월".$day."일 신규 예약등록. 작업스케줄을 관리하세요.";
+            a_push("itseokbeom@gmail.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
+
             if ($result === true){ // success
                 $return_data = array("code" => "000000", "data" => "ok");
             }else{ // fail
