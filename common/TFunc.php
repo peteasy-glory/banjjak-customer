@@ -35,6 +35,7 @@ class TFunc{
         $tmp = sprintf('%0'.strval($zero).'d', (int)$val) ;
         return $tmp;
     }
+
 }
 
 class TChFunc extends TFunc{
