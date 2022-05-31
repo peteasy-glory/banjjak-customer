@@ -77,7 +77,7 @@
                          FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
                      ) c ON c.p_no = a.product_no
                      WHERE (a.product_name like '%".$r_search_word."%' OR a.brand LIKE '%".$r_search_word."%')
-                     AND a.is_delete = '1' AND a.is_view = '1'
+                     AND a.is_delete = '1' AND a.is_view = '1' AND a.is_shop = '2'
                      ORDER BY a.is_soldout, a.il_seq desc
                 ";
 

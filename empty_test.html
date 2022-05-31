@@ -2,7 +2,7 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-$no = (isset($_GET['no']))? $_GET['no'] : "";
+$no = (isset($_GET['no']))? $_GET['no'] : "8";
 
 // 샵 기본 정보
 $query = "SELECT a.photo_path, b.message, c.customer_id, c.name, c.front_image, d.offline_shop_phonenumber, d.offline_shop_address
@@ -114,35 +114,35 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
                     <h4 class="con-title">★ 특가 서비스 시간</h4>
                 </div>
                 <div class="time-msg-group">
+                <?php
+                foreach($time_array as $idx1=>$name){
+                    ?>
+                    <div class="time-msg-items">
+                        <div class="con-title-group"><h5 class="con-title"><?php echo $idx1; ?></h5></div>
                     <?php
-                    foreach($time_array as $idx1=>$name){
+                    foreach ($name as $idx2=>$date){
                         ?>
-                        <div class="time-msg-items">
-                            <div class="con-title-group"><h5 class="con-title"><?php echo $idx1; ?></h5></div>
-                            <?php
-                            foreach ($name as $idx2=>$date){
-                                ?>
-                                <h5 class="con-title"><?php echo date('m.d', strtotime($idx2))."(".$week[date("w", strtotime($idx2))].")"; ?></h5>
-                                <div class="time-msg-detail">
-                                    <!--                            <div class="detail-title"></div>-->
-                                    <div class="detail-value">
-                                        <?php
-                                        foreach ($date as $idx3=>$time){
-                                            if($idx3 > 0){
-                                                echo " / ";
-                                            }
-                                            echo $time;
-                                        }
-                                        ?>
-                                    </div>
-                                </div><br>
-                                <?php
+                        <h5 class="con-title"><?php echo date('m.d', strtotime($idx2))."(".$week[date("w", strtotime($idx2))].")"; ?></h5>
+                        <div class="time-msg-detail">
+<!--                            <div class="detail-title"></div>-->
+                            <div class="detail-value">
+                        <?php
+                        foreach ($date as $idx3=>$time){
+                            if($idx3 > 0){
+                                echo " / ";
                             }
-                            ?>
-                        </div>
+                            echo $time;
+                        }
+                        ?>
+                            </div>
+                        </div><br>
                         <?php
                     }
                     ?>
+                    </div>
+                    <?php
+                }
+                ?>
                 </div>
             </div>
             <div class="basic-data-group">
