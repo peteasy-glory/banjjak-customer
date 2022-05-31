@@ -16,7 +16,8 @@ if($pet_id == ""){
     $pet_id = (isset($_POST['pet_id'])) ? $_POST['pet_id'] : "";
 }
 
-$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
+$api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
+//$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
 //$api = new TRestAPI("http://192.168.20.128:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
 $year_log = $api->get("/walklog/year/".$user_id."/".$pet_id."/".$select_year);
 $graph_month = [];
