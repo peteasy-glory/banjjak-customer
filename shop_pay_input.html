@@ -1,7 +1,7 @@
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
-
+$obj = new module();
 $product_no = (isset($_GET['product_no']))? $_GET['product_no'] : "";
 $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id']:"";
 $user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_user_nickname']:"";
@@ -448,6 +448,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
     var item_cart_cnt = 0;
     var cart = [];
     var _height = 220; // 팝업창 높이 default 220
+    var moblieChk = "<?=$obj->mobileConcertCheck() ?>";
 
 
 
@@ -499,15 +500,6 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
         }
     }
 
-<<<<<<< HEAD
-    // 바로구매 카트는 삭제
-    // 바로구매 카트는 삭제
-=======
-    // 바로구매 카트는 삭제
-    // 바로구매 카트는 삭제
->>>>>>> 30bd66d3cd343c090982c892221f95fa67574073
-    // 페이스북 이벤트때문에 일단 주석
-    // 장바구니랑 구분 해놔서 사실상 삭제는 불필요
 
     function direct_delete(back){
         /*

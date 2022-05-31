@@ -10,7 +10,7 @@ $review_sql = "
     SELECT a.*, b.photo, b.nickname FROM tb_item_review a
     LEFT JOIN tb_customer b ON a.customer_id = b.id
     WHERE a.product_no = '".$product_no."'
-    AND a.is_delete = '2' ORDER BY a.reg_dt DESC
+    AND a.is_delete = '2' AND a.is_blind = '2' ORDER BY a.reg_dt DESC
 ";
 $review_result = mysqli_query($connection,$review_sql);
 $total_reviews = mysqli_num_rows($review_result);
@@ -239,6 +239,7 @@ $total_reviews = mysqli_num_rows($review_result);
             $('#firstRequestMsg1').find('.msg-txt').text('이미 신고접수가 된 후기입니다.');
             pop.open('firstRequestMsg1');
         }else{
+            alert('신고하기 후 해당 글은 비공개 처리 됩니다.');
             location.replace('shop_review_report?ir_seq='+ir_seq+'&product_no='+product_no);
         }
     });

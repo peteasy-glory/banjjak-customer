@@ -35,6 +35,7 @@ $review_sql = "
     WHERE a.customer_id = '".$user_id."'
     AND a.is_cancel = '0'
     AND a.worker IS NOT null
+    AND date_add(DATE_FORMAT(CONCAT(a.year,'-', a.month,'-', a.day,' ', a.hour,':', a.minute), '%Y-%m-%d %H:%i'),INTERVAL 30 minute) < NOW()
     ORDER BY DATE_FORMAT(CONCAT(a.year,'-', a.month,'-', a.day,' ', a.hour,':', a.minute), '%Y-%m-%d %H:%i') desc
 ";
 $total_reviews = sql_fetch_array($review_sql);

@@ -1,0 +1,229 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$no = (isset($_GET['no']))? $_GET['no'] : "8";
+
+// 샵 기본 정보
+$query = "SELECT a.photo_path, b.message, c.customer_id, c.name, c.front_image, d.offline_shop_phonenumber, d.offline_shop_address
+            FROM tb_sale_free_time_mgr a
+            LEFT JOIN tb_partner_message b ON a.msg_idx = b.idx
+            LEFT JOIN tb_shop c ON a.artist_id = c.customer_id
+            LEFT JOIN tb_request_artist d ON a.artist_id = d.customer_id
+            WHERE a.idx =  '{$no}'";
+$result = mysqli_query($connection,$query);
+$data = mysqli_fetch_object($result);
+$dec_phone = add_hyphen($data->offline_shop_phonenumber);
+$shop_address = $data->offline_shop_address;
+$artist_id = $data->customer_id;
+$shop_name = $data->name;
+$message = $data->message;
+$photo_path = $data->photo_path;
+$front_image = $data->front_image;
+
+// 미용사별 판매시간 구하기
+$worker_sql = "SELECT * FROM tb_sale_free_time_product WHERE mgr_idx = '{$no}'";
+$worker_array = sql_fetch_array($worker_sql);
+
+//요일구할때 사용할 배열
+$week = array("일", "월", "화", "수", "목", "금", "토");
+
+// 미용시간 담는 배열
+$time_array = array();
+foreach($worker_array as $index=>$value){
+
+    $woker_name[$index] = $value['worker'];
+    $woker_date[$index] = explode(' ',$value['st_date'])[0];
+    $woker_time[$index] = date('H:i',strtotime(explode(' ',$value['st_date'])[1]))." ~ ".date('H:i',strtotime(explode(' ',$value['fi_date'])[1]));
+    //echo $woker_time[$index]."<br>";
+    if($index > 0){ // 행이 하나 이상일때
+        if($woker_name[$index-1] == $woker_name[$index]){ // 미용사 같으면
+            if($woker_date[$index-1] == $woker_date[$index]){ // 날짜 같으면
+                array_push($time_array[$woker_name[$index]][$woker_date[$index]], $woker_time[$index]);
+            }else{ // 미용사는 같으나 날짜가 다르면
+                $time_array[$woker_name[$index]][$woker_date[$index]] = [$woker_time[$index]];
+            }
+        }else{ // 미용사가 다르면
+            $time_array[$woker_name[$index]][$woker_date[$index]] = [$woker_time[$index]];
+        }
+    }else{ // 데이터가 하나이거나 첫 데이터는 그냥 생성
+        $time_array[$woker_name[$index]][$woker_date[$index]] = [$woker_time[$index]];
+    }
+}
+
+
+
+$working_sql = "select * from tb_working_schedule tws, tb_regular_holiday trh where tws.customer_id = '" . $artist_id . "' and trh.customer_id = '" . $artist_id . "';";
+$working_result = mysqli_query($connection,$working_sql);
+if ($working_datas = mysqli_fetch_object($working_result)) {
+    $working_start = $working_datas->working_start;
+    $working_end = $working_datas->working_end;
+    $rest_public_holiday = $working_datas->rest_public_holiday;
+    $holiday = "";
+    if ($working_datas->is_monday) {
+        $holiday.= " 월요일";
+    }
+    if ($working_datas->is_tuesday) {
+        $holiday.= " 화요일";
+    }
+    if ($working_datas->is_wednesday) {
+        $holiday.= " 수요일";
+    }
+    if ($working_datas->is_thursday) {
+        $holiday.= " 목요일";
+    }
+    if ($working_datas->is_friday) {
+        $holiday.= " 금요일";
+    }
+    if ($working_datas->is_saturday) {
+        $holiday.= " 토요일";
+    }
+    if ($working_datas->is_sunday) {
+        $holiday.= " 일요일";
+    }
+    if (!$working_datas->is_monday && !$working_datas->is_tuesday && !$working_datas->is_wednesday && !$working_datas->is_thursday && !$working_datas->is_friday && !$working_datas->is_saturday && !$working_datas->is_sunday) {
+        $holiday= "없음";
+    }
+}
+?>
+
+<!-- header -->
+<header id="header">
+    <div class="header-left">
+        <a href="/" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+    </div>
+    <!-- page-title 클래스의 태그가 div일 경우 가운데 정렬 , h1일 경우 왼쪽 정렬 -->
+    <div class="page-title">고객 혜택 안내</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container">
+    <!-- page-body -->
+    <div class="page-body">
+        <div class="reserve-landing-wrap">
+            <div class="reserve-landing-visual"><img src="<?=$photo_path?>" alt=""></div>
+            <div class="basic-data-group vvsmall3">
+                <div class="con-title-group">
+                    <h4 class="con-title"><?=$shop_name?> 고객님 안녕하세요? </h4>
+                </div>
+                <div class="reserve-landing-info"><?=$message?></div>
+            </div>
+            <div class="basic-data-group vmiddle">
+                <div class="con-title-group">
+                    <h4 class="con-title">★ 특가 서비스 시간</h4>
+                </div>
+                <div class="time-msg-group">
+                <?php
+                foreach($time_array as $idx1=>$name){
+                    ?>
+                    <div class="time-msg-items">
+                        <div class="con-title-group"><h5 class="con-title"><?php echo $idx1; ?></h5></div>
+                    <?php
+                    foreach ($name as $idx2=>$date){
+                        ?>
+                        <h5 class="con-title"><?php echo date('m.d', strtotime($idx2))."(".$week[date("w", strtotime($idx2))].")"; ?></h5>
+                        <div class="time-msg-detail">
+<!--                            <div class="detail-title"></div>-->
+                            <div class="detail-value">
+                        <?php
+                        foreach ($date as $idx3=>$time){
+                            if($idx3 > 0){
+                                echo " / ";
+                            }
+                            echo $time;
+                        }
+                        ?>
+                            </div>
+                        </div><br>
+                        <?php
+                    }
+                    ?>
+                    </div>
+                    <?php
+                }
+                ?>
+                </div>
+            </div>
+            <div class="basic-data-group">
+                <div class="user-reserve-view">
+                    <div class="view-data-group">
+                        <h5 class="con-title">펫샵 소개</h5>
+                        <div class="simple-thumb-info">
+                            <div class="thumb-wrap">
+                                <div class="content-thumb small"><img src="https://image.banjjakpet.com<?=$front_image ?>" alt=""></div>
+                            </div>
+                            <div class="info-wrap">
+                                <div class="info-inner">
+                                    <div class="item-title"><?=$shop_name?></div>
+                                    <div class="item-info"><?php echo $working_start; ?>:00 ~ <?php echo $working_end; ?>:00<br>정기휴일 : <?php echo $holiday ?><br><span>(자세한 영업시간은 예약화면에서 가능합니다)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="view-data-group">
+                        <h5 class="con-title">매장 위치</h5>
+                        <a href="../mypage_reserve_map?artist_id=<?= $artist_id ?>&backurl=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="simple-thumb-info">
+                            <div class="thumb-wrap">
+                                <div class="content-thumb small" style="border:none;background:none;width:30px;position:relative;"><img src="/static/pub/images/icon/ic-24-top-location@2x.png" alt="" style="width:30px;height:30px;position:absolute;top:50%;transform:translateY(-50%);"></div>
+                            </div>
+                            <div class="info-wrap">
+                                <div class="info-inner">
+                                    <div class="item-address"><?= str_replace("|", "", strstr($shop_address, "|")) ?></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="view-data-group">
+                        <h5 class="con-title">연락처</h5>
+                        <div class="store-contact-data">
+                            <div class="txt-data">
+                                <div class="item-time"><?php echo $dec_phone; ?></div>
+                            </div>
+                            <a href="tel:<?php echo $dec_phone; ?>" class="btn-tel">전화하기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <article id="pop5" class="layer-pop-wrap bottom">
+        <div class="basic-data-group">
+            <div class="mobile-web-wrap">
+                <div class="mobile-web-info">
+                    <div class="logo"><img src="/static/pub/images/icon/icon-logo.png" alt="반짝" width="88"/></div>
+                    <div class="info-wrap">
+                        <div class="info-title">앱에서는 1초만에!<br>간편하게 로그인하기</div>
+                        <div class="info-txt">
+                            <div class="info-star">
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                            </div>
+                            <div class="info-value">특가, 쿠폰 등 앱 전용 혜택까지</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-outline-purple btn-round btn-middle-size btn-app-view"><strong>편리한 앱으로 보기</strong></a>
+                <button type="button" class="btn-web-view" onclick="pop.close();">불편하지만 모바일 웹으로 볼래요</button>
+            </div>
+        </div>
+    </article>
+    <!-- //page-body -->
+    <!-- page-bottom -->
+    <div class="page-bottom">
+        <!--
+        //	비활성화시
+        // - a태그는 disabled 클래스 추가
+        // - button 태그는 disabled 속성 추가
+        -->
+        <a href="#" class="btn-page-bottom">예약하기</a>
+    </div>
+    <!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+</body>
+</html>
