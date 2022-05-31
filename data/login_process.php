@@ -125,7 +125,8 @@ function tmsg(msg) {
    <?php if(!$login_result){ ?>
     popalert.back('firstRequestMsg1', '아이디나 비밀번호를 확인 해주세요.');
     <?php }else if($my_shop_flag == '1'){ ?>
-                location.href="https://partner.gopet.kr/pet/shop?banjjakpet_id=<?=$_SESSION['gobeauty_user_id']?>";
+                //location.href="https://partner.gopet.kr/pet/shop?banjjakpet_id=<?//=$_SESSION['gobeauty_user_id']?>//";
+                location.href="/";
    <?php }else{ ?>
                 location.href="/";
    <?php } ?>
