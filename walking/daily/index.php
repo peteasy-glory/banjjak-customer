@@ -21,6 +21,11 @@ if($log_year == null){
     $log_year = date("Y");
 }
 
+function retValue($val1, $val2){
+    if ($val2 == 0)
+        return 0;
+    return intval($val1/$val2);
+}
 
 ?>
 
@@ -93,11 +98,21 @@ if($log_year == null){
                                 <div class="item-data">
                                     <div class="item-data-inner">
                                         <div class="item-rank">
-                                            <div class="item-rank-value">상위<strong><?=$mypet_log['body'][0]['per']?>%</strong></div>
+                                        <?php
+                                            if($mypet_log['body'][0]['rank'] == 0)
+                                                echo '<div class="item-rank-value">상위<strong>100%</strong></div>';
+                                            else
+                                                echo '<div class="item-rank-value">상위<strong>'.$mypet_log['body'][0]['per'].'%</strong></div>';
+                                        ?>
                                             <button type="button" class="btn-desc-question" ></button>
                                         </div>
                                         <!-- bar클래스에 inline-style방식으로 width값을 0~100%로 지정 -->
-                                        <div class="item-progress"><div class="bar" style="width:<?=100-$mypet_log['body'][0]['per']?>%;"></div></div>
+                                        <?php
+                                        if($mypet_log['body'][0]['rank'] == 0)
+                                            echo '<div class="item-progress"><div class="bar" style="width:0%"></div></div>';
+                                        else
+                                            echo '<div class="item-progress"><div class="bar" style="width:'.strval(100-$mypet_log['body'][0]['per']).'%"></div></div>';
+                                        ?>
                                         <div class="item-msg">아이에게 산책을 선물하세요</div>
                                     </div>
                                 </div>
@@ -124,15 +139,16 @@ if($log_year == null){
                                     <div class="recode-card-data-title">평균/1회 산책</div>
                                     <div class="record-display">
                                         <div class="state-item">
-                                            <div class="state-item-value"><?=number_format(intval($mypet_log['body'][0]['dist']/$mypet_log['body'][0]['count'])/1000, 2)?></div>
+                                            <div class="state-item-value"><?=number_format(intval(retValue($mypet_log['body'][0]['dist'],$mypet_log['body'][0]['count']))/1000, 2)?></div>
                                             <div class="state-item-label">Km</div>
                                         </div>
                                         <div class="state-item">
-                                            <div class="state-item-value"><?=number_format(intval($mypet_log['body'][0]['time']/$mypet_log['body'][0]['count'])/60,2)?></div>
+                                            <div class="state-item-value"><?=number_format(intval(retValue($mypet_log['body'][0]['time'],$mypet_log['body'][0]['count']))/60,2)?></div>
                                             <div class="state-item-label">분</div>
                                         </div>
                                         <div class="state-item">
-                                            <div class="state-item-value"><?=number_format(intval($mypet_log['body'][0]['poo']/$mypet_log['body'][0]['count'])+intval($mypet_log['body'][0]['pee']/$mypet_log['body'][0]['count']))?></div>
+                                            <div class="state-item-value"><?=number_format(intval(retValue($mypet_log['body'][0]['poo'],$mypet_log['body'][0]['count']))
+                                                                                               +intval(retValue($mypet_log['body'][0]['pee'],$mypet_log['body'][0]['count'])))?></div>
                                             <div class="state-item-label"><img src="/static/pub/images/icon/icon_defecate.png" alt="" width="24"/></div>
                                         </div>
                                     </div>

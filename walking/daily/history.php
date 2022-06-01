@@ -85,7 +85,7 @@ foreach ($year_log['body'] as $val){
                                             '</div>'.
                                             '</div>';
                                         if($val["track_map_path"] != null) {
-                                echo        '<button type="button" class="btn-record-general-share" data-map_url="'.$val["track_map_path"].'"></button>';
+                                echo        '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>';
                                         }
                                 echo    '</div>';
 //                                        }
@@ -124,7 +124,7 @@ foreach ($year_log['body'] as $val){
     </div>
 </article>
 <script>
-    $(".btn-record-general-share").click(function(){
+    $(".btn-record-kakao-share").click(function(){
         var mobile = checkMobile2();
         if(mobile === "in_app_and" || mobile === "in_app_ios"){
             onWalkingLogMapShare(mobile, $(this).data('map_url'));

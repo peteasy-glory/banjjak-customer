@@ -29,26 +29,21 @@ if(count($graph_month) > 0){
     if($select_month == ""){
         $select_month = $graph_month[0];
     }
-    $month_log = $api->get("/walklog/month/" . $user_id . "/" . $pet_id . "/" . $select_year. "/" . $select_month);
+    $month_log = $api->get("/walklog/graph/" . $user_id . "/" . $select_year. "/" . $select_month);
 }
 
 $date_arr = [];
 $dist_arr = [];
 $time_arr = [];
-$poo_arr = [];
-$pee_arr = [];
 foreach ($month_log["body"] as $days){
-    array_push($date_arr, substr($days["date"],9));
-    array_push($dist_arr, $days["distance"]);
-    array_push($time_arr, $days["time"]);
-    array_push($poo_arr, $days["sum_poo"]);
-    array_push($pee_arr, $days["sum_pee"]);
+//    array_push($date_arr, substr($days["date"],9));
+    array_push($date_arr, $days["s_date"]);
+    array_push($dist_arr, $days["sum_dist"]);
+    array_push($time_arr, $days["sum_time"]);
 }
 $date_arr = array_reverse($date_arr);
 $dist_arr = array_reverse($dist_arr);
 $time_arr = array_reverse($time_arr);
-$poo_arr = array_reverse($poo_arr);
-$pee_arr = array_reverse($pee_arr);
 
 $graph_max = 0;
 if (count($dist_arr) > 0){
