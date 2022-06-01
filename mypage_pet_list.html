@@ -196,7 +196,7 @@ if(isset($_POST['from_walk_daily'])){
                 if ( varUA.indexOf('android') > -1) 
                     //location.href = "../mypage_pet_list"
                     if("<?=$to_back_url?>" === ""){
-                        ocation.href = "../mypage_pet_list"
+                        location.href = "../mypage_pet_list"
                     }else{
                         location.href = "../mypage_pet_list?mainback=<?=$to_back_url?>";
                     }
@@ -290,11 +290,19 @@ if(isset($_POST['from_walk_daily'])){
 
     // android
     function galleryup() {
-        window.Android.openGallery();
+        if("<?=$to_back_url?>" === ""){
+            window.Android.openGallery();
+        }else{
+            walking_daily_android.openGallery();
+        }
     }
 
     function cameraup() {
-        window.Android.openCamera();
+        if("<?=$to_back_url?>" === ""){
+            window.Android.openCamera();
+        }else{
+            walking_daily_android.openCamera();
+        }
     }
 
     //안드에서 업로드가 끝나면 무조건 호출..
