@@ -75,8 +75,9 @@ foreach($partner_array as $rs){
                             </div>
                         </div> -->
                     </div>
+                    <!-- 일단 무배 뺀다 -->
                     <!--<div class="item-total-price">상품 7,500원 + 배송비 2,500원 = 10,000원</div>-->
-                    <div class="basic-data-group middle">
+                    <!--<div class="basic-data-group middle">
                         <div class="delivery-process">
                             <div class="delivery-process-info">
                                 <em>3만원 이상 무료배송</em>
@@ -84,7 +85,7 @@ foreach($partner_array as $rs){
                             </div>
                             <div class="delivery-process-bar"><div class="bar" style="width:50%"></div></div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="basic-data-group middle">
                         <div class="price-data-wrap">
                             <div class="price-data-group">
@@ -313,8 +314,8 @@ foreach($partner_array as $rs){
         var $item_cart_popup = $("#item_cart_popup");
         var customer_id = "<?=$user_id ?>";
         var company_cnt = <?php echo count($company_cnt) ?>; // 업체배송, 직배송 포함 업체 수
-        var shipping_price = ["",2500, 2800, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 배송비
-        var is_free_shipping_limit = ["", 100000, 30000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
+        var shipping_price = ["",3500, 4000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 배송비
+        var is_free_shipping_limit = ["", 100000, 3000000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
         var is_free_shipping_total = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송인 상품
         var is_free_shipping_cnt = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 상품 개수
         var is_free_shipping_price = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기  ==> 최종 구매가격
@@ -495,10 +496,6 @@ foreach($partner_array as $rs){
                                     html +=                     '<div class="item-name">'+v.product_name+'</div>'
 
                                     $.each(parse_cart_data, function(i2, v2){
-                                        // 소파 무배에서 제외
-                                        if(cart_data.product_no == "CN-BANJJAK-A01"){
-                                            sofa += parseInt(v2.value*v2.amount);
-                                        }
 
                                         html +=                     '<div class="item-option">'
                                         html +=                         '<div>'+v2.txt+'</div>'
@@ -525,6 +522,13 @@ foreach($partner_array as $rs){
                                         }else{
                                             is_free_shipping_cnt[v.is_supply]++;
                                         }
+
+                                        // 소파 무배에서 제외
+                                        if(cart_data.product_no == "CN-BANJJAK-A01"){
+                                            sofa += parseInt(v2.value*v2.amount);
+                                            //shipping_price[2] += 4000*(v2.amount);
+                                        }
+
                                         sum_price += parseInt(v2.value * v2.amount);
 
                                         if(v.is_supply == "1" && v.supplier == "정글북"){ // 외주업체(정글북)
@@ -532,6 +536,8 @@ foreach($partner_array as $rs){
                                             get_jbook_list2("goods", v.goodsNo, v2.amount, cart_data.ic_seq);
                                         }
                                     });
+
+
 
                                     // 해당 상품의 최종 구매 가격 구하기 && 순서 구하기
                                     var company_num = 0;
@@ -625,6 +631,11 @@ foreach($partner_array as $rs){
                     console.log(_total_price);
                     console.log("무배 스타트");
 
+                    // 소파만 있을때 배송비 기본 직배송 배송비 3000 제외
+                    if(is_free_shipping_cnt[2] == 1 && sofa > 0){
+                        //shipping_price[2] -= 3000;
+                    }
+
                     for(var i=1;i<company_cnt;i++){
                         // 아무 상품도 선택 안됐을때(사실상 뜨지않음)
                         if(is_free_shipping_price[i] == 0){
@@ -645,7 +656,7 @@ foreach($partner_array as $rs){
                         // 선택한 상품이 있을때
                         }else{
                             // 선택 가격이 무료배송시작금액보다 클 경우
-                            if(is_free_shipping_price[i] - sofa >= is_free_shipping_limit[i]){
+                            if(is_free_shipping_price[i]>= is_free_shipping_limit[i]){
                                 _shipping_price[i] = 0;
                                 if(i == 1){ // 업체배송일때
                                     $item_cart.find('.out_product .delivery-process-info p').html('무료배송');
@@ -1172,7 +1183,7 @@ foreach($partner_array as $rs){
             }else{
                 // 배열 초기화
                 var flag = 0;
-                is_free_shipping_limit = ["", 100000, 30000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
+                is_free_shipping_limit = ["", 100000, 3000000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
                 is_free_shipping_total = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송인 상품
                 is_free_shipping_cnt = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 상품 개수
                 is_free_shipping_price = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기  ==> 최종 구매가격
@@ -1221,7 +1232,7 @@ foreach($partner_array as $rs){
         $item_cart.on("click", "input[name='chk[]']", function(){
             // 배열 초기화
             var flag = 0;
-            is_free_shipping_limit = ["", 100000, 30000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
+            is_free_shipping_limit = ["", 100000, 3000000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
             is_free_shipping_total = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송인 상품
             is_free_shipping_cnt = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 상품 개수
             is_free_shipping_price = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기  ==> 최종 구매가격

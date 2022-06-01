@@ -42,6 +42,11 @@ if($pet_seq) {
         $p_vaccination =  $pet_rows->vaccination;
         $p_luxation =  $pet_rows->luxation;
         $p_bite =  $pet_rows->bite;
+
+        $p_dermatosis =  ($pet_rows->dermatosis == 1)? "checked" : "";
+        $p_heart_trouble =  ($pet_rows->heart_trouble == 1)? "checked" : "";
+        $p_marking =  ($pet_rows->marking == 1)? "checked" : "";
+        $p_mounting =  ($pet_rows->mounting == 1)? "checked" : "";
     }
 }
 
@@ -301,10 +306,10 @@ if($pet_seq) {
 						<div class="form-item-data type-2">
 							<div class="grid-layout toggle-button-group">
 								<div class="grid-layout-inner">
-									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special1"><input type="checkbox" name="special" id="special1"><em>피부병</em></label></div>
-									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special2"><input type="checkbox" name="special" id="special2"><em>심장질환</em></label></div>
-									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special3"><input type="checkbox" name="special" id="special3"><em>마킹</em></label></div>
-									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special3"><input type="checkbox" name="special" id="special3"><em>마운팅</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special1"><input type="checkbox" name="special[]" id="special1" value="dermatosis" <?php echo $p_dermatosis; ?>><em>피부병</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special2"><input type="checkbox" name="special[]" id="special2" value="heart_trouble" <?php echo $p_heart_trouble; ?>><em>심장질환</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special3"><input type="checkbox" name="special[]" id="special3" value="marking" <?php echo $p_marking; ?>><em>마킹</em></label></div>
+									<div class="grid-layout-cell grid-4"><label class="form-toggle-box middle" for="special3"><input type="checkbox" name="special[]" id="special3" value="mounting" <?php echo $p_mounting; ?>><em>마운팅</em></label></div>
 									<div class="grid-layout-cell grid-1">
 										<input type="text" class="form-control" placeholder="메모를 입력해주세요">											
 									</div>

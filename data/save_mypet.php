@@ -6,14 +6,14 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 $user_id = $_SESSION['gobeauty_user_id'];
 $pet_seq = $_POST['pet_seq'];
 
-$mypet_name = $_POST['pet_name'];
+$mypet_name = $_POST['mypet_name'];
 $mypet_name = trim($mypet_name);
 $pet_type = $_POST['pet_kind'];
 $mypet_type = $_POST['mypet_type'];
 $mypet_type2 = $_POST['mypet_type2'];
-$mypet_b_year = $_POST['pet_year'];
-$mypet_b_month = $_POST['pet_month'];
-$mypet_b_day = $_POST['pet_day'];
+$mypet_b_year = $_POST['mypet_b_year'];
+$mypet_b_month = $_POST['mypet_b_month'];
+$mypet_b_day = $_POST['mypet_b_day'];
 $pet_gender = $_POST['gender'];
 $mypet_neutral = $_POST['neutralize'];
 
@@ -44,8 +44,8 @@ $where_check_dt = "";
  }
 
 //----- [특이사항] 체크 목록
- $array_check_special = $_POST['check_special'];
- $cnt_check_special = sizeof($array_check_special);
+ $array_check_special = $_POST['special'];
+ $cnt_check_special = count($array_check_special);
 $where_check_special = "";
  for ($i = 0; $i < $cnt_check_special; $i++) {
      $where_check_special .= $array_check_special[$i] . "=1, ";
@@ -86,7 +86,7 @@ if (isset($s_rows)) {
             AND pet_seq = '{$pet_seq}';";
     // error_log('----- $sql : ' . $sql);
     $result = mysqli_query($connection, $sql);
-    $result_array = array("result" => "ok","mypet_seq" => $mypet_seq);
+    $result_array = array("result" => "ok","mypet_seq" => $sql);
     echo json_encode($result_array);
 } else {
     $sql = "INSERT INTO tb_mypet (
