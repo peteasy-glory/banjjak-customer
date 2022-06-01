@@ -2,7 +2,7 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-$no = (isset($_GET['no']))? $_GET['no'] : "8";
+$no = (isset($_GET['no']))? $_GET['no'] : "";
 
 // 샵 기본 정보
 $query = "SELECT a.photo_path, b.message, c.customer_id, c.name, c.front_image, d.offline_shop_phonenumber, d.offline_shop_address
@@ -20,6 +20,9 @@ $shop_name = $data->name;
 $message = $data->message;
 $photo_path = $data->photo_path;
 $front_image = $data->front_image;
+
+// 빈시간seq 세션저장
+$_SESSION['empty'] = $no;
 
 // 미용사별 판매시간 구하기
 $worker_sql = "SELECT * FROM tb_sale_free_time_product WHERE mgr_idx = '{$no}'";
@@ -219,7 +222,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
         // - a태그는 disabled 클래스 추가
         // - button 태그는 disabled 속성 추가
         -->
-        <a href="#" class="btn-page-bottom">예약하기</a>
+        <a href="reserve_write2?artist_id=<?=$artist_id ?>" class="btn-page-bottom">예약하기</a>
     </div>
     <!-- //page-bottom -->
 </section>

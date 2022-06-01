@@ -15,16 +15,19 @@ include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
 
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
 $artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$empty = isset($_SESSION['empty']) ? $_SESSION['empty'] : ""; // 빈시간판매하기 여부
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 //$_SESSION['reservation_artist_name'] = $artist_name;
 $artist_name = get_artist_id(addslashes($artist_id));
 $pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
+
+$back = ($empty > 0)? "allim/empty_info?no=".$empty : "reserve_write1?artist_id={$artist_id}";
 ?>     
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
-		<a href="reserve_write1?artist_id=<?=$artist_id?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href="<?=$back?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">서비스 선택</div>
 	<div class="reserve-state-bar">
@@ -72,7 +75,7 @@ $pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
 
 	function onClickService(){
 		if($("#pet_select").hasClass("actived")){
-			location.replace("reserve_write2_2?artist_id=<?= urlencode($artist_id) ?>&pet_seq=<?=$pet_seq?>")
+			location.replace("reserve_write2_2?artist_id=<?= urlencode($artist_id) ?>&pet_seq=<?=$pet_seq?>");
 		}else{
 			alert("펫선택을 먼저 진행해주세요");
 		}
