@@ -4,7 +4,6 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 $user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
 
-
 // 빅 배너
 $banner_sql = "
     SELECT a.mb_seq, a.link, b.file_path FROM tb_main_banner AS a
@@ -83,6 +82,33 @@ WHERE b.is_mainshop_new = '1' GROUP BY customer_id ORDER BY RAND()
 $new_shop_array = sql_fetch_array($new_shop_sql);
 
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+if(!$user_id){
+    ?>
+    <script>
+        $.ajax({
+            url: 'include/st_login.php',
+            data: {
+                user_id: localStorage.getItem('auto_login_uid')
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data) {
+                if(data.code == "000000"){
+                    console.log(data.data);
+                }else{
+                    console.log(data.data);
+                }
+                location.href="/mypage_main";
+            },
+            error: function(xhr, status, error) {
+                if(xhr.status != 0){
+                }
+            }
+        });
+    </script>
+    <?php
+}
 
 //돌아갈 url을 세션에 저장한다.
 unset($_SESSION['backurl_shop']);

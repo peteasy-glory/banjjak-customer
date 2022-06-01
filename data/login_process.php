@@ -2,7 +2,9 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-	
+$past = time() - 3600;
+	foreach ( $_COOKIE as $key => $value ) { setcookie( $key, $value, $past, '/' ); }
+
 	$is_pc = (isset($_POST['is_pc']) && $_POST['is_pc'] === "true" ) ? true : false;
 	$login_result	= "";
 	
@@ -64,6 +66,11 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 			//로그인 상태 유지(2019-06-21 hue)
 			if(isset($_POST['remember']) && $_POST['remember'] == "on"){
 				cookie_save($id,$master_key_name);
+                ?>
+                <script>
+                    localStorage.setItem('auto_login_uid', '<?= $id?>');
+                </script>
+                <?php
 			}else{
 				//쿠키 삭제(2019-06-21 hue)
 				$past = time() - 3600;
