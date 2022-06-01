@@ -14,6 +14,7 @@ $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 $artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$empty = isset($_SESSION['empty']) ? $_SESSION['empty'] : ""; // 빈시간판매하기 여부
 
 $sql = "
     SELECT * FROM tb_product_cat WHERE customer_id = '".$artist_id."'
