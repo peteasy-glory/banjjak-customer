@@ -53,6 +53,7 @@ if ($app->is_app() == 1) {
 // 	setCookie("order_step", "", -1);
 //     location.href="<?=$mainpage_directory?>/index.php";
 // });
+localStorage.removeItem('auto_login_uid');
 location.href="/";
 
 // 쿠키 생성

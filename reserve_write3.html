@@ -441,7 +441,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                 }
                 $(check).prop('checked', true);
             }
-            if(is_disabled_brfore < 4 && is_disabled_brfore > 1){
+            if(is_disabled_brfore < 3 && is_disabled_brfore > 0){
                 $("input[name=time1]").prop('checked', false);
                 console.log("앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!");
             }else if(is_disabled == 1){
@@ -469,7 +469,18 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
     function clickNext(){
         console.log(timeResultArray);
         console.log(serviceResultArray);
-        location.href = `reserve_write4?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+        var chk = 0;
+        $.each($("input[name=time1]"), function(i, v){
+            if($("input[name=time1]").is(":checked") == true){
+                chk += 1;
+            }
+        });
+        if(chk == 0){
+            alert('시간을 선택해주세요.');
+        }else{
+            location.href = `reserve_write4?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+        }
+
     }
 
     $(function(){

@@ -21,6 +21,9 @@ $message = $data->message;
 $photo_path = $data->photo_path;
 $front_image = $data->front_image;
 
+// 빈시간seq 세션저장
+$_SESSION['empty'] = $no;
+
 // 미용사별 판매시간 구하기
 $worker_sql = "SELECT * FROM tb_sale_free_time_product WHERE mgr_idx = '{$no}'";
 $worker_array = sql_fetch_array($worker_sql);
@@ -219,7 +222,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
         // - a태그는 disabled 클래스 추가
         // - button 태그는 disabled 속성 추가
         -->
-        <a href="#" class="btn-page-bottom">예약하기</a>
+        <a href="../reserve_write2?artist_id=<?=$artist_id ?>" class="btn-page-bottom">예약하기</a>
     </div>
     <!-- //page-bottom -->
 </section>

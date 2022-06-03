@@ -18,6 +18,7 @@ $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 //$_SESSION['reservation_artist_name'] = $artist_name;
 $pet_seq = (isset($_GET['pet_seq']))? $_GET['pet_seq'] : "";
+$empty = isset($_SESSION['empty']) ? $_SESSION['empty'] : ""; // 빈시간판매하기 여부
 $artist_name = get_artist_id($artist_id);
 
 if($pet_seq != ""){
@@ -671,9 +672,9 @@ if($pet_seq != ""){
                                 </div>
                             </div>
                         <?}?>
-						<div class="price-select-msg">
+						<!--<div class="price-select-msg">
 							<div class="msg-desc">추가 서비스는 30%할인된 가격으로 제공하고 있습니다.</div>
-						</div>
+						</div>-->
 					</div>
 				</div>
 				<div class="service-selected-wrap">
@@ -1280,7 +1281,12 @@ if($pet_seq != ""){
         }else if(resultArray[2].name == '' || $("input[id='weight2']:checked").val() == 'false'){
             alert("무게를 선택해주세요.");
         }else{
-            location.href = `reserve_write3?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&resultArray=${JSON.stringify(resultArray)}&etcArray=${JSON.stringify(etcArray)}`
+            if('<?=$empty?>' > 0){
+                location.href = `reserve_write3_empty?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&resultArray=${JSON.stringify(resultArray)}&etcArray=${JSON.stringify(etcArray)}`
+            }else{
+                location.href = `reserve_write3?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&resultArray=${JSON.stringify(resultArray)}&etcArray=${JSON.stringify(etcArray)}`
+            }
+
         }
 	}
 </script>

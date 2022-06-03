@@ -84,6 +84,7 @@ $expire_time = date("Y-m-d H:i:s", strtotime(strtotime($now_date)."+2 hours"));
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
 $artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
 $pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
+$empty = isset($_SESSION['empty']) ? $_SESSION['empty'] : ""; // 빈시간판매하기 여부
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 //$_SESSION['reservation_artist_name'] = $artist_name;
@@ -94,6 +95,15 @@ $timeResultArray = isset($_GET['timeResultArray']) ? json_encode($_GET['timeResu
 
 $order_id = str2hex($user_id)."_".rand_id();
 
+// 빈시간 판매하기 정보
+if($_SESSION['empty'] > 0) {
+    $empty_sql = "SELECT * FROM tb_sale_free_time_mgr WHERE idx = '{$empty}'";
+    $empty_result = mysqli_query($connection, $empty_sql);
+    $empty_datas = mysqli_fetch_object($empty_result);
+    $empty_type = $empty_datas->sale_kind;
+    $empty_value = $empty_datas->kind_value;
+    $empty_sale = ($empty_type == 1)? "원" : "%";
+}
 
 // 샵정보
 $shop_sql = "
@@ -316,6 +326,16 @@ $INI_url = array(
                                     <div class="list-title"><strong>부가세 10%</strong></div>
                                     <div class="list-value"><strong id="vat_price"></strong></div>
                                 </div>
+                                <?php
+                                if($_SESSION['empty'] > 0){
+                                    ?>
+                                    <div class="list-cell" id="empty" style="display: flex;">
+                                        <div class="list-title"><strong>할 인</strong></div>
+                                        <div class="list-value"><strong id="emtpy"><?php echo $empty_value.$empty_sale;?></strong></div>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="receipt-buy-detail result-price">
@@ -564,6 +584,7 @@ $INI_url = array(
 <script>
 
     var pet_type = "<?=$pet_type?>";
+    var empty_session = "<?=$_SESSION['empty']?>";
 
     var payment_type = 0; // 0:매장결제, 1:지금결제
 
@@ -701,6 +722,15 @@ $INI_url = array(
         }
         console.log(vat_price);
         var result_price = total_price + vat_price;
+        if(empty_session > 0){ // 빈시간판매하기일때
+            var empty_type = "<?=$empty_type?>";
+            var empty_value = "<?=$empty_value?>";
+            if(empty_type == 1){
+                result_price = result_price - empty_value;
+            }else{
+                result_price = result_price * ((100-empty_value)/100);
+            }
+        }
         if(total_price > 0){
             $("#total_price").html(total_price+"원");
             $("#result_price").html(result_price+"원");

@@ -37,6 +37,8 @@ $timeResultArray = isset($_GET['timeResultArray']) ? json_encode($_GET['timeResu
 $payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : "";
 $bank_name = isset($_GET['bank_name']) ? $_GET['bank_name'] : "";
 
+// 빈시간판매하기였을경우 세션 삭제
+unset($_SESSION['empty']);
 
 // 샵정보
 $shop_sql = "

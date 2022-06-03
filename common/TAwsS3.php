@@ -1,9 +1,15 @@
 <?php
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 //require '/Users/gyeblee/Dev_Project/A01.Project/07.Php/aws/aws-autoloader.php';
 //require '/Users/banjjak_dev/Desktop/Dev_Project/2.Dev/3.Web/www/html/subdomain/banjjak_sol/aws/aws-autoloader.php';
 >>>>>>> Stashed changes
+=======
+require '/var/www/html/subdomain/banjjak_sol/vendor/autoload.php';
+//require '/Users/gyeblee/Dev_Project/A01.Project/07.Php/aws/aws-autoloader.php';
+//require '/Users/banjjak_dev/Desktop/Dev_Project/2.Dev/3.Web/www/html/subdomain/banjjak_sol/aws/aws-autoloader.php';
+>>>>>>> ba4c88f5df546704db8b0f05acabf3038662e966
 //require '/var/www/html/subdomain/banjjak_sol/vendor/autoload.php';
 
 use Aws\S3\S3Client;

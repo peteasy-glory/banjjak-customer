@@ -4,7 +4,7 @@
 			$login_sql = "select * from tb_customer where id = '".$_COOKIE["auto_login_uid"]."' and enable_flag = 1";
 			$res = mysqli_query($connection, $login_sql);
 			$row = mysqli_fetch_array($res);
-			
+
             //탈퇴 회원 일때
 			if($row["enable_flag"] != 1){
 				//쿠키 전체 삭제
@@ -146,6 +146,8 @@
 				cookie_save($id,$master_key_name);
 			}
 		}else{
+
+            /*
             if ($_SESSION['chk_login'] == '' || $_SESSION['chk_login'] != 1) {
     			$_SESSION['chk_login'] = 1;
 	    		$user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -173,5 +175,6 @@
 	    			}
 		    	}
             }
+            */
 		}
 ?>
