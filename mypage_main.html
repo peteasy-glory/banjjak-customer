@@ -67,20 +67,7 @@ if($user_id != ""){
     $review_cnt = $cnt_row["item_review_cnt"] + $cnt_row["payment_review_cnt"];
 }
 
-$work['리사']['2022-06-02'] = ['09:00','12:00'];
-$work['리사']['2022-06-03'] = ['15:00'];
-$work['듀']['2022-06-03'] = ['11:00'];
-//array_push($work['듀'], '2022-07-01');
-array_push($work['듀']['2022-06-03'], '13:00');
 
-echo "<br><br><br>";
-foreach($work as $idx1=>$name){
-    foreach ($name as $idx2=>$date){
-        foreach ($date as $idx3=>$time){
-            echo $time."<br>";
-        }
-    }
-}
 
 ?>     
 
