@@ -267,7 +267,7 @@ if($_SESSION['is_token'] == "1"){
                             foreach($mainShop_array as $rs){
                                 ?>
                                     <div class="scroller-item" style="position:relative;">
-                                        <div class="label label-yellow middle" style="font-size:13px;height:22px;line-height:19px;position:absolute;top:7px;right:12px;z-index:10;"><strong>추 천</strong></div>
+                                        <div class="label label-purple middle" style="font-size:13px;height:25px;line-height:22px;position:absolute;top:7px;right:12px;z-index:10;border-radius:22px;"><strong>추천</strong></div>
                                         <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="picture-item">
                                             <div class="thumb"><img src="https://image.banjjakpet.com<?=img_link_change($rs['front_image'])?>"></div>
                                             <div class="info-wrap">
