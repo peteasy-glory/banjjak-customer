@@ -449,7 +449,7 @@ $_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
                     var cnt_rating = (list[0].rating_cnt > 0)? list[0].rating_cnt : 0;
 					var tag_list = (data.data.total_service && data.data.total_service.indexOf(',') != -1)? data.data.total_service.split(',') : [data.data.total_service];
                     // 추천샵 표시
-                    var recommend = (list[0].is_mainshop_recommend == '1')? '<div class="label label-purple small" style="margin-left:7px;height:20px;line-height:17px;"><strong>추천</strong></div>' : '';
+                    var recommend = (list[0].is_recommend == '1')? '<div class="label label-purple small" style="margin-left:7px;height:20px;line-height:17px;"><strong>추천</strong></div>' : '';
                     var html = '';
                     html += '<div class="list-cell">'
                     html +=     '<a href="reserve_view?artist_id='+list.dec_customer_id+'" class="basic-list-item">'

@@ -94,11 +94,7 @@ if(!$user_id){
             type: 'POST',
             dataType: 'JSON',
             success: function(data) {
-                if(data.code == "000000"){
-                    console.log(data.data);
-                }else{
-                    console.log(data.data);
-                }
+
                 location.href="/mypage_main";
             },
             error: function(xhr, status, error) {
