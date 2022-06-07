@@ -203,6 +203,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 
 				$data[$cnt]["customer_id"] = $row["customer_id"];
 				$data[$cnt]["name"] = $row["name"];
+				$data[$cnt]["is_mainshop_recommend"] = $row["is_mainshop_recommend"];
 				$data[$cnt]['distance'] = number_format($row['distance'],1);	
 				$data[$cnt]['front_image'] = img_link_change($row['front_image']);		
 				if ( $tabMenu == "best" ) {
