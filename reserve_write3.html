@@ -444,6 +444,8 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             if(is_disabled_brfore < 3 && is_disabled_brfore > 0){
                 $("input[name=time1]").prop('checked', false);
                 console.log("앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!");
+                $('#firstRequestMsg1').find('.msg-txt').text('앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!');
+                pop.open("firstRequestMsg1");
             }else if(is_disabled == 1){
                 $("input[name=time1]").prop('checked', false);
                 console.log("no1");
