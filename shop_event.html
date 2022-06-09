@@ -26,7 +26,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 	<div class="header-left">
 		<a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
-	<div class="page-title" id="title">기획전명</div>
+	<div class="page-title" id="title"></div>
 </header>
 <!-- //header -->
 
@@ -145,6 +145,18 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
         // var sub_title = [];
         // var event_item_list0 = [];
         history.back();
+    }else if(seq == '38'){
+        <?php
+        unset($_SESSION['backurl_shop']);
+        $_SESSION['backurl_shop'] = $_SESSION["backurl1"];
+        ?>
+        location.replace("shop_view?product_no=CN-BM-A01-BOGO");
+    }else if(seq == '60'){
+        <?php
+        unset($_SESSION['backurl_shop']);
+        $_SESSION['backurl_shop'] = $_SESSION["backurl1"];
+        ?>
+        location.replace("shop_view?product_no=ETCB-LOVEPET-A01");
     }
 
 

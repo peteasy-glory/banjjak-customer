@@ -66,6 +66,24 @@ if($mode){
                         '".$product."', '".$cellphone."', 'offline-card', 0, now(), now()
                     )";
                 $result = mysqli_query($connection, $sql);
+                $seq = mysqli_insert_id($connection);
+
+                // 회원 등급 확인
+                $sql1 = "
+                    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
+                    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
+                    WHERE a.customer_id = '".$user_id."'
+                    AND b.artist_id = '".$artist_id."'
+                ";
+                $result1 = mysqli_query($connection, $sql1);
+                $datas = mysqli_fetch_object($result1);
+                $grade_ord = $datas->grade_ord;
+                $customer_idx = $datas->idx;
+                if($grade_ord == 2 || $grade_ord == 3){
+                    $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
+                    $result2 = mysqli_query($connection, $sql2);
+                }
+
                 if ($result === true){ // success
                     $return_data = array("code" => "000000", "data" => "ok");
                 }else{ // fail
@@ -114,6 +132,23 @@ if($mode){
                         '".$product."', '".$cellphone."', 'bank', 0, now(), now(), '".$expire_time."'
                     )";
             $result = mysqli_query($connection, $sql);
+            $seq = mysqli_insert_id($connection);
+
+            // 회원 등급 확인
+            $sql1 = "
+                    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
+                    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
+                    WHERE a.customer_id = '".$user_id."'
+                    AND b.artist_id = '".$artist_id."'
+                ";
+            $result1 = mysqli_query($connection, $sql1);
+            $datas = mysqli_fetch_object($result1);
+            $grade_ord = $datas->grade_ord;
+            $customer_idx = $datas->idx;
+            if($grade_ord == 2 || $grade_ord == 3){
+                $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
+                $result2 = mysqli_query($connection, $sql2);
+            }
 
             // 알림톡 발송 / PUSH 발송
             $artist_name = explode("|", $product);
@@ -122,7 +157,7 @@ if($mode){
             //$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
             $image = "";
             $admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약(계좌이체 결제 진행중)하였습니다. ".$year."년".$month."월".$day."일 신규 예약등록. 작업스케줄을 관리하세요.";
-            a_push("itseokbeom@gmail.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
+            a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
 
             if ($result === true){ // success
                 $return_data = array("code" => "000000", "data" => "ok");
@@ -167,6 +202,24 @@ if($mode){
                         '".$product."', '".$cellphone."', 'card', 0, now(), now()
                     )";
             $result = mysqli_query($connection, $sql);
+            $seq = mysqli_insert_id($connection);
+
+            // 회원 등급 확인
+            $sql1 = "
+                    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
+                    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
+                    WHERE a.customer_id = '".$user_id."'
+                    AND b.artist_id = '".$artist_id."'
+                ";
+            $result1 = mysqli_query($connection, $sql1);
+            $datas = mysqli_fetch_object($result1);
+            $grade_ord = $datas->grade_ord;
+            $customer_idx = $datas->idx;
+            if($grade_ord == 2 || $grade_ord == 3){
+                $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
+                $result2 = mysqli_query($connection, $sql2);
+            }
+
             if ($result === true){ // success
                 $return_data = array("code" => "000000", "data" => "ok");
             }else{ // fail
