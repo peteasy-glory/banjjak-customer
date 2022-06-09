@@ -23,7 +23,15 @@
 	<script src="/static/pub/js/jquery.fileupload.js"></script>    
 	<script src="/static/pub/js/jquery.ui.widget.js"></script>   
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TWTXXK9HE7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'G-TWTXXK9HE7');
+</script>
 
 </head>
 <!-- 로딩화면 -->
