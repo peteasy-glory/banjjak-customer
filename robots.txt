@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /ad/
+Disallow: /admin/
+Disallow: /common/
+Disallow: /android/
+Disallow: /data/
+Disallow: /images/
+Disallow: /include/
+Disallow: /item/
+Disallow: /login/
+Disallow: /mainpage/
+Disallow: /pub/
+Disallow: /session/
+Disallow: /static/
+Disallow: /upload/
