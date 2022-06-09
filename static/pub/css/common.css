@@ -802,6 +802,11 @@ h6.con-title {font-size:15px; line-height:20px;}
 
 .symbol-dot {display:inline-block; width:3px;height:3px;border-radius:3px;background:#202020;border-radius:50%; margin:0 5px;}
 
+/*2022.06.08 추가*/
+.record-month-list .accordion-list .btn-accordion-menu-no-after {min-height:64px; padding:14px 55px 13px 16px;}
+.accordion-list .btn-accordion-menu-no-after {position:relative; width:100%; min-height:51px; padding:15px 40px 15px 0px; box-sizing:border-box;  display:flex; align-items:center;  justify-content:flex-start; text-align:left;}
+
+
 /* 정보성 테이블 */
 .read-table table {width:100%; table-layout:fixed;}
 .read-table col.hide,

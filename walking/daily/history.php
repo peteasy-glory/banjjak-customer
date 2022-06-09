@@ -11,10 +11,10 @@ $year = substr($year_month, 0, 4);
 $month = substr($year_month, 4, 6);
 $pet_id = $_POST['pet_id'];
 
-$api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
-//$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
+//$api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
+$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
 //$api = new TRestAPI("http://192.168.20.128:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
-$months_log = $api->get("/walklog/month/".$user_id."/".$pet_id."/".$year."/".$month);
+$months_log = $api->get("/walklog/photo/".$user_id."/".$pet_id."/".$year."/".$month);
 
 $year_log = $api->get("/walklog/year/".$user_id."/".$pet_id."/".$year);
 foreach ($year_log['body'] as $val){
@@ -26,6 +26,7 @@ foreach ($year_log['body'] as $val){
         break;
     }
 }
+
 
 ?>
 <!-- header -->
@@ -39,7 +40,13 @@ foreach ($year_log['body'] as $val){
 
 <!-- container -->
 <section id="container"> 
-	<!-- page-body -->    
+	<!-- page-body -->
+    <div style="display:block">
+        <span id="target-id"><?php echo "$user_id";?></span>
+        <span id="target-pet-id"><?php echo "$pet_id";?></span>
+        <span id="target-year"><?php echo "$year";?></span>
+        <span id="target-month"><?php echo "$month";5?></span>
+    </div>
 	<div class="page-body">
 		<!-- page-contents -->  
 		<div class="page-contents small">
@@ -58,50 +65,75 @@ foreach ($year_log['body'] as $val){
 
                     <?php
                         if($months_log['body'] != null){
-                            foreach ($months_log['body'] as $val){
-                        echo '<li class="accordion-cell">'.
-                                    '<button type="button" class="btn-accordion-menu btn-record-accordion">'.
-                                        '<span class="btn-record-accordion-inner">'.
-                                            '<span class="record-accordion-date">'.$val["date"].'</span>'.
-                                            '<span class="record-accordion-option">'.number_format(intval($val["distance"])/1000, 2).'Km'.', '.number_format(intval($val["time"])/60, 2).'분</span>'.
-                                        '</span>'.
-                                    '</button>'.
-                                    '<div class="accordion-content">'.
-                                        '<div class="record-accordion-data">';
-//                                        if($val["track_map_path"] != null){
-                                echo         '<div class="record-accordion-detail" ><img src="'.$val["track_map_path"].'" alt=""/></div>';
-//                                        }else{
-                                echo        '<div class="record-accordion-header" style="background: #8f8f8f">'.
-                                            '<div class="item-sort">'.
-                                            '<div class="icon icon-size-24 icon-clock-small-white"></div>'.
-                                            '<div class="item-value">'.number_format(intVal($val["time"])/60, 2).'분'.'</div>'.
-                                            '</div>'.
-                                            '<div class="item-sort">'.
-                                            '<div class="item-value">'.number_format(intval($val["distance"])/1000, 2).'Km'.'</div>'.
-                                            '</div>'.
-                                            '<div class="item-sort">'.
-                                            '<div class="icon icon-size-24 icon-defecate-small-white"></div>'.
-                                            '<div class="item-value">'.number_format($val["sum_poo"]+$val["sum_pee"]).'회'.'</div>'.
-                                            '</div>'.
-                                            '</div>';
-                                        if($val["track_map_path"] != null) {
-                                echo        '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>';
-                                        }
-                                echo    '</div>';
-//                                        }
-                          echo      '</div>'.
-                              '</li>';
-                            }
-                        }else{
+                            foreach($months_log['body'] as $val){
 
+
+                                echo '<li class="accordion-cell">';
+                                    if($val["track_map_path"] !== ""){
+                                        echo '<button type="button" class="btn-accordion-menu btn-record-accordion ">'.
+                                            '<span class="btn-record-accordion-inner">'.
+                                            '<span class="record-accordion-date">'.$val["date"].'</span>'.
+                                            '<span class="record-accordion-option">'.number_format(intval($val["distance"])/1000,2).'Km'.', '.number_format(intval($val["time"])/60, 2).'분</span>'.
+                                            '</span>'.
+                                            '</button>'.
+                                            '<div class="accordion-content">'.
+                                            '<div class="record-accordion-data">';
+                                    }else if($val["track_map_path"] == ""){
+                                        echo '<button type="button" class="btn-accordion-menu-no-after btn-record-accordion">'.
+                                            '<span class="btn-record-accordion-inner">'.
+                                            '<span class="record-accordion-date">'.$val["date"].'</span>'.
+                                            '<span class="record-accordion-option">'.number_format(intval($val["distance"])/1000,2).'Km'.', '.number_format(intval($val["time"])/60, 2).'분</span>'.
+                                            '</span>'.
+                                            '<span style="position:absolute; right:0;">test - 맵사진이 없다.</span>'.
+                                            '</button>';
+                                    }
+
+                                        if($val["track_map_path"] !== ""){
+                                            echo    '<div class="record-accordion-detail"><img class="map-target" src="'.$val["track_map_path"].'" alt=""/> </div>'.
+                                                    '<p>'.$val["photo_path"].'</p>'.
+                                                    '<div class="record-accordion-header" style="background: #8f8f8f">'.
+                                                        '<div class="item-sort">'.
+                                                            '<div class="icon icon-size-24 icon-clock-small-white"></div>'.
+                                                            '<div class="item-value">'.number_format(intVal($val["time"])/60,2).'분'.'</div>'.
+                                                        '</div>'.
+                                                        '<div class="item-sort">'.
+                                                            '<div class="item-value">'.number_format(intVal($val["distance"])/1000,2).'Km'.'</div>'.
+                                                        '</div>'.
+                                                        '<div class="item-sort">'.
+                                                            '<div class="icon icon-size-24 icon-defecate-small-white"></div>'.
+                                                            '<div class="item-value">'.number_format($val["sum_poo"]+$val["sum_pee"]).'회'.'</div>'.
+                                                        '</div>'.
+                                                    '</div>'.
+                                                    '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>'.
+                                            '</div>';
+
+
+
+                                        }else if($val["track_map_path"] == ""){
+
+
+
+                                            '</div>';
+
+
+                                        }
+
+
+                                echo '</li>';
+
+
+                            }
                         }
+
                     ?>
 				</ul>
 			</div>
 		</div>
 		<!-- //page-contents -->  
 	</div>
-	<!-- //page-body -->    
+	<!-- //page-body -->
+
+
 
 </section>
 <!-- //container -->
@@ -169,6 +201,56 @@ foreach ($year_log['body'] as $val){
         }
 
     }
+
+
+    const token = "token 58de28d6170dcf11edf7c009bff81e37536a2fa4"
+    const target_id = $("#target-id").text();
+    const target_pet_id = $("#target-pet-id").text();
+    const target_year = $("#target-year").text();
+    const target_month = $("#target-month").text();
+
+    $(".map-target").on("click", function(){
+
+
+        $.ajax({
+            type:"GET",
+            url:`http://stg-walkapi.banjjakpet.com:8080/walking/photo/${target_id}/${target_pet_id}/${target_year}/${target_month}`,
+            header:{
+                "Authorization" : token
+            },
+            contentType : "application/json; charset=utf-8",
+            dataType:"json",
+            success: function(){
+                console.log("성공")
+            },
+            error:function(){
+                console.log("웨않되?")
+            }
+
+
+
+        })
+    })
+    $.ajax({
+        type:"GET",
+        url:`http://stg-walkapi.banjjakpet.com:8080/walking/photo/${target_id}/${target_pet_id}/${target_year}/${target_month}`,
+        header:{
+            "Authorization" : token
+        },
+        contentType : "application/json; charset=utf-8",
+        dataType:"json",
+        success: function(){
+            console.log("성공")
+        },
+        error:function(){
+            console.log("웨않되?")
+        }
+
+
+
+    })
+
+
 </script>
 	
 </body>
