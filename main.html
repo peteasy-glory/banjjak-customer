@@ -661,16 +661,19 @@ if($_SESSION['is_token'] == "1"){
                     <div class="footer-address-cell">개인정보 담당자: 이석범 privacy@peteasy.kr</div>
                 </div>
             </div>
-            <div class="footer-customer-menu">
-                <!--<ul>
-                    <li><a href="#">미용샵/호텔입점신청</a></li>
-                    <li><a href="#">쇼핑입점/제휴광고문의</a></li>
-                </ul>-->
-            </div>
             <div class="footer-etc-menu">
                 <ul>
-                    <li><a href="terms4">이용약관</a></li>
-                    <li><a href="terms3">개인정보처리방침</a></li>
+                    <li><a href="https://ceo.banjjakpet.com/">미용샵/호텔입점신청</a></li>
+                    <li><a href=
+                           <?php
+                                if($user_id == ""){
+                           //"javascript:popalert.confirm('pop2', '로그인이 필요한 메뉴입니다.', '/login.html');"
+                                    echo "/login_1";
+                                }else{
+                                    echo "/home_alliance_request";
+                                }
+                            ?>
+                        >쇼핑입점/제휴광고문의</a></li>
                 </ul>
             </div>
             <!--<div class="footer-etc-menu">
