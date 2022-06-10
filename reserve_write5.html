@@ -75,6 +75,22 @@ if($pet_datas->type == 'cat'){
 }else{
     $pet_product_type = "개";
 }
+
+$payment_sql = "
+	SELECT payment_log_seq FROM tb_payment_log WHERE artist_id = '".$artist_id."'
+	AND customer_id = '".$user_id."'
+	ORDER BY payment_log_seq DESC LIMIT 1
+";
+$payment_result = mysqli_query($connection, $payment_sql);
+$payment_datas = mysqli_fetch_object($payment_result);
+$payment_log_seq = $payment_datas->payment_log_seq;
+
+$grade_sql = "
+    SELECT * FROM tb_grade_reserve_approval_mgr WHERE payment_log_seq = '".$payment_log_seq."'
+";
+$grade_result = mysqli_query($connection, $grade_sql);
+$grade_datas = mysqli_fetch_object($grade_result);
+$is_approve = $grade_datas->is_approve;
 ?>
 
 <!-- header -->

@@ -79,13 +79,13 @@ if($mode){
                 $datas = mysqli_fetch_object($result1);
                 $grade_ord = $datas->grade_ord;
                 $customer_idx = $datas->idx;
-                if($grade_ord == 2 || $grade_ord == 3){
+                if($grade_ord != 1){
                     $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
                     $result2 = mysqli_query($connection, $sql2);
                 }
 
                 if ($result === true){ // success
-                    $return_data = array("code" => "000000", "data" => "ok");
+                    $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
                 }else{ // fail
                     $return_data = array("code" => "000000", "data" => "fail");
                 }
@@ -145,7 +145,7 @@ if($mode){
             $datas = mysqli_fetch_object($result1);
             $grade_ord = $datas->grade_ord;
             $customer_idx = $datas->idx;
-            if($grade_ord == 2 || $grade_ord == 3){
+            if($grade_ord != 1){
                 $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
                 $result2 = mysqli_query($connection, $sql2);
             }
@@ -160,7 +160,7 @@ if($mode){
             a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
 
             if ($result === true){ // success
-                $return_data = array("code" => "000000", "data" => "ok");
+                $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
             }else{ // fail
                 $return_data = array("code" => "000000", "data" => "fail");
             }
@@ -215,13 +215,13 @@ if($mode){
             $datas = mysqli_fetch_object($result1);
             $grade_ord = $datas->grade_ord;
             $customer_idx = $datas->idx;
-            if($grade_ord == 2 || $grade_ord == 3){
+            if($grade_ord != 1){
                 $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
                 $result2 = mysqli_query($connection, $sql2);
             }
 
             if ($result === true){ // success
-                $return_data = array("code" => "000000", "data" => "ok");
+                $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
             }else{ // fail
                 $return_data = array("code" => "000000", "data" => "fail");
             }

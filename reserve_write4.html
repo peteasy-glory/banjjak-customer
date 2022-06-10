@@ -870,7 +870,7 @@ $INI_url = array(
             success: function(data){
                 if(data.data == "ok"){
                     console.log("sucess");
-                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&payment_type=bank&bank_name=${bank_name}&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=bank&bank_name=${bank_name}&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
                 }else if(data.data == 'fail'){
                     console.log("fail");
                 }else{
@@ -949,8 +949,8 @@ $INI_url = array(
             dataType: 'JSON',
             success: function(data){
                 if($.trim(data.data) == "ok"){
-                    console.log("sucess");
-                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&payment_type=shop&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+                    console.log(data.seq);
+                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=shop&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
                 }else if($.trim(data.data) == 'fail'){
                     console.log("fail");
                 }else{
