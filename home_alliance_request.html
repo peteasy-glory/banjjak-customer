@@ -188,7 +188,7 @@ $back_gnb = $_GET['back'];
                 if(result.code !== "000000"){
                     popMessage(result.data);
                 }else{
-                    //alert(result.data);
+                    alert(result.data);
                     if("<?=$back_gnb?>" === "home")
                         location.href = "/";
                     else
