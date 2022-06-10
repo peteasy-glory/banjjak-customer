@@ -1,0 +1,214 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+$back_gnb = $_GET['back'];
+?>
+
+<!-- header -->
+<header id="header">
+
+	<div class="header-left">
+		<a href=
+           <?php
+                if($back_gnb == "home")
+                    echo "/";
+                else
+                    echo "/shop_main";
+           ?>
+           class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+	</div>
+	<div class="page-title">상품입점 / 제휴문의</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container"> 
+	<!-- page-body -->    
+	<div class="page-body">
+		<div class="import-request">		
+			<div class="form-group">
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">항목 선택 (복수 선택 가능)</div>
+						<div class="form-item-data type-2">
+							<div class="grid-layout toggle-button-group">
+								<div class="grid-layout-inner">
+									<div class="grid-layout-cell grid-3"><label class="form-toggle-box middle" for="cate1"><input type="checkbox" name="cate" id="cate1"><em>상품입점</em></label></div>
+									<div class="grid-layout-cell grid-3"><label class="form-toggle-box middle" for="cate2"><input type="checkbox" name="cate" id="cate2"><em>제휴</em></label></div>
+									<div class="grid-layout-cell grid-3"><label class="form-toggle-box middle" for="cate3"><input type="checkbox" name="cate" id="cate3"><em>광고</em></label></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">상호</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" id="txt_company" maxlength=30 />
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">브랜드명</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" id="txt_brand"  maxlength=30/>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">전화번호</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" id="txt_phone" placeholder="'-' 없이 숫자" maxlength=15
+                                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">이메일</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" id="txt_email"  placeholder="user@email.com"  maxlength=30/>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-cell middle">
+					<div class="form-group-item">
+						<div class="form-item-label">문의 내용</div>
+						<div class="form-item-data">
+							<input type="text" class="form-control" id="txt_qa" />
+						</div>
+					</div>
+				</div>	
+			</div>
+		
+		</div>
+		
+	</div>
+	<!-- //page-body -->	
+	<!-- page-bottom -->
+	<div class="page-bottom">
+		<!-- 
+		//	비활성화시 
+		// - a태그는 disabled 클래스 추가
+		// - button 태그는 disabled 속성 추가
+		-->
+		<a href="#" class="btn-page-bottom" id="button_submit">문의 접수</a>
+	</div>
+	<!-- //page-bottom -->
+</section>
+<!-- //container -->
+<script>
+    function popMessage(val){
+        $('#firstRequestMsg1').find('.msg-txt').text(val);
+        pop.open("firstRequestMsg1");
+    }
+
+    function isEmail(email) {
+        const EmailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return EmailRegex.test(email);
+    }
+
+    $(function(){
+        $('input[id=txt_email]').on('keyup', function(event){
+            if (!(event.keyCode >=37 && event.keyCode<=40)) {
+                var inputVal=$(this).val();
+
+                $(this).val(inputVal.replace(/[^a-z0-9@_.-]/gi,''));
+            }
+        });
+    });
+
+    $("#button_submit").on("click", function(){
+
+        var $chk_cnt = 0;
+        var $cate_arr = [0, 0, 0];
+        var $return = false;
+        $("input:checkbox[name='cate']").each(function (){
+            if(this.checked){
+                $chk_cnt ++;
+                if($(this).attr("id") === "cate1")
+                    $cate_arr[0] = 1;
+                else if($(this).attr("id") === "cate2")
+                    $cate_arr[1] = 2;
+                else
+                    $cate_arr[2] = 3;
+            }
+        });
+
+        if($chk_cnt < 1){
+            $('#firstRequestMsg1').find('.msg-txt').text('항목을 선택 해주세요.');
+            pop.open("firstRequestMsg1");
+            return;
+        }
+
+        $("input[type=text]").each(function () {
+            if ($(this).val().trim() === "") {
+                if ($(this).attr("id") === "txt_company") {
+                    popMessage("상호명을 입력 해주세요.")
+                } else if ($(this).attr("id") === "txt_brand") {
+                    popMessage("브랜드명을 입력 해주세요.")
+                } else if ($(this).attr("id") === "txt_phone") {
+                    popMessage("전화번호를 입력 해주세요.")
+                } else if ($(this).attr("id") === "txt_email") {
+                    popMessage("이메일을 입력 해주세요.")
+                } else if ($(this).attr("id") === "txt_qa") {
+                    popMessage("문의 내용을 입력 해주세요.")
+                }
+                $return = true;
+                return false;
+            }
+        })
+        if($return) return;
+        if(!isEmail($("#txt_email").val().trim())){
+            popMessage("이메일 형식이 맞는지 확인 해주세요.")
+            return;
+        }
+        $.ajax({
+            url: "data/alliance_ajax.php",
+            data: {
+                "customer_id":"<?=$user_id?>",
+                "type": $cate_arr.join(),
+                "comp": $("#txt_company").val().trim(),
+                "brand": $("#txt_brand").val().trim(),
+                "phone": $("#txt_phone").val().trim(),
+                "email": $("#txt_email").val().trim(),
+                "contents": $("#txt_qa").val().trim()
+            },
+            type: "POST",
+            dataType: "JSON",
+            success: function(result){
+
+                if(result.code !== "000000"){
+                    popMessage(result.data);
+                }else{
+                    alert(result.data);
+                    if(<?=$back_gnb?> === "home")
+                        location.href = "/";
+                    else
+                        location.href = "/shop_main";
+                }
+            },
+            error: function (xhr, status, error) {
+                if(xhr.status !== 0){
+                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                }
+            }
+        })
+    })
+
+
+
+
+</script>
+
+
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer_no_gnb.php");
+?>
