@@ -438,10 +438,18 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                     </div>
                 </div>
                 <div class="footer-customer-menu">
-                    <!--<ul>
-                        <li><a href="#">미용샵/호텔입점신청</a></li>
-                        <li><a href="#">쇼핑입점/제휴광고문의</a></li>
-                    </ul>-->
+                    <ul>
+                        <li><a href="https://ceo.banjjakpet.com/">미용샵/호텔입점신청</a></li>
+                        <li><a href=
+                               <?php
+                               if($user_id == ""){
+                                   echo "/login_1";
+                               }else{
+                                   echo "/home_alliance_request?back=shop";
+                               }
+                               ?>
+                            >쇼핑입점/제휴광고문의</a></li>
+                    </ul>
                 </div>
                 <div class="footer-etc-menu">
                     <ul>

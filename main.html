@@ -667,10 +667,9 @@ if($_SESSION['is_token'] == "1"){
                     <li><a href=
                            <?php
                                 if($user_id == ""){
-                           //"javascript:popalert.confirm('pop2', '로그인이 필요한 메뉴입니다.', '/login.html');"
                                     echo "/login_1";
                                 }else{
-                                    echo "/home_alliance_request";
+                                    echo "/home_alliance_request?back=home";
                                 }
                             ?>
                         >쇼핑입점/제휴광고문의</a></li>
