@@ -1,3 +1,11 @@
+<?
+header("Access-Control-Allow-Origin: *");
+
+
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // 과거 아무 때나 잡으면 됨.
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");?>
+
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/common/TRestAPI.php");
