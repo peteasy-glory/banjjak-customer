@@ -10,7 +10,6 @@ $year_month = $_POST['year'];
 $year = substr($year_month, 0, 4);
 $month = substr($year_month, 4, 6);
 $pet_id = $_POST['pet_id'];
-$target_path = $_POST['track_map_path'];
 
 //$api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
 $api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
@@ -46,6 +45,44 @@ foreach ($year_log['body'] as $val){
 	<div class="page-body">
 		<!-- page-contents -->  
 		<div class="page-contents small">
+
+            <div class="gallery-pop-wrap">
+                <div class="gallery-pop-inner">
+                    <div class="gallery-pop-data">
+                        <div class="gallery-pop-slider">
+                            <div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="slider-item">
+                                            <span class="loading-bar"><span class="sk-fading-circle"><span class="sk-circle1 sk-circle"></span><span class="sk-circle2 sk-circle"></span><span class="sk-circle3 sk-circle"></span><span class="sk-circle4 sk-circle"></span><span class="sk-circle5 sk-circle"></span><span class="sk-circle6 sk-circle"></span><span class="sk-circle7 sk-circle"></span><span class="sk-circle8 sk-circle"></span><span class="sk-circle9 sk-circle"></span><span class="sk-circle10 sk-circle"></span><span class="sk-circle11 sk-circle"></span><span class="sk-circle12 sk-circle"></span></span></span>
+                                            <img src="/static/pub/images/gate_picture.jpg" alt=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-page"></div>
+                            <button type="button" class="btn-swiper-slider-prev"></button>
+                            <button type="button" class="btn-swiper-slider-next"></button>
+                        </div>
+                        <div class="gallery-pop-ui">
+                            <button type="button" class="btn-gallery-pop-nav btn-gallery-mode" onclick="gallery.viewModeChange(this);">
+                                <span class="icon icon-size-24 icon-viewall-white off"></span>
+                                <span class="icon icon-size-24 icon-viewmax-white on"></span>
+                            </button>
+                            <button type="button" class="btn-gallery-pop-nav" onclick="gallery.close();"><span class="icon icon-size-24 icon-close-white"></span></button>
+                        </div>
+                    </div>
+                    <div class="gallery-thumb-data">
+                        <div class="gallery-thumb-list">
+                            <button type="button" class="btn-gallery-thumb-nav">
+                                <span class="loading-bar"><span class="sk-fading-circle"><span class="sk-circle1 sk-circle"></span><span class="sk-circle2 sk-circle"></span><span class="sk-circle3 sk-circle"></span><span class="sk-circle4 sk-circle"></span><span class="sk-circle5 sk-circle"></span><span class="sk-circle6 sk-circle"></span><span class="sk-circle7 sk-circle"></span><span class="sk-circle8 sk-circle"></span><span class="sk-circle9 sk-circle"></span><span class="sk-circle10 sk-circle"></span><span class="sk-circle11 sk-circle"></span><span class="sk-circle12 sk-circle"></span></span></span>
+                                <img src="/static/pub/images/user_thumb.png" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 			<div class="con-title-group">
 				<h4 class="con-title"><?=$year?>.<?=$month?></h4>
 				<!-- 20220115 수정 -->
@@ -66,12 +103,13 @@ foreach ($year_log['body'] as $val){
 
                                 echo '<li class="accordion-cell">';
                                     if($val["track_map_path"] !== ""){
-                                        echo '<button type="button" class="btn-accordion-menu btn-record-accordion ">'.
+                                        echo '<button type="button" class="btn-accordion-menu btn-record-accordion photo-target">'.
                                             '<span class="btn-record-accordion-inner">'.
                                             '<span class="record-accordion-date">'.$val["date"].'</span>'.
                                             '<span class="record-accordion-option">'.number_format(intval($val["distance"])/1000,2).'Km'.', '.number_format(intval($val["time"])/60, 2).'분</span>'.
                                             '</span>'.
                                             '</button>'.
+                                            '<span class="record-accordion-idx record-accordion-idx-'.$val["idx"].'">'.$val["idx"].'</span>'.
                                             '<div class="accordion-content">'.
                                             '<div class="record-accordion-data">';
                                     }else if($val["track_map_path"] == ""){
@@ -97,8 +135,8 @@ foreach ($year_log['body'] as $val){
                                     }
 
                                         if($val["track_map_path"] !== ""){
-                                            echo    '<div class="record-accordion-detail"><img class="map-target" src="'.$val["track_map_path"].'" alt=""/> </div>'.
-                                                    '<p>'.$val["photo_path"].'</p>'.
+                                            echo    '<div class="record-accordion-detail"><img class="map-target" src="'.$val["track_map_path"].'" alt="">'.
+                                                    '</div>'.
                                                     '<div class="record-accordion-header" style="background: #8f8f8f">'.
                                                         '<div class="item-sort">'.
                                                             '<div class="icon icon-size-24 icon-clock-small-white"></div>'.
@@ -112,6 +150,7 @@ foreach ($year_log['body'] as $val){
                                                             '<div class="item-value">'.number_format($val["sum_poo"]+$val["sum_pee"]).'회'.'</div>'.
                                                         '</div>'.
                                                     '</div>'.
+                                                    '<button type="button" class="test-button"></button>'.
                                                     '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>'.
                                             '</div>';
 
@@ -163,6 +202,7 @@ foreach ($year_log['body'] as $val){
         </div>
     </div>
 </article>
+<script src="/static/pub/js/imagesloaded.pkgd.min.js"></script>
 <script>
     $(".btn-record-kakao-share").click(function(){
         var mobile = checkMobile2();
@@ -212,34 +252,59 @@ foreach ($year_log['body'] as $val){
 
 
 
+    
+    //산책일지 갤러리
+    const target_id =" <?=$user_id ?>";
+    const target_pet_id = <?= $pet_id ?>;
+    const target_year = <?= $year?>;
+    const target_month = <?= $month?>;
 
 
-    <?php echo "const target_id = '$user_id';"; ?>
-    <?php echo "const target_pet_id = '$pet_id';"; ?>
-    <?php echo "const target_year = $year;" ;?>
-    <?php echo "const target_month = $month ;"; ?>
+    $(".photo-target").on("click", function(e){
 
 
-    $(".map-target").on("click", function(){
 
+        let idx = $(this).siblings('span').text();
 
-        $.ajax({
+            $.ajax({
             url:'/data/walking_ajax.php',
             data:{
                 mode:"getTPhoto",
                 pet_id: target_pet_id,
                 year : target_year,
+                month : target_month,
+                idx : idx,
+
             },
-            type:"POST",
-            dataType:"json",
-            success: function(data){
-                console.log("성공")
-                console.log(data)
+            type:"post",
+
+            success: (data) => {
+                let resultData = JSON.parse(data)
+                if(resultData.code == "000000"){
+
+                    let cnt = 0;
+                    let photos = [];
+
+                    for(cnt; cnt < resultData.data.length; cnt++) {
+
+                        photos.push(resultData.data[cnt].path);
+                    }
+
+                    console.log(photos);
+
+
+
+                    console.log($(this))
+
+
+                    $(this).siblings(".accordion-content").find("button.test-button").attr("onclick",`showReviewGallery(${resultData.data.length-1},'${photos.toString()}')`)
+                }
             },
-            error:function(err){
+            error:function(request,status,error){
                 console.log("실패")
-                console.log(err)
-            }
+                console.log("error = " + error)
+            },
+
 
 
 
@@ -247,10 +312,166 @@ foreach ($year_log['body'] as $val){
     })
 
 
+    //갤러리
+
+    let gallery = {
+
+        element : null,
+        swiper : null,
+        swiperCur : 0,
+        swiperLen : -1,
+
+        init : function(){
+            gallery.element = $('.gallery-pop-wrap');
+            gallery.swiperLen = gallery.element.find('.swiper-slide').length;
+            gallery.swiper = new Swiper( gallery.element.find('.swiper-container')[0] , {
+                loop : false,
+                slidesPerView : 1 ,
+                spaceBetween : 0,
+                simulateTouch : true,
+                speed : 450,
+                navigation: {
+                    nextEl: gallery.element.find('.btn-swiper-slider-next')[0],
+                    prevEl: gallery.element.find('.btn-swiper-slider-prev')[0]
+                }
+            });
+            gallery.swiper.on('slideChange' , function(){
+                gallery.swiperCur = this.realIndex;
+                gallery.pageSort();
+            });
+            gallery.pageSort();
+
+            $(document).on('click' , '.btn-gallery-thumb-nav' , function(){
+                let $index = $(this).index();
+                gallery.swiper.slideTo($index , 450);
+            });
+        },
+        pageSort : function(){
+            let _value = '<em>' + String((gallery.swiperCur + 1) + '</em> / ' + gallery.swiperLen);
+            gallery.element.find('.swiper-page').html(_value);
+            gallery.element.find('.gallery-thumb-list > .btn-gallery-thumb-nav').eq(gallery.swiperCur).addClass('actived').siblings().removeClass('actived');
+        },
+
+        dataSet : function(imgList){
+            //샘플링 데이타
+            // -> <div class="swiper-slide"><div class="slider-item"><img src="/static/pub/images/gate_picture.jpg" alt=""/></div></div>
+            let i = 0;
+            let len = Math.floor(Math.random() * (14 - 1)) + 1;
+
+            let result = '';
+            let resultThumb = '';
+            for(i = 0; i < imgList.length; i++){
+
+                result += '<div class="swiper-slide"><div class="slider-item hide">';
+                result += '<span class="loading-bar"><span class="sk-fading-circle"><span class="sk-circle1 sk-circle"></span><span class="sk-circle2 sk-circle"></span><span class="sk-circle3 sk-circle"></span><span class="sk-circle4 sk-circle"></span><span class="sk-circle5 sk-circle"></span><span class="sk-circle6 sk-circle"></span><span class="sk-circle7 sk-circle"></span><span class="sk-circle8 sk-circle"></span><span class="sk-circle9 sk-circle"></span><span class="sk-circle10 sk-circle"></span><span class="sk-circle11 sk-circle"></span><span class="sk-circle12 sk-circle"></span></span></span>	';
+                result += '<img src="'+imgList[i]+'" alt="" />';
+                result += '</div></div>';
+
+                resultThumb += '<button type="button" class="btn-gallery-thumb-nav hide">';
+                resultThumb += '<span class="loading-bar"><span class="sk-fading-circle"><span class="sk-circle1 sk-circle"></span><span class="sk-circle2 sk-circle"></span><span class="sk-circle3 sk-circle"></span><span class="sk-circle4 sk-circle"></span><span class="sk-circle5 sk-circle"></span><span class="sk-circle6 sk-circle"></span><span class="sk-circle7 sk-circle"></span><span class="sk-circle8 sk-circle"></span><span class="sk-circle9 sk-circle"></span><span class="sk-circle10 sk-circle"></span><span class="sk-circle11 sk-circle"></span><span class="sk-circle12 sk-circle"></span></span></span>';
+                resultThumb += '<img src="'+imgList[i]+'" alt="" />';
+                resultThumb += '</button>';
+            };
+
+            //데이타 삽입
+            gallery.element.find('.swiper-wrapper').html(result);
+            gallery.element.find('.gallery-thumb-list').html(resultThumb);
+
+            gallery.element.find('.swiper-wrapper .slider-item').each(function(){
+                $(this).imagesLoaded().always(function(instance){
+                    //console.log('model image loaded');
+                }).done(function(instance){
+                    $(instance.elements).removeClass('hide');
+                }).fail( function(){
+                    //alert('프로필 이미지가 없습니다.');
+                }).progress(function(instance,image){
+
+                });
+            });
+
+            gallery.element.find('.gallery-thumb-list .btn-gallery-thumb-nav').each(function(){
+                $(this).imagesLoaded().always(function(instance){
+                    //console.log('model image loaded');
+                }).done(function(instance){
+                    $(instance.elements).removeClass('hide');
+                }).fail( function(){
+                    //alert('프로필 이미지가 없습니다.');
+                }).progress(function(instance,image){
+
+                });
+            });
+
+            /*
+            $('#heroModel').imagesLoaded().always(function(instance){
+                //console.log('model image loaded');
+            }).done(function(instance){
+                $('#heroModel').removeClass('loading');
+            }).fail( function(){
+                //alert('프로필 이미지가 없습니다.');
+            }).progress(function(instance,image){
+
+            });
+            */
+
+            //데이타 삽입 후 재설정
+            gallery.swiperCur = 0;
+            gallery.swiperLen = i;
+
+            //데이타 삽입 후 재정렬
+            gallery.viewUpdate();
+            gallery.pageSort();
 
 
 
+        },
 
+        open : function(){
+            gallery.element.addClass('actived');
+            gallery.viewUpdate();
+            gallery.swiper.slideTo(0,0);
+        },
+        close : function(){
+            gallery.element.removeClass('actived');
+        },
+        viewModeChange : function(obj){
+            if($(obj).hasClass('actived')){
+                //리스트 비활성화
+                $(obj).removeClass('actived');
+                gallery.element.removeClass('thumb');
+            }else{
+                //리스트 활성화
+                $(obj).addClass('actived')
+                gallery.element.addClass('thumb');
+            }
+
+            setTimeout(function(){
+                if(gallery.swiper) gallery.viewUpdate();
+            } , 300);
+        },
+        viewUpdate : function(){
+            gallery.swiper.update();
+            gallery.swiper.updateSize();
+            gallery.swiper.updateSlides();
+            gallery.swiper.updateProgress();
+        }
+    };
+    $(function(){
+        gallery.init();
+    });
+
+    function showReviewGallery(startIndex, img_list){
+        let imgs	= img_list.split(',');
+        imgs.forEach(element => {
+            element = img_link_change(element);
+        });
+        console.log(imgs);
+        gallery.dataSet(imgs);
+        gallery.open(startIndex);
+       3
+
+  };
+
+    //스크롤페이징
     let deviceHeight = window.screen.height;
     console.log("deviceHeight = " + deviceHeight);
     let listHeight = $(".accordion-list").height();

@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-html,body {overflow:hidden; overflow-x:visible}
+html,body {overflow:hidden;}
 
 /*========================================
 @ 공통
@@ -809,6 +809,11 @@ h6.con-title {font-size:15px; line-height:20px;}
 /*2022.06.09 추가 월별 산책기록 svg 이미지 사이즈 조정*/
 .record-accordion-svg{width:100px; height: 30px;display:flex;}
 .btn-accordion-menu-no-padding{padding:14px 10px 13px 16px !important; justify-content: space-between !important;}
+
+
+/*2022.06.10 추가 산책일지 idx */
+.record-accordion-idx{display: none;}
+.test-button{background:red; width:30px; height: 30px;}
 
 /* 정보성 테이블 */
 .read-table table {width:100%; table-layout:fixed;}
