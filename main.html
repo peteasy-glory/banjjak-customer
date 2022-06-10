@@ -663,7 +663,7 @@ if($_SESSION['is_token'] == "1"){
             </div>
             <div class="footer-etc-menu">
                 <ul>
-                    <li><a href="https://ceo.banjjakpet.com/">미용샵/호텔입점신청</a></li>
+                    <li><a href="javascript:newWindowOpen();" >미용샵/호텔입점신청</a></li>
                     <li><a href=
                            <?php
                                 if($user_id == ""){
@@ -1041,6 +1041,10 @@ if($_SESSION['is_token'] == "1"){
         }, 300);    */
     }
 
+
+    function  newWindowOpen(){
+        window.open("https://ceo.banjjakpet.com/","_blank", "");
+    }
 
 </script>
 
