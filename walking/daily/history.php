@@ -295,9 +295,13 @@ foreach ($year_log['body'] as $val){
 
 
                     console.log($(this))
-
+                    console.log(photos.at())
 
                     $(this).siblings(".accordion-content").find("button.test-button").attr("onclick",`showReviewGallery(${resultData.data.length-1},'${photos.toString()}')`)
+
+                    $(this).siblings(".accordion-content").find("button.test-button").css("background",`url(${photos.at(-1)}) no-repeat`)
+                    $(this).siblings(".accordion-content").find("button.test-button").css("background-size","cover")
+
                 }
             },
             error:function(request,status,error){
@@ -467,7 +471,7 @@ foreach ($year_log['body'] as $val){
         console.log(imgs);
         gallery.dataSet(imgs);
         gallery.open(startIndex);
-       3
+
 
   };
 
