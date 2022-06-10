@@ -189,7 +189,7 @@ $back_gnb = $_GET['back'];
                     popMessage(result.data);
                 }else{
                     alert(result.data);
-                    if(<?=$back_gnb?> === "home")
+                    if("<?=$back_gnb?>" === "home")
                         location.href = "/";
                     else
                         location.href = "/shop_main";
