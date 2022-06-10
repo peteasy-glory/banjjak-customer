@@ -9,6 +9,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 		if($r_mode == "get_shop_list"){							// 0001 상품리스트 가져오기
 			$crypto = new Crypto();
 
+
 			$r_top = ($_POST["top"] && $_POST["top"] != "")? $_POST["top"] : "";
 			$r_middle = ($_POST["middle"] && $_POST["middle"] != "")? $_POST["middle"] : "";
 			$r_lat = ($_POST["lat"] && $_POST["lat"] != "")? $_POST["lat"] : "";

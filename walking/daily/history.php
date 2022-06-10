@@ -10,6 +10,7 @@ $year_month = $_POST['year'];
 $year = substr($year_month, 0, 4);
 $month = substr($year_month, 4, 6);
 $pet_id = $_POST['pet_id'];
+$target_path = $_POST['track_map_path'];
 
 //$api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
 $api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
@@ -41,12 +42,7 @@ foreach ($year_log['body'] as $val){
 <!-- container -->
 <section id="container"> 
 	<!-- page-body -->
-    <div style="display:block">
-        <span id="target-id"><?php echo "$user_id";?></span>
-        <span id="target-pet-id"><?php echo "$pet_id";?></span>
-        <span id="target-year"><?php echo "$year";?></span>
-        <span id="target-month"><?php echo "$month";5?></span>
-    </div>
+
 	<div class="page-body">
 		<!-- page-contents -->  
 		<div class="page-contents small">
@@ -79,12 +75,24 @@ foreach ($year_log['body'] as $val){
                                             '<div class="accordion-content">'.
                                             '<div class="record-accordion-data">';
                                     }else if($val["track_map_path"] == ""){
-                                        echo '<button type="button" class="btn-accordion-menu-no-after btn-record-accordion">'.
+                                        echo '<button type="button" class="btn-accordion-menu-no-after btn-record-accordion btn-accordion-menu-no-padding">'.
                                             '<span class="btn-record-accordion-inner">'.
                                             '<span class="record-accordion-date">'.$val["date"].'</span>'.
                                             '<span class="record-accordion-option">'.number_format(intval($val["distance"])/1000,2).'Km'.', '.number_format(intval($val["time"])/60, 2).'분</span>'.
                                             '</span>'.
-                                            '<span style="position:absolute; right:0;">test - 맵사진이 없다.</span>'.
+                                            '<svg xmlns="http://www.w3.org/2000/svg" width="23.756" height="27.351" viewBox="0 0 23.756 27.351">
+                                              <g id="그룹_2" data-name="그룹 2" transform="translate(-322.25 -179.219)">
+                                                <g id="_10_ic_36_shop_location" data-name="10_ic/36/shop_location" transform="translate(323 184.82)">
+                                                  <g id="Group_2" data-name="Group 2">
+                                                    <path id="Oval" d="M8,21s8-8.244,8-12.783A8.111,8.111,0,0,0,8,0,8.111,8.111,0,0,0,0,8.217C0,12.756,8,21,8,21Z" fill="#fff" stroke="#202020" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+                                                    <circle id="Oval-2" data-name="Oval" cx="2.5" cy="2.5" r="2.5" transform="translate(5.647 5.727)" fill="#fff" stroke="#202020" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+                                                  </g>
+                                                </g>
+                                                <path id="Stroke_1" data-name="Stroke 1" d="M0,6A6,6,0,1,0,6,0,6,6,0,0,0,0,6Z" transform="translate(328.187 188.552) rotate(-45)" fill="#fff" stroke="#202020" stroke-miterlimit="10" stroke-width="1.2"/>
+                                                <path id="Stroke_3" data-name="Stroke 3" d="M0,0V7" transform="translate(334.197 186.078) rotate(-45)" fill="none" stroke="#ff4848" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+                                                <path id="Stroke_5" data-name="Stroke 5" d="M7,0H0" transform="translate(334.197 191.027) rotate(-45)" fill="none" stroke="#ff4848" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+                                              </g>
+                                            </svg>'.
                                             '</button>';
                                     }
 
@@ -203,52 +211,67 @@ foreach ($year_log['body'] as $val){
     }
 
 
-    const token = "token 58de28d6170dcf11edf7c009bff81e37536a2fa4"
-    const target_id = $("#target-id").text();
-    const target_pet_id = $("#target-pet-id").text();
-    const target_year = $("#target-year").text();
-    const target_month = $("#target-month").text();
+
+
+
+    <?php echo "const target_id = '$user_id';"; ?>
+    <?php echo "const target_pet_id = '$pet_id';"; ?>
+    <?php echo "const target_year = $year;" ;?>
+    <?php echo "const target_month = $month ;"; ?>
+
 
     $(".map-target").on("click", function(){
 
 
         $.ajax({
-            type:"GET",
-            url:`http://stg-walkapi.banjjakpet.com:8080/walking/photo/${target_id}/${target_pet_id}/${target_year}/${target_month}`,
-            header:{
-                "Authorization" : token
+            url:'/data/walking_ajax.php',
+            data:{
+                mode:"getTPhoto",
+                pet_id: target_pet_id,
+                year : target_year,
             },
-            contentType : "application/json; charset=utf-8",
+            type:"POST",
             dataType:"json",
-            success: function(){
+            success: function(data){
                 console.log("성공")
+                console.log(data)
             },
-            error:function(){
-                console.log("웨않되?")
+            error:function(err){
+                console.log("실패")
+                console.log(err)
             }
 
 
 
         })
     })
-    $.ajax({
-        type:"GET",
-        url:`http://stg-walkapi.banjjakpet.com:8080/walking/photo/${target_id}/${target_pet_id}/${target_year}/${target_month}`,
-        header:{
-            "Authorization" : token
-        },
-        contentType : "application/json; charset=utf-8",
-        dataType:"json",
-        success: function(){
-            console.log("성공")
-        },
-        error:function(){
-            console.log("웨않되?")
-        }
 
 
 
+
+
+
+    let deviceHeight = window.screen.height;
+    console.log("deviceHeight = " + deviceHeight);
+    let listHeight = $(".accordion-list").height();
+    console.log("listHieght =  " + listHeight);
+
+    let cellHeight = $(".accordion-cell").eq(1).outerHeight(true);
+    console.log("cellHeight = " + cellHeight)
+
+    let headerGroupHeight = $("#header").outerHeight(true) + $(".con-title-group").outerHeight(true);
+    console.log("headerGroupHeight = " + headerGroupHeight)
+
+
+    let listHeightResult = (4+deviceHeight-headerGroupHeight-cellHeight*2)
+
+
+
+    window.addEventListener("touchmove", function(){
+        console.log(window.pageYOffset)
     })
+
+
 
 
 </script>
