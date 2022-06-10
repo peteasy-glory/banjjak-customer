@@ -445,7 +445,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                 </div>
                 <div class="footer-customer-menu">
                     <ul>
-                        <li><a href="https://ceo.banjjakpet.com/">미용샵/호텔입점신청</a></li>
+                        <li><a href="javascript:newWindowOpen();">미용샵/호텔입점신청</a></li>
                         <li><a href=
                                <?php
                                if($user_id == ""){
@@ -645,6 +645,10 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
             }
         });
+
+        function  newWindowOpen(){
+            window.open("https://ceo.banjjakpet.com/","_blank", "");
+        }
     </script>
 
 
