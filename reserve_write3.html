@@ -422,14 +422,18 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                 var check = "#"+seq+"_"+j;
                 j=j-1;
                 if($(check).attr("disabled") == "disabled"){
-                    if(i != 3){
-                        is_disabled_brfore = is_disabled_brfore + 1;
-                    }
+                    is_disabled_brfore = is_disabled_brfore + 1;
                 }
+
             }
             console.log(is_disabled_brfore+"<<");
             // j 초기화
             j=j+4;
+            // 바로 앞 타임 일정 있으면 선택 가능
+            var check = "#"+seq+"_"+(j-1);
+            if($(check).attr("disabled") == "disabled"){
+                is_disabled_brfore = 0;
+            }
             // 가용시간만큼 선택
             for(var i=0;i<=timeCnt;i++){
                 var check = "#"+seq+"_"+j;
