@@ -422,7 +422,9 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                 var check = "#"+seq+"_"+j;
                 j=j-1;
                 if($(check).attr("disabled") == "disabled"){
-                    is_disabled_brfore = is_disabled_brfore + 1;
+                    if(i != 3){
+                        is_disabled_brfore = is_disabled_brfore + 1;
+                    }
                 }
             }
             console.log(is_disabled_brfore+"<<");

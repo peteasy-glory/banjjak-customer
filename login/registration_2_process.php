@@ -107,6 +107,10 @@ if ($result_datas = mysqli_fetch_object($result)) {
             $history_update_query = "UPDATE tb_coupon_history SET customer_id = '{$email_id}' WHERE tmp_seq = '{$tmp_seq}'";
             $result3 = mysqli_query($connection, $history_update_query);
 
+            // 회원 등급 변경하기
+            $grade_update_query = "UPDATE tb_grade_of_customer SET customer_id = '{$email_id}' WHERE customer_id = '{$tmp_seq}'";
+            $result4 = mysqli_query($connection, $grade_update_query);
+
             //임시회원 삭제하기
             if ($result1 && $result2 && $result3) {
                 $delete_query = "DELETE FROM tb_tmp_user WHERE tmp_seq = '{$tmp_seq}' AND cellphone = '{$cellphone}'";

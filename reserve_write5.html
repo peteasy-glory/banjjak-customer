@@ -75,6 +75,30 @@ if($pet_datas->type == 'cat'){
 }else{
     $pet_product_type = "개";
 }
+
+
+$payment_log_seq = (isset($_GET['seq'])) ? $_GET['seq'] : "";
+$payment_sql = "
+	SELECT * FROM tb_payment_log WHERE payment_log_seq = '".$payment_log_seq."'
+";
+$payment_result = mysqli_query($connection, $payment_sql);
+$payment_datas = mysqli_fetch_object($payment_result);
+$pay_status = $payment_datas->status;
+$pay_year = $payment_datas->year;
+$pay_month = $payment_datas->month;
+$pay_day = $payment_datas->day;
+$pay_hour = $payment_datas->hour;
+$pay_minute = ($payment_datas->minute == '0')? "00" : "30";
+$pay_to_hour = $payment_datas->to_hour;
+$pay_to_minute = ($payment_datas->to_minute == '0')? "00" : "30";
+$pay_total_price = $payment_datas->total_price;
+
+$grade_sql = "
+    SELECT * FROM tb_grade_reserve_approval_mgr WHERE payment_log_seq = '".$payment_log_seq."'
+";
+$grade_result = mysqli_query($connection, $grade_sql);
+$grade_cnt = mysqli_num_rows($grade_result);
+//echo "<br><br><br><br>".$grade_cnt;
 ?>
 
 <!-- header -->
@@ -91,14 +115,30 @@ if($pet_datas->type == 'cat'){
 			<div class="common-none-data">
 				<div class="none-inner">
 					<div class="item-visual"><img src="/static/pub/images/icon/img-illust-1@2x.png" alt="" width="103"></div>
-					<div class="item-info">예약이 완료 되었습니다.<br>
+                    <?php
+                    if($grade_cnt > 0){
+                        ?>
+                        <div class="item-info">예약 승인을 요청하였습니다.<br>
+                        매장에서 승인하면 예약이 확정됩니다.
+                        <?php
+                    }else{
+                        ?>
+                        <div class="item-info">예약이 완료 되었습니다.<br>
                         <?if($payment_type == 'shop'){?>
-                        결제는 매장에서 부탁드리겠습니다.
+                            결제는 매장에서 부탁드리겠습니다.
                         <?}else if($payment_type == 'bank'){?>
-                        아래의 계좌로 입금 부탁드리겠습니다.
-                        <?}?>
+                            아래의 계좌로 입금 부탁드리겠습니다.
+                        <?}
+                    }
+                    ?>
                     </div>
-					<div class="item-desc">예약내역 확인, 변경, 취소는 홈화면의<br>마이 메뉴에서 확인 하실 수 있습니다.</div>
+                    <?php
+                    if($grade_cnt > 0){
+                        ?><div class="item-desc">예약 승인대기/요청취소/확정은<br>마이반짝 > 예약내역에서 확인하실 수 있습니다.</div><?php
+                    }else{
+                        ?><div class="item-desc">예약내역 확인, 변경, 취소는 홈화면의<br>마이 메뉴에서 확인 하실 수 있습니다.</div><?php
+                    }
+                    ?>
 				</div>
 			</div>
 		</div>
@@ -135,7 +175,11 @@ if($pet_datas->type == 'cat'){
 						<div class="info-wrap">
 							<div class="info-inner">
 								<div class="item-title"><?=$shop_datas->name?></div>
-								<div class="item-date" id="beauty_date"></div>
+								<div class="item-date" id="beauty_date">
+                                    <?php
+                                    echo $pay_year.".".$pay_month.".".$pay_day." ".$pay_hour.":".$pay_minute."~".$pay_to_hour.":".$pay_to_minute;
+                                    ?>
+                                </div>
 							</div>
 						</div>
 					</div>
@@ -165,8 +209,8 @@ if($pet_datas->type == 'cat'){
 					<div class="receipt-buy-detail">
 						<div class="item-data-list">
                             <div class="list-cell" id="main_service_1_cell">
-                                <div class="list-title" id="main_service_1">소형견미용/목욕/~3Kg</div>
-                                <div class="list-value" id="main_service_1_price">20,000원</div>
+                                <div class="list-title" id="main_service_1"></div>
+                                <div class="list-value" id="main_service_1_price"></div>
                             </div>
                             <div class="list-cell" id="main_service_2_cell">
                                 <div class="list-title" id="main_service_2"></div>
@@ -196,11 +240,11 @@ if($pet_datas->type == 'cat'){
 					</div>
 					<div class="receipt-buy-detail total-price">
                         <div class="item-data-list">
-                            <div class="list-cell" id="total_price_cell">
+                            <div class="list-cell" id="total_price_cell" style="display: none;">
                                 <div class="list-title"><strong>합산 금액</strong></div>
                                 <div class="list-value"><strong id="total_price"></strong></div>
                             </div>
-                            <div class="list-cell" id="vat_price_cell">
+                            <div class="list-cell" id="vat_price_cell" style="display: none;">
                                 <div class="list-title"><strong>부가세 10%</strong></div>
                                 <div class="list-value"><strong id="vat_price"></strong></div>
                             </div>
@@ -222,7 +266,7 @@ if($pet_datas->type == 'cat'){
 						<div class="item-data-list">
                             <div class="list-cell" id="result_price_cell">
                                 <div class="list-title font-color-purple"><strong>총 결제 합산 금액</strong></div>
-                                <div class="list-value font-color-purple"><strong id="result_price"></strong></div>
+                                <div class="list-value font-color-purple"><strong id="result_price"><?=number_format($pay_total_price)."원" ?></strong></div>
                             </div>
 						</div>
 					</div>
@@ -243,10 +287,10 @@ if($pet_datas->type == 'cat'){
 						<a href="#" class="product-item">
 							<div class="thumb"><div class="obj"></div></div>
 							<div class="info-wrap">
-								<div class="item-name">최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다. 최대 두줄까지 표현됩니다.</div>
+								<div class="item-name"></div>
 								<div class="item-price-group">
-									<div class="price-sale">50%</div>
-									<div class="price-value">33,000원</div>
+									<div class="price-sale"></div>
+									<div class="price-value"></div>
 								</div>
 								<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
 							</div>
@@ -319,117 +363,116 @@ if($pet_datas->type == 'cat'){
 
 <script>
     // 데이터 꺼내기
-    var serviceResultArray = JSON.parse(<?=$serviceResultArray?>);
-    var etcResultArray = JSON.parse(<?=$etcResultArray?>);
-    var timeResultArray = JSON.parse(<?=$timeResultArray?>);
+    if("<?=$pay_status ?>" != 'R1'){
+        var serviceResultArray = JSON.parse(<?=$serviceResultArray?>);
+        var etcResultArray = JSON.parse(<?=$etcResultArray?>);
+        var timeResultArray = JSON.parse(<?=$timeResultArray?>);
 
-    // 미용종료시간 구하기
-    var start_time = timeResultArray[0].time;
-    start_time = start_time.replace(':','');
-    console.log(start_time);
-    var beauty_time = serviceResultArray[1].price;
-    for(var i=0;i<beauty_time/30;i++){
-        start_time = parseInt(start_time)+50;
-    }
-    var end_minute = start_time.toString().slice(-2);
-    var end_hour = start_time.toString().replace(end_minute,'');
-    if(end_minute == '50'){
-        end_minute = '30';
-    }else{
-        end_minute = '00';
-    }
-    var end_time = end_hour+":"+end_minute;
+        // 미용종료시간 구하기
+        var start_time = timeResultArray[0].time;
+        start_time = start_time.replace(':','');
+        console.log(start_time);
+        var beauty_time = serviceResultArray[1].price;
+        for(var i=0;i<beauty_time/30;i++){
+            start_time = parseInt(start_time)+50;
+        }
+        var end_minute = start_time.toString().slice(-2);
+        var end_hour = start_time.toString().replace(end_minute,'');
+        if(end_minute == '50'){
+            end_minute = '30';
+        }else{
+            end_minute = '00';
+        }
+        var end_time = end_hour+":"+end_minute;
 
-    // 요일 구하기
-    var week_txt = ['일', '월', '화', '수', '목', '금', '토'];
-    var week = week_txt[new Date(timeResultArray[0].date).getDay()];
+        // 요일 구하기
+        var week_txt = ['일', '월', '화', '수', '목', '금', '토'];
+        var week = week_txt[new Date(timeResultArray[0].date).getDay()];
 
-    // 날짜 포멧 바꾸기
-    var beauty_day = timeResultArray[0].date.replace(/-/g,".");
-    $("#beauty_date").html(beauty_day + " (" + week +") " + timeResultArray[0].time + "~" + end_time);
+        // 날짜 포멧 바꾸기
+        var beauty_day = timeResultArray[0].date.replace(/-/g,".");
+        $("#beauty_date").html(beauty_day + " (" + week +") " + timeResultArray[0].time + "~" + end_time);
 
-    // 상세 상품정보 넣기
-    var main_service_1 = serviceResultArray[0].name + "/" + serviceResultArray[1].name + "/" + serviceResultArray[2].name;
-    var main_service_1_price = serviceResultArray[2].price + "원";
-    var main_service_2 = serviceResultArray[3].name;
-    var main_service_2_price = serviceResultArray[3].price + "원";
-    var main_service_3 = serviceResultArray[4].name;
-    var main_service_3_price = serviceResultArray[4].price + "원";
+        // 상세 상품정보 넣기
+        var main_service_1 = serviceResultArray[0].name + "/" + serviceResultArray[1].name + "/" + serviceResultArray[2].name;
+        var main_service_1_price = serviceResultArray[2].price + "원";
+        var main_service_2 = serviceResultArray[3].name;
+        var main_service_2_price = serviceResultArray[3].price + "원";
+        var main_service_3 = serviceResultArray[4].name;
+        var main_service_3_price = serviceResultArray[4].price + "원";
 
-    var etc_service_1 = etcResultArray[0].name;
-    var etc_service_1_price = etcResultArray[0].price + "원";
-    var etc_service_2 = etcResultArray[1].name;
-    var etc_service_2_price = etcResultArray[1].price + "원";
-    var etc_service_3 = etcResultArray[2].name;
-    var etc_service_3_price = etcResultArray[2].price + "원";
-    var etc_service_4 = etcResultArray[3].name;
-    var etc_service_4_price = etcResultArray[3].price + "원";
+        var etc_service_1 = etcResultArray[0].name;
+        var etc_service_1_price = etcResultArray[0].price + "원";
+        var etc_service_2 = etcResultArray[1].name;
+        var etc_service_2_price = etcResultArray[1].price + "원";
+        var etc_service_3 = etcResultArray[2].name;
+        var etc_service_3_price = etcResultArray[2].price + "원";
+        var etc_service_4 = etcResultArray[3].name;
+        var etc_service_4_price = etcResultArray[3].price + "원";
 
-    if(main_service_1 != ''){
-        $("#main_service_1").html(main_service_1);
-        $("#main_service_1_price").html(main_service_1_price);
-        $("#main_service_1_cell").css("display","flex");
-    }
-    if(main_service_2 != ''){
-        $("#main_service_2").html(main_service_2);
-        $("#main_service_2_price").html(main_service_2_price);
-        $("#main_service_2_cell").css("display","flex");
-    }
-    if(main_service_3 != ''){
-        $("#main_service_3").html(main_service_3);
-        $("#main_service_3_price").html(main_service_3_price);
-        $("#main_service_3_cell").css("display","flex");
+        if(main_service_1 != ''){
+            $("#main_service_1").html(main_service_1);
+            $("#main_service_1_price").html(main_service_1_price);
+            $("#main_service_1_cell").css("display","flex");
+        }
+        if(main_service_2 != ''){
+            $("#main_service_2").html(main_service_2);
+            $("#main_service_2_price").html(main_service_2_price);
+            $("#main_service_2_cell").css("display","flex");
+        }
+        if(main_service_3 != ''){
+            $("#main_service_3").html(main_service_3);
+            $("#main_service_3_price").html(main_service_3_price);
+            $("#main_service_3_cell").css("display","flex");
+        }
+
+        if(etc_service_1 != ''){
+            $("#etc_service_1").html(etc_service_1);
+            $("#etc_service_1_price").html(etc_service_1_price);
+            $("#etc_service_1_cell").css("display","flex");
+        }
+        if(etc_service_2 != ''){
+            $("#etc_service_2").html(etc_service_2);
+            $("#etc_service_2_price").html(etc_service_2_price);
+            $("#etc_service_2_cell").css("display","flex");
+        }
+        if(etc_service_3 != ''){
+            $("#etc_service_3").html(etc_service_3);
+            $("#etc_service_3_price").html(etc_service_3_price);
+            $("#etc_service_3_cell").css("display","flex");
+        }
+        if(etc_service_4 != ''){
+            $("#etc_service_4").html(etc_service_4);
+            $("#etc_service_4_price").html(etc_service_4_price);
+            $("#etc_service_4_cell").css("display","flex");
+        }
+
+        // 총 금액 구하기
+        var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price
+            + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
+        var is_vat = "<?=$shop_datas->is_vat?>";
+        var vat_price = 0;
+        if(is_vat == 1){
+            vat_price = total_price*0.1;
+            $("#vat_price").html(vat_price+"원");
+            $("#vat_price_cell").css("display","flex");
+        }
+        console.log(vat_price);
+        var result_price = total_price + vat_price;
+        if(total_price > 0){
+            $("#total_price").html(total_price+"원");
+            $("#result_price").html(result_price+"원");
+            $("#total_price_cell").css("display","flex");
+            $("#result_price_cell").css("display","flex");
+
+        }
     }
 
-    if(etc_service_1 != ''){
-        $("#etc_service_1").html(etc_service_1);
-        $("#etc_service_1_price").html(etc_service_1_price);
-        $("#etc_service_1_cell").css("display","flex");
-    }
-    if(etc_service_2 != ''){
-        $("#etc_service_2").html(etc_service_2);
-        $("#etc_service_2_price").html(etc_service_2_price);
-        $("#etc_service_2_cell").css("display","flex");
-    }
-    if(etc_service_3 != ''){
-        $("#etc_service_3").html(etc_service_3);
-        $("#etc_service_3_price").html(etc_service_3_price);
-        $("#etc_service_3_cell").css("display","flex");
-    }
-    if(etc_service_4 != ''){
-        $("#etc_service_4").html(etc_service_4);
-        $("#etc_service_4_price").html(etc_service_4_price);
-        $("#etc_service_4_cell").css("display","flex");
-    }
-
-    // 총 금액 구하기
-    var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price
-        + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
-    var is_vat = "<?=$shop_datas->is_vat?>";
-    var vat_price = 0;
-    if(is_vat == 1){
-        vat_price = total_price*0.1;
-        $("#vat_price").html(vat_price+"원");
-        $("#vat_price_cell").css("display","flex");
-    }
-    console.log(vat_price);
-    var result_price = total_price + vat_price;
-    if(total_price > 0){
-        $("#total_price").html(total_price+"원");
-        $("#result_price").html(result_price+"원");
-        $("#total_price_cell").css("display","flex");
-        $("#result_price_cell").css("display","flex");
-
-    }
 
     $(function(){
         best_item();
     });
 
-    $("#item_list").on("click", ".best_item .item_link_btn", function(){
-        history.replaceState('', '', window.location.pathname+'?oid=<?=$r_oid ?>');
-        location.href = "../test/test_item_product_page.php?no="+$(this).data("product_no")+"&backurl="+encodeURIComponent(window.location.pathname+'?oid=<?=$r_oid ?>');
-    });
 
     function best_item(){
         $.ajax({
@@ -456,7 +499,7 @@ if($pet_datas->type == 'cat'){
                         $.each(data.data.list, function(i, v){
                             var percent = (parseInt(v.product_price) == 0 || parseInt(v.sale_price) == 0)? 0 : 100 - (parseInt(v.sale_price) / parseInt(v.product_price) * 100);
                             html += '<div class="scroller-item">';
-                            html +=    '<a href=shop_view?no='+v.product_no+' class="product-item">';
+                            html +=    '<a href=shop_view?product_no='+v.product_no+' class="product-item">';
                             html +=        '<div class="thumb" data-id="'+v.il_seq+'"><div class="obj"><img id="md-banner'+v.il_seq+'"src="" alt=""/></div></div>';
                             html +=            '<div class="info-wrap">';
                             html +=                '<div class="item-name">'+v.product_name+'</div>';
