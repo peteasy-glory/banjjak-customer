@@ -37,7 +37,7 @@ if($mode){
             $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
             $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "")? $_POST["pet_seq"] : "";
             $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
-            $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : "";
+            $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : 0;
             $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
             $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
             $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
@@ -103,7 +103,7 @@ if($mode){
         $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
         $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "")? $_POST["pet_seq"] : "";
         $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
-        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : "";
+        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : 0;
         $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
         $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
         $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
@@ -134,21 +134,7 @@ if($mode){
             $result = mysqli_query($connection, $sql);
             $seq = mysqli_insert_id($connection);
 
-            // 회원 등급 확인
-            $sql1 = "
-                    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
-                    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
-                    WHERE a.customer_id = '".$user_id."'
-                    AND b.artist_id = '".$artist_id."'
-                ";
-            $result1 = mysqli_query($connection, $sql1);
-            $datas = mysqli_fetch_object($result1);
-            $grade_ord = $datas->grade_ord;
-            $customer_idx = $datas->idx;
-            if($grade_ord != 1){
-                $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
-                $result2 = mysqli_query($connection, $sql2);
-            }
+
 
             // 알림톡 발송 / PUSH 발송
             $artist_name = explode("|", $product);
@@ -175,7 +161,7 @@ if($mode){
         $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
         $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "")? $_POST["pet_seq"] : "";
         $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
-        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : "";
+        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : 0;
         $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
         $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
         $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
@@ -204,21 +190,6 @@ if($mode){
             $result = mysqli_query($connection, $sql);
             $seq = mysqli_insert_id($connection);
 
-            // 회원 등급 확인
-            $sql1 = "
-                    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
-                    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
-                    WHERE a.customer_id = '".$user_id."'
-                    AND b.artist_id = '".$artist_id."'
-                ";
-            $result1 = mysqli_query($connection, $sql1);
-            $datas = mysqli_fetch_object($result1);
-            $grade_ord = $datas->grade_ord;
-            $customer_idx = $datas->idx;
-            if($grade_ord != 1){
-                $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
-                $result2 = mysqli_query($connection, $sql2);
-            }
 
             if ($result === true){ // success
                 $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);

@@ -195,7 +195,7 @@
 						?>
                             <script language="javascript">
                                 //location.href='<?//=$artist_directory ?>///payment_result.php?oid=<?//=$return_arr["P_OID"] ?>//';
-                                location.href = `/reserve_write5_2?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+                                location.href = `/reserve_write5?artist_id=<?=$artist_id?>&seq=<?=$row['payment_log_seq']?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
                             </script>
                         <?php
 					}else{

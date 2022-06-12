@@ -142,6 +142,17 @@ if($pet_datas->type == 'cat'){
     $pet_product_type = "개";
 }
 
+// 회원 등급 확인
+$sql1 = "
+    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
+    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
+    WHERE a.customer_id = '".$user_id."'
+    AND b.artist_id = '".$artist_id."'
+";
+$result1 = mysqli_query($connection, $sql1);
+$datas = mysqli_fetch_object($result1);
+$grade_ord = $datas->grade_ord;
+
 // KG inicis 결제모듈
 
 /*
@@ -341,7 +352,13 @@ $INI_url = array(
                         <div class="receipt-buy-detail result-price">
                             <div class="item-data-list">
                                 <div class="list-cell" id="result_price_cell">
-                                    <div class="list-title font-color-purple"><strong>총 결제 합산 금액</strong></div>
+                                    <?php
+                                    if($grade_ord != 1){
+                                        ?><div class="list-title font-color-purple"><strong>총 결제 예상 금액</strong></div><?php
+                                    }else{
+                                        ?><div class="list-title font-color-purple"><strong>총 결제 합산 금액</strong></div><?php
+                                    }
+                                    ?>
                                     <div class="list-value font-color-purple"><strong id="result_price"></strong></div>
                                 </div>
                             </div>
@@ -358,7 +375,13 @@ $INI_url = array(
                             <!-- 활성화시 actived클래스 추가 -->
                             <!-- 비활성화시 disabled클래스 추가 -->
                             <div class="tab-cell actived" id="payment_shop_tab" onclick="clickPayment('shop')"><button type="button" class="btn-tab-item">매장결제</button></div>
-                            <div class="tab-cell disabled" id="payment_now_tab" onclick="clickPayment('now')"><button type="button" class="btn-tab-item">지금결제</button></div>
+                            <?php
+                            if($grade_ord != 1){
+                                ?><div class="tab-cell disabled"><button type="button" class="btn-tab-item" disabled>지금결제</button></div><?php
+                            }else{
+                                ?><div class="tab-cell disabled" id="payment_now_tab" onclick="clickPayment('now')"><button type="button" class="btn-tab-item">지금결제</button></div><?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="basic-data-group vvsmall3">
@@ -544,7 +567,15 @@ $INI_url = array(
         // - a태그는 disabled 클래스 추가
         // - button 태그는 disabled 속성 추가
         -->
-        <a href="#" class="btn-page-bottom disabled" id="submit_reserve" onclick="submit_reserve()">예약을 신청합니다.</a>
+        <a href="#" class="btn-page-bottom disabled" id="submit_reserve" onclick="submit_reserve()">
+            <?php
+            if($grade_ord != 1){
+                ?>예약을 승인을 요청합니다.<?php
+            }else{
+                ?>예약을 신청합니다.<?php
+            }
+            ?>
+        </a>
     </div>
     <!-- //page-bottom -->
 </section>
