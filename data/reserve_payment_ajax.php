@@ -82,6 +82,11 @@ if($mode){
                 if($grade_ord != 1){
                     $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
                     $result2 = mysqli_query($connection, $sql2);
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> bd2d84e3864f0eb999e049452f486e4761ff3b2a
                     $mgr_idx = mysqli_insert_id($connection);
 
                     $select_sql = "SELECT a.cellphone, b.name pet_name, c.name shop_name FROM tb_payment_log a
@@ -101,7 +106,12 @@ if($mode){
 
                     // 관리자 푸시
                     $admin_message = "{$cellphone}님({$pet_name})이 ({$shop_name})({$artist_id})에 승인요청";
+<<<<<<< HEAD
                     a_push("itseokbeom@gmail.com", "[예약승인요청]", $admin_message, "", $image);
+=======
+                    a_push("pickmon@pickmon.com", "[예약승인요청]", $admin_message, "", $image);
+>>>>>>> Stashed changes
+>>>>>>> bd2d84e3864f0eb999e049452f486e4761ff3b2a
                 }
 
                 if ($result === true){ // success
