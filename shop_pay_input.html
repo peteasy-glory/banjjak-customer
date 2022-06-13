@@ -435,7 +435,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
     var customer_id = "<?=$user_id ?>";
     var company_cnt = <?php echo count($company_cnt) ?>; // 업체배송, 직배송 포함 업체 수
     var shipping_price = ["",3500, 4000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 배송비
-    var is_free_shipping_limit = ["", 100000, 30000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
+    var is_free_shipping_limit = ["", 100000, 300000, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송 시작 금액
     var is_free_shipping_total = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 무료배송인 상품
     var is_free_shipping_cnt = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 상품 개수
     var is_free_shipping_price = ["", 0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기  ==> 최종 구매가격
@@ -899,14 +899,14 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                     }else{
                         // 선택 가격이 무료배송시작금액보다 클 경우
                         if(is_free_shipping_price[i] >= is_free_shipping_limit[i]){
-                            //_shipping_price[i] = 0;
-                            _shipping_price[i] = parseInt(shipping_price[i]);
+                            _shipping_price[i] = 0;
+                            //_shipping_price[i] = parseInt(shipping_price[i]);
                         // 선택 가격이 무료배송시작금액보다 작을 경우
                         }else{
                             // 무료배송 상품이 있을 경우
                             if(is_free_shipping_total[i] > 0){
-                                //_shipping_price[i] = 0;
-                                _shipping_price[i] = parseInt(shipping_price[i]);
+                                _shipping_price[i] = 0;
+                                //_shipping_price[i] = parseInt(shipping_price[i]);
                             // 무료배송 상품 없을경우
                             }else{
                                 _shipping_price[i] = parseInt(shipping_price[i]);
