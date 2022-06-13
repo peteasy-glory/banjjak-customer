@@ -82,6 +82,29 @@ if($mode){
                 if($grade_ord != 1){
                     $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
                     $result2 = mysqli_query($connection, $sql2);
+<<<<<<< Updated upstream
+=======
+                    $mgr_idx = mysqli_insert_id($connection);
+
+                    $select_sql = "SELECT a.cellphone, b.name pet_name, c.name shop_name FROM tb_payment_log a
+                        LEFT JOIN tb_mypet b ON a.pet_seq = b.pet_seq 
+                        LEFT JOIN tb_shop c on a.artist_id = c.customer_id 
+                        WHERE a.payment_log_seq = {$seq}";
+                    $select_result = mysqli_query($connection,$select_sql);
+                    $select_datas = mysqli_fetch_object($select_result);
+                    $cellphone = $select_datas->cellphone;
+                    $pet_name = $select_datas->pet_name;
+                    $shop_name = $select_datas->shop_name;
+
+                    $message = "{$cellphone}님({$pet_name})이 {$month}월{$day}일 {$hour}시{$minute}분 예약승인을 요청하였습니다.";
+                    $path = "https://partner.banjjakpet.com/reserve_pay_management_1?reserve_approval_idx={$mgr_idx}";
+                    $image = "http://gopet.kr/pet/images/app_logo.png";
+                    a_push($artist_id, "[반짝][예약승인대기]", $message, $path, $image);
+
+                    // 관리자 푸시
+                    $admin_message = "{$cellphone}님({$pet_name})이 ({$shop_name})({$artist_id})에 승인요청";
+                    a_push("pickmon@pickmon.com", "[예약승인요청]", $admin_message, "", $image);
+>>>>>>> Stashed changes
                 }
 
                 if ($result === true){ // success
