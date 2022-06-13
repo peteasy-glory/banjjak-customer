@@ -164,10 +164,11 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
 				}
                 ?>
                 <a href="#" class="user-receipt-item">
+                    <div class="label label-outline-purple middle-add"><em>예약요청취소</em></div>
                     <? if ($is_cancel == 1) { ?>
-					<div class="receipt-cancel-date">예약취소일자 : <? echo $cancel_time ?></div>
+					<div class="receipt-cancel-date">예약취소일자: <? echo $cancel_time ?></div>
                     <? } ?>
-					<!-- 예약 정보 -->
+                    <!-- 예약 정보 -->
 					<div class="receipt-reserve-option">
 						<div class="option-cell">
 							<div class="option-title">매장명</div>

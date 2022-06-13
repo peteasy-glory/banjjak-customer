@@ -651,6 +651,11 @@ button.btn-text-button.btn-before-beauty.actived{background-image:url(../images/
 .label.label-shop-state {padding:0 15px; height:35px; font-size:15px; line-height:35px; font-weight:700; color:#666; background:#f4f4f4; border-radius:18px; border:none;}
 .label.label-hotel {padding:0 9px; height:26px; font-size:14px; line-height:26px; font-weight:500;border-radius:5px; min-width:80px;}
 
+/*========================================
+@ 2022.06.13 예약 및 취소 내역 페이지 css 수정
+========================================*/
+.label.middle-add {height:21px; line-height:21px; font-weight:500; position: absolute; right: 35px;}
+
 /* 라벨 칼라 */
 .label-black {color:#fff; border-color:#202020; background-color:#202020;}
 .label-purple {color:#fff; border-color:#6840b1; background-color:#6840b1;}
@@ -663,7 +668,6 @@ button.btn-text-button.btn-before-beauty.actived{background-image:url(../images/
 .label-whitegreen {background:#c9e896; border-color:#c9e896; color:#fff;}
 .label-whitemint {background:#99e8ca; border-color:#99e8ca; color:#fff;}
 .label-whiteblue {background:#b3c0e2; border-color:#b3c0e2; color:#fff;}
-
 
 
 /* 라벨 아웃라인 칼라 */
