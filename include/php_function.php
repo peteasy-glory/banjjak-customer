@@ -51,7 +51,13 @@ function check_bad_word($word) {
 function app_push($arr_userapikey,$title,$memo,$path,$image, $is_partner){
 		$result =[];
  		global $connection;
-         $API_ACCESS_KEY= 'AAAAKR8K-yk:APA91bFGTYpY4e0uOZw1IfOmyMc9dQQlDfsXCWKUAkoJBMPudzEdXYuXJVHgkZrmXp8ikj0qKrtb8rV63-jcgCMsEiZaCdwc1bCUyiSrCsayIdcEkFhS29Ok5zK559Bh8c9rYrA-T5cY';
+         //$API_ACCESS_KEY= 'AAAAKR8K-yk:APA91bFGTYpY4e0uOZw1IfOmyMc9dQQlDfsXCWKUAkoJBMPudzEdXYuXJVHgkZrmXp8ikj0qKrtb8rV63-jcgCMsEiZaCdwc1bCUyiSrCsayIdcEkFhS29Ok5zK559Bh8c9rYrA-T5cY';
+
+		if($is_partner == "partner"){ // 파트너앱
+			$API_ACCESS_KEY= 'AAAAexOuErg:APA91bGIHbSkZlt46HZaPelJtBMNPskBVkJ0w9z944k-UkppzuasuiWhpeexSkgnsM3TC7XVExCmkKgbQSk_48-CX54rZmSgtzeLWOjgPbVSdTFJ13No_Hm2kQnH7LxW37fLiS6-_VUE';
+		}else{ // 견주앱
+			$API_ACCESS_KEY= 'AAAAKR8K-yk:APA91bFGTYpY4e0uOZw1IfOmyMc9dQQlDfsXCWKUAkoJBMPudzEdXYuXJVHgkZrmXp8ikj0qKrtb8rV63-jcgCMsEiZaCdwc1bCUyiSrCsayIdcEkFhS29Ok5zK559Bh8c9rYrA-T5cY';
+		}
 		
  		$path = str_replace("http://" , "https://" , $path);
 
