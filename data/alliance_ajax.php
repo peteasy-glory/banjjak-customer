@@ -1,6 +1,8 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+    include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 
+    $emoji = new TEmoji();
 
     // 변수 정리
     $customer_id = $_POST['customer_id'];
@@ -10,7 +12,7 @@
     $brand = $_POST['brand'];
     $phone = $_POST['phone'];
     $email = $_POST['email'];
-    $contents = $_POST['contents'];
+    $contents = $emoji->emojiStrToDB($_POST['contents']);
 
 
 

@@ -2,10 +2,11 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 $back_gnb = $_GET['back'];
+
+
 ?>
 
 <!-- header -->
@@ -82,7 +83,8 @@ $back_gnb = $_GET['back'];
 					<div class="form-group-item">
 						<div class="form-item-label">문의 내용</div>
 						<div class="form-item-data">
-							<input type="text" class="form-control" id="txt_qa" />
+<!--							<input type="text" class="form-control" id="txt_qa" />-->
+                            <textarea name="memo" id="txt_qa" cols="30" rows="10"></textarea>
 						</div>
 					</div>
 				</div>	
