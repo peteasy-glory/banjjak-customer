@@ -164,12 +164,6 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
 				}
                 ?>
                 <a href="#" class="user-receipt-item">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    <div class="label label-outline-purple middle-add"><em>예약요청취소</em></div>
-=======
-<<<<<<< Updated upstream
-=======
                     <?php
                     $grade_sql = "select * from tb_grade_reserve_approval_mgr where payment_log_seq = {$payment_log_seq}";
                     $grade_result = mysqli_query($connection,$grade_sql);
@@ -184,11 +178,6 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                         }
                     }
                     ?>
->>>>>>> Stashed changes
->>>>>>> bd2d84e3864f0eb999e049452f486e4761ff3b2a
-=======
-                    <div class="label-add-purple"><em>예약요청취소</em></div>
->>>>>>> cb9bf4d03fb999a04ef6b00e488fe3af89f2031e
                     <? if ($is_cancel == 1) { ?>
 					<div class="receipt-cancel-date">예약취소일자: <? echo $cancel_time ?></div>
                     <? } ?>
