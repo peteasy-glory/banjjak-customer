@@ -1,4 +1,6 @@
 <?php
+const G5_MYSQLI_USE = true;
+
 function alert($str){
 	echo '<script>alert("'.$str.'");</script>';
 }
@@ -413,6 +415,7 @@ function sql_fetch($result){
 
 	return $row;
 }
+
 function sql_fetch_array($sql){
 	global $connection;
 	$res = mysqli_query($connection, $sql);
