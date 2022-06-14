@@ -103,12 +103,29 @@ foreach ($year_log['body'] as $val){
 
                                 echo '<li class="accordion-cell">';
                                     if($val["track_map_path"] !== ""){
-                                        echo '<button type="button" class="btn-accordion-menu btn-record-accordion photo-target">'.
+                                        echo '<button type="button" class="btn-accordion-menu btn-record-accordion photo-target btn-accordion-menu-exist-after ">'.
                                             '<span class="btn-record-accordion-inner">'.
                                             '<span class="record-accordion-date">'.$val["date"].'</span>'.
                                             '<span class="record-accordion-option">'.number_format(intval($val["distance"])/1000,2).'Km'.', '.number_format(intval($val["time"])/60, 2).'분</span>'.
-                                            '</span>'.
-                                            '</button>'.
+                                            '</span>';
+
+                                        if(is_array($val["photo_path"])){
+                                            echo '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="32" viewBox="0 0 36 32">
+                                                <path data-name="사각형 2" style="fill:none" d="M0 0h36v32H0z"/>
+                                                <g data-name="10_ic/22/camera">
+                                                    <g data-name="Group 9">
+                                                        <g data-name="Group 5">
+                                                            <path data-name="Stroke 1" d="M13.723 2.6 12.43.8a1.9 1.9 0 0 0-1.549-.8H7.12a1.909 1.909 0 0 0-1.551.8L4.278 2.6a1.161 1.161 0 0 1-.945.485H1.687A1.749 1.749 0 0 0 0 4.889V12.2A1.749 1.749 0 0 0 1.687 14h14.627A1.748 1.748 0 0 0 18 12.2V4.889a1.748 1.748 0 0 0-1.686-1.8h-1.646a1.162 1.162 0 0 1-.945-.489z" style="stroke:#202020;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-width:1.25px;fill:#fff" transform="translate(9 9)"/>
+                                                            <path data-name="Stroke 3" d="M6 3a3 3 0 1 1-3-3 3 3 0 0 1 3 3z" transform="translate(15 13.5)" style="stroke:#202020;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-width:1.25px;fill:none"/>
+                                                        </g>
+                                                        <g data-name="Group 8">
+                                                            <path data-name="Clip 7" d="M0 .925a.924.924 0 0 0 .925.925.924.924 0 0 0 .925-.925A.926.926 0 0 0 .925 0 .926.926 0 0 0 0 .925z" style="fill:#202020" transform="translate(23 14.5)"/>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>';
+                                            }
+                                            echo '</button>'.
                                             '<span class="record-accordion-idx record-accordion-idx-'.$val["idx"].'">'.$val["idx"].'</span>'.
                                             '<div class="accordion-content">'.
                                             '<div class="record-accordion-data">';
@@ -150,7 +167,7 @@ foreach ($year_log['body'] as $val){
                                                             '<div class="item-value">'.number_format($val["sum_poo"]+$val["sum_pee"]).'회'.'</div>'.
                                                         '</div>'.
                                                     '</div>'.
-                                                    '<button type="button" class="test-button"></button>'.
+                                                    '<button type="button" class="track-thumb"></button>'.
                                                     '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>'.
                                             '</div>';
 
@@ -290,22 +307,31 @@ foreach ($year_log['body'] as $val){
                         photos.push(resultData.data[cnt].path);
                     }
 
-                    console.log(photos);
 
 
 
-                    console.log($(this))
-                    console.log(photos.at())
 
-                    $(this).siblings(".accordion-content").find("button.test-button").attr("onclick",`showReviewGallery(${resultData.data.length-1},'${photos.toString()}')`)
+                    if(photos.length === 0){
 
-                    $(this).siblings(".accordion-content").find("button.test-button").css("background",`url(${photos.at(-1)}) no-repeat`)
-                    $(this).siblings(".accordion-content").find("button.test-button").css("background-size","cover")
+
+                        $(this).siblings(".accordion-content").find("button.track-thumb").css("background",`url(../../images/no_img.png) no-repeat`)
+
+
+                    }else{
+
+                    $(this).siblings(".accordion-content").find("button.track-thumb").attr("onclick",`showReviewGallery(${resultData.data.length-1},'${photos.toString()}')`)
+
+                    $(this).siblings(".accordion-content").find("button.track-thumb").css("background",`url(${photos.at(-1)}) no-repeat`)
+
+                    }
+                    $(this).siblings(".accordion-content").find("button.track-thumb").css("background-size","cover")
+
+
 
                 }
             },
             error:function(request,status,error){
-                console.log("실패")
+
                 console.log("error = " + error)
             },
 
@@ -465,10 +491,12 @@ foreach ($year_log['body'] as $val){
 
     function showReviewGallery(startIndex, img_list){
         let imgs	= img_list.split(',');
+
+
         imgs.forEach(element => {
             element = img_link_change(element);
         });
-        console.log(imgs);
+
         gallery.dataSet(imgs);
         gallery.open(startIndex);
 
