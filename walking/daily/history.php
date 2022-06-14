@@ -153,6 +153,9 @@ foreach ($year_log['body'] as $val){
 
                                         if($val["track_map_path"] !== ""){
                                             echo    '<div class="record-accordion-detail"><img class="map-target" src="'.$val["track_map_path"].'" alt="">'.
+
+                                                '<button type="button" class="track-thumb"></button>'.
+                                                '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>'.
                                                     '</div>'.
                                                     '<div class="record-accordion-header" style="background: #8f8f8f">'.
                                                         '<div class="item-sort">'.
@@ -167,8 +170,7 @@ foreach ($year_log['body'] as $val){
                                                             '<div class="item-value">'.number_format($val["sum_poo"]+$val["sum_pee"]).'회'.'</div>'.
                                                         '</div>'.
                                                     '</div>'.
-                                                    '<button type="button" class="track-thumb"></button>'.
-                                                    '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>'.
+
                                             '</div>';
 
 
@@ -520,8 +522,9 @@ foreach ($year_log['body'] as $val){
 
 
 
-    window.addEventListener("touchmove", function(){
-        console.log(window.pageYOffset)
+    console.log(<?=$months_log["body"]?>.length);
+    $(".page-body").on("touchmove", function(){
+        console.log($(this).scrollTop())
     })
 
 
