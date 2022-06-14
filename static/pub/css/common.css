@@ -654,7 +654,7 @@ button.btn-text-button.btn-before-beauty.actived{background-image:url(../images/
 /*========================================
 @ 2022.06.13 예약 및 취소 내역 페이지 css 수정
 ========================================*/
-.label.middle-add {height:21px; line-height:21px; font-weight:500; position: absolute; right: 35px;}
+.label-add-purple {display:inline-block; padding:0 9px; height:25px; font-size:12px; line-height:25px; font-weight:700; border-radius:15px; color:#fff; border:1px solid #6840b1; background-color:#6840b1; box-sizing:border-box;text-align:center; white-space:nowrap; position: relative; margin: 0 0 10px 0;}
 
 /* 라벨 칼라 */
 .label-black {color:#fff; border-color:#202020; background-color:#202020;}
