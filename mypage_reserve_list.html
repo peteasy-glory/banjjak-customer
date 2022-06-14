@@ -172,9 +172,9 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     $is_approve = $grade_datas->is_approve;
                     if($grade_cnt > 0){ // 예약승인 데이터가 있을 시
                         if($is_approve == 3){ // 취소일때
-                            ?><div class="label label-outline-purple middle-add"><em>예약요청취소</em></div><?php
+                            ?><div class="label label-add-purple"><em>예약요청취소</em></div><?php
                         }else if($is_approve == 0){
-                            ?><div class="label label-outline-purple middle-add"><em>승인대기</em></div><?php
+                            ?><div class="label label-add-purple"><em>승인대기</em></div><?php
                         }
                     }
                     ?>
