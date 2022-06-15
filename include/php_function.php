@@ -175,6 +175,9 @@ function a_push ($customer_id, $title, $memo, $path, $image){
     $result = mysqli_query($connection, $sql);
     if($rs = mysqli_fetch_object($result)) {
 		$is_partner = (isset($rs->partner_token) && $rs->partner_token != '')? "partner" : "customer";
+		if($customer_id == 'pickmon@pickmon.com'){
+			$is_partner = 'customer';
+		}
 		if($is_partner == 'partner'){
 			return app_push($rs->partner_token, $title, $memo, $path, $image, $is_partner);
 		}else{
