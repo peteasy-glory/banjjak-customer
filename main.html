@@ -52,7 +52,7 @@ $md_item_sql = "
          SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
          FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
      ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND a.is_view_main_1 = '1' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.update_dt desc
+    WHERE a.is_delete = '1' AND a.is_view_main_1 = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.update_dt desc
 ";
 $md_item_array = sql_fetch_array($md_item_sql);
 
@@ -63,7 +63,7 @@ $new_item_sql = "
         SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
         FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
         ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND a.is_view_main_2 = '1' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30 
+    WHERE a.is_delete = '1' AND a.is_view_main_2 = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30 
 ";
 $new_item_array = sql_fetch_array($new_item_sql);
 
