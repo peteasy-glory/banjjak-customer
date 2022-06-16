@@ -204,6 +204,7 @@ if($mode){
 					SELECT *
 					FROM tb_item_cart
 					WHERE is_delete = '1'
+					AND is_shop = '2'
                     ".$where_qy."
                     AND direct_chk = 0
 				";
@@ -241,6 +242,7 @@ if($mode){
 					SELECT *
 					FROM tb_item_cart
 					WHERE is_delete = '1'
+					AND is_shop = '2'
 						".$where_qy."
 				";
             $array = sql_fetch_array($sql);
