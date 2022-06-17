@@ -550,71 +550,83 @@ $count = 0;
     let parse_data = [];
 
     $("#track-body").css("height",deviceHeight+20+"px");
-    $(".page-body").on("scroll", function () {
+
+
+    let isRun = false;
+
+    $(".page-body").on("touchmove", function () {
 
 
 
 
 
-        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
 
 
 
 
+        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight-0.9 ) {
 
-            $.ajax({
-                url: '/data/walking_ajax.php',
-                data: {
-                    mode: "getTList",
-                    pet_id: target_pet_id,
-                    year: target_year,
-                    month: target_month,
-                    list_start: list_start,
-                    list_count:list_count,
+            if(isRun === true){
 
-                },
-                type: "post",
-                header: {
-                    accept: 'application/json'
-                },
-                beforeSend:function(){
+                return;
+            }
 
-                    $('.list-loading').css("display","block");
+            isRun = true;
 
-                },
+            $(".list-loading").css("display","block")
 
 
-                success: (data) => {
+            setTimeout(function(){
+
+                $.ajax({
+                    url: '/data/walking_ajax.php',
+                    async: false,
+                    data: {
+                        mode: "getTList",
+                        pet_id: target_pet_id,
+                        year: target_year,
+                        month: target_month,
+                        list_start: list_start,
+                        list_count:list_count,
+
+                    },
+                    type: "post",
+                    header: {
+                        accept: 'application/json'
+                    },
 
 
-
-
-
-                    parse_data = JSON.parse(data).data;
-
-
-
-                    for (let j = 0; j <= parse_data.length; j++) {
-
-
-                        if(parse_data[j]?.idx !== undefined){
-                        $(".accordion-list").append(`<li class="accordion-cell" id="accordion-cell-${parse_data[j]?.idx}"></li>`);
-                        }
+                    success: (data) => {
 
 
 
-                        if (parse_data[j]?.track_map_path !== "") {
+
+                        isRun = false;
+                        parse_data = JSON.parse(data).data;
 
 
-                            $(`<button type="button" class="btn-accordion-menu btn-record-accordion photo-target btn-accordion-menu-exist-after"><span class="btn-record-accordion-inner"><span class="record-accordion-date">${parse_data[j]?.date}</span><span class="record-accordion-option">
+
+                        for (let j = 0; j <= parse_data.length; j++) {
+
+
+                            if(parse_data[j]?.idx !== undefined){
+                                $(".accordion-list").append(`<li class="accordion-cell" id="accordion-cell-${parse_data[j]?.idx}"></li>`);
+                            }
+
+
+
+                            if (parse_data[j]?.track_map_path !== "") {
+
+
+                                $(`<button type="button" class="btn-accordion-menu btn-record-accordion photo-target btn-accordion-menu-exist-after"><span class="btn-record-accordion-inner"><span class="record-accordion-date">${parse_data[j]?.date}</span><span class="record-accordion-option">
                     ${(parse_data[j]?.distance / 1000).toFixed(2)}Km,
                         ${(parse_data[j]?.time / 60).toFixed(2)}분
                     </span></span>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`));
 
 
-                            if (Array.isArray(parse_data[j]?.photo_path)) {
+                                if (Array.isArray(parse_data[j]?.photo_path)) {
 
-                                $(`<svg xmlns="http://www.w3.org/2000/svg" width="36" height="32" viewBox="0 0 36 32">
+                                    $(`<svg xmlns="http://www.w3.org/2000/svg" width="36" height="32" viewBox="0 0 36 32">
                                                 <path data-name="사각형 2" style="fill:none" d="M0 0h36v32H0z"/>
                                                 <g data-name="10_ic/22/camera">
                                                     <g data-name="Group 9">
@@ -628,17 +640,17 @@ $count = 0;
                                                     </g>
                                                 </g>
                                             </svg>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx} button`))
-                            }
+                                }
 
 
-                            $(`</button><span class="record-accordion-idx record-accordion-idx-${parse_data[j]?.idx}">${parse_data[j]?.idx}</span>
+                                $(`</button><span class="record-accordion-idx record-accordion-idx-${parse_data[j]?.idx}">${parse_data[j]?.idx}</span>
                        <div class="accordion-content"><div class="record-accordion-data" id="record-accordion-data-${parse_data[j]?.idx}">`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`))
 
 
-                        } else if (parse_data[j]?.track_map_path == "") {
+                            } else if (parse_data[j]?.track_map_path == "") {
 
 
-                            $(`<button type="button" class="btn-accordion-menu-no-after btn-record-accordion btn-accordion-menu-no-padding">
+                                $(`<button type="button" class="btn-accordion-menu-no-after btn-record-accordion btn-accordion-menu-no-padding">
                         <span class="btn-record-accordion-inner">
                         <span class="record-accordion-date">${parse_data[j]?.date}</span>
                         <span class="record-accordion-option">
@@ -664,11 +676,11 @@ $count = 0;
                     `).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`));
 
 
-                        }
+                            }
 
-                        if (parse_data[j]?.track_map_path !== "") {
+                            if (parse_data[j]?.track_map_path !== "") {
 
-                            $(`
+                                $(`
                         <div class="record-accordion-detail"><img class="map-target" src="${parse_data[j]?.track_map_path}" alt="">
                         <button type="button" class="track-thumb" id="track-thumb-${parse_data[j]?.idx}"></button>
                         <button type="button" class="btn-record-kakao-share" data-map_url="${parse_data[j]?.track_map_path}"></button>
@@ -688,54 +700,55 @@ $count = 0;
                         </div>
                     </div>`).appendTo($(`#record-accordion-data-${parse_data[j]?.idx}`));
 
-                            let parse_photos = [];
-                            if (parse_data[j]?.photo_path == "") {
-                                $(`#track-thumb-${parse_data[j]?.idx}`).css("background", `url(../../images/no_img.png) no-repeat`)
+                                let parse_photos = [];
+                                if (parse_data[j]?.photo_path == "") {
+                                    $(`#track-thumb-${parse_data[j]?.idx}`).css("background", `url(../../images/no_img.png) no-repeat`)
 
-                            } else {
-                                for (let k = 0; k < parse_data[j]?.photo_path.length; k++) {
+                                } else {
+                                    for (let k = 0; k < parse_data[j]?.photo_path.length; k++) {
 
-                                    parse_photos.push(parse_data[j]?.photo_path[k].path)
+                                        parse_photos.push(parse_data[j]?.photo_path[k].path)
 
+
+                                    }
+                                    let photo_path_length = (typeof parse_data[j]?.photo_path.length  === "number" ? parse_data[j]?.photo_path.length : "0");
+                                    // console.log(photo_path_length);
+                                    $(`#track-thumb-${parse_data[j]?.idx}`).attr("onclick", `showReviewGallery(${photo_path_length},'${parse_photos.toString()}')`)
+                                    $(`#track-thumb-${parse_data[j]?.idx}`).css("background", `url(${parse_photos.at(0)}) no-repeat`)
 
                                 }
-                                let photo_path_length = (typeof parse_data[j]?.photo_path.length  === "number" ? parse_data[j]?.photo_path.length : "0");
-                                // console.log(photo_path_length);
-                                $(`#track-thumb-${parse_data[j]?.idx}`).attr("onclick", `showReviewGallery(${photo_path_length},'${parse_photos.toString()}')`)
-                                $(`#track-thumb-${parse_data[j]?.idx}`).css("background", `url(${parse_photos.at(0)}) no-repeat`)
 
+
+
+                                $(`#track-thumb-${parse_data[j]?.idx}`).css("background-size", "cover")
+                            } else if (parse_data[j]?.track_map_path == "") {
+
+                                $(`</div>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`))
                             }
 
-
-
-                            $(`#track-thumb-${parse_data[j]?.idx}`).css("background-size", "cover")
-                        } else if (parse_data[j]?.track_map_path == "") {
-
-                            $(`</div>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`))
+                            $("#track-body").css("height",$(".accordion-list").innerHeight()+100+"px");
                         }
 
-                        $("#track-body").css("height",$(".accordion-list").innerHeight()+100+"px");
+
+
+                        list_count++;
+
+
+
+                    },
+                    error: function (request, status, error) {
+
+                        console.log("error = " + error)
+                    },
+                    complete:function (){
+
+                        $(".list-loading").css("display","none");
                     }
 
 
 
-                    list_count++;
-
-
-
-                },
-                error: function (request, status, error) {
-
-                    console.log("error = " + error)
-                },
-                complete:function (){
-                    console.log("complete");
-                    $(".list-loading").css("display","none");
-                }
-
-
-
-            })
+                })
+            },200)
 
         }
     });
