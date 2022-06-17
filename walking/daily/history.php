@@ -208,7 +208,8 @@ $count = 0;
 				</ul>
 			</div>
 		</div>
-		<!-- //page-contents -->  
+		<!-- //page-contents -->
+        <div class="list-loading"><img src="/images/loading_s.gif" alt="" style="width:100%"></div>
 	</div>
 	<!-- //page-body -->
 
@@ -546,6 +547,7 @@ $count = 0;
 
     let list_count = 1 ;
 
+    let parse_data = [];
 
     $("#track-body").css("height",deviceHeight+20+"px");
     $(".page-body").on("scroll", function () {
@@ -569,35 +571,48 @@ $count = 0;
                     month: target_month,
                     list_start: list_start,
                     list_count:list_count,
+
                 },
                 type: "post",
                 header: {
                     accept: 'application/json'
                 },
+                beforeSend:function(){
+
+                    $('.list-loading').css("display","block");
+
+                },
+
 
                 success: (data) => {
 
 
-                    let parse_data = JSON.parse(data).data;
-                    list_count++;
+
+
+
+                    parse_data = JSON.parse(data).data;
 
 
 
                     for (let j = 0; j <= parse_data.length; j++) {
 
-                        $(".accordion-list").append(`<li class="accordion-cell" id="accordion-cell-${parse_data[j].idx}"></li>`);
+
+                        if(parse_data[j]?.idx !== undefined){
+                        $(".accordion-list").append(`<li class="accordion-cell" id="accordion-cell-${parse_data[j]?.idx}"></li>`);
+                        }
 
 
-                        if (parse_data[j].track_map_path !== "") {
+
+                        if (parse_data[j]?.track_map_path !== "") {
 
 
-                            $(`<button type="button" class="btn-accordion-menu btn-record-accordion photo-target btn-accordion-menu-exist-after"><span class="btn-record-accordion-inner"><span class="record-accordion-date">${parse_data[j].date}</span><span class="record-accordion-option">
-                    ${(parse_data[j].distance / 1000).toFixed(2)}Km,
-                        ${(parse_data[j].time / 60).toFixed(2)}분
-                    </span></span>`).appendTo($(`#accordion-cell-${parse_data[j].idx}`));
+                            $(`<button type="button" class="btn-accordion-menu btn-record-accordion photo-target btn-accordion-menu-exist-after"><span class="btn-record-accordion-inner"><span class="record-accordion-date">${parse_data[j]?.date}</span><span class="record-accordion-option">
+                    ${(parse_data[j]?.distance / 1000).toFixed(2)}Km,
+                        ${(parse_data[j]?.time / 60).toFixed(2)}분
+                    </span></span>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`));
 
 
-                            if (Array.isArray(parse_data[j].photo_path)) {
+                            if (Array.isArray(parse_data[j]?.photo_path)) {
 
                                 $(`<svg xmlns="http://www.w3.org/2000/svg" width="36" height="32" viewBox="0 0 36 32">
                                                 <path data-name="사각형 2" style="fill:none" d="M0 0h36v32H0z"/>
@@ -612,23 +627,23 @@ $count = 0;
                                                         </g>
                                                     </g>
                                                 </g>
-                                            </svg>`).appendTo($(`#accordion-cell-${parse_data[j].idx} button`))
+                                            </svg>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx} button`))
                             }
 
 
-                            $(`</button><span class="record-accordion-idx record-accordion-idx-${parse_data[j].idx}">${parse_data[j].idx}</span>
-                       <div class="accordion-content"><div class="record-accordion-data" id="record-accordion-data-${parse_data[j].idx}">`).appendTo($(`#accordion-cell-${parse_data[j].idx}`))
+                            $(`</button><span class="record-accordion-idx record-accordion-idx-${parse_data[j]?.idx}">${parse_data[j]?.idx}</span>
+                       <div class="accordion-content"><div class="record-accordion-data" id="record-accordion-data-${parse_data[j]?.idx}">`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`))
 
 
-                        } else if (parse_data[j].track_map_path == "") {
+                        } else if (parse_data[j]?.track_map_path == "") {
 
 
                             $(`<button type="button" class="btn-accordion-menu-no-after btn-record-accordion btn-accordion-menu-no-padding">
                         <span class="btn-record-accordion-inner">
-                        <span class="record-accordion-date">${parse_data[j].date}</span>
+                        <span class="record-accordion-date">${parse_data[j]?.date}</span>
                         <span class="record-accordion-option">
-                            ${(parse_data[j].distance / 1000).toFixed(2)}Km,
-                            ${(parse_data[j].time / 60).toFixed(2)}분</span>
+                            ${(parse_data[j]?.distance / 1000).toFixed(2)}Km,
+                            ${(parse_data[j]?.time / 60).toFixed(2)}분</span>
                         </span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="23.756" height="27.351" viewBox="0 0 23.756 27.351">
                                               <g id="그룹_2" data-name="그룹 2" transform="translate(-322.25 -179.219)">
@@ -644,68 +659,80 @@ $count = 0;
                                               </g>
                                             </svg>
                         </button>
-                        <span class="record-accordion-idx record-accordion-idx-${parse_data[j].idx}">${parse_data[j].idx}</span>
+                        <span class="record-accordion-idx record-accordion-idx-${parse_data[j]?.idx}">${parse_data[j]?.idx}</span>
 
-                    `).appendTo($(`#accordion-cell-${parse_data[j].idx}`));
+                    `).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`));
 
 
                         }
 
-                        if (parse_data[j].track_map_path !== "") {
+                        if (parse_data[j]?.track_map_path !== "") {
 
                             $(`
-                        <div class="record-accordion-detail"><img class="map-target" src="${parse_data[j].track_map_path}" alt="">
-                        <button type="button" class="track-thumb" id="track-thumb-${parse_data[j].idx}"></button>
-                        <button type="button" class="btn-record-kakao-share" data-map_url="${parse_data[j].track_map_path}"></button>
+                        <div class="record-accordion-detail"><img class="map-target" src="${parse_data[j]?.track_map_path}" alt="">
+                        <button type="button" class="track-thumb" id="track-thumb-${parse_data[j]?.idx}"></button>
+                        <button type="button" class="btn-record-kakao-share" data-map_url="${parse_data[j]?.track_map_path}"></button>
                         </div>
                         <div class="record-accordion-header" style="background:#8f8f8f">
                             <div class="item-sort">
                                 <div class="icon icon-size-24 icon-clock-small-white"></div>
-                                <div class="item-value"> ${(parse_data[j].time / 60).toFixed(2)}분</div>
+                                <div class="item-value"> ${(parse_data[j]?.time / 60).toFixed(2)}분</div>
                             </div>
                             <div class="item-sort">
-                                <div class="item-value"> ${(parse_data[j].distance / 1000).toFixed(2)}Km</div>
+                                <div class="item-value"> ${(parse_data[j]?.distance / 1000).toFixed(2)}Km</div>
                             </div>
                             <div class="item-sort">
                                 <div class="icon icon-size-24 icon-defecate-small-white"></div>
-                                <div class="item-value">${parse_data[j].sum_poo + parse_data[j].sum_pee}</div>
+                                <div class="item-value">${parse_data[j]?.sum_poo + parse_data[j]?.sum_pee}</div>
                             </div>
                         </div>
-                    </div>`).appendTo($(`#record-accordion-data-${parse_data[j].idx}`));
+                    </div>`).appendTo($(`#record-accordion-data-${parse_data[j]?.idx}`));
 
                             let parse_photos = [];
-                            if (parse_data[j].photo_path == "") {
-                                $(`#track-thumb-${parse_data[j].idx}`).css("background", `url(../../images/no_img.png) no-repeat`)
+                            if (parse_data[j]?.photo_path == "") {
+                                $(`#track-thumb-${parse_data[j]?.idx}`).css("background", `url(../../images/no_img.png) no-repeat`)
 
                             } else {
-                                for (let k = 0; k < parse_data[j].photo_path.length; k++) {
+                                for (let k = 0; k < parse_data[j]?.photo_path.length; k++) {
 
-                                    parse_photos.push(parse_data[j].photo_path[k].path)
+                                    parse_photos.push(parse_data[j]?.photo_path[k].path)
 
 
                                 }
-                                $(`#track-thumb-${parse_data[j].idx}`).attr("onclick", `showReviewGallery(${(parse_data[j].photo_path).length},'${parse_photos.toString()}')`)
-                                $(`#track-thumb-${parse_data[j].idx}`).css("background", `url(${parse_photos.at(0)}) no-repeat`)
+                                let photo_path_length = (typeof parse_data[j]?.photo_path.length  === "number" ? parse_data[j]?.photo_path.length : "0");
+                                // console.log(photo_path_length);
+                                $(`#track-thumb-${parse_data[j]?.idx}`).attr("onclick", `showReviewGallery(${photo_path_length},'${parse_photos.toString()}')`)
+                                $(`#track-thumb-${parse_data[j]?.idx}`).css("background", `url(${parse_photos.at(0)}) no-repeat`)
 
                             }
 
 
-                            $(`#track-thumb-${parse_data[j].idx}`).css("background-size", "cover")
-                        } else if (parse_data[j].track_map_path == "") {
 
-                            $(`</div>`).appendTo($(`#accordion-cell-${parse_data[j].idx}`))
+                            $(`#track-thumb-${parse_data[j]?.idx}`).css("background-size", "cover")
+                        } else if (parse_data[j]?.track_map_path == "") {
+
+                            $(`</div>`).appendTo($(`#accordion-cell-${parse_data[j]?.idx}`))
                         }
 
-
+                        $("#track-body").css("height",$(".accordion-list").innerHeight()+100+"px");
                     }
 
 
+
                     list_count++;
+
+
+
                 },
                 error: function (request, status, error) {
 
                     console.log("error = " + error)
                 },
+                complete:function (){
+                    console.log("complete");
+                    $(".list-loading").css("display","none");
+                }
+
 
 
             })
