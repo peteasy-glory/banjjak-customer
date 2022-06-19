@@ -329,42 +329,17 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                     // }
                     if(is_time_type == '2'){
                         getTimeSchedule(v.name,date,v.seq); // 타임제 해보자
+                    }else{
+                        getArtistTime(v.name,date,v.seq); // 미용있는 시간 비활성화
                     }
-                    getArtistTime(v.name,date,v.seq); // 미용있는 시간 비활성화
-                    getRestTime(v.seq); // 휴게시간 비활성화
-                    getArtistHoliday(v.name,v.seq); // 휴무 파악 후 뿌려주기
+
+                    //getRestTime(v.seq); // 휴게시간 비활성화
+                    //getArtistHoliday(v.name,v.seq); // 휴무 파악 후 뿌려주기
                 });
 
                 console.log(timeResultArray);
                 $("#worker_list").html(html);
 
-            }
-        });
-    }
-
-    function getArtistTime(name,date,seq){
-        $.ajax({
-            url : "data/getSchedule.php",
-            data : {
-                mode : "artist_time",
-                artist_id : '<?=$artist_id?>',
-                worker : name,
-                selectDate : date
-            },
-            type : 'POST',
-            dataType: 'json',
-            success: function(json) {
-                $(json.data).each(function (i,v){
-                    var timeStart = parseInt(v.hour+((v.minute == 30)? "50":"00"));
-                    var timeEnd = parseInt(v.to_hour+((v.to_minute == 30)? "50":"00"));
-                    console.log(timeStart + ' '+ timeEnd);
-                    for(timeStart;timeStart<timeEnd;timeStart=timeStart+50){
-                        // console.log(timeStart/50);
-                        var disabled = "#"+seq+"_"+(timeStart/50);
-                        console.log(disabled);
-                        $(disabled).attr("disabled", true);
-                    }
-                });
             }
         });
     }
@@ -393,11 +368,40 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                     $(disabled).attr("disabled", false); // 시간제일경우 선택된 타임만 선택가능
 
                 });
+                getArtistTime(name,date,seq);
             }
         });
     }
 
-    function getRestTime(seq){
+    function getArtistTime(name,date,seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "artist_time",
+                artist_id : '<?=$artist_id?>',
+                worker : name,
+                selectDate : date
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                $(json.data).each(function (i,v){
+                    var timeStart = parseInt(v.hour+((v.minute == 30)? "50":"00"));
+                    var timeEnd = parseInt(v.to_hour+((v.to_minute == 30)? "50":"00"));
+                    console.log(timeStart + ' '+ timeEnd);
+                    for(timeStart;timeStart<timeEnd;timeStart=timeStart+50){
+                        // console.log(timeStart/50);
+                        var disabled = "#"+seq+"_"+(timeStart/50);
+                        console.log(disabled);
+                        $(disabled).attr("disabled", true);
+                    }
+                });
+                getRestTime(name,seq); // 휴게시간 비활성화
+            }
+        });
+    }
+
+    function getRestTime(name,seq){
         $.ajax({
             url : "data/getSchedule.php",
             data : {
@@ -420,6 +424,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                     $(disabled).attr("disabled", true); // 시간제일경우 선택된 타임만 선택가능
 
                 });
+                getArtistHoliday(name,seq);
             }
         });
     }
