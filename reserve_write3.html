@@ -327,8 +327,11 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                     // }else{
                     //     console.log("testnot")
                     // }
-                    getTimeSchedule(v.name,date,v.seq); // 타임제 해보자
+                    if(is_time_type == '2'){
+                        getTimeSchedule(v.name,date,v.seq); // 타임제 해보자
+                    }
                     getArtistTime(v.name,date,v.seq); // 미용있는 시간 비활성화
+                    getRestTime(v.seq); // 휴게시간 비활성화
                     getArtistHoliday(v.name,v.seq); // 휴무 파악 후 뿌려주기
                 });
 
@@ -388,6 +391,33 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                     var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
                     var disabled = "#"+seq+"_"+(timeStart/50);
                     $(disabled).attr("disabled", false); // 시간제일경우 선택된 타임만 선택가능
+
+                });
+            }
+        });
+    }
+
+    function getRestTime(seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "rest_time",
+                artist_id : '<?=$artist_id?>'
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                var time_data = json.data[0].res_time_off;
+                var time_array = time_data.split(",");
+                console.log(time_array);
+
+                $(time_array).each(function (i,v){
+                    var start_time = v.split("~")[0];
+                    var split_time = start_time.split(":");
+
+                    var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
+                    var disabled = "#"+seq+"_"+(timeStart/50);
+                    $(disabled).attr("disabled", true); // 시간제일경우 선택된 타임만 선택가능
 
                 });
             }

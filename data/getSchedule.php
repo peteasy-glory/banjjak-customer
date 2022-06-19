@@ -67,11 +67,24 @@ if(isset($mode)) {
         }
         $return_data = array("code" => "000000", "data" => $data);
 
+    // 타임제일 경우
     }else if($mode == "time_schedule") {
         $artist_id = isset($_POST['artist_id']) ? $_POST['artist_id'] : "";
         $worker = isset($_POST['worker']) ? $_POST['worker'] : "";
 
         $sql = "SELECT * FROM tb_time_schedule WHERE artist_id='{$artist_id}' and artist_name = '{$worker}'";
+        $result = mysqli_query($connection, $sql);
+        while ($datas = mysqli_fetch_object($result)) {
+            $data[] = $datas;
+        }
+        $return_data = array("code" => "000000", "data" => $data);
+
+    // 휴무시간
+    }else if($mode == "rest_time") {
+        $artist_id = isset($_POST['artist_id']) ? $_POST['artist_id'] : "";
+        $worker = isset($_POST['worker']) ? $_POST['worker'] : "";
+
+        $sql = "SELECT * FROM tb_time_off WHERE customer_id='{$artist_id}'";
         $result = mysqli_query($connection, $sql);
         while ($datas = mysqli_fetch_object($result)) {
             $data[] = $datas;
