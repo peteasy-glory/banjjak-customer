@@ -9,6 +9,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 		if($r_mode == "get_shop_list"){							// 0001 상품리스트 가져오기
 			$crypto = new Crypto();
 
+
 			$r_top = ($_POST["top"] && $_POST["top"] != "")? $_POST["top"] : "";
 			$r_middle = ($_POST["middle"] && $_POST["middle"] != "")? $_POST["middle"] : "";
 			$r_lat = ($_POST["lat"] && $_POST["lat"] != "")? $_POST["lat"] : "";
@@ -203,6 +204,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 
 				$data[$cnt]["customer_id"] = $row["customer_id"];
 				$data[$cnt]["name"] = $row["name"];
+				$data[$cnt]["is_recommend"] = $row["is_recommend"];
 				$data[$cnt]['distance'] = number_format($row['distance'],1);	
 				$data[$cnt]['front_image'] = img_link_change($row['front_image']);		
 				if ( $tabMenu == "best" ) {

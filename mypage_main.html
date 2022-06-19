@@ -65,6 +65,14 @@ if($user_id != ""){
     $coupon_cnt = $cnt_row["coupon_cnt"];
     $like_artist_cnt = $cnt_row["like_artist_cnt"];
     $review_cnt = $cnt_row["item_review_cnt"] + $cnt_row["payment_review_cnt"];
+
+    //산책포인트
+    $total_tracking = 0;
+    $select_sql = "select point from tb_tracking_mgr where owner_id = '" . $user_id . "';";
+    $select_result = mysqli_query($connection, $select_sql);
+    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+        $total_tracking += $result_datas->point;
+    }
 }
 
 <<<<<<< HEAD
@@ -138,7 +146,7 @@ if($user_id != ""){
 				</div>
 			</div>
 			<div class="info-list-wrap">
-                <div class="list-cell"><a href="mypage_point_save_list"><div class="title">포인트</div><div class="value"><?=number_format($point_total)?></div></a></div>
+                <div class="list-cell"><a href="mypage_point_save_list"><div class="title">포인트</div><div class="value"><?=number_format($point_total+$total_tracking)?></div></a></div>
 				<div class="list-cell"><a href="mypage_coupon_list"><div class="title">쿠폰</div><div class="value"><?=number_format($coupon_cnt)?></div></a></div>
 				<div class="list-cell"><a href="mypage_regular_list"><div class="title">단골</div><div class="value"><?=number_format($like_artist_cnt)?></div></a></div>
 				<div class="list-cell"><a href="mypage_review_beauty_list"><div class="title">후기</div><div class="value"><?=number_format($review_cnt)?></div></a></div>

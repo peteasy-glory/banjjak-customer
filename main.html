@@ -52,7 +52,7 @@ $md_item_sql = "
          SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
          FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
      ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND a.is_view_main_1 = '1' AND a.is_soldout = '1' ORDER BY a.update_dt desc
+    WHERE a.is_delete = '1' AND a.is_view_main_1 = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.update_dt desc
 ";
 $md_item_array = sql_fetch_array($md_item_sql);
 
@@ -63,7 +63,7 @@ $new_item_sql = "
         SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
         FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
         ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND a.is_view_main_2 = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30 
+    WHERE a.is_delete = '1' AND a.is_view_main_2 = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30 
 ";
 $new_item_array = sql_fetch_array($new_item_sql);
 
@@ -94,12 +94,8 @@ if(!$user_id){
             type: 'POST',
             dataType: 'JSON',
             success: function(data) {
-                if(data.code == "000000"){
-                    console.log(data.data);
-                }else{
-                    console.log(data.data);
-                }
-                location.href="/mypage_main";
+
+                //location.href="/mypage_main";
             },
             error: function(xhr, status, error) {
                 if(xhr.status != 0){
@@ -266,11 +262,12 @@ if($_SESSION['is_token'] == "1"){
                         if(count($mainShop_array)>0){
                             foreach($mainShop_array as $rs){
                                 ?>
-                                    <div class="scroller-item">
+                                    <div class="scroller-item" style="position:relative;">
+                                        <div class="label label-purple middle" style="font-size:13px;height:25px;line-height:22px;position:absolute;top:7px;right:12px;z-index:10;border-radius:22px;"><strong>추천</strong></div>
                                         <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="picture-item">
                                             <div class="thumb"><img src="https://image.banjjakpet.com<?=img_link_change($rs['front_image'])?>"></div>
                                             <div class="info-wrap">
-                                                <div class="item-name"><?=$rs['name']?></div>
+                                                <div class="item-name"><?=$rs['name']?> </div>
                                                 <div class="item-option-group">
                                                     <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=round($rs['rating_avg'])?></em>(<?=$rs['rating_cnt']?>)</div>
 <!--                                                    <div class="item-distance">0.15km</div>-->
@@ -664,16 +661,18 @@ if($_SESSION['is_token'] == "1"){
                     <div class="footer-address-cell">개인정보 담당자: 이석범 privacy@peteasy.kr</div>
                 </div>
             </div>
-            <div class="footer-customer-menu">
-                <!--<ul>
-                    <li><a href="#">미용샵/호텔입점신청</a></li>
-                    <li><a href="#">쇼핑입점/제휴광고문의</a></li>
-                </ul>-->
-            </div>
             <div class="footer-etc-menu">
                 <ul>
-                    <li><a href="terms4">이용약관</a></li>
-                    <li><a href="terms3">개인정보처리방침</a></li>
+                    <li><a href="javascript:newWindowOpen();" >미용샵/호텔입점신청</a></li>
+                    <li><a href=
+                           <?php
+                                if($user_id == ""){
+                                    echo "/login_1";
+                                }else{
+                                    echo "/home_alliance_request?back=home";
+                                }
+                            ?>
+                        >쇼핑입점/제휴광고문의</a></li>
                 </ul>
             </div>
             <!--<div class="footer-etc-menu">
@@ -1042,6 +1041,10 @@ if($_SESSION['is_token'] == "1"){
         }, 300);    */
     }
 
+
+    function  newWindowOpen(){
+        window.open("https://ceo.banjjakpet.com/","_blank", "");
+    }
 
 </script>
 

@@ -43,10 +43,111 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
                     if ($result == true) {
                         $curPoint = $point->get_point();
                     }
+
+                    //총 적립 포인트
+                    $total_purchase = 0;
+                    $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'BUY';";
+                    $select_result = mysqli_query($connection, $select_sql);
+                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                        $total_purchase += $result_datas->adding_point;
+                    }
+
+                    //적립 포인트
+                    $total_accumulate = 0;
+                    $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'ACCUMLATE';";
+                    $select_result = mysqli_query($connection, $select_sql);
+                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                        $total_accumulate += $result_datas->adding_point;
+                    }
+
+                    //이벤트 포인트
+                    $total_event = 0;
+                    $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'EVENT';";
+                    $select_result = mysqli_query($connection, $select_sql);
+                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                        $total_event += $result_datas->adding_point;
+                    }
+
+                    //산책포인트
+                    $total_tracking = 0;
+                    $select_sql = "select point from tb_tracking_mgr where owner_id = '" . $user_id . "';";
+                    $select_result = mysqli_query($connection, $select_sql);
+                    for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                        $total_tracking += $result_datas->point;
+                    }
+
+                    //소멸 예정 산책포인트
+
+                    //젤 빠른 소멸 포인트
+                    $select_sql = "select point, fi_date 
+							from tb_tracking_mgr 
+							where owner_id = '{$user_id}'
+							and is_invalid_point = 0
+							and is_delete = 0
+							and fi_date != ''
+							order by fi_date asc";
+                    $select_result = mysqli_query($connection, $select_sql);
+                    $num_data = mysqli_num_rows($select_result);
+
+                    //var_dump($select_sql);
+                    //var_dump($num_data);
+                    //exit();
+
+                    //소멸 예정 포인트
+                    $total_point_tracking_delete = 0;
+                    $msg_delete = "";
+
+                    if($num_data > 0){
+
+
+                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
+                            //첫 데이터
+                            if($ch_index == 0){
+                                $obj_first = $result_datas;
+                                $fi_date = $obj_first->fi_date;
+                            }
+
+                            //첫 데이터와 같은 날짜만
+                            if($result_datas->fi_date == $obj_first->fi_date){
+                                $total_point_tracking_delete += $result_datas->point;
+                            }
+                        }
+
+                        $date = date("Y.m.d", strtotime($fi_date));
+                        $hour = date("H", strtotime($fi_date));
+                        $min  = date("i", strtotime($fi_date));
+
+                        //$date = date_format($fi_date, "Y,m,d");
+                        //$hour = date_format($fi_date, "H");
+                        //$min  = date_format($fi_date, "i");
+
+                        //$hour = date("H", strtotime($fi_date));
+                        //$min  = date("i", strtotime($date_str));
+
+                        //var_dump($fi_date);
+                        //var_dump($date);
+                        //var_dump($hour);
+                        //var_dump($min);
+                        //exit();
+
+                        if ($hour > 12) {
+                            //오후
+                            $hour = $hour - 12;
+
+                            $msg_delete = "소멸 예정일 : {$date} 오후 {$hour}:{$min}";
+                        }else{
+                            //오전
+                            $msg_delete = "소멸 예정일 : {$date} 오전 {$hour}:{$min}";
+                        }
+
+                    }else{
+                        $total_point_tracking_delete = 0;
+                        $msg_delete = "";
+                    }
                     ?>
                 
 					<div class="item-title">현재 포인트<!--<a href="mypage_point_charge" class="btn btn-outline-purple btn-round btn-inline btn-charge"><em>충전하기</em></a>--></div>
-					<div class="item-value"><?= number_format($curPoint) ?>P</div>
+					<div class="item-value"><?= number_format($curPoint + $total_tracking) ?>P</div>
 				</div>
 				<div class="wide-tab">
 					<div class="wide-tab-inner">
@@ -57,114 +158,6 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 					</div>
 				</div>
 
-
-
-                <?php
-						//총 적립 포인트
-                        $total_purchase = 0;
-                        $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'BUY';";
-                        $select_result = mysqli_query($connection, $select_sql);
-                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-                            $total_purchase += $result_datas->adding_point;
-                        }
-
-						//적립 포인트
-                        $total_accumulate = 0;
-                        $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'ACCUMLATE';";
-                        $select_result = mysqli_query($connection, $select_sql);
-                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-                            $total_accumulate += $result_datas->adding_point;
-                        }
-
-						//이벤트 포인트
-                        $total_event = 0;
-                        $select_sql = "select adding_point from tb_point_history where customer_id = '" . $user_id . "' and type = 'EVENT';";
-                        $select_result = mysqli_query($connection, $select_sql);
-                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-                            $total_event += $result_datas->adding_point;
-                        }
-
-						//산책포인트
-						$total_tracking = 0;
-                        $select_sql = "select point from tb_tracking_mgr where owner_id = '" . $user_id . "';";
-                        $select_result = mysqli_query($connection, $select_sql);
-                        for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-                            $total_tracking += $result_datas->point;
-                        }
-
-						//소멸 예정 산책포인트
-
-						//젤 빠른 소멸 포인트
-						$select_sql = "select point, fi_date 
-							from tb_tracking_mgr 
-							where owner_id = '{$user_id}'
-							and is_invalid_point = 0
-							and is_delete = 0
-							and fi_date != ''
-							order by fi_date asc";
-						$select_result = mysqli_query($connection, $select_sql);
-						$num_data = mysqli_num_rows($select_result);
-
-						//var_dump($select_sql);
-						//var_dump($num_data);
-						//exit();
-						
-						//소멸 예정 포인트
-						$total_point_tracking_delete = 0;
-						$msg_delete = "";
-
-						if($num_data > 0){
-							
-
-							for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-								//첫 데이터
-								if($ch_index == 0){
-									$obj_first = $result_datas;
-									$fi_date = $obj_first->fi_date;
-								}
-
-								//첫 데이터와 같은 날짜만 
-								if($result_datas->fi_date == $obj_first->fi_date){
-									$total_point_tracking_delete += $result_datas->point;
-								}
-							}
-
-							$date = date("Y.m.d", strtotime($fi_date));
-							$hour = date("H", strtotime($fi_date));
-							$min  = date("i", strtotime($fi_date));
-
-							//$date = date_format($fi_date, "Y,m,d");
-							//$hour = date_format($fi_date, "H");
-							//$min  = date_format($fi_date, "i");
-
-							//$hour = date("H", strtotime($fi_date));
-							//$min  = date("i", strtotime($date_str));
-
-							//var_dump($fi_date);
-							//var_dump($date);
-							//var_dump($hour);
-							//var_dump($min);
-							//exit();
-
-							if ($hour > 12) {
-								//오후
-								$hour = $hour - 12;
-
-								$msg_delete = "소멸 예정일 : {$date} 오후 {$hour}:{$min}";
-							}else{
-								//오전
-								$msg_delete = "소멸 예정일 : {$date} 오전 {$hour}:{$min}";
-							}
-
-						}else{
-							$total_point_tracking_delete = 0;
-							$msg_delete = "";
-						}
-					
-
-
-                ?>
-				
                     <!-- 포인트 리스트 -->
                     <div class="user-point-list">
                         <div class="user-point-list-item total">

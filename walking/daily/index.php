@@ -1,3 +1,11 @@
+<?
+header("Access-Control-Allow-Origin: *");
+
+
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // 과거 아무 때나 잡으면 됨.
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");?>
+
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/common/TRestAPI.php");
@@ -212,6 +220,7 @@ function retValue($val1, $val2){
                 ?>
 
 			</div>
+
 			<!-- //산책 상세 -->
 		</div>
 		<!-- //page-contents -->  
@@ -226,6 +235,26 @@ function jsAlert($year){
 }
 ?>
 <script>
+
+    //스크롤페이징
+    let deviceHeight = window.screen.height;
+    console.log("deviceHeight = " + deviceHeight);
+    let listHeight = $(".accordion-list").height();
+    console.log("listHieght =  " + listHeight);
+
+    let cellHeight = 82;
+
+
+    let headerGroupHeight = $("#header").outerHeight(true) + $(".con-title-group").outerHeight(true);
+    console.log("headerGroupHeight = " + headerGroupHeight)
+
+
+    let cellNumber = Math.floor((deviceHeight)/cellHeight)-2
+
+    console.log(cellNumber)
+
+
+
     $(".btn-page-prev").click(function(){
         var mobile = checkMobile2();
         if(mobile === "in_app_and" || mobile === "in_app_ios"){
@@ -285,7 +314,7 @@ function jsAlert($year){
         form.setAttribute('method', 'post');
         form.setAttribute('action', "/walking/daily/graph.php");
         document.body.appendChild(form);
-        form.submit();
+        form.submit(); 
     });
 
 
@@ -303,6 +332,13 @@ function jsAlert($year){
         objs1.setAttribute('name', 'pet_id');
         objs1.setAttribute('value', <?=$pet_id?>);
         form.appendChild(objs1);
+
+        var objs2 = document.createElement('input');
+        objs2.setAttribute('type', 'hidden');
+        objs2.setAttribute('name', 'cellNumber');
+        objs2.setAttribute('value', cellNumber);
+        form.appendChild(objs2)
+
 
         form.setAttribute('method', 'post');
         form.setAttribute('action', "/walking/daily/history.php");

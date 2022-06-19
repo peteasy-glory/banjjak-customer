@@ -9,12 +9,14 @@ $user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_u
 $pet_type = (isset($_COOKIE['pet_type']))? $_COOKIE['pet_type'] : "dog";
 //$pet_type = (isset($_GET['pet_type']))? $_GET['pet_type'] : "dog";
 
-if($_GET['pet_type'] == "cat"){
+if($pet_type == "cat"){
+    $type = "4";
     $big_banner = "a.odr_4";
     $md_item = "a.is_view_main_7";
     $best_item = "a.is_view_main_9";
     $new_item = "a.is_view_main_8";
 }else{
+    $type = "3";
     $big_banner = "a.odr_3";
     $md_item = "a.is_view_main_3";
     $best_item = "a.is_view_main_5";
@@ -25,7 +27,7 @@ if($_GET['pet_type'] == "cat"){
 $banner_sql = "
     SELECT a.mb_seq, a.link, b.file_path FROM tb_main_banner AS a
     INNER JOIN tb_file AS b ON a.banner = b.f_seq
-    WHERE a.is_delete = '2' AND a.is_use = '1' AND a.type REGEXP '3' ORDER BY {$big_banner} ASC, a.reg_dt DESC
+    WHERE a.is_delete = '2' AND a.is_use = '1' AND a.type REGEXP '{$type}' ORDER BY {$big_banner} ASC, a.reg_dt DESC
 ";
 $banner_array = sql_fetch_array($banner_sql);
 
@@ -36,7 +38,7 @@ $md_item_sql = "
             SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
             FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
             ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND {$md_item} = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt desc";
+    WHERE a.is_delete = '1' AND {$md_item} = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt desc";
 $md_item_array = sql_fetch_array($md_item_sql);
 
 // 베스트 쇼핑템
@@ -46,7 +48,7 @@ $best_item_sql = "
             SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
             FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
             ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND {$best_item} = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt desc";
+    WHERE a.is_delete = '1' AND {$best_item} = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt desc";
 $best_item_array = sql_fetch_array($best_item_sql);
 
 // new 쇼핑템
@@ -56,7 +58,7 @@ $new_item_sql = "
             SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
             FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
             ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND {$new_item} = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30";
+    WHERE a.is_delete = '1' AND {$new_item} = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30";
 $new_item_array = sql_fetch_array($new_item_sql);
 
 //돌아갈 url을 세션에 저장한다.
@@ -105,9 +107,13 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                     foreach($banner_array as $rs){
                                         $path = explode(".", $rs['file_path']);
                                         $path = $path[0]."_1.png";
+                                        $href = "shop_event?seq=".$rs['mb_seq'];
+                                        if($rs['mb_seq'] == '37'){ // 링크없음
+                                            $href = '#';
+                                        }
                                     ?>
 <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"></a></div></div>-->
-                                    <div class="swiper-slide"><div class="slider-item"><a href="shop_event?seq=<?=$rs['mb_seq'] ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a></div></div>
+                                    <div class="swiper-slide"><div class="slider-item"><a href="<?=$href ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a></div></div>
 <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
 <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
                                     <?php
@@ -438,10 +444,18 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                     </div>
                 </div>
                 <div class="footer-customer-menu">
-                    <!--<ul>
-                        <li><a href="#">미용샵/호텔입점신청</a></li>
-                        <li><a href="#">쇼핑입점/제휴광고문의</a></li>
-                    </ul>-->
+                    <ul>
+                        <li><a href="javascript:newWindowOpen();">미용샵/호텔입점신청</a></li>
+                        <li><a href=
+                               <?php
+                               if($user_id == ""){
+                                   echo "/login_1";
+                               }else{
+                                   echo "/home_alliance_request?back=shop";
+                               }
+                               ?>
+                            >쇼핑입점/제휴광고문의</a></li>
+                    </ul>
                 </div>
                 <div class="footer-etc-menu">
                     <ul>
@@ -468,7 +482,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
         //	page-bottom 이 있을 경우 이위치
         <div class="page-bottom">
         </div>
-        -->
+        -->-
         <!-- page-bottom -->
 
         <!-- //page-bottom -->
@@ -550,7 +564,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
         $(document).ready(function(){
             if (getCookie_popup('guide_beauty_shop') != 'Y') {
-                $("#popup").addClass('actived');
+                //$("#popup").addClass('actived'); // 주석 제가하면 팝업 생성
             }
             /*
             new Swiper('.swiper-container', {
@@ -631,6 +645,10 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
             }
         });
+
+        function  newWindowOpen(){
+            window.open("https://ceo.banjjakpet.com/","_blank", "");
+        }
     </script>
 
 

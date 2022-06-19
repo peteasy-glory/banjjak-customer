@@ -37,7 +37,7 @@ if($mode){
             $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
             $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "")? $_POST["pet_seq"] : "";
             $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
-            $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : "";
+            $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : 0;
             $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
             $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
             $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
@@ -66,8 +66,88 @@ if($mode){
                         '".$product."', '".$cellphone."', 'offline-card', 0, now(), now()
                     )";
                 $result = mysqli_query($connection, $sql);
+                $seq = mysqli_insert_id($connection);
+
+                // 회원 등급 확인
+                $sql1 = "
+                    SELECT a.idx, b.grade_ord FROM tb_grade_of_customer a
+                    INNER JOIN tb_grade_of_shop b ON a.grade_idx = b.idx
+                    WHERE a.customer_id = '".$user_id."'
+                    AND b.artist_id = '".$artist_id."'
+                ";
+                $result1 = mysqli_query($connection, $sql1);
+                $datas = mysqli_fetch_object($result1);
+                $cnt = mysqli_num_rows($result1);
+                $grade_ord = $datas->grade_ord;
+                $customer_idx = $datas->idx;
+
+                if($cnt == 0){
+                    // 해당샵 gold 등급 찾아서 넣기
+                    $find_sql = "SELECT idx FROM tb_grade_of_shop WHERE artist_id = '".$artist_id."' AND grade_ord = 2";
+                    $find_result = mysqli_query($connection, $find_sql);
+                    $find_data = mysqli_fetch_object($find_result);
+                    $insert_idx = $find_data->idx;
+
+                    $insert_sql = "INSERT INTO `tb_grade_of_customer` (`grade_idx`, `customer_id`, `is_delete`) VALUES (".$insert_idx.", '".$user_id."', 0);";
+                    $insert_result = mysqli_query($connection, $insert_sql);
+                    $grade_idx = mysqli_insert_id($connection);
+
+                    // 방금 등록한 grade_customer_idx 값 넣기
+                    $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$grade_idx.", 0, NOW(), NOW(), 0);";
+
+                    $result2 = mysqli_query($connection, $sql2);
+                    $mgr_idx = mysqli_insert_id($connection);
+
+                    $select_sql = "SELECT a.cellphone, b.name pet_name, c.name shop_name FROM tb_payment_log a
+                        LEFT JOIN tb_mypet b ON a.pet_seq = b.pet_seq 
+                        LEFT JOIN tb_shop c on a.artist_id = c.customer_id 
+                        WHERE a.payment_log_seq = {$seq}";
+                    $select_result = mysqli_query($connection,$select_sql);
+                    $select_datas = mysqli_fetch_object($select_result);
+                    $cellphone = $select_datas->cellphone;
+                    $pet_name = $select_datas->pet_name;
+                    $shop_name = $select_datas->shop_name;
+
+                    $message = "{$cellphone}님({$pet_name})이 {$month}월{$day}일 {$hour}시{$minute}분 예약승인을 요청하였습니다.";
+                    $path = "https://partner.banjjakpet.com/reserve_pay_management_1?reserve_approval_idx={$mgr_idx}";
+                    $image = "http://gopet.kr/pet/images/app_logo.png";
+                    a_push($artist_id, "[반짝][예약승인대기]", $message, $path, $image);
+
+                    // 관리자 푸시
+                    $admin_message = "{$cellphone}님({$pet_name})이 ({$shop_name})({$artist_id})에 승인요청";
+                    a_push("pickmon@pickmon.com", "[예약승인요청]", $admin_message, "", $image);
+                }else{
+                    if($grade_ord != 1){
+
+                        $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
+
+                        $result2 = mysqli_query($connection, $sql2);
+                        $mgr_idx = mysqli_insert_id($connection);
+
+                        $select_sql = "SELECT a.cellphone, b.name pet_name, c.name shop_name FROM tb_payment_log a
+                        LEFT JOIN tb_mypet b ON a.pet_seq = b.pet_seq 
+                        LEFT JOIN tb_shop c on a.artist_id = c.customer_id 
+                        WHERE a.payment_log_seq = {$seq}";
+                        $select_result = mysqli_query($connection,$select_sql);
+                        $select_datas = mysqli_fetch_object($select_result);
+                        $cellphone = $select_datas->cellphone;
+                        $pet_name = $select_datas->pet_name;
+                        $shop_name = $select_datas->shop_name;
+
+                        $message = "{$cellphone}님({$pet_name})이 {$month}월{$day}일 {$hour}시{$minute}분 예약승인을 요청하였습니다.";
+                        $path = "https://partner.banjjakpet.com/reserve_pay_management_1?reserve_approval_idx={$mgr_idx}";
+                        $image = "http://gopet.kr/pet/images/app_logo.png";
+                        a_push($artist_id, "[반짝][예약승인대기]", $message, $path, $image);
+
+                        // 관리자 푸시
+                        $admin_message = "{$cellphone}님({$pet_name})이 ({$shop_name})({$artist_id})에 승인요청";
+                        a_push("pickmon@pickmon.com", "[예약승인요청]", $admin_message, "", $image);
+                    }
+                }
+
+
                 if ($result === true){ // success
-                    $return_data = array("code" => "000000", "data" => "ok");
+                    $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
                 }else{ // fail
                     $return_data = array("code" => "000000", "data" => "fail");
                 }
@@ -85,7 +165,7 @@ if($mode){
         $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
         $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "")? $_POST["pet_seq"] : "";
         $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
-        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : "";
+        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : 0;
         $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
         $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
         $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
@@ -114,6 +194,9 @@ if($mode){
                         '".$product."', '".$cellphone."', 'bank', 0, now(), now(), '".$expire_time."'
                     )";
             $result = mysqli_query($connection, $sql);
+            $seq = mysqli_insert_id($connection);
+
+
 
             // 알림톡 발송 / PUSH 발송
             $artist_name = explode("|", $product);
@@ -122,10 +205,10 @@ if($mode){
             //$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
             $image = "";
             $admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약(계좌이체 결제 진행중)하였습니다. ".$year."년".$month."월".$day."일 신규 예약등록. 작업스케줄을 관리하세요.";
-            a_push("itseokbeom@gmail.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
+            a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
 
             if ($result === true){ // success
-                $return_data = array("code" => "000000", "data" => "ok");
+                $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
             }else{ // fail
                 $return_data = array("code" => "000000", "data" => "fail");
             }
@@ -140,7 +223,7 @@ if($mode){
         $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
         $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "")? $_POST["pet_seq"] : "";
         $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
-        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : "";
+        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "")? $_POST["is_vat"] : 0;
         $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
         $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
         $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
@@ -167,8 +250,11 @@ if($mode){
                         '".$product."', '".$cellphone."', 'card', 0, now(), now()
                     )";
             $result = mysqli_query($connection, $sql);
+            $seq = mysqli_insert_id($connection);
+
+
             if ($result === true){ // success
-                $return_data = array("code" => "000000", "data" => "ok");
+                $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
             }else{ // fail
                 $return_data = array("code" => "000000", "data" => "fail");
             }

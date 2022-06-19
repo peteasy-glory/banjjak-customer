@@ -1,4 +1,6 @@
 <?php
+const G5_MYSQLI_USE = true;
+
 function alert($str){
 	echo '<script>alert("'.$str.'");</script>';
 }
@@ -48,10 +50,16 @@ function check_bad_word($word) {
 		return 0; // 미포함
 	}
 }
-function app_push($arr_userapikey,$title,$memo,$path,$image){
+function app_push($arr_userapikey,$title,$memo,$path,$image, $is_partner){
 		$result =[];
  		global $connection;
-         $API_ACCESS_KEY= 'AAAAKR8K-yk:APA91bFGTYpY4e0uOZw1IfOmyMc9dQQlDfsXCWKUAkoJBMPudzEdXYuXJVHgkZrmXp8ikj0qKrtb8rV63-jcgCMsEiZaCdwc1bCUyiSrCsayIdcEkFhS29Ok5zK559Bh8c9rYrA-T5cY';
+         //$API_ACCESS_KEY= 'AAAAKR8K-yk:APA91bFGTYpY4e0uOZw1IfOmyMc9dQQlDfsXCWKUAkoJBMPudzEdXYuXJVHgkZrmXp8ikj0qKrtb8rV63-jcgCMsEiZaCdwc1bCUyiSrCsayIdcEkFhS29Ok5zK559Bh8c9rYrA-T5cY';
+
+		if($is_partner == "partner"){ // 파트너앱
+			$API_ACCESS_KEY= 'AAAAexOuErg:APA91bGIHbSkZlt46HZaPelJtBMNPskBVkJ0w9z944k-UkppzuasuiWhpeexSkgnsM3TC7XVExCmkKgbQSk_48-CX54rZmSgtzeLWOjgPbVSdTFJ13No_Hm2kQnH7LxW37fLiS6-_VUE';
+		}else{ // 견주앱
+			$API_ACCESS_KEY= 'AAAAKR8K-yk:APA91bFGTYpY4e0uOZw1IfOmyMc9dQQlDfsXCWKUAkoJBMPudzEdXYuXJVHgkZrmXp8ikj0qKrtb8rV63-jcgCMsEiZaCdwc1bCUyiSrCsayIdcEkFhS29Ok5zK559Bh8c9rYrA-T5cY';
+		}
 		
  		$path = str_replace("http://" , "https://" , $path);
 
@@ -160,26 +168,21 @@ function app_push_iOS($receiver, $title, $memo, $path)
 
 }
 
-function a_push ($customer_id, $title, $memo, $path, $image) 
-{
+function a_push ($customer_id, $title, $memo, $path, $image){
 	global $connection;
 	
-	$sql = "select token, is_android from tb_customer where id = '".$customer_id."';";
+	$sql = "select token, partner_token from tb_customer where id = '".$customer_id."';";
     $result = mysqli_query($connection, $sql);
-    if($rs = mysqli_fetch_object($result)) 
-    {
-        if ($rs->token != null && $rs->token != "") 
-        {	  
-			// 20201012 ulmo IOS push 발송 firebase로 통합발송처리
-	        //if ($rs->is_android == 1)
-	        //{
-		        return app_push($rs->token, $title, $memo, $path, $image);
-	        //}				
-			//else if ($rs->is_android == 2)
-			//{
-			//	return app_push_iOS($rs->token, $title, $memo, $path);
-			//}				
-        }
+    if($rs = mysqli_fetch_object($result)) {
+		$is_partner = (isset($rs->partner_token) && $rs->partner_token != '')? "partner" : "customer";
+		if($customer_id == 'pickmon@pickmon.com'){
+			$is_partner = 'customer';
+		}
+		if($is_partner == 'partner'){
+			return app_push($rs->partner_token, $title, $memo, $path, $image, $is_partner);
+		}else{
+			return app_push($rs->token, $title, $memo, $path, $image, $is_partner);
+		}
     }
     
     return null;
@@ -415,6 +418,7 @@ function sql_fetch($result){
 
 	return $row;
 }
+
 function sql_fetch_array($sql){
 	global $connection;
 	$res = mysqli_query($connection, $sql);

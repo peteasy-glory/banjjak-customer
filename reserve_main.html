@@ -380,6 +380,7 @@ $_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
 			type: 'POST',
 			dataType: 'JSON',
 			success: function(data) {
+                console.log(data.data);
 				if (data.code == "000000") {
 					if (data.data.length <= 0) {
 						isPageEnd = true;
@@ -393,6 +394,8 @@ $_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
 						var photo = "https://image.banjjakpet.com"+img_link_change(data.data[i].front_image);
                         var rating = (data.data[i].rating > 0)? data.data[i].rating : 0;
 						var backUrl = encodeURIComponent(window.location.pathname+'?tab='+tabMenu+'&top='+addrTop+'&middle='+addrMiddle+'&lat='+lat+'&lng='+lng);
+                        // 추천샵 표시
+                        var recommend = (data.data[i].is_recommend == '1')? '<div class="label label-purple small" style="margin-left:7px;height:20px;line-height:17px;"><strong>추천</strong></div>' : '';
 						var html = `
 						<div class="list-cell">
 							<a href="reserve_view?type=beauty&artist_id=`+data.data[i].customer_id+`" class="basic-list-item">
@@ -400,7 +403,9 @@ $_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
 									<img src="` + photo + `" alt="" onerror="this.style.display='none';">
 								</div>
 								<div class="info-wrap">
-									<div class="item-name">`+data.data[i].name+kmTxt+`</div>
+									<div class="item-name" style="line-height:24px;">`+data.data[i].name+kmTxt+recommend+`
+
+                                    </div>
 									<div class="item-grade">
 										<div class="icon icon-size-16 icon-star-yellow"></div><em>`+Math.round(rating)+`</em>(`+data.data[i].commentCnt+`)
 									</div>
@@ -626,6 +631,8 @@ $_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
 		<button type="button" class="btn-pop-close" onclick="productSelectedPopClose();">팝업 닫기</button>
 	</div>
 </section>
+
+
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
 ?>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23.756" height="27.351" viewBox="0 0 23.756 27.351">
+  <g id="그룹_2" data-name="그룹 2" transform="translate(-322.25 -179.219)">
+    <g id="_10_ic_36_shop_location" data-name="10_ic/36/shop_location" transform="translate(323 184.82)">
+      <g id="Group_2" data-name="Group 2">
+        <path id="Oval" d="M8,21s8-8.244,8-12.783A8.111,8.111,0,0,0,8,0,8.111,8.111,0,0,0,0,8.217C0,12.756,8,21,8,21Z" fill="#fff" stroke="#202020" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+        <circle id="Oval-2" data-name="Oval" cx="2.5" cy="2.5" r="2.5" transform="translate(5.647 5.727)" fill="#fff" stroke="#202020" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+    </g>
+    <path id="Stroke_1" data-name="Stroke 1" d="M0,6A6,6,0,1,0,6,0,6,6,0,0,0,0,6Z" transform="translate(328.187 188.552) rotate(-45)" fill="#fff" stroke="#202020" stroke-miterlimit="10" stroke-width="1.2"/>
+    <path id="Stroke_3" data-name="Stroke 3" d="M0,0V7" transform="translate(334.197 186.078) rotate(-45)" fill="none" stroke="#ff4848" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+    <path id="Stroke_5" data-name="Stroke 5" d="M7,0H0" transform="translate(334.197 191.027) rotate(-45)" fill="none" stroke="#ff4848" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+  </g>
+</svg>
