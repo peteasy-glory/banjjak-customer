@@ -1,7 +1,7 @@
 <?php
 $document_root	= $_SERVER['DOCUMENT_ROOT'];
 $document_root2	= "/var/www/html";
-$root_directory = "/user";
+$root_directory = "";
 $upload_directory = "upload";
 $upload_directory2 = "/upload";
 $upload_static_directory = "/var/www/html/subdomain/banjjak_sol/shop";

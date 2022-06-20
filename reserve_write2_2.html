@@ -21,6 +21,10 @@ $pet_seq = (isset($_GET['pet_seq']))? $_GET['pet_seq'] : "";
 $empty = isset($_SESSION['empty']) ? $_SESSION['empty'] : ""; // 빈시간판매하기 여부
 $artist_name = get_artist_id($artist_id);
 
+$shop_sql = "SELECT * FROM tb_shop WHERE customer_id = '".$artist_id."'";
+$shop_result = mysqli_query($connection, $shop_sql);
+$shop_datas = mysqli_fetch_object($shop_result);
+
 if($pet_seq != ""){
 	$pet_sql = "
 		SELECT * FROM
@@ -705,6 +709,9 @@ if($pet_seq != ""){
 
     var pet_type = "<?=$pet_type?>";
 
+    // 추후 시간선택제 구분
+    var is_time_type = "<?=$shop_datas->is_time_type?>";
+
     $(document).ready(function(){
         is_cat();
     });
@@ -963,9 +970,12 @@ if($pet_seq != ""){
     
                 // if(resultArray[1]){
                     resultArray.map(result => {
-                        if(result.sequnce == 1){
+                        if(result.sequnce == 1 && is_time_type == '1'){
                             result.name = serviceName //+ " " + serviceTime + "분"
                             result.price = serviceTime;
+                        }else if(result.sequnce == 1 && is_time_type == '2'){
+                            result.name = serviceName //+ " " + serviceTime + "분"
+                            result.price = 30; // 시간제일 경우 미용시간 30분
                         }
                         breakdownHtml += `<div class="service-selected-list-cell"><div class="list-data">${result.name}</div></div>`;
                     })
