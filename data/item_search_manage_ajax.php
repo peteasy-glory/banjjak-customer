@@ -58,7 +58,7 @@
 		}else if($r_mode == "get_rank") {
 
             $sql = "
-				SELECT * FROM tb_item_rank ORDER BY num
+				SELECT * FROM tb_item_rank WHERE is_shop = '2' ORDER BY num
 			";
             $result = mysqli_query($connection, $sql);
             while ($row = mysqli_fetch_assoc($result)) {

@@ -68,7 +68,15 @@ $is_cat = mysqli_num_rows($result);
                     <?}?>
                         <div class="item-info-wrap">
                             <div class="item-thumb">
-                                <div class="user-thumb large"><img onerror="this.style.display='none';" src="<?= $photo ?>" alt=""></div>
+                                <div class="user-thumb large" style="
+                                <?php
+                                if($type === 'dog'){
+                                    echo 'background:url(/images/icon_dog_90.png) no-repeat; background-size:cover;';
+                                }else{
+                                    echo 'background:url(/images/icon_cat_90.png) no-repeat; background-size:cover;';
+                                }
+                                ?>
+                                "><img onerror="this.style.display='none';" src="<?= $photo ?>" alt=""></div>
                             </div>
                             <div class="item-data">
                                 <div class="item-data-inner">
