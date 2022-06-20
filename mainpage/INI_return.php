@@ -183,7 +183,7 @@
 						$artist_name = $artist_name[2];
 						$user_id = $row['customer_id'];
 						$message = $row['year']."년".$row['month']."월".$row['day']."일 신규 예약등록. 작업스케줄을 관리하세요.";
-						$path = "https://www.gopet.kr/pet/shop/manage_sell_info.php?yy=".$row['year']."&mm=".$row['month']."&dd=".$row['day'];
+						$path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$row['year']."&mm=".$row['month']."&dd=".$row['day'];
 						//$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
 						$image = "";
 						a_push($artist_id, "반짝, 반려생활의 단짝. 신규 예약 알림", $message, $path, $image);

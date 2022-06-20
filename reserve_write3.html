@@ -195,8 +195,8 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
     var pet_type = "<?=$pet_type?>";
 
     // 추후 시간선택제 구분
-    var test = "<?=$shop_datas->is_time_type?>";
-    console.log(test);
+    var is_time_type = "<?=$shop_datas->is_time_type?>";
+    console.log(is_time_type);
 
     // 데이터 꺼내보기
     var etcResultArray = JSON.parse(<?=$etcResultArray?>);
@@ -299,7 +299,14 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                         }else{
                             input_type = 'radio';
                         }
-                        html += '           <div class="list-cell"><label class="form-toggle-box" onclick="clickTime(\''+time+'\','+(seviceTime-1)+','+(timeStart/50)+','+v.seq+',\''+v.name+'\')"><input type="'+input_type+'" name="time1" id="'+v.seq+"_"+(timeStart/50)+'"><em>'+time+'</em></label></div>';
+
+                        // 타임제일경우
+                        var disabled = "";
+                        if(is_time_type == '2'){
+                            disabled = 'disabled';
+                            input_type = 'radio';
+                        }
+                        html += '           <div class="list-cell"><label class="form-toggle-box" onclick="clickTime(\''+time+'\','+(seviceTime-1)+','+(timeStart/50)+','+v.seq+',\''+v.name+'\')"><input type="'+input_type+'" name="time1" id="'+v.seq+"_"+(timeStart/50)+'" '+disabled+'><em>'+time+'</em></label></div>';
                     }
                     // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>10:30</em></label></div>';
                     // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>11:30</em></label></div>';
@@ -320,13 +327,48 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                     // }else{
                     //     console.log("testnot")
                     // }
-                    getArtistTime(v.name,date,v.seq); // 미용있는 시간 비활성화
-                    getArtistHoliday(v.name,v.seq); // 휴무 파악 후 뿌려주기
+                    if(is_time_type == '2'){
+                        getTimeSchedule(v.name,date,v.seq); // 타임제 해보자
+                    }else{
+                        getArtistTime(v.name,date,v.seq); // 미용있는 시간 비활성화
+                    }
+
+                    //getRestTime(v.seq); // 휴게시간 비활성화
+                    //getArtistHoliday(v.name,v.seq); // 휴무 파악 후 뿌려주기
                 });
 
                 console.log(timeResultArray);
                 $("#worker_list").html(html);
 
+            }
+        });
+    }
+
+    function getTimeSchedule(name,date,seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "time_schedule",
+                artist_id : '<?=$artist_id?>',
+                worker : name,
+                selectDate : date
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                var time_data = json.data[0].res_time_off;
+                var time_array = time_data.split(",");
+
+                $(time_array).each(function (i,v){
+                    var start_time = v.split("~")[0];
+                    var split_time = start_time.split(":");
+
+                    var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
+                    var disabled = "#"+seq+"_"+(timeStart/50);
+                    $(disabled).attr("disabled", false); // 시간제일경우 선택된 타임만 선택가능
+
+                });
+                getArtistTime(name,date,seq);
             }
         });
     }
@@ -354,6 +396,35 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                         $(disabled).attr("disabled", true);
                     }
                 });
+                getRestTime(name,seq); // 휴게시간 비활성화
+            }
+        });
+    }
+
+    function getRestTime(name,seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "rest_time",
+                artist_id : '<?=$artist_id?>'
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                var time_data = json.data[0].res_time_off;
+                var time_array = time_data.split(",");
+                console.log(time_array);
+
+                $(time_array).each(function (i,v){
+                    var start_time = v.split("~")[0];
+                    var split_time = start_time.split(":");
+
+                    var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
+                    var disabled = "#"+seq+"_"+(timeStart/50);
+                    $(disabled).attr("disabled", true); // 시간제일경우 선택된 타임만 선택가능
+
+                });
+                getArtistHoliday(name,seq);
             }
         });
     }
@@ -410,7 +481,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
     }
 
     function clickTime(time,timeCnt,j,seq,name){
-        if(pet_type == 'dog'){
+        if(pet_type == 'dog' && is_time_type == '1'){
             $("input[name=time1]").prop('checked', false);
             var is_disabled = 0;
             var is_disabled_brfore = 0;

@@ -19,7 +19,6 @@ if ($app->is_app() == 1) {
     $is_android = 1;
 }
 
-$data_ajax_url = "/user/data";
 $crypto = new Crypto();
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
 $artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "" ;
@@ -137,7 +136,8 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 				<div class="form-group">
 					<form id="form_reservation" >
                     <input type="hidden" id="artist_id" name="artist_id" value="<?= $customer_id ?>" />
-                    <input type="hidden" id="customer_id" name="customer_id" value="<?= $user_id ?>" />
+                        <input type="hidden" id="customer_id" name="customer_id" value="<?= $user_id ?>" />
+
                     <?php
                     $name_for_owner = ""; 
                     $type = "";
@@ -225,6 +225,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                     ?>
             
                     <input type="hidden" id="before_pet_name" name="before_pet_name" value="<?= $name_for_owner ?>" />
+                    <input type="hidden" id="photo_counseling" name="photo_counseling" value="<?= $photo_counseling ?>" />
                     <?php
                     $cellphone_sql = "SELECT cellphone FROM tb_customer WHERE id = '{$user_id}'";
                     $cellphone_result = mysqli_query($connection, $cellphone_sql);
@@ -523,24 +524,18 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 					</div>		
 					<div class="form-group-cell">
 						<div class="form-group-item">
-							<!--<div class="form-item-label">현재 아이 모습</div>-->
-							<!--<div class="form-item-data type-2">
+							<div class="form-item-label">현재 아이 모습</div>
+							<div class="form-item-data type-2">
 								<div class="grid-layout btn-grid-group">
 									<div class="grid-layout-inner">
-                                        <?php if($is_android == "1"){ ?>
-										<div class="grid-layout-cell grid-2"><div class="btn btn-outline-gray btn-middle btn-round">
-											<input type="file" class=""/>
+										<a href="javascript:onClickProfileUpdate();" class="grid-layout-cell grid-2"><div class="btn btn-outline-gray btn-middle btn-round">
+                                                <input type="file" accept="image/*" name="imgupfile" id="addimgfile" style="display: none;" />
 											<div class="icon icon-size-24 icon-file-gray mr-px-10"></div>사진 첨부</div>
-										</div>
-										<div class="grid-layout-cell grid-2">
+										</a>
+										<!--<div class="grid-layout-cell grid-2">
                                             <a href="#" class="btn btn-outline-gray btn-middle btn-round"><div class="icon icon-size-24 icon-camera-gray mr-px-14"></div>사진 촬영</a>
-                                        </div>
-                                        <?php }else{ ?>                                            
-                                        <div class="grid-layout-cell grid-2"><a class="btn btn-outline-gray btn-middle btn-round upload_img_btn">
-                                            <div class="icon icon-size-24 icon-file-gray mr-px-10"></div>사진 첨부</a>
-                                        </div>
-                                        <?php } ?>   
-                                        <input type="hidden" name="photo_counseling" value="<?=$photo_counseling ?>" /> 
+                                        </div>-->
+                                        <input type="hidden" name="photo_counseling" value="<?=$photo_counseling ?>" />
 									</div>
 								</div>
 								<div class="file-preview">
@@ -549,10 +544,10 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 											<div class="item-visual"><img src="/static/pub/images/icon/img-illust-3@2x.png" alt="" width="103"></div>
 											<div class="item-info">업로드된 이미지가 없습니다.<br><span>*사진을 첨부하시면 정확한 상담이 가능합니다.</span></div>
 										</div>
-									</div>-->
-									<!-- file-preview-data 클래스에 actived클래스 추가시 활성화 -->
-									<!--<div class="file-preview-data"><img src="/static/pub/images/gate_picture.jpg" lalt=""/></div>
-								</div>-->			
+									</div>
+									<!-- file-preview-data 클래스에 actived 클래스 추가시 활성화 -->
+                                    <div class="file-preview-data"><img src="/static/pub/images/gate_picture.jpg" id="con_img" lalt=""/></div>
+								</div>
 								<label class="form-checkbox "><input id="check_agree" type="checkbox" name="check"><span class="form-check-icon"><em>펫 정보를 최대한 정확하게 입력하였으며, 펫샵에 정보가 제공되는 것에 동의합니다.</em></span></label>
 							</div>
 						</div>
@@ -571,36 +566,16 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 
 </section>
 <!-- //container -->
-<?php // 파일업로드용 ?>
-<input id="fileupload" type="file" name="files[]" data-url="<?=$data_ajax_url?>/fileupload_ajax.php"  multiple style="display: none;" />
+
 <script>
 
-    var is_possable_dog = "<?=$is_possable_dog ?>";
-    var is_possable_cat = "<?=$is_possable_cat ?>";
-    var img_list = [];             
-
-    $('#fileupload').fileupload({
-        type : "POST",
-        formData: {
-			mode: "upload_img",
-			target: "tb_item_list.product_img",
-			folder: "hello"
-		},
-        dataType: 'json',   
-        done: function (e, data) {
-            console.log(data.result);
-        },
-        error:function(request,status,error){
-            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-        }
-    })                                            
 
     function get_pet_type_list() {
         var pet_kind = $('input[name="pet_kind"]:checked').val();
         var post_data = 'pet_type=' + pet_kind;
 
         $.ajax({
-            url: '/data/get_pet_type',
+            url: '/data/get_pet_type.php',
             data: post_data,
             type: 'POST',
             success: function(data) {
@@ -655,13 +630,13 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
         }
     }
 
-    $(document).on("click", ".upload_img_btn", function(){
-        if(img_list.length < 3){
-            $("#fileupload").trigger("click");
-        }else{
-            alert("최대 3장까지 업로드가 가능합니다.");
-        }
-    });
+    // $(document).on("click", ".upload_img_btn", function(){
+    //     if(img_list.length < 3){
+    //         $("#fileupload").trigger("click");
+    //     }else{
+    //         alert("최대 3장까지 업로드가 가능합니다.");
+    //     }
+    // });
 
 
     function isCellPhone(val) {
@@ -679,13 +654,13 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
         }
         
         var pet_kind = $("input[name='pet_kind']:checked").val();
-        if(pet_kind == "dog" && is_possable_dog != "1"){
+        /*if(pet_kind == "dog" && is_possable_dog != "1"){
             alert("개와 관련된 상품을 판매하지 않는 펫샵입니다. 상품을 확인해주세요.");
             return;
         }else if(pet_kind == "cat" && is_possable_cat != "1"){
             alert("고양이와 관련된 상품을 판매하지 않는 펫샵입니다. 상품을 확인해주세요.");
             return;
-        }
+        }/*
 
         if ($('#pet_name').val() == "") {
             alert('이름을 입력해주세요.');
@@ -763,6 +738,191 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
             }
         });				
     }
+
+    /////////////////////////////////////////// 사진등록 시작
+    function onClickProfileUpdate() {
+        var is_android = checkMobile();
+        if(is_android == true){
+            galleryup();
+        } else {
+            MemofocusNcursor();
+        }
+    }
+
+    function checkMobile(){
+
+        var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+        if ( varUA.indexOf('android') > -1) {
+            //안드로이드
+            return true;
+        } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+            //IOS
+            return 'ios';
+        } else {
+            //아이폰, 안드로이드 외
+            return 'other';
+        }
+
+    }
+
+    //////////////// 안드로이드 시작
+    function galleryup() {
+        //alert("갤러리")
+        window.Android.openGallery();
+    }
+
+    function cameraup() {
+        //alert("카메라")
+        window.Android.openCamera();
+    }
+
+    //안드에서 업로드가 끝나면 무조건 호출..
+    function uploadEnd(fileName) {
+        $(".fileuparea2").hide();
+        $("#fileuplodingarea").show();
+
+        var newfilename = GetPhotoFilename('appupload_photo', '<?= $user_id ?>', fileName);
+        var post_data =
+            'filepath=' + fileName +
+            '&newfilepath=' + newfilename +
+            '&payment_log_seq=' + '<?= $payment_log_seq ?>' +
+            '&artist_id=' + '<?= $artist_id ?>';
+
+        $.ajax({
+            url: 'mainpage/upload_usages_review_photo_byapp.php',
+            data: post_data,
+            type: 'POST',
+            success: function(data) {
+                $(".fileuparea2").show();
+                $("#fileuplodingarea").hide();
+                // alert(data)
+                //      return;
+                if (/(MSIE|Trident)/.test(navigator.userAgent)) {
+                    // ie 일때 input[type=file] init.
+                    $("#addimgfile").replaceWith($("#addimgfile").clone(true));
+                } else {
+                    // other browser 일때 input[type=file] init.
+                    $("#addimgfile").val("");
+                }
+
+                if ($("#con_img").val() == "" || $("#con_img").val() == undefined) {
+                    $("#con_img").val('<?= $upload_directory2 ?>' + '/' + newfilename);
+                } else {
+                    $("#con_img").val($("#con_img").val() + '|' + '<?= $upload_directory2 ?>' + '/' + newfilename);
+                }
+
+                review_img_arr = $("#con_img").val().split('|');
+                if (review_img_arr.length > 0) {
+
+                    var review_img_output = "";
+                    for (i = 0; i < review_img_arr.length; i++) {
+                        review_img_output += '<img id="img_arr_' + i + '" src="' + review_img_arr[i] + '" onclick="review_img_delete(' + i + ')">';
+                    }
+                    $(".con_img").html(review_img_output);
+                    $(".con_img").show();
+                }
+            },
+            error: function(xhr, status, error) {
+                //alert(error + "네트워크에러");
+                if(xhr.status != 0){
+                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                }
+            }
+        });
+    }
+    //////////////// 안드로이드 끝
+
+
+    function MemofocusNcursor() {
+        html = "<div id='upimgarea'></div>";
+        // document.getElementById('memo').focus();
+        var sel, range;
+        if (window.getSelection) {
+            // IE9 and non-IE
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+
+                // Range.createContextualFragment() would be useful here but is
+                // non-standard and not supported in all browsers (IE9, for one)
+                var el = document.createElement("div");
+                el.innerHTML = html;
+                var frag = document.createDocumentFragment(),
+                    node, lastNode;
+                while ((node = el.firstChild)) {
+                    lastNode = frag.appendChild(node);
+                }
+                range.insertNode(frag);
+
+                // Preserve the selection
+                if (lastNode) {
+                    range = range.cloneRange();
+                    range.setStartAfter(lastNode);
+                    range.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+        } else if (document.selection && document.selection.type != "Control") {
+            // IE < 9
+            document.selection.createRange().pasteHTML(html);
+        }
+        $("#addimgfile").trigger("click");
+    }
+
+    $('#addimgfile').bind('change', function(e) {
+
+        var upload_chk = "0";
+        if(upload_chk == "0"){
+            upload_chk = "1";
+            var ext = $('#addimgfile').val().split('.').pop().toLowerCase();
+            if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                alert('gif,png,jpg,jpeg 파일만 업로드 할수 있습니다.');
+                return;
+            }
+
+            var filename = $("input[name=imgupfile]")[0].files[0].name;
+            var newfilename = GetPhotoFilename('counseling', '<?= $user_id ?>', filename);
+            var formData = new FormData();
+
+            formData.append("myfile", $("input[name=imgupfile]")[0].files[0]);
+            formData.append("filepath", newfilename);
+
+            $.ajax({
+                url: 'data/upload_first_counseling_photo.php',
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data) {
+                    if (/(MSIE|Trident)/.test(navigator.userAgent)) {
+                        // ie 일때 input[type=file] init.
+                        $("#addimgfile").replaceWith($("#addimgfile").clone(true));
+                    } else {
+                        // other browser 일때 input[type=file] init.
+                        $("#addimgfile").val("");
+                    }
+
+                    //if ($("#con_img").val() == "" || $("#con_img").val() == undefined) {
+                        $("#con_img").attr('src',"https://image.banjjakpet.com/upload/"+newfilename);
+                        $(".file-preview-data").addClass('actived');
+                    //}
+                    $('#photo_counseling).val(data);
+
+
+                },
+                error: function(xhr, status, error) {
+                    // alert(error+"에러발생");
+                }
+            });
+
+        }else{
+            alert("사진파일 업로드 중입니다.");
+        }
+    });
+
 </script>
 
 	
