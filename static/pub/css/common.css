@@ -825,6 +825,98 @@ h6.con-title {font-size:15px; line-height:20px;}
 /*2022.06.17 산책일지 더보기*/
 .list-loading {width:30px; height: 30px;margin:0 auto; display: none;}
 
+/*2022.06.17 산책일지 그래프 */
+.chart-wrap{width:calc(100vw - 40px); margin-top:18px;  max-height:600px; height:100vh; display: flex; flex-direction: column; align-items: center}
+.legend-wrap{ width:100%; height:30px; display: flex; align-items: center; justify-content: center}
+.legend-wrap-item{display: flex; align-items: center; margin-right:20px;}
+.legend-dist-round {width:10px; height: 10px; border-radius: 5px; background:#6840b1; margin-right:10px;}
+.legend-div-line {width:10px; height: 4px; background: #eaa2a5; margin-right:10px;}
+.legend-time-round {width:10px; height: 10px; border-radius: 5px; background: #fdd94e; margin-right:10px;}
+.legend-span {font-size:12px; color:#8f8f8f;}
+
+.chart-view{width:100%; height: 100%; margin-top:10px; position: relative}
+
+.chart-back{display:flex; width: 100%; height: 100%; justify-content: center; position: absolute; z-index: 5;}
+.chart-back-left{display:flex; width:calc(50% - 23.5px);justify-content: center}
+.chart-back-right{display:flex; width:calc(50% - 23.5px);justify-content: center}
+
+.chart-grid-left{border-left:1px solid #f4f4f4; width:19px; height: 100%;}
+.chart-grid-left-dash{border-left : 1px dashed #f4f4f4 !important;}
+.chart-grid-middle{width:47px;height: 100%;}
+.chart-grid-right{border-right:1px solid #f4f4f4; width:19px; height: 100%;}
+.chart-grid-right-dash{border-right:1px dashed #f4f4f4 !important;}
+
+.chart-front{display:flex; flex-direction: column;z-index: 10; width:100%; height: 100%; position: absolute;}
+.chart-front-container{display: flex; width:100%; height: 10px;  margin: 4px 0px 4px 0px; justify-content: center;}
+.chart-front-left-box{height: 100%; width: calc(50% - 23.5px); display:flex;justify-content: flex-end; max-width:140px;}
+.chart-front-left{position:relative;background: #c5a5ff;border-top-left-radius: 10px; border-bottom-left-radius: 10px; height: 100%;}
+.chart-front-middle{ width:47px; height:100%; background: white; color:#8f8f8f; font-size:10px; display:flex; align-items: center; justify-content: center}
+.chart-front-right-box{width:calc(50% - 23.5px); height: 100%; max-width:140px; }
+.chart-front-right{background: #ffea9c; border-top-right-radius: 10px; border-bottom-right-radius: 10px; height: 100%}
+
+
+.chart-front-left-active{
+	background: #6840b1;
+	position: relative;
+}
+.chart-front-left-balloon{
+	position:relative;
+	bottom:20px;
+	background: #6840b1;
+	border-radius: 9.5px;
+	width:30px;
+	height: 15px;
+	font-size:10px;
+	color:white;
+	text-align: center;
+	display: none;
+	right:20px;
+}
+.chart-front-left-balloon:after{
+	border-top:8px solid #6840b1;
+	border-left:8px solid transparent;
+	content:"";
+	position: absolute;
+	top:12px;
+	left:20px;
+	transform:rotate(-17deg);
+
+}
+
+.chart-front-right-balloon{
+	position:relative;
+	bottom:20px;
+	background: #fdd94e;
+	border-radius: 9.5px;
+	width:30px;
+	height: 15px;
+	font-size:10px;
+	color:#202020;
+	text-align: center;
+	display: none;
+	right:-20px;
+
+}
+.chart-front-right-balloon:after{
+	border-top:8px solid #fdd94e;
+	border-right:8px solid transparent;
+	content:"";
+	position: absolute;
+	top:12px;
+	right:20px;
+	transform:rotate(17deg);
+
+}
+.chart-front-right-active{
+	background: #fdd94e;
+	position: relative;
+}
+.chart-div{display:flex;justify-content: center; height: 100%}
+.chart-div-left-box{height:100%; width:calc(50% - 23.5px); display:flex; justify-content: flex-end;}
+.chart-div-left{border-left:1px solid #eaa2a5; height:100%; }
+.chart-div-right-box{height:100%; width:calc(50% - 23.5px); display: flex;}
+.chart-div-right{border-right:1px solid #eaa2a5; height:100%;}
+
 
 
 /* 정보성 테이블 */

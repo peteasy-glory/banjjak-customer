@@ -58,7 +58,7 @@ if (count($dist_arr) > 0){
 ?>
 
 <!-- header -->
-<header id="header">	
+<header id="header">
 	<div class="header-left">
 		<a href="../daily" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
@@ -67,10 +67,10 @@ if (count($dist_arr) > 0){
 <!-- //header -->
 
 <!-- container -->
-<section id="container"> 
-	<!-- page-body -->    
+<section id="container">
+	<!-- page-body -->
 	<div class="page-body">
-		<!-- walk-graph-view -->  
+		<!-- walk-graph-view -->
 		<div class="walk-graph-view">
 			<div class="horizontal-swiper-scoller">
 				<div class="scroller-inner">
@@ -78,7 +78,7 @@ if (count($dist_arr) > 0){
 						<canvas id="verticalBar1" ></canvas>
 					</div>
 				</div>
-			</div>		
+			</div>
 
 			<div class="basic-data-group vvsmall3">
 				<div class="con-title-group">
@@ -124,9 +124,9 @@ if (count($dist_arr) > 0){
                 </div>
             </div>
 		</div>
-		<!-- //walk-graph-view -->  
+		<!-- //walk-graph-view -->
 	</div>
-	<!-- //page-body -->    
+	<!-- //page-body -->
 
 </section>
 <!-- //container -->
@@ -180,8 +180,7 @@ if (count($dist_arr) > 0){
             data: verticalBarData,
             options: {
                 reponsive: true,
-                maintainAspectRatio: false,
-                title: {
+                maintainAspectRatio: false,                title: {
                     display: true
                 },
                 legend: {
@@ -249,6 +248,6 @@ if (count($dist_arr) > 0){
 
     });
 </script>
-	
+
 </body>
 </html>
