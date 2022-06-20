@@ -225,7 +225,6 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                     ?>
             
                     <input type="hidden" id="before_pet_name" name="before_pet_name" value="<?= $name_for_owner ?>" />
-                    <input type="hidden" id="photo_counseling" name="photo_counseling" value="<?= $photo_counseling ?>" />
                     <?php
                     $cellphone_sql = "SELECT cellphone FROM tb_customer WHERE id = '{$user_id}'";
                     $cellphone_result = mysqli_query($connection, $cellphone_sql);
@@ -535,7 +534,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 										<!--<div class="grid-layout-cell grid-2">
                                             <a href="#" class="btn btn-outline-gray btn-middle btn-round"><div class="icon icon-size-24 icon-camera-gray mr-px-14"></div>사진 촬영</a>
                                         </div>-->
-                                        <input type="hidden" name="photo_counseling" value="<?=$photo_counseling ?>" />
+                                        <input type="hidden" id="photo_counseling" name="photo_counseling" value="<?=$photo_counseling ?>" />
 									</div>
 								</div>
 								<div class="file-preview">
@@ -660,7 +659,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
         }else if(pet_kind == "cat" && is_possable_cat != "1"){
             alert("고양이와 관련된 상품을 판매하지 않는 펫샵입니다. 상품을 확인해주세요.");
             return;
-        }/*
+        }*/
 
         if ($('#pet_name').val() == "") {
             alert('이름을 입력해주세요.');
@@ -779,25 +778,21 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 
     //안드에서 업로드가 끝나면 무조건 호출..
     function uploadEnd(fileName) {
-        $(".fileuparea2").hide();
-        $("#fileuplodingarea").show();
 
         var newfilename = GetPhotoFilename('appupload_photo', '<?= $user_id ?>', fileName);
         var post_data =
             'filepath=' + fileName +
-            '&newfilepath=' + newfilename +
-            '&payment_log_seq=' + '<?= $payment_log_seq ?>' +
-            '&artist_id=' + '<?= $artist_id ?>';
+            '&newfilepath=' + newfilename;
+        var formData = new FormData();
+        formData.append("filepath", fileName);
+        formData.append("newfilepath", newfilename);
 
         $.ajax({
-            url: 'mainpage/upload_usages_review_photo_byapp.php',
+            url: 'data/upload_first_counseling_photo_byapp.php',
             data: post_data,
             type: 'POST',
             success: function(data) {
-                $(".fileuparea2").show();
-                $("#fileuplodingarea").hide();
-                // alert(data)
-                //      return;
+
                 if (/(MSIE|Trident)/.test(navigator.userAgent)) {
                     // ie 일때 input[type=file] init.
                     $("#addimgfile").replaceWith($("#addimgfile").clone(true));
@@ -806,22 +801,13 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                     $("#addimgfile").val("");
                 }
 
-                if ($("#con_img").val() == "" || $("#con_img").val() == undefined) {
-                    $("#con_img").val('<?= $upload_directory2 ?>' + '/' + newfilename);
-                } else {
-                    $("#con_img").val($("#con_img").val() + '|' + '<?= $upload_directory2 ?>' + '/' + newfilename);
-                }
+                //if ($("#con_img").val() == "" || $("#con_img").val() == undefined) {
+                $("#con_img").attr('src',"https://image.banjjakpet.com/upload/"+newfilename);
+                $(".file-preview-data").addClass('actived');
+                //}
+                console.log(data);
+                $('#photo_counseling').val(data);
 
-                review_img_arr = $("#con_img").val().split('|');
-                if (review_img_arr.length > 0) {
-
-                    var review_img_output = "";
-                    for (i = 0; i < review_img_arr.length; i++) {
-                        review_img_output += '<img id="img_arr_' + i + '" src="' + review_img_arr[i] + '" onclick="review_img_delete(' + i + ')">';
-                    }
-                    $(".con_img").html(review_img_output);
-                    $(".con_img").show();
-                }
             },
             error: function(xhr, status, error) {
                 //alert(error + "네트워크에러");
@@ -909,7 +895,8 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                         $("#con_img").attr('src',"https://image.banjjakpet.com/upload/"+newfilename);
                         $(".file-preview-data").addClass('actived');
                     //}
-                    $('#photo_counseling).val(data);
+                    console.log(data);
+                    $('#photo_counseling').val(data);
 
 
                 },

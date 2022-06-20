@@ -56,9 +56,11 @@ $s3->fileToS3($upload_static_directory2.$upload_direcoty_full_path, $upload_dire
 //==fileupload==//
 
 // image size
-//$size = @getimagesize($upload_static_directory2.$upload_direcoty_full_path);
-$img_x = 0;
-$img_y = 0;
+$size = @getimagesize($upload_static_directory2.$upload_direcoty_full_path);
+//$img_x = 0;
+//$img_y = 0;
+$img_x = $size[0];
+$img_y = $size[1];
 $r_target = "tb_mypet.photo_counseling";
 
 //global $connection;

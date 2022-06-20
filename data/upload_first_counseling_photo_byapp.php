@@ -17,10 +17,10 @@ make_user_directory($upload_static_directory2.$upload_directory2, $user_id);
 $allowed_ext = array('jpg','jpeg','png','gif');
 
 // 변수 정리
-$filename = $_REQUEST['file'];
+$filename = $_REQUEST['filepath'];
 $filename = trim($filename);
 
-$new_filename = $_REQUEST['filepath'];
+$new_filename = $_REQUEST['newfilepath'];
 $new_filename = trim($new_filename);
 $ext = array_pop(explode('.', $filename));
 
@@ -104,15 +104,32 @@ if($exifData['Orientation']){
 }
 
 $s3 = new TAwsS3('banjjak-s3', 'AKIATLSPGL6BNM6VOYWX', 'JJagfUCVzN4fCOrX3cdGHlX+8WL9PJ7T0GUHlFao');
-$s3->resizeImage($upload_static_directory2.$upload_direcoty_full_path, $upload_static_directory2.$upload_direcoty_full_path);
-$s3->fileToS3($upload_static_directory2.$upload_direcoty_full_path, $upload_directory."/".$new_filename);
+$s3->resizeImage($target, $target);
+$s3->fileToS3($target, $upload_directory."/".$new_filename);
 @unlink($imgpath);
 //==fileupload==//
 
-//global $connection;
-$sql = "update tb_mypet set photo = '".$upload_direcoty_full_path."' where pet_seq = '".$pet_seq."';";
-$result = mysqli_query($connection, $sql);
+// image size
+//$size = @getimagesize($target);
+$img_x = 0;
+$img_y = 0;
+$r_target = "tb_mypet.photo_counseling";
 
-echo json_encode($result);
+//global $connection;
+$sql = "
+    INSERT INTO tb_file (
+        `tmp_name`, `file_name`, `file_path`, `file_type`, `img_x`, 
+        `img_y`, `target`, `reg_dt`
+    ) VALUES (
+        'appupload', '".$new_filename."', '".$upload_direcoty_full_path."', '".$ext."', '".$img_x."',
+        '".$img_y."', '".$r_target."', NOW()
+    )
+";
+$result = mysqli_query($connection, $sql);
+$review_seq = mysqli_insert_id($connection);
+
+echo json_encode($review_seq);
+
 //}
 ?>
+
