@@ -655,7 +655,9 @@ $INI_url = array(
 
         // 미용종료시간 구하기
         var start_time = timeResultArray[0].time;
-        start_time = start_time.replace(':','');
+        var start_time_min = (start_time.split(':')[1] == '30')? '50' : '00';
+        start_time = start_time.split(':')[0]+start_time_min;
+        //start_time = start_time.replace(':','');
         console.log(start_time);
         var beauty_time = (pet_type == 'dog')? serviceResultArray[1].price : 30;
         for(var i=0;i<beauty_time/30;i++){

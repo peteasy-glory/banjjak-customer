@@ -163,7 +163,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
 					$timediff = (strtotime($_e_date) - strtotime($_s_date)) / 60; // minute
 				}
                 ?>
-                <a href="#" class="user-receipt-item">
+                <div class="user-receipt-item">
                     <?php
                     $grade_sql = "select * from tb_grade_reserve_approval_mgr where payment_log_seq = {$payment_log_seq}";
                     $grade_result = mysqli_query($connection,$grade_sql);
@@ -642,7 +642,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                         <div class="total-option-list">
                             <div class="total-option"> 출장비 : <?= number_format($per_diem) ?>원</div>
                             <?
-                            $vat_price = 0;
+                            $vat_price = 0; 
                             if ($is_vat) {
                                 $vat_price = ($total_price / 10);
                                 $total_price = $total_price + $vat_price;
@@ -668,7 +668,21 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                         </div>                    
                     </div>
                     <!-- //최종 가격 -->
-                              </a>
+                    <?php
+                    if($type != 'cancel'){
+                    ?>
+                        <!--<div class="basic-data-group vmiddle">
+                            <div class="grid-layout btn-grid-group">
+                                <div class="grid-layout-inner">
+                                    <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">예약변경</button></div>
+                                    <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-outline-purple btn-middle-size btn-round">예약 취소</button></div>
+                                </div>
+                            </div>
+                        </div>-->
+                    <?php
+                    }
+                    ?>
+                  </div>
 
 
 
