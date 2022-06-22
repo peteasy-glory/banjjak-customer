@@ -96,7 +96,7 @@ if (count($dist_arr) > 0){
                     if(count($graph_month) > 0){
                         echo  '<select class="arrow" id="choice_month">';
                     }
-                    ?>6yt
+                    ?>
                     <?php
                     for($i=0; $i < count($graph_month); $i++){
                         if($graph_month[$i] == $select_month){
@@ -366,13 +366,13 @@ if (count($dist_arr) > 0){
             $(this).addClass('chart-front-right-active')
             $(this).children('div').css("display","block");
             if($(this).width() < 25){
-                console.log($(this).width())
-                console.log("25이하");
+                // console.log($(this).width())
+                // console.log("25이하");
                 $(this).children('div').css("right",`-${$(this).width()}px`)
             }else{
-                console.log($(this).width())
-                console.log("25이상");
-                $(this).children('div').css("right",`-${$(this).width()-10}px`)
+                // console.log($(this).width())
+                // console.log("25이상");
+                $(this).children('div').css("right",`-${$(this).width()-25}px`)
             }
 
 

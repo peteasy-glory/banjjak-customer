@@ -820,7 +820,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 .track-thumb{ width:60px; height: 60px; border-radius: 5px; border:1px solid #8F8F8F;margin: 0px 0px 12px 12px; position:absolute; left:0; bottom:0;}
 
 /*2022.06.14 추가 산책일지 photo-exist icon*/
-.btn-accordion-menu-exist-after{padding:14px 35px 13px 16px !important; justify-content:space-between !important;}
+.btn-accordion-menu-exist-after{background:white;z-index:5;padding:14px 35px 13px 16px !important; justify-content:space-between !important;}
 
 /*2022.06.17 산책일지 더보기*/
 .list-loading {width:30px; height: 30px;margin:0 auto; display: none;}
@@ -864,7 +864,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 	bottom:20px;
 	background: #6840b1;
 	border-radius: 9.5px;
-	width:30px;
+	width:40px;
 	height: 15px;
 	font-size:10px;
 	color:white;
@@ -888,7 +888,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 	bottom:20px;
 	background: #fdd94e;
 	border-radius: 9.5px;
-	width:30px;
+	width:40px;
 	height: 15px;
 	font-size:10px;
 	color:#202020;
@@ -916,6 +916,17 @@ h6.con-title {font-size:15px; line-height:20px;}
 .chart-div-left{border-left:1px solid #eaa2a5; height:100%; }
 .chart-div-right-box{height:100%; width:calc(50% - 23.5px); display: flex;}
 .chart-div-right{border-right:1px solid #eaa2a5; height:100%;}
+
+
+/* 2022.06.20 산책일지 map resize*/
+/*.detail-resize{*/
+/*	position: relative;*/
+/*	max-height:350px;*/
+/*}*/
+/*.detail-resize > img{position: relative; top:-300px;}*/
+
+
+/*2022.06.22 오늘의 메세지*/
 
 
 
