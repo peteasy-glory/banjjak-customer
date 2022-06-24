@@ -1086,7 +1086,11 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
             location.replace('reserve_review_report?review_seq='+review_seq+'&artist_id=<?=$artist_id?>&payment_log_seq='+payment_log_seq+'&review_id='+review_id);
         }
     });
-    
+
+
+    let info_name = '<?= $artist_datas->name ?>';
+
+    $("meta[property='og\\:description']").attr("content",info_name);
 </script>
 
 

@@ -52,6 +52,7 @@ $percent = ($product_row['product_price'] == 0 || $product_row['sale_price'] == 
 $img_sql = "SELECT * FROM tb_file WHERE f_seq IN (".$product_row['product_img'].") AND is_delete ='1'";
 $img_array = sql_fetch_array($img_sql);
 
+
 // 리뷰 정보
 $review_sql = "
     SELECT a.*, b.photo, b.nickname FROM tb_item_review a
@@ -1701,6 +1702,17 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
         if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + '; SameSite=None; Secure=true; ';
         document.cookie = cookies;
     }
+
+
+    // meta 태그 관련
+
+    let info_name = '<?=$product_row['product_name']?>';
+
+    //let info_image = 'https://image.banjjakpet.com<?//=img_link_change($img_array[0]['file_path'])?>//';
+
+    $("meta[property='og\\:description']").attr("content",info_name);
+    // $("meta[property='og\\:image']").attr("content",info_image);
+
 
 </script>
 <?
