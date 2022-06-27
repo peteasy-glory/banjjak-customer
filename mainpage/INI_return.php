@@ -537,7 +537,8 @@
 				if("<?=$return_arr['P_NOTI'] ?>" == "beauty"){
 					location.href = `../reserve_write4?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
 				}else if("<?=$return_arr['P_NOTI'] ?>" == "item"){
-					location.href = '../shop_pay_input?no=<?=$_GET["no"]?>';
+					//location.href = '../shop_pay_input?no=<?=$_GET["no"]?>';
+                    history.back();
 				//}else if("<?=$return_arr['P_NOTI'] ?>" == "hotel"){
 				//	location.href = '../test/test_hotel_payment.php';
 				//}else if("<?=$return_arr['P_NOTI'] ?>" == "playroom"){
@@ -549,12 +550,13 @@
 		}
 	}else{
 		?><script language="javascript">
-			alert("네트워크 환경으로 예약실패. 재시도 해주세요.\r\n ( <?=$P_RMESG1.' [ EM9'.$P_STATUS.' ] ' ?> )");
+			//alert("네트워크 환경으로 예약실패. 재시도 해주세요.\r\n ( <?=$P_RMESG1.' [ EM9'.$P_STATUS.' ] ' ?> )");
 			if("<?=$P_NOTI ?>" == "beauty"){
 				//location.href = '<?//=$artist_directory ?>///payment.php';
                 location.href = `../reserve_write4?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
 			}else if("<?=$P_NOTI ?>" == "item"){
-				location.href = '../shop_pay_input?no=<?=$_GET["no"]?>';
+				//location.href = '../shop_pay_input?no=<?=$_GET["no"]?>';
+                history.back();
 			//}else if("<?=$P_NOTI ?>" == "hotel"){
 			//	location.href = "../test/test_hotel_payment.php";
 			//}else if("<?=$P_NOTI ?>" == "playroom"){
