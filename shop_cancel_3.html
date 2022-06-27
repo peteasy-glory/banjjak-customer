@@ -311,6 +311,8 @@ asort($banks); // 가나다순
         }
     }
 
+    // 따닥 방지
+    var double_chk = true;
     // 취소 클릭
     $(document).on("click", "#container .set_update_item_payment_cancel", function(){
         var cancel_account = $("#container input[name='cancel_account']").val();
@@ -332,95 +334,108 @@ asort($banks); // 가나다순
             }
         }
 
-        if(cancel_pay_type == "1" && receipt_id != null){ // 카드 결제 취소처리
-            // 0024 상품결제취소
-            $.ajax({
-                url: 'item/item_list_ajax.php',
-                data: {
-                    mode : "item_payment_cancel",
-                    receipt_id : receipt_id,
-                    customer_name : customer_name,
-                    cancel_reason : "사용자 요청에 의해 직접 취소",
-                    cancel_price : cancel_price,
-                    cancel_type : "cancel"
-                },
-                type: 'POST',
-                dataType: 'JSON',
-                success: function(data) {
-                    if(data.code == "000000"){
-                        console.log(data.data);
-                        // 취소처리 0036
-                        $.ajax({
-                            url: 'item/item_list_ajax.php',
-                            data: {
-                                mode : "set_update_item_return_n_cancel_step3",
-                                return_pay_type : cancel_pay_type,
-                                return_account : cancel_account,
-                                return_bank : cancel_bank,
-                                return_price : cancel_price,
-                                order_num : no
-                            },
-                            type: 'POST',
-                            dataType: 'JSON',
-                            success: function(data) {
-                                if(data.code == "000000"){
-                                    console.log(data.data);
-                                    pop.open('cancel_fnish');
-                                }else{
-                                    alert(data.data+"("+data.code+")");
-                                    console.log(data.data);
+        // 따닥방지
+        if(double_chk == true){
+            double_chk = false;
+            if(cancel_pay_type == "1" && receipt_id != null){ // 카드 결제 취소처리
+                // 0024 상품결제취소
+                $.ajax({
+                    url: 'item/item_list_ajax.php',
+                    data: {
+                        mode : "item_payment_cancel",
+                        receipt_id : receipt_id,
+                        customer_name : customer_name,
+                        cancel_reason : "사용자 요청에 의해 직접 취소",
+                        cancel_price : cancel_price,
+                        cancel_type : "cancel"
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if(data.code == "000000"){
+                            console.log(data.data);
+                            // 취소처리 0036
+                            $.ajax({
+                                url: 'item/item_list_ajax.php',
+                                data: {
+                                    mode : "set_update_item_return_n_cancel_step3",
+                                    return_pay_type : cancel_pay_type,
+                                    return_account : cancel_account,
+                                    return_bank : cancel_bank,
+                                    return_price : cancel_price,
+                                    order_num : no
+                                },
+                                type: 'POST',
+                                dataType: 'JSON',
+                                success: function(data) {
+                                    if(data.code == "000000"){
+                                        console.log(data.data);
+                                        pop.open('cancel_fnish');
+                                    }else{
+                                        alert(data.data+"("+data.code+")");
+                                        console.log(data.data);
+                                        double_chk = true;
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    //alert(error + "네트워크에러");
+                                    if(xhr.status != 0){
+                                        alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                                        double_chk = true;
+                                    }
                                 }
-                            },
-                            error: function(xhr, status, error) {
-                                //alert(error + "네트워크에러");
-                                if(xhr.status != 0){
-                                    alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-                                }
-                            }
-                        });
-                    }else{
-                        alert(data.data+"("+data.code+")");
-                        console.log(data.data);
+                            });
+                        }else{
+                            alert(data.data+"("+data.code+")");
+                            console.log(data.data);
+                            double_chk = true;
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        //alert(error + "네트워크에러");
+                        if(xhr.status != 0){
+                            alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                            double_chk = true;
+                        }
                     }
-                },
-                error: function(xhr, status, error) {
-                    //alert(error + "네트워크에러");
-                    if(xhr.status != 0){
-                        alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                });
+            }else{
+                // 취소처리 0036
+                $.ajax({
+                    url: 'item/item_list_ajax.php',
+                    data: {
+                        mode : "set_update_item_return_n_cancel_step3",
+                        return_pay_type : cancel_pay_type,
+                        return_account : cancel_account,
+                        return_bank : cancel_bank,
+                        return_price : cancel_price,
+                        order_num : no
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if(data.code == "000000"){
+                            console.log(data.data);
+                            pop.open('cancel_fnish');
+                        }else{
+                            alert(data.data+"("+data.code+")");
+                            console.log(data.data);
+                            double_chk = true;
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        //alert(error + "네트워크에러");
+                        if(xhr.status != 0){
+                            alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                            double_chk = true;
+                        }
                     }
-                }
-            });
+                });
+            }
         }else{
-            // 취소처리 0036
-            $.ajax({
-                url: 'item/item_list_ajax.php',
-                data: {
-                    mode : "set_update_item_return_n_cancel_step3",
-                    return_pay_type : cancel_pay_type,
-                    return_account : cancel_account,
-                    return_bank : cancel_bank,
-                    return_price : cancel_price,
-                    order_num : no
-                },
-                type: 'POST',
-                dataType: 'JSON',
-                success: function(data) {
-                    if(data.code == "000000"){
-                        console.log(data.data);
-                        pop.open('cancel_fnish');
-                    }else{
-                        alert(data.data+"("+data.code+")");
-                        console.log(data.data);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    //alert(error + "네트워크에러");
-                    if(xhr.status != 0){
-                        alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-                    }
-                }
-            });
+            alert("취소가 진행중입니다.");
         }
+
     });
 
     // 세자리 숫자 콤마
