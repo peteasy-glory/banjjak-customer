@@ -112,6 +112,7 @@ $shop_sql = "
 $shop_result = mysqli_query($connection, $shop_sql);
 $shop_datas = mysqli_fetch_object($shop_result);
 $is_vat = $shop_datas->is_vat;
+$is_setting_pay = $shop_datas->is_setting_pay_in_shop;
 
 // 유저정보
 $user_sql = "
@@ -374,12 +375,30 @@ $INI_url = array(
                         <div class="wide-tab-inner">
                             <!-- 활성화시 actived클래스 추가 -->
                             <!-- 비활성화시 disabled클래스 추가 -->
-                            <div class="tab-cell actived" id="payment_shop_tab" onclick="clickPayment('shop')"><button type="button" class="btn-tab-item">매장결제</button></div>
                             <?php
-                            if($grade_ord != 1){
-                                ?><div class="tab-cell disabled"><button type="button" class="btn-tab-item" disabled>지금결제</button></div><?php
-                            }else{
-                                ?><div class="tab-cell disabled" id="payment_now_tab" onclick="clickPayment('now')"><button type="button" class="btn-tab-item">지금결제</button></div><?php
+                            if($is_setting_pay == 0){ // 지금 결제만 가능
+                                ?>
+                                <div class="tab-cell disabled" id="payment_shop_tab" onclick="alert('<?=$shop_datas->name?> 샵은 매장결제를 지원하지 않습니다.')"><button type="button" class="btn-tab-item" disabled>매장결제</button></div>
+                                <?php
+                                if($grade_ord != 1){
+                                    ?><div class="tab-cell disabled"><button type="button" class="btn-tab-item" disabled>지금결제</button></div><?php
+                                }else{
+                                    ?><div class="tab-cell actived" id="payment_now_tab" onclick="clickPayment('now')"><button type="button" class="btn-tab-item">지금결제</button></div><?php
+                                }
+                            }else if($is_setting_pay == 1){ // 둘다 가능
+                                ?>
+                                <div class="tab-cell actived" id="payment_shop_tab" onclick="clickPayment('shop')"><button type="button" class="btn-tab-item">매장결제</button></div>
+                                <?php
+                                if($grade_ord != 1){
+                                    ?><div class="tab-cell disabled"><button type="button" class="btn-tab-item" disabled>지금결제</button></div><?php
+                                }else{
+                                    ?><div class="tab-cell disabled" id="payment_now_tab" onclick="clickPayment('now')"><button type="button" class="btn-tab-item">지금결제</button></div><?php
+                                }
+                            }else if($is_setting_pay == 2){ // 매장결제만 가능
+                                ?>
+                                <div class="tab-cell actived" id="payment_shop_tab" onclick="clickPayment('shop')"><button type="button" class="btn-tab-item">매장결제</button></div>
+                                <div class="tab-cell disabled"><button type="button" class="btn-tab-item" disabled>지금결제</button></div>
+                                <?php
                             }
                             ?>
                         </div>
@@ -774,6 +793,28 @@ $INI_url = array(
 
         }
     // });
+
+    $(document).ready(function(){
+       if(<?=$is_setting_pay?> == 0){
+           if(<?=$grade_ord?> == 1){
+               $("#payment_shop_tab").removeClass("actived");
+               $("#payment_shop").removeClass("actived");
+               $("#payment_now").removeClass("disabled");
+
+               $("#payment_now_tab").addClass("actived");
+               $("#payment_shop").addClass("disabled");
+               $("#payment_now").addClass("actived");
+           }else{
+               $("#payment_shop_tab").removeClass("actived");
+               $("#payment_shop").removeClass("actived");
+               $("#payment_now").removeClass("actived");
+
+               $("#payment_now_tab").addClass("disabled");
+               $("#payment_shop").addClass("disabled");
+               $("#payment_now").addClass("disabled");
+           }
+       }
+    });
 
     function clickPayment(type){
         if(type == 'now'){
