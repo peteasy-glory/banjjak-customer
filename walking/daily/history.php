@@ -163,7 +163,7 @@ $count = 0;
                                     }
 
                                         if($val["track_map_path"] !== ""){
-                                            echo    '<div class="record-accordion-detail"><img class="map-target" src="'.$val["track_map_path"].'" alt="">'.
+                                            echo    '<div class="record-accordion-detail detail-resize"><img class="map-target" src="'.$val["track_map_path"].'" alt="">'.
 
                                                 '<button type="button" class="track-thumb"></button>'.
                                                 '<button type="button" class="btn-record-kakao-share" data-map_url="'.$val["track_map_path"].'"></button>'.
@@ -681,7 +681,7 @@ $count = 0;
                             if (parse_data[j]?.track_map_path !== "") {
 
                                 $(`
-                        <div class="record-accordion-detail"><img class="map-target" src="${parse_data[j]?.track_map_path}" alt="">
+                        <div class="record-accordion-detail detail-resize"><img class="map-target" src="${parse_data[j]?.track_map_path}" alt="">
                         <button type="button" class="track-thumb" id="track-thumb-${parse_data[j]?.idx}"></button>
                         <button type="button" class="btn-record-kakao-share" data-map_url="${parse_data[j]?.track_map_path}"></button>
                         </div>
@@ -756,7 +756,9 @@ $count = 0;
 
 
 
-
+    $(".btn-page-prev").click(function(){
+        history.back(); return false;
+    });
 
 </script>
 
