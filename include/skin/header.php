@@ -20,17 +20,17 @@
 	<script src="/static/pub/js/common.js?v=<?=$jsVersion?>"></script>
 	<script src="/static/pub/js/dev_common.js?v=<?=$jsVersion?>"></script>
 	<script src="/static/pub/js/jquery.fileupload.js"></script>    
-	<script src="/static/pub/js/jquery.ui.widget.js"></script>   
+	<script src="/static/pub/js/jquery.ui.widget.js"></script>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TWTXXK9HE7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9ENXG8BLD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-  gtag('config', 'G-TWTXXK9HE7');
-</script>
+        gtag('config', 'G-J9ENXG8BLD');
+    </script>
 
 </head>
 <!-- 로딩화면 -->
