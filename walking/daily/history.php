@@ -39,7 +39,7 @@ $count = 0;
 <header id="header">
 
 	<div class="header-left">
-		<a href="../daily" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">월별 산책기록</div>
 </header>
