@@ -56,7 +56,7 @@ if(isset($_POST['from_walk_daily'])){
                         $count++;
                         $pet_seq = $pet_rows->pet_seq;
                         $name_for_owner = $pet_rows->name_for_owner;
-                        $pet_name = ($pet_rows->name == "")? $name_for_owner : $pet_rows->name; // 견주용 펫 이름이 null 값이면 shop용 펫 이름 가져오기
+                        $pet_name = ($name_for_owner == "")? $pet_rows->name : $name_for_owner; // 견주용 펫 이름이 null 값이면 shop용 펫 이름 가져오기
                         $type = $pet_rows->type;
                         $pet_type = $pet_rows->pet_type;
                         $pet_type2 = $pet_rows->pet_type2;
