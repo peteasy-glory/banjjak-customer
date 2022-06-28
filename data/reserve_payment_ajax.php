@@ -142,6 +142,21 @@ if($mode){
                         // 관리자 푸시
                         $admin_message = "{$cellphone}님({$pet_name})이 ({$shop_name})({$artist_id})에 승인요청";
                         a_push("pickmon@pickmon.com", "[예약승인요청]", $admin_message, "", $image);
+                    }else{
+                        $message = "{$month}월 {$day}일 신규 예약등록. 매장결제를 선택하신 고객입니다. 매장에서 요금을 받으시면 됩니다.작업스케줄을 관리하세요.";
+                        $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
+                        //$image = "http://gopet.kr/pet/images/logo_login.jpg";
+                        $image = "";
+
+                        a_push($artist_id, "반짝, 반려생활의 단짝. 신규 예약 알림(매장결제)", $message, $path, $image);
+
+                        $select_sql = "SELECT * from tb_shop where customer_id = '".$artist_id."'";
+                        $select_result = mysqli_query($connection,$select_sql);
+                        $select_datas = mysqli_fetch_object($select_result);
+                        $artist_name = $select_datas->name;
+
+                        $admin_message = $user_id . "가 펫샵(" . $artist_id . " | " . $artist_name . ")에 예약(매장결제)을 하였습니다. " . $year . "년" . $month . "월" . $day . "일 신규 예약등록. 작업스케줄을 관리하세요.";
+                        a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
                     }
                 }
 
