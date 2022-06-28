@@ -54,8 +54,10 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     $type_query = "AND tpl.is_cancel = 1";
                 }
                 // 20200910 ulmo 진행중(RO)은 표시되지 않도록 추가
-                $login_insert_sql = "SELECT *, tpl.is_vat as is_vat, tpl.update_time as d_time 
-                                    FROM tb_payment_log tpl LEFT JOIN tb_shop ts ON ts.customer_id = tpl.artist_id
+                $login_insert_sql = "SELECT *, tpl.is_vat as is_vat, tpl.update_time as d_time, ra.offline_shop_phonenumber as shop_phone
+                                    FROM tb_payment_log tpl 
+                                    LEFT JOIN tb_shop ts ON ts.customer_id = tpl.artist_id 
+                                    LEFT JOIN tb_request_artist ra ON ra.customer_id = ts.customer_id
                                     WHERE tpl.customer_id = '" . $user_id . "' 
                                           AND tpl.approval = 1 
                                           AND tpl.status != 'R0'
@@ -141,6 +143,9 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     $d_time = $result_datas->d_time;
                     $is_cancel = $result_datas->is_cancel;
                     $cancel_time = date("Y년 m월 d일 H시", strtotime($result_datas->cancel_time));
+                    $ds_date = date('Y-m-d H:i:s', strtotime($year . "-" . $month . "-" . $day . " " . $hour . ":00:00"));
+                    $n_date = date('Y-m-d H:i:s');
+                    $shop_phone = $result_datas->shop_phone;
                 ?>   
                 
                 <?php
@@ -669,17 +674,24 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     </div>
                     <!-- //최종 가격 -->
                     <?php
+                    if(strtotime("-1 days", strtotime($ds_date)) > strtotime($n_date)){
                     if($type != 'cancel'){
                     ?>
-                        <!--<div class="basic-data-group vmiddle">
+                        <div class="basic-data-group vmiddle">
                             <div class="grid-layout btn-grid-group">
                                 <div class="grid-layout-inner">
-                                    <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">예약변경</button></div>
+                                    <?php if (!startsWith($pay_type, "pos")) { ?>
+                                        <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">예약변경견주</button></div>
+                                    <?php } else { // 펫샵에서 에약(견주가 예약변경 X) ?>
+                                        <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round" onclick="pos_alert('<?=$shop_phone?>')">예약변경</button></div>
+                                    <?php } ?>
+                                    <!--<div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round">예약변경</button></div>-->
                                     <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-outline-purple btn-middle-size btn-round">예약 취소</button></div>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                     <?php
+                    }
                     }
                     ?>
                   </div>
@@ -717,6 +729,35 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
 </section>
 <!-- //container -->
 
+<article id="pos_alert" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
+
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt">이 예약은 펫샵에서 잡은 예약이네요^^<br>변경/취소는 펫샵을 통해 가능합니다.<br>통화하시려면 통화(<span class="shop_phone"></span>)를 눌러주세요</div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm btn-cf go_phone">통화</button>
+                    <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">취소</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
+
+<script>
+    function pos_alert(shop_phone){
+        console.log(shop_phone);
+        $(".shop_phone").text(shop_phone);
+        $(".go_phone").data('id',shop_phone);
+        popalert.open('pos_alert');
+    }
+    $(".go_phone").click(function(){
+       console.log($(this).data('id'));
+    });
+</script>
 <?
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
 ?>
