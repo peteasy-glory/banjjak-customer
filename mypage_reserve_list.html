@@ -738,7 +738,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     <div class="msg-txt">이 예약은 펫샵에서 잡은 예약이네요^^<br>변경/취소는 펫샵을 통해 가능합니다.<br>통화하시려면 통화(<span class="shop_phone"></span>)를 눌러주세요</div>
                 </div>
                 <div class="pop-footer">
-                    <button type="button" class="btn btn-confirm btn-cf go_phone">통화</button>
+                    <button type="button" class="btn btn-confirm btn-cf go_phone"><a href="tel:01086331776" class="phone_a">통화</a></button>
                     <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">취소</button>
                 </div>
             </div>
@@ -754,9 +754,9 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
         $(".go_phone").data('id',shop_phone);
         popalert.open('pos_alert');
     }
-    $(".go_phone").click(function(){
-       console.log($(this).data('id'));
-    });
+    // $(".go_phone").click(function(){
+    //    console.log($(this).data('id'));
+    // });
 </script>
 <?
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
