@@ -1,0 +1,622 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
+
+//jin 이거주석 풀면 App이 중복선언되있다고 나옴
+//include($_SERVER['DOCUMENT_ROOT']."/include/App.class.php");
+
+//jin 일단 주석처리
+//$cl_result = include "../include/check_login.php";
+//if ($cl_result == 0) {
+//    return false;
+//}
+
+$date = date('Y-m-d');
+$tomorrow = date('Y-m-d', strtotime($date."+1days"));
+$week = date('w', strtotime($tomorrow));
+
+$backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
+$artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
+$pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
+$serviceResultArray = isset($_GET['resultArray']) ? json_encode($_GET['resultArray']) : "";
+$etcResultArray = isset($_GET['etcArray']) ? json_encode($_GET['etcArray']) : "";
+$user_id = $_SESSION['gobeauty_user_id'];
+$user_name = $_SESSION['gobeauty_user_nickname'];
+//$_SESSION['reservation_artist_name'] = $artist_name;
+$artist_name = get_artist_id(addslashes($artist_id));
+//$artist_id = "taekyung201@naver.com"
+//while ($resultArray){
+//    echo "<br>".$resultArray;
+//}
+//echo "<br><br><br><br>".$resultArray;
+
+// 펫 정보 가져오기(강아지,고양이별 시간 선택때문)
+$pet_sql = "
+    SELECT * FROM
+    tb_mypet WHERE pet_seq = '{$pet_seq}';
+";
+$pet_result = mysqli_query($connection,$pet_sql);
+$pet_datas = mysqli_fetch_object($pet_result);
+$pet_type = $pet_datas -> type;
+
+
+// 샵 정보 및 정기휴무일
+$shop_sql = "
+    SELECT holiday.*, shop.is_time_type FROM tb_regular_holiday AS holiday 
+    JOIN tb_shop AS shop ON shop.customer_id = holiday.customer_id
+    WHERE shop.customer_id = '{$artist_id}'
+";
+$shop_result = mysqli_query($connection, $shop_sql);
+$shop_datas = mysqli_fetch_object($shop_result);
+
+// 미용사별 휴무일
+$artist_data = array();
+$artist_sql = "
+    SELECT holiday.*, shop.is_time_type FROM tb_regular_holiday AS holiday 
+    JOIN tb_shop AS shop ON shop.customer_id = holiday.customer_id
+    WHERE shop.customer_id = '{$artist_id}'
+";
+$artist_result = mysqli_query($connection, $artist_sql);
+$artist_datas = mysqli_fetch_object($artist_result);
+while ($artist_datas = mysqli_fetch_object($artist_result)) {
+    $artist_data[] = $artist_datas;
+}
+
+?>
+
+<!-- header -->
+<header id="header">
+    <div class="header-left">
+        <a href="mypage_reserve_list" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+    </div>
+    <div class="page-title">예약 신청하기</div>
+    <div class="reserve-state-bar">
+        <div class="bar" style="width:66.66%"></div>
+    </div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container">
+    <!-- page-body -->
+    <div class="page-body">
+        <!-- page-contents -->
+        <div class="page-contents">
+
+            <div class="basic-data-group">
+                <!-- 샵 이름 있을 때 -->
+                <div class="reserve-shop-name con-title-group line">
+                    <h3 class="con-title"><?=$artist_name?></h3>
+                </div>
+                <!-- //샵 이름 있을 때 -->
+                <div class="reserve-schedule-wrap">
+                    <ul class="accordion-list big">
+                        <li class="accordion-cell actived">
+                            <button type="button" class="btn-accordion-menu">
+                                <span class="accordion-menu-subject"><strong>예약날짜를 선택해주세요.</strong></span>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="accordion-detail">
+                                    <div class="calendar-wrap">
+                                        <div class="datepicker"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="accordion-cell actived">
+                            <button type="button" class="btn-accordion-menu">
+                                <span class="accordion-menu-subject"><strong>디자이너<span class="symbol-dot"></span>시간</strong></span>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="accordion-detail">
+                                    <div class="master-time-list" id="worker_list">
+                                        <!-- <div class="master-time-wrap">
+                                            <h6 class="con-title">원장 헤이즈</h6>
+                                            <div class="master-tag-list tag-group">
+                                                <div class="tag-group-inner">
+                                                    <div class="tag-item">매주 월,수 휴무</div>
+                                                    <div class="tag-item">평일 11:00-22:00</div>
+                                                </div>
+                                            </div>
+                                            <div class="master-time-select">
+                                                <div class="list-inner">
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>10:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>11:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>12:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>13:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>14:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>15:30</em></label></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="master-time-wrap">
+                                            <h6 class="con-title">원장 헤이즈</h6>
+                                            <div class="master-tag-list tag-group">
+                                                <div class="tag-group-inner">
+                                                    <div class="tag-item">매주 월,수 휴무</div>
+                                                    <div class="tag-item">평일 11:00-22:00</div>
+                                                </div>
+                                            </div>
+                                            <div class="master-time-select">
+                                                <div class="list-inner">
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>10:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>11:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>12:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>13:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>14:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>15:30</em></label></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="master-time-wrap">
+                                            <h6 class="con-title">원장 헤이즈</h6>
+                                            <div class="master-tag-list tag-group">
+                                                <div class="tag-group-inner">
+                                                    <div class="tag-item">매주 월,수 휴무</div>
+                                                    <div class="tag-item">평일 11:00-22:00</div>
+                                                </div>
+                                            </div>
+                                            <div class="master-time-select">
+                                                <div class="list-inner">
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>10:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>11:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>12:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>13:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>14:30</em></label></div>
+                                                    <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>15:30</em></label></div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- //page-contents -->
+    </div>
+    <!-- //page-body -->
+    <!-- page-bottom -->
+    <div class="page-bottom">
+        <a onclick="clickNext()" class="btn-page-bottom">변경</a>
+    </div>
+    <!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+<script>
+    //펫종류
+    var pet_type = "<?=$pet_type?>";
+
+    // 추후 시간선택제 구분
+    var is_time_type = "<?=$shop_datas->is_time_type?>";
+    console.log(is_time_type);
+
+    // 데이터 꺼내보기
+    //var etcResultArray = JSON.parse(<?//=$etcResultArray?>//);
+    //var serviceResultArray = JSON.parse(<?//=$serviceResultArray?>//);
+    //console.log(serviceResultArray[1].price); // 서비스 이용시간
+    let seviceTime = <?=$_GET['beauty_time']?>/30;
+
+
+    // 내일날짜 및 요일구하기
+    var tomorrow = "<?=$tomorrow?>";
+    var week = "<?=$week?>";
+
+    let timeResultArray = new Array();
+    timeResultArray.push({"date" : tomorrow, "time" : "", "worker" : ""});
+
+    // 정기휴일 구해서 datepicker에 비활성화시키기
+    var holiday_code = "";
+    var sunday = "<?=$shop_datas->is_sunday?>";
+    var monday = "<?=$shop_datas->is_monday?>";
+    var tuesday = "<?=$shop_datas->is_tuesday?>";
+    var wednesday = "<?=$shop_datas->is_wednesday?>";
+    var thursday = "<?=$shop_datas->is_thursday?>";
+    var friday = "<?=$shop_datas->is_friday?>";
+    var saturday = "<?=$shop_datas->is_saturday?>";
+    if(sunday == 1){
+        holiday_code += "&& day != 0 ";
+    }
+    if(monday == 1){
+        holiday_code += "&& day != 1 ";
+    }
+    if(tuesday == 1){
+        holiday_code += "&& day != 2 ";
+    }
+    if(wednesday == 1){
+        holiday_code += "&& day != 3 ";
+    }
+    if(thursday == 1){
+        holiday_code += "&& day != 4 ";
+    }
+    if(friday == 1){
+        holiday_code += "&& day != 5 ";
+    }
+    if(saturday == 1){
+        holiday_code += "&& day != 6 ";
+    }
+    console.log(holiday_code);
+    holiday_code = (holiday_code != "")? holiday_code.substring(3) : "";
+    if(holiday_code.indexOf(week) == -1){ // 현재 요일이 정기휴일이 아니면 미용사 리스트 노출
+        console.log("없");
+        getDesigner(tomorrow);
+    }else{
+        console.log("있");
+    }
+
+    function getDesigner(date){
+        console.log(typeof date);
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "worker",
+                artist_id : '<?=$artist_id?>',
+                selectDate : date
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(data) {
+                console.log(date.data);
+                var html = '';
+                $(data.data).each(function(i,v){
+                    // console.log(v);
+                    html += '<div class="master-time-wrap">';
+                    html += '   <h6 class="con-title">'+v.nicname+'</h6>';
+                    html += '   <div class="master-tag-list tag-group">';
+                    html += '       <div class="tag-group-inner">';
+                    html += '           <div class="tag-item" id="holiday_'+v.seq+'"></div>';
+                    html += '           <div class="tag-item">'+v.time_start+' - '+v.time_end+'</div>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '   <div class="master-time-select">';
+                    html += '       <div class="list-inner">';
+                    // 선택가능 시간 구하기
+                    var timeStart = parseInt((v.time_start).split(':')[0]+(v.time_start).split(':')[1]);
+                    var timeEnd = parseInt((v.time_end).split(':')[0]+(v.time_end).split(':')[1]);
+                    // console.log(timeStart);
+                    // console.log(timeEnd);
+                    for(timeStart;timeStart<timeEnd;timeStart=timeStart+50){
+                        var minutes = timeStart.toString().slice(-2);
+                        var hours = timeStart.toString().replace(minutes,'');
+                        if(minutes == 50){
+                            minutes = "30";
+                        }else{
+                            minutes = "00";
+                        }
+                        if(hours == ''){hours = "0";}
+                        var time = hours+':'+minutes;
+
+                        // 고양이는 30분 미용
+                        var input_type = "";
+                        if(pet_type == 'dog'){
+                            input_type = 'checkbox';
+                        }else{
+                            input_type = 'radio';
+                        }
+
+                        // 타임제일경우
+                        var disabled = "";
+                        if(is_time_type == '2'){
+                            disabled = 'disabled';
+                            input_type = 'radio';
+                        }
+                        html += '           <div class="list-cell"><label class="form-toggle-box" onclick="clickTime(\''+time+'\','+(seviceTime-1)+','+(timeStart/50)+','+v.seq+',\''+v.name+'\')"><input type="'+input_type+'" name="time1" id="'+v.seq+"_"+(timeStart/50)+'" '+disabled+'><em>'+time+'</em></label></div>';
+                    }
+                    // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>10:30</em></label></div>';
+                    // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>11:30</em></label></div>';
+                    // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1" disabled><em>12:30</em></label></div>';
+                    // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>13:30</em></label></div>';
+                    // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>14:30</em></label></div>';
+                    // html += '           <div class="list-cell"><label class="form-toggle-box"><input type="radio" name="time1"><em>15:30</em></label></div>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '</div>';
+
+
+                    timeResultArray.map(result => {
+                        result.date = date;
+                    });
+                    // if(date == today){
+                    //     console.log("test");
+                    // }else{
+                    //     console.log("testnot")
+                    // }
+                    if(is_time_type == '2'){
+                        getTimeSchedule(v.name,date,v.seq); // 타임제 해보자
+                    }else{
+                        getArtistTime(v.name,date,v.seq); // 미용있는 시간 비활성화
+                    }
+
+                    //getRestTime(v.seq); // 휴게시간 비활성화
+                    //getArtistHoliday(v.name,v.seq); // 휴무 파악 후 뿌려주기
+                });
+
+                console.log(timeResultArray);
+                $("#worker_list").html(html);
+
+            }
+        });
+    }
+
+    function getTimeSchedule(name,date,seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "time_schedule",
+                artist_id : '<?=$artist_id?>',
+                worker : name,
+                selectDate : date
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                var time_data = json.data[0].res_time_off;
+                var time_array = time_data.split(",");
+
+                $(time_array).each(function (i,v){
+                    var start_time = v.split("~")[0];
+                    var split_time = start_time.split(":");
+
+                    var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
+                    var disabled = "#"+seq+"_"+(timeStart/50);
+                    $(disabled).attr("disabled", false); // 시간제일경우 선택된 타임만 선택가능
+
+                });
+                getArtistTime(name,date,seq);
+            }
+        });
+    }
+
+    function getArtistTime(name,date,seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "artist_time",
+                artist_id : '<?=$artist_id?>',
+                worker : name,
+                selectDate : date
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                $(json.data).each(function (i,v){
+                    var timeStart = parseInt(v.hour+((v.minute == 30)? "50":"00"));
+                    var timeEnd = parseInt(v.to_hour+((v.to_minute == 30)? "50":"00"));
+                    console.log(timeStart + ' '+ timeEnd);
+                    for(timeStart;timeStart<timeEnd;timeStart=timeStart+50){
+                        // console.log(timeStart/50);
+                        var disabled = "#"+seq+"_"+(timeStart/50);
+                        console.log(disabled);
+                        $(disabled).attr("disabled", true);
+                    }
+                });
+                getRestTime(name,seq); // 휴게시간 비활성화
+            }
+        });
+    }
+
+    function getRestTime(name,seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "rest_time",
+                artist_id : '<?=$artist_id?>'
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(json) {
+                var time_data = json.data[0].res_time_off;
+                var time_array = time_data.split(",");
+                console.log(time_array);
+
+                $(time_array).each(function (i,v){
+                    var start_time = v.split("~")[0];
+                    var split_time = start_time.split(":");
+
+                    var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
+                    var disabled = "#"+seq+"_"+(timeStart/50);
+                    $(disabled).attr("disabled", true); // 시간제일경우 선택된 타임만 선택가능
+
+                });
+                getArtistHoliday(name,seq);
+            }
+        });
+    }
+
+    function getArtistHoliday(name, seq){
+        $.ajax({
+            url : "data/getSchedule.php",
+            data : {
+                mode : "artist_holiday",
+                artist_id : '<?=$artist_id?>',
+                name : name
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data.data);
+                var holiday_txt = "매주 일, 월, 화, 수, 목, 금, 토, ";
+                var holiday_seq = "#holiday_"+seq;
+                $(data.data).each(function(i,v) {
+
+
+                    if(v.week == 0){
+                        holiday_txt = holiday_txt.replace("일, ", "");
+                    }
+                    if(v.week == 1){
+                        holiday_txt = holiday_txt.replace("월, ", "");
+                    }
+                    if(v.week == 2){
+                        holiday_txt = holiday_txt.replace("화, ", "");
+                    }
+                    if(v.week == 3){
+                        holiday_txt = holiday_txt.replace("수, ", "");
+                    }
+                    if(v.week == 4){
+                        holiday_txt = holiday_txt.replace("목, ", "");
+                    }
+                    if(v.week == 5){
+                        holiday_txt = holiday_txt.replace("금, ", "");
+                    }
+                    if(v.week == 6){
+                        holiday_txt = holiday_txt.replace("토, ", "");
+                    }
+
+                });
+                if(holiday_txt.indexOf(",") == -1){
+                    holiday_txt = "무휴"; // 정기휴일 제외하고 안쉼
+                }else{
+                    holiday_txt = holiday_txt.slice(0, -2) + " 휴무";
+                }
+                $(holiday_seq).html(holiday_txt);
+                // console.log(holiday_txt);
+            }
+        });
+    }
+
+    function clickTime(time,timeCnt,j,seq,name){
+        if(pet_type == 'dog' && is_time_type == '1'){
+            $("input[name=time1]").prop('checked', false);
+            var is_disabled = 0;
+            var is_disabled_brfore = 0;
+            var is_id = 0;
+
+            // 앞선 빈 시간 최소 90분이여야함
+            for(var i=4;i>0;i--){
+                console.log(i);
+                var check = "#"+seq+"_"+j;
+                j=j-1;
+                if($(check).attr("disabled") == "disabled"){
+                    is_disabled_brfore = is_disabled_brfore + 1;
+                }
+
+            }
+            console.log(is_disabled_brfore+"<<");
+            // j 초기화
+            j=j+4;
+            // 바로 앞 타임 일정 있으면 선택 가능
+            var check = "#"+seq+"_"+(j-1);
+            if($(check).attr("disabled") == "disabled"){
+                is_disabled_brfore = 0;
+            }
+            // 가용시간만큼 선택
+            for(var i=0;i<=timeCnt;i++){
+                var check = "#"+seq+"_"+j;
+                j=j+1;
+                // console.log(check);
+                if($(check).attr("disabled") == "disabled"){
+                    is_disabled = 1;
+                }
+                if($(check).length <= 0){
+                    is_id = 1;
+                }
+                $(check).prop('checked', true);
+            }
+            if(is_disabled_brfore < 3 && is_disabled_brfore > 0){
+                $("input[name=time1]").prop('checked', false);
+                console.log("앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!");
+                $('#firstRequestMsg1').find('.msg-txt').text('앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!');
+                pop.open("firstRequestMsg1");
+            }else if(is_disabled == 1){
+                $("input[name=time1]").prop('checked', false);
+                console.log("no1");
+            }else if(is_id == 1){
+                $("input[name=time1]").prop('checked', false);
+                console.log("미용가용시간만큼 비어있는 시간이 없습니다.");
+            }else{
+                console.log("yes");
+                timeResultArray.map(result => {
+                    result.time = time
+                    result.worker = name;
+                });
+            }
+        }else{
+            timeResultArray.map(result => {
+                result.time = time
+                result.worker = name;
+            });
+        }
+
+    }
+
+    function clickNext(){
+        // console.log(timeResultArray);
+        // console.log(serviceResultArray);
+        var chk = 0;
+        $.each($("input[name=time1]"), function(i, v){
+            if($("input[name=time1]").is(":checked") == true){
+                chk += 1;
+            }
+        });
+        if(chk == 0){
+            alert('시간을 선택해주세요.');
+        }else{
+            //location.href = `reserve_write4?artist_id=<?=$artist_id?>&pet_seq=<?=$pet_seq?>&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+            //alert('시간/날짜변경');
+            console.log(timeResultArray);
+
+        }
+    }
+
+    function update_date(){
+        $.ajax({
+            url : "data/reserve_payment_ajax.php",
+            data : {
+                mode : "update_date",
+                artist_id : '<?=$artist_id?>',
+                name : name
+            },
+            type : 'POST',
+            dataType: 'json',
+            success: function(data) {
+            }
+        });
+    }
+
+    $(function(){
+
+        $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',//포맷 설정
+            prevText: '이전 달',//이전 버튼
+            nextText: '다음 달', //다음달 버튼
+            monthNames: ['1','2','3','4','5','6','7','8','9','10','11','12'],//월 설정
+            monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'], //월 설정
+            dayNames: ['일','월','화','수','목','금','토'],//주 타이틀 설정
+            dayNamesShort: ['일','월','화','수','목','금','토'],//주 타이틀 설정
+            dayNamesMin: ['일','월','화','수','목','금','토'], //주 타이틀 설정
+            showMonthAfterYear: true, // 년도가 앞으로 설정
+            yearSuffix: '.', //년도 뒤 블릿 설정
+            changeMonth: false, //월 선택 불가
+            changeYear: false, //년 선택 불가
+            showOtherMonths:true, //이전 , 다음 달 일수 활성화
+            minDate : 1, // 오늘날짜 이전 선택 불가(오늘포함)
+            beforeShowDay: function(date){ // 샵 휴일 선택 불가
+                if(holiday_code != '') {
+                    var day = date.getDay();
+                    return [eval(holiday_code)];
+                }else{
+                    return ['1960-1-1'];
+                }
+            },
+            // defaultDate :
+            onSelect : function (date){
+
+                // var today = new date();
+                // console.log(new Date(today));
+                // console.log(new Date(date));
+                // if(today.getTime() == date.getTime()){alert("당일예약 노노")}; // 당일예약 방지이지만 datepicker에서 아예 선택 불가능하게 막아놓음
+                getDesigner(date);
+                console.log(date);
+            }
+
+        });
+    });
+</script>
+

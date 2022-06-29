@@ -277,6 +277,8 @@ if($mode){
             $return_data = array("code" => "000000", "data" => "fail");
         }
 
+    }else if($mode == 'update_date'){
+
     }else{
         $return_data = array("code" => "999997", "data" => "허용되지 않은 접근입니다.");
     }
