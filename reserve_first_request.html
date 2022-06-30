@@ -717,9 +717,12 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
 
         $.ajax({
             cache: false,
-            url: "/data/counseling_save_mypet",
+            url: "/data/counseling_save_mypet.php",
             type: 'POST',
             data: $("#form_reservation").serialize(),
+            beforeSend: function(){
+                $("#loading").addClass("actived");
+            },
             success: function(data) {
                 //console.log(data);
                 if(data == "OK"){
@@ -792,7 +795,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
             data: post_data,
             type: 'POST',
             success: function(data) {
-
+                $("#loading").removeClass("actived");
                 if (/(MSIE|Trident)/.test(navigator.userAgent)) {
                     // ie 일때 input[type=file] init.
                     $("#addimgfile").replaceWith($("#addimgfile").clone(true));
@@ -808,6 +811,9 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                 console.log(data);
                 $('#photo_counseling').val(data);
 
+            },
+            beforeSend: function(){
+                $("#loading").addClass("actived");
             },
             error: function(xhr, status, error) {
                 //alert(error + "네트워크에러");
@@ -882,6 +888,9 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                 processData: false,
                 contentType: false,
                 type: 'POST',
+                beforeSend: function(){
+                    $("#loading").addClass("actived");
+                },
                 success: function(data) {
                     if (/(MSIE|Trident)/.test(navigator.userAgent)) {
                         // ie 일때 input[type=file] init.
