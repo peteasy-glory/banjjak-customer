@@ -651,7 +651,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                 return;
             }
         }
-        
+
         var pet_kind = $("input[name='pet_kind']:checked").val();
         /*if(pet_kind == "dog" && is_possable_dog != "1"){
             alert("개와 관련된 상품을 판매하지 않는 펫샵입니다. 상품을 확인해주세요.");
@@ -724,8 +724,10 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                 $("#loading").addClass("actived");
             },
             success: function(data) {
+                $("#loading").removeClass("actived");
+                double_chk = true;
                 //console.log(data);
-                if(data == "OK"){
+                if($.trim(data) == "OK"){
                     alert("상담 신청이 완료되었습니다.");
                     location.replace("reserve_view?artist_id=<?= $artist_id ?>&backurl=<?=$backurl?>");
 //                    location.replace("<?= $mainpage_directory ?>");
@@ -738,7 +740,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
             error: function(xhr, status) {
                 alert(xhr + " : " + status);
             }
-        });				
+        });
     }
 
     /////////////////////////////////////////// 사진등록 시작
@@ -892,6 +894,7 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                     $("#loading").addClass("actived");
                 },
                 success: function(data) {
+                    $("#loading").removeClass("actived");
                     if (/(MSIE|Trident)/.test(navigator.userAgent)) {
                         // ie 일때 input[type=file] init.
                         $("#addimgfile").replaceWith($("#addimgfile").clone(true));

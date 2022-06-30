@@ -34,18 +34,18 @@
 
 </head>
 <!-- 로딩화면 -->
-<!--<div id="loading" class="actived">-->
-<!--    <div class="loading-wrap">-->
-<!--        <div class="loading-bar">-->
-<!--            <div class="loading-obj">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg">-->
-<!--                    <circle cx="50%" cy="50%" r="24"  class="background" stroke-linecap="butt"></circle>-->
-<!--                    <circle cx="50%" cy="50%" r="24"  class="yellow" stroke-linecap="butt" ></circle>-->
-<!--                </svg>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div id="loading" class="">
+    <div class="loading-wrap">
+        <div class="loading-bar">
+            <div class="loading-obj">
+                <svg xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50%" cy="50%" r="24"  class="background" stroke-linecap="butt"></circle>
+                    <circle cx="50%" cy="50%" r="24"  class="yellow" stroke-linecap="butt" ></circle>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     // window.onload = function(){
     //     $('#loading').removeClass("actived");

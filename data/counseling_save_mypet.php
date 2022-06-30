@@ -254,7 +254,7 @@ if($approval_cnt > 0){
 	if ($artist_id != null && $artist_id != "") {
 		$message = "[".$mypet_name." (".$cellphone_back_num.")]님이 이용 상담을 신청하셨네요. 12시간 이내에 상담을 완료해주세요.";
 		$message_admin = "[".$mypet_name." (".$cellphone_back_num.")]님이 펫샵(".$artist_name." | ".$artist_id.")에 이용 상담을 신청.";
-		$path = "https://www.gopet.kr/pet/shop/manage_counseling_request.php";
+		$path = "https://partner.banjjakpet.com/reserve_advice_list_1";
 		$path_admin = "https://www.gopet.kr/pet/mainpage/mainpage_my_menu.php";
 		$image = "https://www.gopet.kr/pet/images/app_logo.png";
 		a_push($artist_id, "반짝, 첫 이용 상담 신청 알림", $message, $path, $image);
