@@ -160,11 +160,17 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
         var banner = ["https://image.banjjakpet.com/images/event_bugspet.png"];
         var sub_title = [''];
         var event_item_list0 = ['ETCB-BUGS-PET-A01','ETCB-BUGS-PET-A02','ETCB-BUGS-PET-A03','ETCB-BUGS-PET-A04','ETCB-BUGS-PET-A05','ETCB-BUGS-PET-A06','ETCB-BUGS-PET-A07'];
-    }else if(seq == '66'){
+    }else if(seq == '66') {
         var title = "스크래쳐 할인전";
         var banner = ["https://image.banjjakpet.com/images/scratcher.jpg"];
         var sub_title = [''];
-        var event_item_list0 = ['ETCB-BANDI-A06','ETCB-BANDI-A36','JB-SB-C71','JB-SB-C70','JB-SB-C60','JB-SB-C61','JB-SB-C58','JB-SB-C52','JB-SB-C37','JB-SB-C38','JB-SB-C39','JB-SB-C27','JB-SB-C26','JB-SB-C25','JB-SB-C63','JB-SB-C69','JB-SB-C68','JB-SB-C64'];
+        var event_item_list0 = ['ETCB-BANDI-A06', 'ETCB-BANDI-A36', 'JB-SB-C71', 'JB-SB-C70', 'JB-SB-C60', 'JB-SB-C61', 'JB-SB-C58', 'JB-SB-C52', 'JB-SB-C37', 'JB-SB-C38', 'JB-SB-C39', 'JB-SB-C27', 'JB-SB-C26', 'JB-SB-C25', 'JB-SB-C63', 'JB-SB-C69', 'JB-SB-C68', 'JB-SB-C64'];
+    }else if(seq == '67'){
+        <?php
+        unset($_SESSION['backurl_shop']);
+        $_SESSION['backurl_shop'] = $_SESSION["backurl1"];
+        ?>
+        location.replace("shop_view?product_no=ETCB-HEEMING-A01");
     }
 
 
