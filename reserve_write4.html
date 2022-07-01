@@ -796,7 +796,7 @@ $INI_url = array(
 
     $(document).ready(function(){
        if(<?=$is_setting_pay?> == 0){
-           if(<?=$grade_ord?> == 1){
+           if('<?=$grade_ord?>' == 1){
                $("#payment_shop_tab").removeClass("actived");
                $("#payment_shop").removeClass("actived");
                $("#payment_now").removeClass("disabled");
