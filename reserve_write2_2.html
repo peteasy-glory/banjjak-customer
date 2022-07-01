@@ -35,7 +35,7 @@ $dist = isset($_GET['dist']) ? $_GET['dist'] : "";
 $gender = isset($_GET['gender']) ? $_GET['gender'] : "";
 $weight = isset($_GET['weight']) ? $_GET['weight'] : "";
 $type = isset($_GET['type']) ? $_GET['type'] : "";
-$pet_type = isset($_GET['pet_type']) ? $_GET['pet_type'] : "";
+$pet_type_1 = isset($_GET['pet_type']) ? $_GET['pet_type'] : "";
 $pet_type2 = isset($_GET['pet_type2']) ? $_GET['pet_type2'] : "";
 
 if($pet_seq != ""){
@@ -82,7 +82,7 @@ if($pet_seq != ""){
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
-		<a href="reserve_write2?artist_id=<?=$artist_id?>&pet_seq=<?= $pet_seq ?>&pet_name=<?=$pet_name?>&year=<?= $year?>&month=<?=$month?>&day=<?= $day?>&gender=<?=$gender?>&weight=<?=$weight?>&type=<?=$type?>&pet_type=<?=$pet_type?>&photo=<?=$photo?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+		<a href="reserve_write2?artist_id=<?=$artist_id?>&pet_seq=<?= $pet_seq ?>&pet_name=<?=$pet_name?>&year=<?= $year?>&month=<?=$month?>&day=<?= $day?>&gender=<?=$gender?>&weight=<?=$weight?>&type=<?=$type?>&pet_type=<?=$pet_type_1?>&photo=<?=$photo?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
 	</div>
 	<div class="page-title">서비스 설정하기</div>
 	<div class="reserve-state-bar">
