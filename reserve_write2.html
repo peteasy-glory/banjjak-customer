@@ -136,8 +136,8 @@ $back = ($empty > 0)? "allim/empty_info?no=".$empty : "reserve_write1?artist_id=
     //});
 
 	function onClickService(){
-		if($("#pet_select").hasClass("actived")){
-			location.replace("reserve_write2_2?artist_id=<?= urlencode($artist_id) ?>&pet_seq=<?=$pet_seq?>");
+		if($("#pet_select").hasClass("pet")){
+			location.replace("reserve_write2_2?artist_id=<?= urlencode($artist_id) ?>&pet_seq=<?=$pet_seq?>&pet_name=<?=$pet_name?>&year=<?= $year?>&month=<?=$month?>&day=<?= $day?>&gender=<?=$gender?>&weight=<?=$weight?>&type=<?=$type?>&pet_type=<?=$pet_type?>&photo=<?=$photo?>");
 		}else{
 			alert("펫선택을 먼저 진행해주세요");
 		}
