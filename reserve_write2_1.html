@@ -64,7 +64,7 @@ $is_cat = mysqli_num_rows($result);
                     ?>
                         <a href="#" onclick="alert('고양이 미용을 하지 않는 샵입니다.<?=$is_cat?>');" class="customer-card-item pet">
                     <?}else{?>
-                        <a href="reserve_write2?artist_id=<?=$artist_id?>&pet_seq=<?= $pet_seq ?>" class="customer-card-item pet">
+                        <a href="reserve_write2?artist_id=<?=$artist_id?>&pet_seq=<?= $pet_seq ?>&pet_name=<?=$pet_name?>&year=<?= $year?>&month=<?=$month?>&day=<?= $day?>&gender=<?=$gender?>&weight=<?=$weight?>&type=<?=$type?>&pet_type=<?=$pet_type?>&photo=<?=$photo?>" class="customer-card-item pet">
                     <?}?>
                         <div class="item-info-wrap">
                             <div class="item-thumb">
@@ -112,4 +112,42 @@ $is_cat = mysqli_num_rows($result);
 </section>
 <!-- //container -->
 <script>
+//
+//    function send_info(){
+//
+//        $.ajax({
+//
+//            url:'reserve_write2.html',
+//            type:'POST',
+//            data:{
+//                photo:'<?//= $photo?>//',
+//                pet_name:'<?//= $pet_name?>//',
+//                year:'<?//= $year?>//',
+//                month:'<?//= $month?>//',
+//                day:'<?//= $day?>//',
+//                age:'<?//= $age?>//',
+//                dist:'<?//= $dist?>//',
+//                gender:'<?//= $gender?>//',
+//                weight:'<?//= $weight?>//',
+//                pet_type:'<?//= $pet_type?>//',
+//                pet_type2:'<?//= $pet_type2?>//',
+//
+//
+//            },
+//            success: ()=>{
+//
+//                console.log("성공");
+//                alert("성공");
+//
+//            },
+//            error:(err)=>{
+//
+//                event.preventDefault();
+//                console.log(err)
+//            }
+//
+//
+//
+//        })
+//    }
 </script>

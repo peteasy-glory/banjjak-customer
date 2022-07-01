@@ -22,6 +22,22 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 $artist_name = get_artist_id(addslashes($artist_id));
 $pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
 
+$photo = isset($_GET['photo']) ? $_GET['photo'] : "";
+$pet_name = isset($_GET['pet_name']) ? $_GET['pet_name'] : "";
+$year = isset($_GET['year']) ? $_GET['year'] : "";
+$month = isset($_GET['month']) ? $_GET['month'] : "";
+$day = isset($_GET['day']) ? $_GET['day'] : "";
+$age = isset($_GET['age']) ? $_GET['age'] : "";
+$dist = isset($_GET['dist']) ? $_GET['dist'] : "";
+$gender = isset($_GET['gender']) ? $_GET['gender'] : "";
+$weight = isset($_GET['weight']) ? $_GET['weight'] : "";
+$type = isset($_GET['type']) ? $_GET['type'] : "";
+$pet_type = isset($_GET['pet_type']) ? $_GET['pet_type'] : "";
+$pet_type2 = isset($_GET['pet_type2']) ? $_GET['pet_type2'] : "";
+
+
+$item = isset($_GET['item']) ? $_GET['item'] : "";
+
 $back = ($empty > 0)? "allim/empty_info?no=".$empty : "reserve_write1?artist_id={$artist_id}";
 ?>     
 <!-- header -->
@@ -37,7 +53,7 @@ $back = ($empty > 0)? "allim/empty_info?no=".$empty : "reserve_write1?artist_id=
 <!-- //header -->
 
 <!-- container -->
-<section id="container"> 
+<section id="container">
 	<!-- page-body -->    
 	<div class="page-body">
 		<!-- page-contents -->  
@@ -51,7 +67,53 @@ $back = ($empty > 0)? "allim/empty_info?no=".$empty : "reserve_write1?artist_id=
 				<!-- //샵 이름 있을 때 -->
 				<div class="reserve-select-wrap">
 					<!-- 활성화시 actived클래스 추가 -->
-					<a type="button" id="pet_select" href="reserve_write2_1?artist_id=<?=$artist_id?>" class="btn-text-button btn-outline-purple">펫을 선택해주세요</a>
+                    <?php if(empty($pet_seq)){
+
+                       echo '<a type="button" id="pet_select" href="reserve_write2_1?artist_id='.$artist_id.'" class="btn-text-button btn-outline-purple">펫을 선택해주세요</a>';
+
+
+                    }else{?>
+
+                        <a type="button" id="pet_select" href="reserve_write2_1?artist_id=<?=$artist_id?>" class="customer-card-item pet" style="margin-bottom:10px; border:1px solid rgba(104,64,177,0.3);">
+                        <div class="item-info-wrap">
+                            <div class="item-thumb">
+                                <div class="user-thumb large" style="
+                                <?php
+                                if($type === 'dog'){
+                                    echo 'background:url(/images/icon_dog_90.png) no-repeat; background-size:cover;';
+                                }else{
+                                    echo 'background:url(/images/icon_cat_90.png) no-repeat; background-size:cover;';
+                                }
+                                ?>
+                                        "><img onerror="this.style.display='none';" src="<?= $photo ?>" alt=""></div>
+                            </div>
+                            <div class="item-data">
+                                <div class="item-data-inner">
+                                    <div class="item-pet-name" style="display:flex; justify-content: space-between"><?= $pet_name ?><div class="edit-button">변경</div></div>
+                                    <?php
+                                    $ttttt = sprintf("%d-%d-%d", $year, $month, $day);
+                                    $birth_time   = strtotime($ttttt);
+                                    $now          = date('Ymd');
+                                    $birthday     = date('Ymd', $birth_time);
+                                    $age           = floor(($now - $birthday) / 10000);
+
+                                    $nowY = date("Y");
+                                    $nowM = date("m");
+                                    $postY = $year;
+                                    $postM = $month;
+                                    $dist = ($nowY - $postY) * 12 + ($nowM - $postM);
+                                    ?>
+                                    <div class="item-pet-date"><?= $year ?>.<?= $month ?>.<?= $day ?><font style="font-size:13px;">(<?php if ($age != 0) {
+                                                echo $age . "년";} ?><?= $dist % 12 ?>개월)</font></div>
+                                    <div class="item-pet-body"><?= $gender ?> / <?= $weight ?>kg  <?= $pet_type ?> <?= $pet_type2 ?></div>
+                                </div>
+                            </div>
+                        </div>
+                        </a>
+
+
+                    <?php } ?>
+
 					<a type="button" onclick="onClickService()" class="btn-text-button btn-outline-purple" >서비스를 선택해주세요</a>
 				</div>
 			</div>
@@ -64,14 +126,14 @@ $back = ($empty > 0)? "allim/empty_info?no=".$empty : "reserve_write1?artist_id=
 	<!-- //page-bottom -->
 </section>
 <script>
-	$(function(){
-       let pet_seq = "<?=$pet_seq?>"
-	   if(pet_seq != ""){
-			$("#pet_select").addClass("actived");
-	   }
-
-	   
-    });
+	//$(function(){
+    //   let pet_seq = "<?//=$pet_seq?>//"
+	//   if(pet_seq != ""){
+	//		$("#pet_select").addClass("actived");
+	//   }
+    //
+	//
+    //});
 
 	function onClickService(){
 		if($("#pet_select").hasClass("actived")){

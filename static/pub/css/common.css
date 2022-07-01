@@ -966,6 +966,19 @@ h6.con-title {font-size:15px; line-height:20px;}
 }
 
 
+/*2020.07.01 펫 예약 불러오기 수정*/
+.edit-button {
+	width: 40px;
+	height: 18px;
+	border: 1px solid #ebebeb;
+	font-weight: 300;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius:5px;
+	font-size:13px;
+
+}
 
 /* 정보성 테이블 */
 .read-table table {width:100%; table-layout:fixed;}
