@@ -279,6 +279,44 @@ if($mode){
 
     }else if($mode == 'update_date'){
 
+        $user_id = $_SESSION['gobeauty_user_id'];
+        $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
+        $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
+        $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
+        $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
+        $day = ($_POST["day"] && $_POST["day"] != "")? $_POST["day"] : "";
+        $hour = ($_POST["hour"] && $_POST["hour"] != "")? $_POST["hour"] : "";
+        $to_hour = ($_POST["to_hour"] && $_POST["to_hour"] != "")? $_POST["to_hour"] : "";
+        $minute = ($_POST["minute"] && $_POST["minute"] != "")? $_POST["minute"] : "";
+        $to_minute = ($_POST["to_minute"] && $_POST["to_minute"] != "")? $_POST["to_minute"] : "";
+        $payment_log_seq = ($_POST["payment_log_seq"] && $_POST["payment_log_seq"] != "")? $_POST["payment_log_seq"] : "";
+
+
+        if($artist_id != "" && $user_id != ""){
+            $sql = "
+                UPDATE tb_payment_log SET
+                    worker = '{$worker}',
+                    year = '{$year}',
+                    month = '{$month}',
+                    day = '{$day}',
+                    hour = '{$hour}',
+                    minute = '{$minute}',
+                    to_hour = '{$to_hour}',
+                    to_minute = '{$to_minute}'
+                WHERE artist_id = '{$artist_id}' 
+                AND customer_id = '{$user_id}'
+                AND payment_log_seq = {$payment_log_seq}
+            ";
+            $result = mysqli_query($connection, $sql);
+
+            if ($result === true){ // success
+                $return_data = array("code" => "000000", "data" => "ok");
+            }else{ // fail
+                $return_data = array("code" => "000000", "data" => $sql);
+            }
+        }else{ // fail
+            $return_data = array("code" => "000000", "data" => "fail");
+        }
     }else{
         $return_data = array("code" => "999997", "data" => "허용되지 않은 접근입니다.");
     }

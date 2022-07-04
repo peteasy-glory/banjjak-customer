@@ -77,12 +77,8 @@ if ($is_only_point == 0 && $pay_type == 'card') {
     }else{
         ?>
         <script>
-            $.MessageBox({
-                buttonDone: "확인",
-                message: "카드사 에러로 결제 취소가 안되고 있습니다.<br>(고객센터로 전화 부탁드립니다.)"
-            }).done(function() {
-                location.href = 'manage_my_reservation.php';
-            });
+            alert("카드사 에러로 결제 취소가 안되고 있습니다.<br>(고객센터로 전화 부탁드립니다.)");
+            location.href = '../mypage_reserve_list';
         </script>
         <?php
         //include "../include/bottom.php";
@@ -176,12 +172,12 @@ if ($load_result) {
 // 예약 취소하기
 $sql = "UPDATE tb_payment_log SET is_cancel = 1, cancel_time = NOW() WHERE payment_log_seq = '" . $payment_log_seq . "' AND artist_id = '" . $artist_id . "';";
 $result = mysqli_query($connection,$sql);
-if (mysqli_affected_rows() > 0) {
-    echo "success";
+if ($result) {
+    //echo "success";
 
     if ($artist_id != null && $artist_id != "") {
         $message = $year . "년" . $month . "월" . $day . "일 예약취소. 예약내용을 확인하세요.";
-        $path = "http://gopet.kr/pet/shop/manage_sell_info.php?yy=" . $year . "&mm=" . $month . "&dd=" . $day;
+        $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
         //$image = "http://gopet.kr/pet/images/logo_login.jpg";
         $image = "";
         a_push($artist_id, "반짝, 반려생활의 단짝. 예약취소 알림", $message, $path, $image);
@@ -189,8 +185,19 @@ if (mysqli_affected_rows() > 0) {
         $admin_message = $user_id . "가 펫샵 " . $artist_id . "의 " . $year . "년" . $month . "월" . $day . "일 예약취소.";
         a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 예약취소 알림", $admin_message, $path, $image);
     }
+    ?>
+    <script>
+        location.href = '../mypage_reserve_list?type=cancel';
+    </script>
+    <?php
 } else {
-    echo "fail";
+    //echo "fail";
+    ?>
+    <script>
+        alert('에약취소에 실패했습니다.')
+        location.href = '../mypage_reserve_list';
+    </script>
+    <?php
 }
 
 function INI_PartialRefund($tid, $msg, $price, $confirmPrice){
@@ -269,5 +276,5 @@ closeDB();
 //include "../include/bottom.php";
 ?>
 <script>
-    location.href = 'manage_my_reservation.php?type=cancel';
+    location.href = '../mypage_reserve_list?type=cancel';
 </script>

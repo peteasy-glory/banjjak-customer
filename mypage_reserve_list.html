@@ -687,7 +687,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                                 <div class="grid-layout btn-grid-group">
                                     <div class="grid-layout-inner">
                                         <?php if (!startsWith($pay_type, "pos")) { ?>
-                                            <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round" onclick="location.href='modify_reservation?artist_id=<?=$artist_id?>&beauty_time=<?=$beauty_time?>&pet_seq=<?=$pet_seq?>'">예약변경견주</button></div>
+                                            <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round" onclick="location.href='modify_reservation?artist_id=<?=$artist_id?>&beauty_time=<?=$beauty_time?>&pet_seq=<?=$pet_seq?>&payment_log_seq=<?=$payment_log_seq?>'">예약변경견주</button></div>
                                             <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-outline-purple btn-middle-size btn-round" onclick="cancel_button('<?=$artist_id?>','<?=$payment_log_seq?>')">예약 취소견주</button></div>
                                         <?php } else { // 펫샵에서 에약(견주가 예약변경 X) ?>
                                             <div class="grid-layout-cell grid-2"><button type="button" class="btn btn-purple btn-middle-size btn-round" onclick="pos_alert('<?=$shop_phone?>')">예약변경</button></div>
@@ -792,7 +792,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
     $(".go_cancel").click(function(){
         var artist_id = $(this).data('id');
         var payment_log_seq = $(this).data('seq');
-        //location.href = 'cancel_reservation.php?artist_id=' + artist_id + '&payment_log_seq=' + payment_log_seq;
+        location.href = 'data/cancel_reservation.php?artist_id=' + artist_id + '&payment_log_seq=' + payment_log_seq;
         console.log(artist_id,payment_log_seq);
     });
 </script>

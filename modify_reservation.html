@@ -17,6 +17,8 @@ $date = date('Y-m-d');
 $tomorrow = date('Y-m-d', strtotime($date."+1days"));
 $week = date('w', strtotime($tomorrow));
 
+$payment_log_seq = $_GET['payment_log_seq'];
+
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
 $artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
 $pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
@@ -71,7 +73,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
     <div class="header-left">
         <a href="mypage_reserve_list" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
-    <div class="page-title">예약 신청하기</div>
+    <div class="page-title">예약 변경하기</div>
     <div class="reserve-state-bar">
         <div class="bar" style="width:66.66%"></div>
     </div>
@@ -189,6 +191,42 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
     <!-- //page-bottom -->
 </section>
 <!-- //container -->
+
+<!-- 견주예약 변경 메시지 -->
+<article id="modify_alert" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
+
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt"></div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm btn-cf" onclick="update_date();">예</button>
+                    <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">아니오</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
+
+<article id="modify_success" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
+
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt">예약시간을 변경했습니다.</div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm" onclick="location.href='mypage_reserve_list'">확인</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
 
 <script>
     //펫종류
@@ -562,20 +600,64 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             //alert('시간/날짜변경');
             console.log(timeResultArray);
 
+            //console.log(timeResultArray[0].worker+" / "+start_hour+":"+start_minute+" ~ "+end_hour+":"+end_minute);
+            popalert.open('modify_alert',timeResultArray[0].date+" "+timeResultArray[0].time+" 로 변경하시겠습니까?");
         }
     }
 
+    // 예약변경하기
     function update_date(){
+
+        // 미용날짜 구하기
+        var start_year = (timeResultArray[0].date.split('-'))[0];
+        var start_month = (timeResultArray[0].date.split('-'))[1];
+        var start_day = (timeResultArray[0].date.split('-'))[2];
+        console.log(start_year+"-"+start_month+"-"+start_day);
+
+        // 미용시작시간 구하기
+        var start_minute = (timeResultArray[0].time.replace(':','')).slice(-2);
+        var start_hour = (timeResultArray[0].time.replace(':','')).replace(start_minute,'');
+
+        // 미용종료시간 구하기
+        var start_time = timeResultArray[0].time;
+        var start_time_min = (start_time.split(':')[1] == '30')? '50' : '00';
+        start_time = start_time.split(':')[0]+start_time_min;
+        for(var i=0;i<seviceTime;i++){
+            start_time = parseInt(start_time)+50;
+        }
+        var end_minute = start_time.toString().slice(-2);
+        var end_hour = start_time.toString().replace(end_minute,'');
+        if(end_minute == '50'){
+            end_minute = '30';
+        }else{
+            end_minute = '00';
+        }
+
         $.ajax({
             url : "data/reserve_payment_ajax.php",
             data : {
                 mode : "update_date",
                 artist_id : '<?=$artist_id?>',
-                name : name
+                worker : timeResultArray[0].worker,
+                year : start_year,
+                month : start_month,
+                day : start_day,
+                hour : start_hour,
+                to_hour : end_hour,
+                minute : start_minute,
+                to_minute : end_minute,
+                payment_log_seq : <?=$payment_log_seq?>
             },
             type : 'POST',
             dataType: 'json',
             success: function(data) {
+                if($.trim(data.data) == 'ok'){
+                    pop.open('modify_success');
+
+                }else{
+                    $('#firstRequestMsg1').find('.msg-txt').text('예약시간 변경에 실패했습니다.');
+                    pop.open('modify_success');
+                }
             }
         });
     }
