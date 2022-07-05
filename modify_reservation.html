@@ -650,8 +650,12 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             },
             type : 'POST',
             dataType: 'json',
+            beforeSend: function(){
+                $("#loading").addClass('actived');
+            },
             success: function(data) {
                 if($.trim(data.data) == 'ok'){
+                    $("#loading").removeClass('actived');
                     pop.open('modify_success');
 
                 }else{

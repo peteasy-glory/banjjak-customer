@@ -93,6 +93,13 @@ $serviceResultArray = isset($_GET['serviceResultArray']) ? json_encode($_GET['se
 $etcResultArray = isset($_GET['etcResultArray']) ? json_encode($_GET['etcResultArray']) : "";
 $timeResultArray = isset($_GET['timeResultArray']) ? json_encode($_GET['timeResultArray']) : "";
 
+// 카드결제를 위한 세션 생성
+$_SESSION['serviceResultArray'] = $serviceResultArray;
+$_SESSION['etcResultArray'] = $etcResultArray;
+$_SESSION['timeResultArray'] = $timeResultArray;
+$_SESSION['artist_id'] = $artist_id;
+$_SESSION['pet_seq'] = $pet_seq;
+
 $order_id = str2hex($user_id)."_".rand_id();
 
 // 빈시간 판매하기 정보

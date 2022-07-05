@@ -216,7 +216,7 @@ if($mode){
             // 알림톡 발송 / PUSH 발송
             $artist_name = explode("|", $product);
             $artist_name = $artist_name[2];
-            $path = "https://www.gopet.kr/pet/shop/manage_sell_info.php?yy=".$year."&mm=".$month."&dd=".$day;
+            $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
             //$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
             $image = "";
             $admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약(계좌이체 결제 진행중)하였습니다. ".$year."년".$month."월".$day."일 신규 예약등록. 작업스케줄을 관리하세요.";
@@ -310,6 +310,13 @@ if($mode){
             $result = mysqli_query($connection, $sql);
 
             if ($result === true){ // success
+
+                $message = $year."년".$month."월".$day."일 예약변경등록. 예약 내용을 확인하세요.";
+                $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
+                //$image = "http://gopet.kr/pet/images/logo_login.jpg";
+                $image = "";
+                a_push($artist_id, "반짝, 반려생활의 단짝. 예약변경 알림", $message, $path, $image);
+
                 $return_data = array("code" => "000000", "data" => "ok");
             }else{ // fail
                 $return_data = array("code" => "000000", "data" => $sql);
