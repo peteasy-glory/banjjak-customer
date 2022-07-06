@@ -277,6 +277,7 @@ if($mode){
             $return_data = array("code" => "000000", "data" => "fail");
         }
 
+    // 예약시간변경
     }else if($mode == 'update_date'){
 
         $user_id = $_SESSION['gobeauty_user_id'];
