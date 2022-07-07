@@ -43,7 +43,7 @@ if(isset($mode)) {
         // 당일 예약미용, 휴무, 타인의 앱에약중
         $sql = "
             SELECT hour, minute, to_hour, to_minute
-            FROM tb_payment_log WHERE artist_id = '".$artist_id."' AND worker = '".$worker."'
+            FROM tb_payment_log WHERE artist_id = '".$artist_id."' AND worker = '".$worker."' AND is_cancel = 0 
             AND YEAR = ".$year." AND MONTH = ".$month." AND DAY = ".$day."
             
             UNION

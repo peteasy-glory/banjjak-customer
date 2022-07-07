@@ -363,7 +363,7 @@ $grade_cnt = mysqli_num_rows($grade_result);
 
 <script>
     // 데이터 꺼내기
-    if("<?=$pay_status ?>" != 'R1'){
+    //if("<?=$pay_status ?>" != 'R1'){
         var serviceResultArray = JSON.parse(<?=$serviceResultArray?>);
         var etcResultArray = JSON.parse(<?=$etcResultArray?>);
         var timeResultArray = JSON.parse(<?=$timeResultArray?>);
@@ -466,7 +466,7 @@ $grade_cnt = mysqli_num_rows($grade_result);
             $("#result_price_cell").css("display","flex");
 
         }
-    }
+    //}
 
 
     $(function(){

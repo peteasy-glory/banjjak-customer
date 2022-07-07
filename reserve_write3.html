@@ -93,7 +93,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
 				<!-- //샵 이름 있을 때 -->
 				<div class="reserve-schedule-wrap">
 					<ul class="accordion-list big">
-						<li class="accordion-cell actived">
+						<li class="accordion-cell month_select actived">
 							<button type="button" class="btn-accordion-menu">
 								<span class="accordion-menu-subject"><strong>예약날짜를 선택해주세요.</strong></span>
 							</button>
@@ -105,7 +105,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
 								</div>
 							</div>			
 						</li>       
-						<li class="accordion-cell actived">			
+						<li class="accordion-cell actived">
 							<button type="button" class="btn-accordion-menu">
 								<span class="accordion-menu-subject"><strong>디자이너<span class="symbol-dot"></span>시간</strong></span>
 							</button>
@@ -411,19 +411,21 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             type : 'POST',
             dataType: 'json',
             success: function(json) {
-                var time_data = json.data[0].res_time_off;
-                var time_array = time_data.split(",");
-                console.log(time_array);
+                if(json.data.length > 0){
+                    var time_data = json.data[0].res_time_off;
+                    var time_array = time_data.split(",");
+                    console.log(time_array);
 
-                $(time_array).each(function (i,v){
-                    var start_time = v.split("~")[0];
-                    var split_time = start_time.split(":");
+                    $(time_array).each(function (i,v){
+                        var start_time = v.split("~")[0];
+                        var split_time = start_time.split(":");
 
-                    var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
-                    var disabled = "#"+seq+"_"+(timeStart/50);
-                    $(disabled).attr("disabled", true); // 시간제일경우 선택된 타임만 선택가능
+                        var timeStart = parseInt(split_time[0]+((split_time[1] == 30)? "50":"00"));
+                        var disabled = "#"+seq+"_"+(timeStart/50);
+                        $(disabled).attr("disabled", true); // 시간제일경우 선택된 타임만 선택가능
 
-                });
+                    });
+                }
                 getArtistHoliday(name,seq);
             }
         });
@@ -521,14 +523,18 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             if(is_disabled_brfore < 3 && is_disabled_brfore > 0){
                 $("input[name=time1]").prop('checked', false);
                 console.log("앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!");
-                $('#firstRequestMsg1').find('.msg-txt').text('앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!');
+                $('#firstRequestMsg1').find('.msg-txt').html('앞 시간이 비어있어요!<br> 앞 시간에 이어서 선택해 주세요!');
                 pop.open("firstRequestMsg1");
             }else if(is_disabled == 1){
                 $("input[name=time1]").prop('checked', false);
-                console.log("no1");
+                console.log("뒤에 다른 미용과 겹침");
+                $('#firstRequestMsg1').find('.msg-txt').html('미용 소요 시간이 길어</br> 해당 시간은 예약이 어렵습니다.');
+                pop.open("firstRequestMsg1");
             }else if(is_id == 1){
                 $("input[name=time1]").prop('checked', false);
-                console.log("미용가용시간만큼 비어있는 시간이 없습니다.");
+                console.log("뒤에 근무시간이 없음");
+                $('#firstRequestMsg1').find('.msg-txt').html('미용 소요 시간이 길어</br> 해당 시간은 예약이 어렵습니다.');
+                pop.open("firstRequestMsg1");
             }else{
                 console.log("yes");
                 timeResultArray.map(result => {
@@ -594,6 +600,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
                 // console.log(new Date(today));
                 // console.log(new Date(date));
                 // if(today.getTime() == date.getTime()){alert("당일예약 노노")}; // 당일예약 방지이지만 datepicker에서 아예 선택 불가능하게 막아놓음
+                $(".month_select").removeClass('actived');
                 getDesigner(date);
                 console.log(date);
             }

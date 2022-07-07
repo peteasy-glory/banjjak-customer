@@ -216,7 +216,7 @@ if($mode){
             // 알림톡 발송 / PUSH 발송
             $artist_name = explode("|", $product);
             $artist_name = $artist_name[2];
-            $path = "https://www.gopet.kr/pet/shop/manage_sell_info.php?yy=".$year."&mm=".$month."&dd=".$day;
+            $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
             //$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
             $image = "";
             $admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약(계좌이체 결제 진행중)하였습니다. ".$year."년".$month."월".$day."일 신규 예약등록. 작업스케줄을 관리하세요.";
@@ -277,8 +277,54 @@ if($mode){
             $return_data = array("code" => "000000", "data" => "fail");
         }
 
+    // 예약시간변경
     }else if($mode == 'update_date'){
 
+        $user_id = $_SESSION['gobeauty_user_id'];
+        $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "")? $_POST["artist_id"] : "";
+        $worker = ($_POST["worker"] && $_POST["worker"] != "")? $_POST["worker"] : "";
+        $year = ($_POST["year"] && $_POST["year"] != "")? $_POST["year"] : "";
+        $month = ($_POST["month"] && $_POST["month"] != "")? $_POST["month"] : "";
+        $day = ($_POST["day"] && $_POST["day"] != "")? $_POST["day"] : "";
+        $hour = ($_POST["hour"] && $_POST["hour"] != "")? $_POST["hour"] : "";
+        $to_hour = ($_POST["to_hour"] && $_POST["to_hour"] != "")? $_POST["to_hour"] : "";
+        $minute = ($_POST["minute"] && $_POST["minute"] != "")? $_POST["minute"] : "";
+        $to_minute = ($_POST["to_minute"] && $_POST["to_minute"] != "")? $_POST["to_minute"] : "";
+        $payment_log_seq = ($_POST["payment_log_seq"] && $_POST["payment_log_seq"] != "")? $_POST["payment_log_seq"] : "";
+
+
+        if($artist_id != "" && $user_id != ""){
+            $sql = "
+                UPDATE tb_payment_log SET
+                    worker = '{$worker}',
+                    year = '{$year}',
+                    month = '{$month}',
+                    day = '{$day}',
+                    hour = '{$hour}',
+                    minute = '{$minute}',
+                    to_hour = '{$to_hour}',
+                    to_minute = '{$to_minute}'
+                WHERE artist_id = '{$artist_id}' 
+                AND customer_id = '{$user_id}'
+                AND payment_log_seq = {$payment_log_seq}
+            ";
+            $result = mysqli_query($connection, $sql);
+
+            if ($result === true){ // success
+
+                $message = $year."년".$month."월".$day."일 예약변경등록. 예약 내용을 확인하세요.";
+                $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
+                //$image = "http://gopet.kr/pet/images/logo_login.jpg";
+                $image = "";
+                a_push($artist_id, "반짝, 반려생활의 단짝. 예약변경 알림", $message, $path, $image);
+
+                $return_data = array("code" => "000000", "data" => "ok");
+            }else{ // fail
+                $return_data = array("code" => "000000", "data" => $sql);
+            }
+        }else{ // fail
+            $return_data = array("code" => "000000", "data" => "fail");
+        }
     }else{
         $return_data = array("code" => "999997", "data" => "허용되지 않은 접근입니다.");
     }

@@ -45,11 +45,11 @@
     include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
     include($_SERVER['DOCUMENT_ROOT']."/include/Allimtalk.class.php");
 
-    $serviceResultArray = isset($_GET['serviceResultArray']) ? json_encode($_GET['serviceResultArray']) : "";
-    $etcResultArray = isset($_GET['etcResultArray']) ? json_encode($_GET['etcResultArray']) : "";
-    $timeResultArray = isset($_GET['timeResultArray']) ? json_encode($_GET['timeResultArray']) : "";
-    $artist_id = isset($_GET['artist_id']) ? $_GET['artist_id'] : "";
-    $pet_seq = isset($_GET['pet_seq']) ? $_GET['pet_seq'] : "";
+    $serviceResultArray = $_SESSION['serviceResultArray'];
+    $etcResultArray = $_SESSION['etcResultArray'];
+    $timeResultArray = $_SESSION['timeResultArray'];
+    $artist_id = $_SESSION['artist_id'];
+    $pet_seq = $_SESSION['pet_seq'];
     ?>
     <script>
         var serviceResultArray = JSON.parse(<?=$serviceResultArray?>);
