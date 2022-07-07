@@ -12,15 +12,6 @@ if(end($referer) != 'join3' ){
 }
 
 ?>
-    <script>
-
-    if(sessionStorage.getItem('check3') !== 'check'){
-
-        alert('잘못된 접근입니다.\n회원가입 첫 화면으로 이동합니다.');
-        location.href = "join1"
-    }
-
-</script>
                 
 
 <!-- header -->
@@ -54,14 +45,6 @@ if(end($referer) != 'join3' ){
 </section>
 <!-- //container -->
 
-    <script>
-
-
-        setTimeout(function(){
-
-            sessionStorage.clear()
-        },500)
-    </script>
 	
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer_no_gnb.php");
