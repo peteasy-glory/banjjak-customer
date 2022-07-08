@@ -159,10 +159,15 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
     let userAgent =  navigator.userAgent;
-
-    if(userAgent.match(/window/i)){
+    //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
+    if(userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)){
         document.getElementById('appDownloadPopup').classList.remove('actived');
     }
+
+
+
+
+
 
     if(getCookie_popup('appDownloadpopup') === 'Y'){
         document.getElementById('appDownloadPopup').classList.remove('actived');
