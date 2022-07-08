@@ -1894,12 +1894,34 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
         }
 
 
-        //// meta 태그 관련
-        //
-        //let info_name = '<?//=$product_row['product_name']?>//';
-        //
-        //
-        //$("meta[property='og\\:description']").attr("content",info_name);
+
+        $(document).ready(function(){
+
+
+            let link = document.getElementsByClassName('app-download-link');
+
+
+
+
+            if(userAgent.match(/iphone|ipad|ipod/i) ){
+
+
+                Array.from(link).forEach(function(el,i){
+
+                    el.setAttribute('href','https://apps.apple.com/kr/app/id1436568194');
+                })
+
+
+            }else{
+                Array.from(link).forEach(function(el,i){
+
+                    el.setAttribute('href','https://play.google.com/store/apps/details?id=m.kr.gobeauty');
+                })
+            }
+
+
+
+        })
 
     </script>
 <?
