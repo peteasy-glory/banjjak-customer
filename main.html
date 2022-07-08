@@ -192,190 +192,76 @@ if($_SESSION['is_token'] == "1"){
     }
 }
 ?>
-<?php
-if($user_id !== ""){
-
-    $sql = "
-                            SELECT *
-                            FROM tb_customer
-                            WHERE id = '".$user_id."'
-                        ";
-    $result = mysqli_query($connection, $sql);
-    $row = mysqli_fetch_assoc($result);
-    $pet_seq = (isset($row['pet_seq']) && $row['pet_seq']) ? $row['pet_seq'] : "";
-    $nickname = $row["nickname"];
-
-
-
-}
-$pet_sql = "select * from tb_mypet where customer_id = '" . $user_id . "' order by '" . $pet_seq ."' asc  ;";
-$pet_result = mysqli_query($connection, $pet_sql);
-$pet_rows = mysqli_fetch_object($pet_result);
-$name_for_owner = $pet_rows->name_for_owner;
-$pet_name = ($name_for_owner == "")? $pet_rows->name : $name_for_owner;
-$pet_type = $pet_rows->pet_type;
-
-
-
-?>
-
-<?php
-
-function have_jongsung ($chr) {
-    static $no_jongsung = "가갸거겨고교구규그기개걔게계과괘궈궤괴귀긔까꺄꺼껴꼬꾜꾸뀨끄끼깨꺠께꼐꽈꽤꿔꿰꾀뀌끠나냐너녀노뇨누뉴느니내냬네녜놔놰눠눼뇌뉘늬다댜더뎌도됴두듀드디대댸데뎨돠돼둬뒈되뒤듸따땨떠뗘또뚀뚜뜌뜨띠때떄떼뗴똬뙈뚸뛔뙤뛰띄라랴러려로료루류르리래럐레례롸뢔뤄뤠뢰뤼릐마먀머며모묘무뮤므미매먜메몌뫄뫠뭐뭬뫼뮈믜바뱌버벼보뵤부뷰브비배뱨베볘봐봬붜붸뵈뷔븨빠뺘뻐뼈뽀뾰뿌쀼쁘삐빼뺴뻬뼤뽜뽸뿨쀄뾔쀠쁴사샤서셔소쇼수슈스시새섀세셰솨쇄숴쉐쇠쉬싀싸쌰써쎠쏘쑈쑤쓔쓰씨쌔썌쎄쎼쏴쐐쒀쒜쐬쒸씌아야어여오요우유으이애얘에예와왜워웨외위의자쟈저져조죠주쥬즈지재쟤제졔좌좨줘줴죄쥐즤짜쨔쩌쪄쪼쬬쭈쮸쯔찌째쨰쩨쪠쫘쫴쭤쮀쬐쮜쯰차챠처쳐초쵸추츄츠치채챼체쳬촤쵀춰췌최취츼카캬커켜코쿄쿠큐크키캐컈케켸콰쾌쿼퀘쾨퀴킈타탸터텨토툐투튜트티태턔테톄톼퇘퉈퉤퇴튀틔파퍄퍼펴포표푸퓨프피패퍠페폐퐈퐤풔풰푀퓌픠하햐허혀호효후휴흐히해햬헤혜화홰훠훼회휘희2459";
-    return !mb_strpos($no_jongsung, $chr) ? true : false;
-}
-
-
-function select_marker ($word, $have_jongsung, $no_jongsung) {
-    $last_chr = mb_substr($word, -1, 1);
-    return have_jongsung($last_chr) ?
-        $word.$have_jongsung :
-        $word.$no_jongsung;
-}
-
-
-?>
 
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=21wrh1y95y&submodules=geocoder"></script>
 <!-- header -->
-<header id="header">	
-	<div class="header-left">
-		<a href="reserve_search_area" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt" id="areaTxt"></div></a>
-	</div>
-	<div class="header-right">
-		<a href="main_alarm" class="btn-page-ui btn-page-alarm"><div class="icon icon-size-24 icon-page-alarm">알람</div></a>
-	</div>
+<header id="header">
+    <div class="header-left">
+        <a href="reserve_search_area" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt" id="areaTxt"></div></a>
+    </div>
+    <div class="header-right">
+        <!--		<a href="#" class="btn-page-ui btn-page-alarm"><div class="icon icon-size-24 icon-page-alarm">알람</div></a>-->
+    </div>
 </header>
 <!-- //header -->
 
 <!-- container -->
-<section id="container"> 
-	<!-- page-body -->   
-	<div class="page-body">
-		<!-- page-contents -->  
-		<div class="page-contents" style="padding:0px;">
-			<div class="main-wrap">
-
-
-
-                                <div class="main-today-banner">
-                                    <a href="#" class="btn-main-today-item">
-                                        <div class="item-desc">
-                                            <span><?php echo $nickname?> 님, 할인쿠폰 받고 첫 예약을 시작해 보세요.</span>
-                                        </div>
-                                        <div class="item-visual">
-                                            <img src="images/icon-today-visual-1.png" alt="">
-                                        </div>
-                                    </a>
-                                </div>
-                                <br/>
-                                <div class="main-today-banner">
-                                    <a href="/shop_main" class="btn-main-today-item">
-
-                                        <div class="item-desc">
-                                            <span>
-                                                <?php echo $pet_name.' 부모님, 가입 축하 포인트로 '.select_marker($pet_name,'을','를').' 위한 미용/쇼핑을 시작해보세요.' ;?>
-                                            </span>
-                                        </div>
-                                        <div class="item-visual">
-                                            <img src="images/icon-today-visual-2.png" alt="">
-                                        </div>
-                                    </a>
-                                </div>
-                                <br/>
-                                <div class="main-today-banner">
-                                    <a href="#" class="btn-main-today-item">
-                                        <div class="item-desc">
-                                            <span><?php echo $pet_name.' 부모님,'.$pet_name.' 미용할 때 되었죠? 2,000원 쿠폰을 이용해 보세요.';?> </span>
-                                        </div>
-                                        <div class="item-visual">
-                                            <img src="images/icon-today-visual-3.png" alt="">
-                                        </div>
-                                    </a>
-                                </div>
-                                <br/>
-                                <div class="main-today-banner">
-                                    <a href="#" class="btn-main-today-item">
-                                        <div class="item-desc">
-                                            <span><?php echo $pet_name.' 부모님 '.$pet_name.' 미용해서 더 이뻐졌죠? 후기쓰고 포인트 챙기세요.';?> </span>
-                                        </div>
-                                        <div class="item-visual">
-                                            <img src="images/icon-today-visual-4.png" alt="">
-                                        </div>
-                                    </a>
-                                </div>
-                                <br/>
-                                <div class="main-today-banner">
-                                    <a href="#" class="btn-main-today-item">
-                                        <div class="item-desc">
-                                            <span><?php echo $pet_name.' 부모님, '.$pet_name.'처럼 귀요미들이 좋아할 뽀글이 패딩이에요.'; ?></span>
-                                        </div>
-                                        <div class="item-visual">
-                                            <img src="images/icon-today-visual-5.png" alt="">
-                                        </div>
-                                    </a>
-                                </div>
-                                <br/>
-                                <div class="main-today-banner">
-                                    <a href="#" class="btn-main-today-item">
-                                        <div class="item-desc">
-                                            <span><?php echo $pet_name.' 부모님, '. select_marker($pet_type,'이','가').' 좋아라 하는 하네스를 추천해요.';?> </span>
-                                        </div>
-                                        <div class="item-visual">
-                                            <img src="images/icon-today-visual-6.png" alt="">
-                                        </div>
-                                    </a>
-                                </div>
-                                <br/>
-
-
-				<!-- //오늘의 메세지 -->
+<section id="container">
+    <!-- page-body -->
+    <div class="page-body">
+        <!-- page-contents -->
+        <div class="page-contents" style="padding:0px;">
+            <div class="main-wrap">
+                <!-- 오늘의 메세지 -->
+                <!--<div class="main-today-banner">
+                    <a href="#" class="btn-main-today-item"><img src="/static/pub/images/14-banner-main-message@2x.png" alt=""/></a>
+                </div>-->
+                <!-- //오늘의 메세지 -->
 
 
                 <!-- 빅배너 -->
                 <div class="main-big-banner">
                     <div class="swiper-list">
-                         <div class="swiper-container">
-                             <div class="swiper-wrapper" >
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper" >
                                 <?php
                                 if(count($banner_array)>0){
                                     foreach($banner_array as $rs){
                                         $path = explode(".", $rs['file_path']);
                                         $path = $path[0]."_1.png";
-                                        
+
                                         ?>
                                         <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"></a></div></div>-->
-                                        
-                                        <div class="swiper-slide" > 
-                                            <div class="slider-item"> 
-                                                <a href="shop_event?seq=<?=$rs['mb_seq'] ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a> 
-                                            </div> 
+
+                                        <div class="swiper-slide" >
+                                            <div class="slider-item">
+                                                <a href="shop_event?seq=<?=$rs['mb_seq'] ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a>
+                                            </div>
                                         </div>
-                                        
-                                                                            <!--<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
-                                                                            <!--<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
+
+                                        <!--<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
+                                        <!--<div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
                                         <?php
                                     }
                                 }
                                 ?>
-                            </div> 
+                            </div>
                         </div>
                         <div class="swiper-page"></div>
                     </div>
                 </div>
                 <!-- //빅배너 -->
-				<!-- 많이 이용했어요 -->
-				<div class="main-use-banner">
-					<div class="con-title-group">
-						<div class="con-title">많이 이용했어요</div>
-					</div>
-					<div class="horizontal-swiper-scoller">
+                <!-- 많이 이용했어요 -->
+                <div class="main-use-banner">
+                    <div class="con-title-group">
+                        <div class="con-title">많이 이용했어요</div>
+                    </div>
+                    <div class="horizontal-swiper-scoller">
                         <div class="scroller-inner" style="overflow: auto;">
-                        <?php
-                        if(count($mainShop_array)>0){
-                            foreach($mainShop_array as $rs){
-                                ?>
+                            <?php
+                            if(count($mainShop_array)>0){
+                                foreach($mainShop_array as $rs){
+                                    ?>
                                     <div class="scroller-item" style="position:relative;">
                                         <div class="label label-purple middle" style="font-size:13px;height:25px;line-height:22px;position:absolute;top:7px;right:12px;z-index:10;border-radius:22px;"><strong>추천</strong></div>
                                         <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="picture-item">
@@ -384,168 +270,168 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
                                                 <div class="item-name"><?=$rs['name']?> </div>
                                                 <div class="item-option-group">
                                                     <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=round($rs['rating_avg'])?></em>(<?=$rs['rating_cnt']?>)</div>
-<!--                                                    <div class="item-distance">0.15km</div>-->
+                                                    <!--                                                    <div class="item-distance">0.15km</div>-->
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
-                                <?php
+                                    <?php
+                                }
                             }
-                        }
-                        ?>
+                            ?>
                         </div>
-					</div>
-				</div>
-				<!-- //많이 이용했어요 -->
-				<!-- 지금 예약가능해요 -->
-				<!--<div class="main-reserve-wrap">
-					<div class="con-title-group">
-						<div class="con-title">지금 예약가능해요</div>
-						<a href="#" class="btn-content-more">전체보기</a>
-					</div>
-					<div class="current-km">현재 위치 10km 내</div>					
-					<div class="vertical-list-wrap line">
-						<div class="list-inner">
-							<div class="list-cell">
-								<a href="#" class="basic-list-item">
-									<div class="thumb">
-										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
-										<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
-									</div>
-									<div class="info-wrap">
-										<div class="item-name">폴리파크 홍대점</div>
-										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
-										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
-										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>-->
-										<!-- 20211024 수정 : item-option-group 클래스로 수정 (리스트 이하 동일) -->
-										<!--<div class="item-option-group">
-											<div class="group-inner">-->
-												<!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->
-												<!--<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
-												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
-												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
-											</div>
-										</div>
-									</div>
-								</a>
-							</div>
-							<div class="list-cell">
-								<a href="#" class="basic-list-item">
-									<div class="thumb">
-										<div class="thumb-label"><div class="label label-pink">당일예약</div></div>
-										<img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
-									</div>
-									<div class="info-wrap">
-										<div class="item-name">폴리파크 홍대점</div>
-										<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
-										<div class="item-address">서울특별시 마포구 동교로 192-1</div>
-										<div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
-										<div class="item-option-group">
-											<div class="group-inner">
-												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
-												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
-												<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
-											</div>
-										</div>
-									</div>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>-->
-				<!-- //지금 예약가능해요 -->
-				<!-- 반려 미용 명인을 모아봣어요 -->
-				<!--<div class="main-master-banner">
-					<div class="con-title-group">
-						<div class="con-title">반려 미용 명인을 모아봣어요</div>
-						<a href="#" class="btn-content-more">전체보기</a>
-					</div>					
-					<div class="horizontal-swiper-scoller wide">
-						<div class="scroller-inner">
-							<div class="scroller-item">-->
-								<!--
-								// 배경색상 지정해서 사용(기본은 #000값)
-								-->
-								<!--<a href="#" class="bg-color-item" style="background-color:#6840b1;">
-									<div class="info-wrap">
-										<div class="item-name">다시태어나개</div>
-										<div class="item-info">미용을 꺼리는 아이의 마음을 읽는 명인이 미용하는 곳</div>
-										<div class="item-grade"><div class="icon icon-size-16 icon-star-white"></div><em>5.0</em></div>
-									</div>
-									<div class="thumb">
-										<div class="obj"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>-->
-										<!--
-										// 테두리 지정해서 사용(기본은 #000값)
-										-->
-										<!--<div class="user-thumb" style="border-color:#6840b1;"><img src="/static/pub/images/user_thumb.png" alt=""/></div>
-									</div>
-								</a>
-							</div>
-							<div class="scroller-item">-->
-								<!--
-								// 배경색상 지정해서 사용(기본은 #000값)
-								-->
-								<!--<a href="#" class="bg-color-item" style="background-color:#ffe030;">
-									<div class="info-wrap">
-										<div class="item-name">다시태어나개</div>
-										<div class="item-info">미용을 꺼리는 아이의 마음을 읽는 명인이 미용하는 곳</div>
-										<div class="item-grade"><div class="icon icon-size-16 icon-star-white"></div><em>5.0</em></div>
-									</div>
-									<div class="thumb">
-										<div class="obj"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>-->
-										<!--
-										// 테두리 지정해서 사용(기본은 #000값)
-										-->
-										<!--<div class="user-thumb" style="border-color:#ffe030;"><img src="/static/pub/images/user_thumb.png" alt=""/></div>
-									</div>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>-->
-				<!-- //반려 미용 명인을 모아봣어요 -->
-				<!-- BEST 미용후기 -->
-				<div class="main-best-wrap">
-					<div class="con-title-group">
-						<div class="con-title">BEST 미용후기</div>
-					</div>									
-					<div class="vertical-list-wrap">
-						<div class="list-inner" id="beauty_comment">
+                    </div>
+                </div>
+                <!-- //많이 이용했어요 -->
+                <!-- 지금 예약가능해요 -->
+                <!--<div class="main-reserve-wrap">
+                    <div class="con-title-group">
+                        <div class="con-title">지금 예약가능해요</div>
+                        <a href="#" class="btn-content-more">전체보기</a>
+                    </div>
+                    <div class="current-km">현재 위치 10km 내</div>
+                    <div class="vertical-list-wrap line">
+                        <div class="list-inner">
+                            <div class="list-cell">
+                                <a href="#" class="basic-list-item">
+                                    <div class="thumb">
+                                        <div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+                                        <img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+                                    </div>
+                                    <div class="info-wrap">
+                                        <div class="item-name">폴리파크 홍대점</div>
+                                        <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+                                        <div class="item-address">서울특별시 마포구 동교로 192-1</div>
+                                        <div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>-->
+                <!-- 20211024 수정 : item-option-group 클래스로 수정 (리스트 이하 동일) -->
+                <!--<div class="item-option-group">
+                    <div class="group-inner">-->
+                <!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->
+                <!--<div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+                <div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+                <div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+            </div>
+        </div>
+    </div>
+</a>
+</div>
+<div class="list-cell">
+<a href="#" class="basic-list-item">
+    <div class="thumb">
+        <div class="thumb-label"><div class="label label-pink">당일예약</div></div>
+        <img src="/static/pub/images/vertical_list_thumb_1.png" alt=""/>
+    </div>
+    <div class="info-wrap">
+        <div class="item-name">폴리파크 홍대점</div>
+        <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>5.0</em>(100+)</div>
+        <div class="item-address">서울특별시 마포구 동교로 192-1</div>
+        <div class="item-cate">소형견, 중형견, 대형견, 특수견, 고양이</div>
+        <div class="item-option-group">
+            <div class="group-inner">
+                <div class="tag-item"><div class="icon icon-size-16 icon-time"></div>13:00</div>
+                <div class="tag-item"><div class="icon icon-size-16 icon-time"></div>18:00</div>
+                <div class="tag-item"><div class="icon icon-size-16 icon-time"></div>20:00</div>
+            </div>
+        </div>
+    </div>
+</a>
+</div>
+</div>
+</div>
+</div>-->
+                <!-- //지금 예약가능해요 -->
+                <!-- 반려 미용 명인을 모아봣어요 -->
+                <!--<div class="main-master-banner">
+                    <div class="con-title-group">
+                        <div class="con-title">반려 미용 명인을 모아봣어요</div>
+                        <a href="#" class="btn-content-more">전체보기</a>
+                    </div>
+                    <div class="horizontal-swiper-scoller wide">
+                        <div class="scroller-inner">
+                            <div class="scroller-item">-->
+                <!--
+                // 배경색상 지정해서 사용(기본은 #000값)
+                -->
+                <!--<a href="#" class="bg-color-item" style="background-color:#6840b1;">
+                    <div class="info-wrap">
+                        <div class="item-name">다시태어나개</div>
+                        <div class="item-info">미용을 꺼리는 아이의 마음을 읽는 명인이 미용하는 곳</div>
+                        <div class="item-grade"><div class="icon icon-size-16 icon-star-white"></div><em>5.0</em></div>
+                    </div>
+                    <div class="thumb">
+                        <div class="obj"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>-->
+                <!--
+                // 테두리 지정해서 사용(기본은 #000값)
+                -->
+                <!--<div class="user-thumb" style="border-color:#6840b1;"><img src="/static/pub/images/user_thumb.png" alt=""/></div>
+            </div>
+        </a>
+    </div>
+    <div class="scroller-item">-->
+                <!--
+                // 배경색상 지정해서 사용(기본은 #000값)
+                -->
+                <!--<a href="#" class="bg-color-item" style="background-color:#ffe030;">
+                    <div class="info-wrap">
+                        <div class="item-name">다시태어나개</div>
+                        <div class="item-info">미용을 꺼리는 아이의 마음을 읽는 명인이 미용하는 곳</div>
+                        <div class="item-grade"><div class="icon icon-size-16 icon-star-white"></div><em>5.0</em></div>
+                    </div>
+                    <div class="thumb">
+                        <div class="obj"><img src="/static/pub/images/picture_banner_1.png" alt=""/></div>-->
+                <!--
+                // 테두리 지정해서 사용(기본은 #000값)
+                -->
+                <!--<div class="user-thumb" style="border-color:#ffe030;"><img src="/static/pub/images/user_thumb.png" alt=""/></div>
+            </div>
+        </a>
+    </div>
+</div>
+</div>
+</div>-->
+                <!-- //반려 미용 명인을 모아봣어요 -->
+                <!-- BEST 미용후기 -->
+                <div class="main-best-wrap">
+                    <div class="con-title-group">
+                        <div class="con-title">BEST 미용후기</div>
+                    </div>
+                    <div class="vertical-list-wrap">
+                        <div class="list-inner" id="beauty_comment">
                             <?php
                             if(count($bestReview_array)>0){
                                 foreach($bestReview_array as $rs){
                                     $photo = explode('|', $rs['review_images']);
-                                ?>
-                                <div class="list-cell">
-                                    <a href="reserve_view?type=beauty&artist_id=<?=$rs['artist_id']?>&rev=<?=$rs['review_seq']?>" class="basic-list-item">
-                                        <div class="thumb">
-                                            <img src="https://image.banjjakpet.com<?=img_link_change($photo[0])?>">
-                                        </div>
-                                        <div class="info-wrap">
-                                            <div class="item-name"><?=$rs['name']?></div>
-                                            <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=$rs['rating']?></em>(<?=$rs['rating_cnt']?>)<div class="hit">총 <?=$rs['use_cnt']?>회 이용</div></div>
-                                            <div class="item-desc"><?=$rs['review']?></div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <?php
+                                    ?>
+                                    <div class="list-cell">
+                                        <a href="reserve_view?type=beauty&artist_id=<?=$rs['artist_id']?>&rev=<?=$rs['review_seq']?>" class="basic-list-item">
+                                            <div class="thumb">
+                                                <img src="https://image.banjjakpet.com<?=img_link_change($photo[0])?>">
+                                            </div>
+                                            <div class="info-wrap">
+                                                <div class="item-name"><?=$rs['name']?></div>
+                                                <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em><?=$rs['rating']?></em>(<?=$rs['rating_cnt']?>)<div class="hit">총 <?=$rs['use_cnt']?>회 이용</div></div>
+                                                <div class="item-desc"><?=$rs['review']?></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <?php
                                 }
                             }
                             ?>
-						</div>
-					</div>
+                        </div>
+                    </div>
                     <div class="page-middle-banner">
                         <a href="shop_event?seq=9" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/best_review.png" alt=""/></a>
                     </div>
-				</div>
-				<!-- //BEST 미용후기 -->
-				<!-- MD추천 쇼핑템 -->
-				<div class="main-md-wrap">
-					<div class="con-title-group">
-						<div class="con-title">MD 추천 쇼핑템</div>
-						<!--<a href="#" class="btn-content-more">전체보기</a>-->
-					</div>				
-					<div class="horizontal-swiper-scoller">
+                </div>
+                <!-- //BEST 미용후기 -->
+                <!-- MD추천 쇼핑템 -->
+                <div class="main-md-wrap">
+                    <div class="con-title-group">
+                        <div class="con-title">MD 추천 쇼핑템</div>
+                        <!--<a href="#" class="btn-content-more">전체보기</a>-->
+                    </div>
+                    <div class="horizontal-swiper-scoller">
                         <div class="scroller-inner" style="overflow: auto;">
                             <?php
                             if(count($md_item_array)>0){
@@ -577,17 +463,17 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
                             }
                             ?>
                         </div>
-					</div>	
-				</div>
-				<!-- //MD추천 쇼핑템 -->
-				<!-- NEW 쇼핑템 -->
-				<div class="main-new-wrap" id="new_item_parent">
-					<div class="con-title-group">
-						<div class="con-title">NEW 쇼핑템</div>
-						<!--<a href="#" class="btn-content-more">전체보기</a>-->
-					</div>			
-					<div class="horizontal-swiper-scoller group">
-						<div class="scroller-inner" id="new_item_1">
+                    </div>
+                </div>
+                <!-- //MD추천 쇼핑템 -->
+                <!-- NEW 쇼핑템 -->
+                <div class="main-new-wrap" id="new_item_parent">
+                    <div class="con-title-group">
+                        <div class="con-title">NEW 쇼핑템</div>
+                        <!--<a href="#" class="btn-content-more">전체보기</a>-->
+                    </div>
+                    <div class="horizontal-swiper-scoller group">
+                        <div class="scroller-inner" id="new_item_1">
                             <div class="scroller-mulity-group" style="overflow: auto;">
                                 <div class="scroller-mulity-inner">
                                     <?php
@@ -648,25 +534,25 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
                                     ?>
                                 </div>
                             </div>
-						</div>
-					</div>			
-					<div class="horizontal-swiper-scoller">
-						<div class="scroller-inner" id="new_item_2">
+                        </div>
+                    </div>
+                    <div class="horizontal-swiper-scoller">
+                        <div class="scroller-inner" id="new_item_2">
 
-							
 
-						</div>
-					</div>				
-				</div>
-				<!-- //NEW 쇼핑템 -->
-				<!-- 새로 입점했어요 -->
-				<div class="main-store-wrap">
-					<div class="con-title-group">
-						<div class="con-title">새로 입점했어요!</div>
-						<!-- <a href="#" class="btn-content-more">전체보기</a> --> 
-					</div>					
-					<div class="vertical-list-wrap line shop">
-						<div class="list-inner" id="new_beauty_shop">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- //NEW 쇼핑템 -->
+                <!-- 새로 입점했어요 -->
+                <div class="main-store-wrap">
+                    <div class="con-title-group">
+                        <div class="con-title">새로 입점했어요!</div>
+                        <!-- <a href="#" class="btn-content-more">전체보기</a> -->
+                    </div>
+                    <div class="vertical-list-wrap line shop">
+                        <div class="list-inner" id="new_beauty_shop">
                             <?php
                             if(count($new_shop_array)>0){
                                 foreach($new_shop_array as $rs){
@@ -726,43 +612,43 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
                                     if($type_txt != ''){
                                         $type_txt = substr($type_txt, 0, -2);
                                     }
-                                ?>
-                                <div class="list-cell">
-                                    <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="basic-list-item store">
-                                        <div class="thumb">
-                                            <img src="https://image.banjjakpet.com<?=img_link_change($rs['photo'])?>">
-                                        </div>
-                                        <div class="info-wrap">
-                                            <div class="item-name"><?=$rs['name']?></div>
-                                            <div class="item-address"><?=$shop_address[1]?></div>
-                                            <div class="item-cate"><?=$type_txt?></div>
-                                            <div class="item-option-group">
-                                                <div class="group-inner">
-                                                    <!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->
-                                                    <div class="tag-item"><?=$start_time?>-<?=$end_time?></div>
-                                                    <div class="tag-item"><?=$holiday_txt?></div>
+                                    ?>
+                                    <div class="list-cell">
+                                        <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="basic-list-item store">
+                                            <div class="thumb">
+                                                <img src="https://image.banjjakpet.com<?=img_link_change($rs['photo'])?>">
+                                            </div>
+                                            <div class="info-wrap">
+                                                <div class="item-name"><?=$rs['name']?></div>
+                                                <div class="item-address"><?=$shop_address[1]?></div>
+                                                <div class="item-cate"><?=$type_txt?></div>
+                                                <div class="item-option-group">
+                                                    <div class="group-inner">
+                                                        <!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->
+                                                        <div class="tag-item"><?=$start_time?>-<?=$end_time?></div>
+                                                        <div class="tag-item"><?=$holiday_txt?></div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <?php
+                                        </a>
+                                    </div>
+                                    <?php
                                 }
                             }
                             ?>
-						</div>
-					</div>
-				</div>
-				<!-- //새로 입점했어요 -->
-			</div>
-		</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- //새로 입점했어요 -->
+            </div>
+        </div>
         <div class="basic-data-group">
-			<div class="common-customer">
-				<div class="item-tel"><a href="tel:1661-9956">고객센터 <em>1661-9956</em></a></div>
-				<div class="item-mail"><a href="mailTo:help@peteasy.kr">help@peteasy.kr</a></div>
-			</div>
-		</div>
-		<!-- //page-contents -->
+            <div class="common-customer">
+                <div class="item-tel"><a href="tel:1661-9956">고객센터 <em>1661-9956</em></a></div>
+                <div class="item-mail"><a href="mailTo:help@peteasy.kr">help@peteasy.kr</a></div>
+            </div>
+        </div>
+        <!-- //page-contents -->
         <!-- //하단 배너 -->
         <div class="page-footer">
             <div class="footer-business">
@@ -780,12 +666,12 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
                     <li><a href="javascript:newWindowOpen();" >미용샵/호텔입점신청</a></li>
                     <li><a href=
                            <?php
-                                if($user_id == ""){
-                                    echo "/login_1";
-                                }else{
-                                    echo "/home_alliance_request?back=home";
-                                }
-                            ?>
+                           if($user_id == ""){
+                               echo "/login_1";
+                           }else{
+                               echo "/home_alliance_request?back=home";
+                           }
+                           ?>
                         >쇼핑입점/제휴광고문의</a></li>
                 </ul>
             </div>
@@ -802,8 +688,8 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
             </div>-->
             <div class="footer-copy">©PetEasy Co. Ltd. All rights reserved</div>
         </div>
-	</div>
-	<!-- //page-body -->	
+    </div>
+    <!-- //page-body -->
 </section>
 <!-- //container -->
 
@@ -924,33 +810,33 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
     function myLocate() {
         // 위치값 세번 호출
         //if(location_cnt < 3){
-            var deviceType = checkMobile();
-            try {
-                if (deviceType == "in_app_and") {
-                    //lat = window.Android.myLocate('lat');
-                    //lng = window.Android.myLocate(null);
-                    //setMap(lastValue);
-                    window.Android.reqMyLocate();
-                } else if (deviceType == "in_app_ios") {
-                    window.webkit.messageHandlers.isGps.postMessage('a');
-                    if (timerDe) {
-                        clearTimeout(timerDe);
-                    }
-                    timerDe = setTimeout(function() {
-                        getiOSLacation();
-                    }, 300);
-                } else {
-                    getLocation();
+        var deviceType = checkMobile();
+        try {
+            if (deviceType == "in_app_and") {
+                //lat = window.Android.myLocate('lat');
+                //lng = window.Android.myLocate(null);
+                //setMap(lastValue);
+                window.Android.reqMyLocate();
+            } else if (deviceType == "in_app_ios") {
+                window.webkit.messageHandlers.isGps.postMessage('a');
+                if (timerDe) {
+                    clearTimeout(timerDe);
                 }
-            } catch(e) {
-
+                timerDe = setTimeout(function() {
+                    getiOSLacation();
+                }, 300);
+            } else {
+                getLocation();
             }
-            // 세번 호출 뒤 locationClose
+        } catch(e) {
+
+        }
+        // 세번 호출 뒤 locationClose
         /*}else{
             var deviceType = checkMobile();
             if(deviceType == "in_app_and"){	//
                 window.Android.myLocateClose();
-                // 20210602 by migo - console.log() 사용시, GPS 내위치 조회에서 오류가 발생함, 사용하면 안 됨 
+                // 20210602 by migo - console.log() 사용시, GPS 내위치 조회에서 오류가 발생함, 사용하면 안 됨
             }else if(deviceType == "android"){
 
             }else if(deviceType == "in_app_ios"){
@@ -962,7 +848,7 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
             }
         }*/
     }
-    
+
     function isGps(_data){
         // to do something..
         //alert(_data);
@@ -1160,13 +1046,11 @@ function select_marker ($word, $have_jongsung, $no_jongsung) {
         window.open("https://ceo.banjjakpet.com/","_blank", "");
     }
 
-
-
 </script>
 
 
 
-	
+
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
 ?>
