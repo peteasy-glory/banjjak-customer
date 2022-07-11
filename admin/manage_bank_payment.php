@@ -1,11 +1,8 @@
 <?php
-include "../include/top.php";
-include "../include/Region.class.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-$cl_result = include "../include/check_login.php";
-if ($cl_result == 0) {
-    return false;
-}
 
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
@@ -37,9 +34,9 @@ if ($seq == null || $seq == "") {
 
 <?php
 $login_insert_sql = "select * from tb_customer where id = '" . $user_id . "' and (admin_flag = true or operator_flag = true)";
-$result = mysql_query($login_insert_sql);
+$result = mysqli_query($connection,$login_insert_sql);
 
-if ($result_datas = mysql_fetch_object($result)) {
+if ($result_datas = mysqli_fetch_object($result)) {
     ?>
 
     <div class="header-back-btn"><a href="<?= $admin_directory ?>/"><img src="<?= $image_directory ?>/back.png" width="35px"></a></div>
@@ -110,8 +107,8 @@ if ($result_datas = mysql_fetch_object($result)) {
             } else if ($seq == 3) {
                 $sql = "select * from tb_payment_log where is_cancel = 1 and pay_type = 'bank' order by update_time desc;";
             }
-            $result = mysql_query($sql);
-            while ($rows = mysql_fetch_object($result)) {
+            $result = mysqli_query($connection,$sql);
+            while ($rows = mysqli_fetch_object($result)) {
                 ?>
             <tr style="font-size:13px;">
                 <td><?= $rows->update_time ?></td>
@@ -126,8 +123,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                 <td><?= $rows->customer_id ?>/<br><?= $rows->artist_id ?><br>
                     <?php
                             $s_sql = "select name, open_flag, enable_flag from tb_shop where customer_id = '" . $rows->artist_id . "';";
-                            $s_result = mysql_query($s_sql);
-                            if ($s_rows = mysql_fetch_object($s_result)) {
+                            $s_result = mysqli_query($connection,$s_sql);
+                            if ($s_rows = mysqli_fetch_object($s_result)) {
                                 echo "(" . $s_rows->name . ")<br>";
                                 /*                if ($s_rows->open_flag == 1) {
                         echo "<b>(오픈)</b>";
@@ -142,8 +139,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                             ?>
                     <?php
                             $s_sql = "select name, open_flag, enable_flag from tb_shop where customer_id = '" . $rows->customer_id . "';";
-                            $s_result = mysql_query($s_sql);
-                            if ($s_rows = mysql_fetch_object($s_result)) {
+                            $s_result = mysqli_query($connection,$s_sql);
+                            if ($s_rows = mysqli_fetch_object($s_result)) {
                                 echo $s_rows->name;
                             }
                             ?>
@@ -186,8 +183,5 @@ if ($result_datas = mysql_fetch_object($result)) {
     <br>
     <br>
     <br>
-    <?php
-        include "../include/buttom.php";
-        ?>
 
 <?php } ?>
