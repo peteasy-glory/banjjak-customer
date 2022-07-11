@@ -751,7 +751,6 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
 
-        let scheme = 'banjjack://';
 
 
 
@@ -767,11 +766,11 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                             location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
                         }
                     }
-                ,500);
+                ,1500);
 
                 setTimeout(
                     function(){
-                        location.href = scheme;
+                        location.href = 'banjjack://';
                     }
                 ,0);
             }else{
@@ -779,14 +778,18 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                            location.href = 'market://details?id=m.kr.gobeauty';
+                            location.href = "intent://#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
+                            // location.href="intent://login#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
                         }
+
+
+
                             }
-                    ,500);
+                    ,1500);
 
                 setTimeout(
                     function(){
-                        location.href = scheme;
+                        location.href = 'banjjack://';
                     }
                     ,0);
             }
