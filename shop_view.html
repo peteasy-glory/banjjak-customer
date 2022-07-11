@@ -2,6 +2,10 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
+
+if($_SESSION['backurl_shop'] == null)
+    $_SESSION['backurl_shop'] = 'main';
+
 $product_no = (isset($_GET['product_no']))? $_GET['product_no'] : "";
 $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id']:"";
 $user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_user_nickname']:"";
