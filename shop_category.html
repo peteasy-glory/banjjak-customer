@@ -725,7 +725,32 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
         return num.format();
     };
 
+    $(document).ready(function(){
 
+
+        let link = document.getElementsByClassName('app-download-link');
+
+
+
+
+        if(userAgent.match(/iphone|ipad|ipod/i) ){
+
+
+            Array.from(link).forEach(function(el,i){
+
+                el.setAttribute('href','https://apps.apple.com/kr/app/id1436568194');
+            })
+
+
+        }else{
+            Array.from(link).forEach(function(el,i){
+
+                el.setAttribute('href','https://play.google.com/store/apps/details?id=m.kr.gobeauty');
+            })
+        }
+
+        
+    })
 </script>
 
 <?
