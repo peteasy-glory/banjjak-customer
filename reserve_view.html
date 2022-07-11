@@ -4,7 +4,8 @@ $title = "펫샵 상세보기";
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-
+if($_SESSION['backurl_reserve'] == null)
+    $_SESSION['backurl_reserve'] = 'main';
 //print_r($_GET);
 //exit; 
 
