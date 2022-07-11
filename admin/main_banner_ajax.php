@@ -1,6 +1,10 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
-	
+	include "../include/configure.php";
+	include "../include/Crypto.class.php";
+	include "../include/session.php";
+	include "../include/db_connection.php";
+	include "../include/php_function.php";
+
 	$data = array();
 	$return_data = array("code" => "999999", "data" => "잘못된 접근입니다.");
 	
@@ -8,11 +12,11 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 
 	if($r_mode){
 		if($r_mode == "get_main_banner"){
-			$r_mb_seq = (isset($_POST["mb_seq"]) && $_POST["mb_seq"] != "")? $_POST["mb_seq"] : "";
+			$r_mb_seq = ($_POST["mb_seq"] && $_POST["mb_seq"] != "")? $_POST["mb_seq"] : "";
 			$r_tab = ($_POST["tab"] && $_POST["tab"] != "")? $_POST["tab"] : "";
 			$r_order = ($_POST["order"] && $_POST["order"] != "")? $_POST["order"] : "";
-			$r_limit_0 = (isset($_POST["limit_0"]) && $_POST["limit_0"] != "")? $_POST["limit_0"] : "0";
-			$r_limit_1 = (isset($_POST["limit_1"]) && $_POST["limit_1"] != "")? $_POST["limit_1"] : "50";
+			$r_limit_0 = ($_POST["limit_0"] && $_POST["limit_0"] != "")? $_POST["limit_0"] : "0";
+			$r_limit_1 = ($_POST["limit_1"] && $_POST["limit_1"] != "")? $_POST["limit_1"] : "50";
 			$where_qy = "";
 			$order_qy = "";
 			$limit_qy = "";
@@ -40,8 +44,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				WHERE is_delete = '2'
 					".$where_qy."
 			";
-			$result = mysqli_query($connection, $sql);
-			$data["total_cnt"] = mysqli_num_rows($result);
+			$result = mysql_query($sql);
+			$data["total_cnt"] = mysql_num_rows($result);
 
 			$sql = "
 				SELECT *
@@ -51,9 +55,9 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				".$order_qy."
 				".$limit_qy."
 			";
-			$result = mysqli_query($connection, $sql);
-			$data["list_cnt"] = $r_limit_0 + mysqli_num_rows($result);
-			while($row = mysqli_fetch_assoc($result)){
+			$result = mysql_query($sql);
+			$data["list_cnt"] = $r_limit_0 + mysql_num_rows($result);
+			while($row = mysql_fetch_assoc($result)){
 				$data["list"][] = $row;
 			}
 
@@ -148,9 +152,9 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 						".$insert_2_qy." NOW()
 					)
 				";
-				$result = mysqli_query($connection, $sql);
+				$result = mysql_query($sql);
 				if($result){
-					$return_data = array("code" => "000000", "data" => mysqli_insert_id($connection));	
+					$return_data = array("code" => "000000", "data" => mysql_insert_id());	
 				}else{
 					$return_data = array("code" => "000002", "data" => "배너 생성에 실패했습니다.");
 				}
@@ -169,6 +173,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			$r_odr_2 = ($_POST["odr_2"] && $_POST["odr_2"] != "")? $_POST["odr_2"] : "";
 			$r_odr_3 = ($_POST["odr_3"] && $_POST["odr_3"] != "")? $_POST["odr_3"] : "";
 			$r_odr_4 = ($_POST["odr_4"] && $_POST["odr_4"] != "")? $_POST["odr_4"] : "";
+			$r_odr_5 = ($_POST["odr_5"] && $_POST["odr_5"] != "")? $_POST["odr_5"] : "";
 			$r_is_use = ($_POST["is_use"] && $_POST["is_use"] != "")? $_POST["is_use"] : "";
 			$r_is_use_time = ($_POST["is_use_time"] && $_POST["is_use_time"] != "")? $_POST["is_use_time"] : "";
 			$r_start_date = ($_POST["start_date"] && $_POST["start_date"] != "")? $_POST["start_date"] : "";
@@ -209,6 +214,9 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			if($r_odr_4 != ""){
 				$update_qy .= " `odr_4` = '".$r_odr_4."', ";
 			}
+			if($r_odr_5 != ""){
+				$update_qy .= " `odr_5` = '".$r_odr_5."', ";
+			}
 			if($r_is_use != ""){
 				$update_qy .= " `is_use` = '".$r_is_use."', ";
 			}
@@ -230,7 +238,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 					WHERE is_delete = '2'
 						AND mb_seq = '".$r_mb_seq."'
 				";
-				$result = mysqli_query($connection, $sql);
+				$result = mysql_query($sql);
 				if($result){
 					$return_data = array("code" => "000000", "data" => "OK");	
 				}else{
@@ -253,7 +261,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 					WHERE is_delete = '2'
 						AND mb_seq = '".$r_mb_seq."'
 				";
-				$result = mysqli_query($connection, $sql);
+				$result = mysql_query($sql);
 				if($result){
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{
@@ -268,8 +276,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				FROM tb_shop
 				ORDER BY name ASC
 			";
-			$result = mysqli_query($connection, $sql);
-			$cnt = mysqli_num_rows($result);
+			$result = mysql_query($sql);
+			$cnt = mysql_num_rows($result);
 			$return_data = array("code" => "000000", "data" => $cnt);
 		}else if($r_mode == "get_main_banner_shop_list"){
 			$r_limit_0 = ($_POST["limit_0"] && $_POST["limit_0"] != "")? $_POST["limit_0"] : "0";
@@ -285,8 +293,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				ORDER BY name ASC
 				".$limit_qy."
 			";
-			$result = mysqli_query($connection, $sql);
-			while($row = mysqli_fetch_assoc($result)){
+			$result = mysql_query($sql);
+			while($row = mysql_fetch_assoc($result)){
 				$data[] = $row;
 			}
 			$return_data = array("code" => "000000", "data" => $data);
@@ -304,7 +312,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 							`".$r_column_name."` = '".$r_column_value."'
 						WHERE customer_id = '".$r_customer_id."'
 					";
-					$result = mysqli_query($connection, $sql);
+					$result = mysql_query($sql);
 					if($result){
 						$return_data = array("code" => "000000", "data" => "OK");
 					}else{

@@ -79,7 +79,6 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			.then(get_main_banner);
 
 		$('#fileupload').fileupload({
-			type : "POST"
 			formData: {
 				mode: "upload_img",
 				target: "tb_main_banner.banner",
@@ -426,6 +425,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			html += '			<label for="type_3">상품(강아지)</label>';
 			html += '			<input type="checkbox" id="type_4" name="type[]" value="4" />';
 			html += '			<label for="type_4">상품(고양이)</label>';
+			html += '			<input type="checkbox" id="type_5" name="type[]" value="5" />';
+			html += '			<label for="type_5">전문몰</label>';
 			html += '		</li>';
 			html += '		<li>';
 			html += '			<div class="title">배너명</div>';

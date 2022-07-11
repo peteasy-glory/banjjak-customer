@@ -1,5 +1,10 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+	include "../include/configure.php";
+	include "../include/Crypto.class.php";
+	include "../include/session.php";
+	include "../include/db_connection.php";
+	include "../include/php_function.php";
+	include "../include/Point.class.php";
 
 	$data = array();
 	$return_data = array("code" => "999999", "data" => "잘못된 접근입니다.");
@@ -20,8 +25,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				ORDER BY reg_time DESC
 				LIMIT ".$r_flag." , ".$r_page_cnt."
 			";
-			$result = mysqli_query($connection,$sql);
-			while($row = mysqli_fetch_assoc($result)){
+			$result = mysql_query($sql);
+			while($row = mysql_fetch_assoc($result)){
 				$data[] = $row;
 			}
 
@@ -58,8 +63,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				ORDER BY rb.update_dt DESC, rb.reg_dt DESC
 				LIMIT ".$r_flag." , ".$r_page_cnt."
 			";
-			$result = mysqli_query($connection,$sql);
-			while($row = mysqli_fetch_assoc($result)){
+			$result = mysql_query($sql);
+			while($row = mysql_fetch_assoc($result)){
 				$data[] = $row;
 			}
 
@@ -87,8 +92,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				ORDER BY rb.update_dt DESC, rb.reg_dt DESC
 				LIMIT ".$r_flag." , ".$r_page_cnt."
 			";
-			$result = mysqli_query($connection,$sql);
-			while($row = mysqli_fetch_assoc($result)){
+			$result = mysql_query($sql);
+			while($row = mysql_fetch_assoc($result)){
 				$sql2 = "
 					SELECT ur.*, 
 						( SELECT id FROM tb_customer WHERE id = ur.customer_id ) AS c_id,
@@ -99,8 +104,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 					WHERE ur.is_delete = '0'
 						AND ur.review_seq = '".$row["review_seq"]."'
 				";
-				$result2 = mysqli_query($connection,$sql2);
-				while($row2 = mysqli_fetch_assoc($result2)){
+				$result2 = mysql_query($sql2);
+				while($row2 = mysql_fetch_assoc($result2)){
 					$data[] = array_merge($row, $row2);
 				}
 			}
@@ -114,9 +119,9 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				$sql = "
 					INSERT INTO tb_review_best (`review_seq`, `order_num`) VALUES ('".$r_review_seq."', '".$r_order_num."')
 				";
-				$result = mysqli_query($connection,$sql);
+				$result = mysql_query($sql);
 				if($result){
-					$review_seq = mysqli_insert_id($connection);
+					$review_seq = mysql_insert_id();
 					$return_data = array("code" => "000000", "data" => $review_seq);
 				}else{
 					$return_data = array("code" => "000001", "data" => "베스트 댓글 등록에 실패했습니다.");
@@ -137,7 +142,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 					WHERE rb_seq = '".$r_rb_seq."'
 						AND review_seq = '".$r_review_seq."'
 				";
-				$result = mysqli_query($connection,$sql);
+				$result = mysql_query($sql);
 
 				if($result){
 					/*
@@ -149,7 +154,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 								AND review_seq != '".$r_review_seq."'
 								AND order_num = '".$r_order_num."'
 						";
-						$result = mysqli_query($connection,$sql);
+						$result = mysql_query($sql);
 						if($result){
 							$return_data = array("code" => "000000", "data" => "OK_change");
 						}else{
@@ -178,7 +183,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 						delete_dt = NOW()
 					WHERE rb_seq = '".$r_rb_seq."'
 				";
-				$result = mysqli_query($connection,$sql);
+				$result = mysql_query($sql);
 
 				if($result){
 					$return_data = array("code" => "000000", "data" => "OK");
@@ -196,7 +201,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				$sql = "
 					INSERT INTO tb_review_best_log (`rb_seq`, `status`) VALUES ('".$r_rb_seq."', '".$r_status."')
 				";
-				$result = mysqli_query($connection,$sql);
+				$result = mysql_query($sql);
 				if($result){
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{
@@ -227,8 +232,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 						AND is_no_show = '0'
 						".$where_qy."
 				";
-				$result = mysqli_query($connection,$sql);
-				$data = mysqli_fetch_assoc($result);
+				$result = mysql_query($sql);
+				$data = mysql_fetch_assoc($result);
 				$return_data = array("code" => "000000", "data" => $data["cnt"]);
 			}else{
 				$return_data = array("code" => "000002", "data" => "중요 데이터가 누락되었습니다.");

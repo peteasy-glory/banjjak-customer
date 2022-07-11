@@ -28,8 +28,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 <?php
 //////////////// 1대1 문의 답변 카운트 시작
 
-// 문의 갯수
-$pna_sql = "SELECT COUNT(*) AS pna_cnt FROM tb_1vs1_pna WHERE pna_seq > 400";
+// 문의 갯수 || 20211005 대표님 요청 1로 등록된 문의글 안보이게 처리 by glory (AND NOT title = '1')
+$pna_sql = "SELECT COUNT(*) AS pna_cnt FROM tb_1vs1_pna WHERE pna_seq > 400 AND NOT title = '1'";
 $pna_result = mysql_query($pna_sql);
 $pna_datas = mysql_fetch_object($pna_result);
 $pna_cnt = $pna_datas->pna_cnt;
@@ -859,6 +859,8 @@ if ($result_datas = mysql_fetch_object($result)) {
             <?php
             }
             ?>
+
+
             <?php   // 20210706 by migo - 앱 이동용 dev.gopet.kr
             if ($admin_flag || $is_point) {
             ?>
@@ -885,6 +887,29 @@ if ($result_datas = mysql_fetch_object($result)) {
 
     </center>
 
+<?php
+}
+?>
+
+<?php
+	if ($user_id == "pettester@peteasy.kr") {
+	?>
+		<center id="manager_set" style="margin-top: 57px;">
+			<a href="http://dev.gopet.kr/pet/mainpage">
+				<div class="my_menu_div">
+					<table class="my_shop_text">
+						<tr>
+							<td>산책페이지테스트</td>
+						</tr>
+					</table>
+					<table class="my_menu_img2">
+						<tr>
+							<td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
+						</tr>
+					</table>
+				</div>
+			</a>
+		</center>
 <?php
 }
 ?>

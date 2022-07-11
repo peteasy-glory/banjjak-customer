@@ -26,6 +26,18 @@
 				$result = mysql_query($sql);
 				$cnt = mysql_num_rows($result);
 				if($cnt > 0){
+					
+					$sql_bank = "
+						SELECT *
+						FROM tb_artist_payment_info
+						WHERE customer_id = '".$r_artist_id."'
+					";
+					$result_bank = mysql_query($sql_bank);
+					$row_bank = mysql_fetch_assoc($result_bank);
+					$data["bank_bankname"] = $crypto->decode(trim($row_bank["bankname"]), $access_key, $secret_key);
+					$data["bank_name"] = $crypto->decode(trim($row_bank["account_holder"]), $access_key, $secret_key);
+					$data["bank_number"] = $crypto->decode(trim($row_bank["bank_account"]), $access_key, $secret_key);
+					
 					$row = mysql_fetch_assoc($result);
 
 					$data["customer_id"] = $crypto->decode(trim($row["customer_id"]), $access_key, $secret_key);
@@ -62,6 +74,9 @@
 			$r_is_business = ($_POST["is_business"] != "")? $_POST["is_business"] : "";
 			$r_business_number = ($_POST["business_number"] && $_POST["business_number"] != "")? $_POST["business_number"] : "";
 			$r_region = ($_POST["region"] && $_POST["region"] != "")? $_POST["region"] : "";
+			$r_bank_bankname = ($_POST["bank_bankname"] && $_POST["bank_bankname"] != "")? $_POST["bank_bankname"] : "";
+			$r_bank_name = ($_POST["bank_name"] && $_POST["bank_name"] != "")? $_POST["bank_name"] : "";
+			$r_bank_number = ($_POST["bank_number"] && $_POST["bank_number"] != "")? $_POST["bank_number"] : "";
 			$r_is_got_offline_shop = ($_POST["is_got_offline_shop"] != "")? $_POST["is_got_offline_shop"] : "";
 			$r_offline_shop_name = ($_POST["offline_shop_name"] && $_POST["offline_shop_name"] != "")? $_POST["offline_shop_name"] : "";
 			$r_offline_shop_phonenumber = ($_POST["offline_shop_phonenumber"] && $_POST["offline_shop_phonenumber"] != "")? $_POST["offline_shop_phonenumber"] : "";
@@ -148,7 +163,22 @@
 					";
 					$result = mysql_query($sql);
 					if($result){
-						$return_data = array("code" => "000000", "data" => "OK");
+					$enc_bankname = $crypto->encode(trim($r_bank_bankname), $access_key, $secret_key);
+					$enc_account_holder = $crypto->encode(trim($r_bank_name), $access_key, $secret_key);
+					$enc_bank_account = $crypto->encode(trim($r_bank_number), $access_key, $secret_key);
+						$sql = "
+							UPDATE tb_artist_payment_info SET
+								bankname = '".$enc_bankname."', 
+								account_holder = '".$enc_account_holder."', 
+								bank_account = '".$enc_bank_account."' 
+							WHERE customer_id = '".$r_customer_id."'
+						";
+						$result = mysql_query($sql);
+						if($result){
+							$return_data = array("code" => "000000", "data" => "OK");
+						}else{
+							$return_data = array("code" => "000004", "data" => "수정에 실패했습니다.".$sql); // tb_artist_payment_info
+						}
 					}else{
 						$return_data = array("code" => "000003", "data" => "수정에 실패했습니다.".$sql); // tb_shop
 					}

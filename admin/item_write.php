@@ -154,6 +154,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 		<form id="item_form">
 			<input type="hidden" name="il_seq" value="<?=$r_seq ?>" />
 			<input type="hidden" name="is_shop" value="2" />
+			<input type="hidden" name="is_free_shipping" value="2" />
 			<ul>
 				<li>
 					<div class="info">카테고리 <span>*</span></div>
@@ -220,6 +221,18 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						<input type="text" name="supplier_price" class="amount" value="" />
 					</div>
 				</li>
+				<li class="ip_fees_wrap" style="display:none;">
+					<div class="info">위탁수수료</div>
+					<div class="value">
+						<select class="ip_fees" dir="rtl">
+						<?php for($_i = 0; $_i <= 100; $_i++){ ?>
+							<option value="<?=$_i?>"><?=$_i?>%</option>
+						<?php } ?>
+						</select>
+						<input type="hidden" name="ip_fees" value="" />
+						<input type="hidden" name="is_supply" value="2" />
+					</div>
+				</li>
 				<li>
 					<div class="info">상품금액 <span>*</span></div>
 					<div class="value">
@@ -236,6 +249,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						</select>
 						<div class="sale_price_txt" style="padding: 10px 5px;">(-) 0</div>
 					</div>
+				</li>
 				<li>
 					<div class="info">최종판매가 <span>*</span></div>
 					<div class="value">
@@ -322,6 +336,15 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						<span>
 							<input type="checkbox" id="is_use_point" name="is_use_point" value="1" checked />
 							<label for="is_use_point">사용</label>
+						</span>
+					</div>
+				</li>
+				<li>
+					<div class="info">배송비할인</div>
+					<div class="value">
+						<span>
+							<input type="checkbox" id="is_free_shipping" name="is_free_shipping" value="1" />
+							<label for="is_free_shipping">사용</label>
 						</span>
 					</div>
 				</li>
@@ -422,6 +445,9 @@ var il_seq = "<?=$r_seq ?>";
 var img_list = [];
 var old_product_no = "";
 var upload_flag = ""; // upload_file_target
+
+var first_ip_seq = ""; // 위탁업체 상품일 경우 상품페이지 수정시 기존 시퀀스
+var first_ip_fees = ""; // 위탁업체 상품일 경우 상품페이지 수정시 기존 상품수수료
 
 // 그룹옵션
 var $item_group_option = $("#item_group_option");
@@ -556,6 +582,14 @@ $(document).ready(function() {
 						$("#item_write #item_form input[name='product_img']").val(v.product_img);
 						img_list = v.product_img.split(",");
 						$("#item_write #item_form input[name='ip_seq']").val(v.ip_seq);
+						$("#item_write #item_form input[name='is_supply']").val(v.is_supply);
+						if(v.ip_seq && v.ip_seq != ""){ 
+							$("#item_form ul li.ip_fees_wrap").css("display", ""); // 상품수정시 위탁업체 제품일경우 수수료란 노출
+							first_ip_seq = v.ip_seq; // 상품수정시 위탁업체 제품일경우 시퀀스 값 입력
+							first_ip_fees = v.ip_fees; // 상품수정시 위탁업체 제품일경우 수수료 값 입력
+						}
+						$("#item_write #item_form input[name='ip_fees']").val(v.ip_fees);
+						$("#item_form ul li select.ip_fees").val(v.ip_fees);
 						$("#item_write #item_form input[name='supplier']").val(v.supplier);
 						$("#item_write #item_form input[name='product_comment']").val(v.product_comment);
 						$("#item_write #item_form textarea[name='product_detail']").val(v.product_detail);
@@ -564,6 +598,7 @@ $(document).ready(function() {
 						$("#item_write #item_form input[name='sale_price']").val(v.sale_price);
 						$("#item_write #item_form select.sale_percent").val(sale_percent);
 						$("#item_write #item_form .sale_price_txt").text('(-) '+sale_price_txt);
+						$("#item_write #item_form input[name='is_free_shipping']").val(v.is_free_shipping); // 배송비 무료
 						if(v.is_view_main_1 == "1"){
 							$("#item_write #item_form input[name='is_view_main_1']").prop("checked", true);
 							$(document).find("#item_write li.md_list").addClass("on");
@@ -605,6 +640,9 @@ $(document).ready(function() {
 						}
 						if(v.is_view == "1"){
 							$("#item_write #item_form input[name='is_view']").prop("checked", true);
+						}
+						if(v.is_free_shipping == "1"){
+							$("#item_write #item_form input[name='is_free_shipping']").prop("checked", true);
 						}
 						if(v.is_use_point == "1"){
 							$("#item_write #item_form input[name='is_use_point']").prop("checked", true);
@@ -713,6 +751,60 @@ $(document).on("change", "#item_form ul li select.ip_seq", function(){
 	console.log(_ip_seq, _company_name);
 	$("#item_form ul li input[name='ip_seq']").val(_ip_seq);
 	$("#item_form ul li input[name='supplier']").val(_company_name);
+	if(_ip_seq == ""){
+		$("#item_form ul li.ip_fees_wrap").css("display", "none");
+		$("#item_form ul li input[name='ip_fees']").val("");
+		$("#item_form ul li input[name='is_supply']").val("2");
+	}else{
+		//ajax 파트너 ip_seq로 수수료 가져와서 넣어버리기!!
+		$.ajax({
+			url: '../partner/partner_ajax.php',
+			data: {
+				mode: "get_item_partner_list",
+				ip_seq: _ip_seq
+			},
+			type: 'POST',
+			dataType: 'JSON',
+			success: function(data) {
+				if(data.code == "000000"){
+					console.log(data.data);
+					if(data.data && data.data.length > 0){
+						$.each(data.data, function(i, v){
+							if(_ip_seq == first_ip_seq){
+								$("#item_form ul li input[name='ip_fees']").val(first_ip_fees);
+								$("#item_form ul li select.ip_fees").val(first_ip_fees);								
+//							}else if(!v.yield || v.yield == ""){ // 파트너 계정에 수수료 미등록일경우 default로 12% 입력
+//								$("#item_form ul li input[name='ip_fees']").val("12");
+//								$("#item_form ul li select.ip_fees").val("12");
+							}else{
+								$("#item_form ul li input[name='ip_fees']").val(v.yield);
+								$("#item_form ul li select.ip_fees").val(v.yield); // 파트너 등록되어있는 수수료퍼센트만 넣기 수정해야함!!!
+							}
+							$("#item_form ul li input[name='is_supply']").val("1");
+						});
+					}
+				}else{
+					alert(data.data+"("+data.code+")");
+					console.log(data.data);
+				}
+			},
+			error: function(xhr, status, error) {
+				//alert(error + "네트워크에러");
+				if(xhr.status != 0){
+					alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+				}
+			}
+		});
+		$("#item_form ul li.ip_fees_wrap").css("display", "");
+	}
+});
+
+// 위탁 수수료
+$(document).on("change", "#item_form ul li select.ip_fees", function(){
+	let _ip_fees = $(this).children("option:selected").val();
+
+	console.log(_ip_fees);
+	$("#item_form ul li input[name='ip_fees']").val(_ip_fees);
 });
 
 function get_partner_list(){
@@ -1035,7 +1127,9 @@ $(document).on("keyup", "#item_write #item_form input[name='sale_price']", funct
 	var sale_percent = percent_calculator(sale_price, price);
 	var sale_price = percent_calculator2(100 - sale_percent, price);
 	$("#item_write #item_form .sale_price_txt").text("(-) "+sale_price);
+console.log(sale_percent);
 	$("#item_write #item_form input[name='sale_price']").siblings("select.sale_percent").val(100 - sale_percent);
+	$("select.sale_percent").val(100 - (sale_percent*1)); // 퍼센트도 바로 입력 by glory 20211221
 });
 
 $(document).on("keyup", "#item_write .option_list_wrap input[name='option_price']", function(){
@@ -1221,6 +1315,8 @@ $(document).on("click", "#item_write .submit_btn", function(){
 				data += "&"+v.name+"=2";
 			}else if($(this).attr("name") == "is_view"){
 				data += "&"+v.name+"=2";
+			}else if($(this).attr("name") == "is_free_shipping"){
+				data += "&"+v.name+"=2";
 			}else if($(this).attr("name") == "is_use_option"){
 				data += "&"+v.name+"=2";
 			}else if($(this).attr("name") == "is_use_group_option"){
@@ -1254,6 +1350,19 @@ $(document).on("click", "#item_write .submit_btn", function(){
 	}
 	console.log(data);
 	
+	if($("#item_write #item_form input[name='product_no']").val() == ""){
+		alert("상품번호를 입력하세요");
+		return false;
+	}
+	if($("#item_write #item_form input[name='product_name']").val() == ""){
+		alert("상품명을 입력하세요");
+		return false;
+	}
+	if($("#item_write #item_form input[name='sale_price']").val() == ""){
+		alert("최종판매가를 입력하세요");
+		return false;
+	}
+
 	$.ajax({
 		url: '<?=$item_directory ?>/item_list_ajax.php',
 		data: {
@@ -1695,6 +1804,32 @@ $item_group_option.on("click", ".set_delete_item_option_detail_btn", function(){
 	});
 });
 
+// 품절 클릭
+$item_group_option.on("click", ".soldout_item_option_detail_btn", function(){
+	var igod_seq = $(this).parent().parent().parent().data("id2");
+	console.log(igod_seq);
+	$.MessageBox({
+		buttonDone: "확인",
+		buttonFail: "취소",
+		message: "해당 옵션을 품절처리 하시겠습니까?"
+	}).done(function(){
+		soldout_in_item_group_option_detail(igod_seq, "2"); 
+	});
+});
+
+// 품절취소
+$item_group_option.on("click", ".soldin_item_option_detail_btn", function(){
+	var igod_seq = $(this).parent().parent().parent().data("id2");
+	console.log(igod_seq);
+	$.MessageBox({
+		buttonDone: "확인",
+		buttonFail: "취소",
+		message: "해당 옵션을 품절취소처리 하시겠습니까?"
+	}).done(function(){
+		soldout_in_item_group_option_detail(igod_seq, "1"); 
+	});
+});
+
 $item_group_option.on("click", ".set_update_item_option_detail_btn", function(){
 	set_write_item_group_option_detail('update'); // update_group
 });
@@ -1831,6 +1966,41 @@ function item_group_option_refresh_html(){
 
 		resolve();
 	});
+}
+
+// 품절처리
+function soldout_in_item_group_option_detail(igod_seq, is_soldout){
+	$.ajax({
+		url: '../test/test_item_list_ajax.php',
+		data: {
+			mode: "set_update_item_group_option_detail",
+			igod_seq: igod_seq,
+			is_soldout: is_soldout
+		},
+		type: 'POST',
+		dataType: 'JSON',
+		beforeSend: function(){
+			$("#loading").css("display", "flex");
+		},
+		success: function(data) {
+			$("#loading").css("display", "none");
+			if(data.code == "000000"){
+				console.log(data.data);
+				$.MessageBox("옵션이 수정되었습니다.");
+				item_group_option_refresh_html();
+
+			}else{
+				alert(data.data+"("+data.code+")");
+				console.log(data.data);
+			}
+		},
+		error: function(xhr, status, error) {
+			//alert(error + "네트워크에러");
+			if(xhr.status != 0){
+				alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+			}
+		}
+	});	
 }
 
 function set_write_item_group_option_detail(mode, igod_seq){
@@ -2309,6 +2479,11 @@ function get_item_group_option_detail_list(igo_seq, is_fold){
 							html += _image;
 							html += '				<span>'+v.option_name+_plus_price+'</span>';
 							html += '				<div class="right_menu">';
+							if(v.is_soldout == "1"){
+								html += '					<button type="button" class="soldout_item_option_detail_btn"> <span>품절</span></button>'; // 품절처리	
+							}else{
+								html += '					<button type="button" class="soldin_item_option_detail_btn"> <span>품절취소</span></button>'; // 재고충전
+							}
 							html += '					<button type="button" class="update_item_group_option_detail_btn"><i class="far fa-edit"></i> <span>옵션수정</span></button>'; // 옵션수정
 							html += '					<button type="button" class="set_delete_item_option_detail_btn"><i class="far fa-minus-square"></i> <span>옵션삭제</span></button>'; // 옵션삭제
 							html += '				</div>';

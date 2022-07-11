@@ -23,9 +23,16 @@ $path = "http://gopet.kr/pet/mainpage/manage_my_reservation.php";
 $image = "";
 a_push($customer_id, "반짝, 반려생활의 단짝. 입금 확인", "예약관련 계좌이체 입금확인 되었습니다.", $path, $image);
 
+// 파트너앱 설치여부 판단
+$partner_sql = "SELECT * FROM tb_customer WHERE id = '".$artist_id."' AND (partner_token IS NOT NULL AND partner_token != '')";
+$partner_result = mysql_query($partner_sql);
+$partner_rows = mysql_fetch_object($partner_result);
+$is_partner = $partner_rows->partner_token;
+$partner = ($is_partner && $is_partner != "")? "partner" : "" ;
 $path = "http://gopet.kr/pet/shop/manage_sell_info.php?yy=".$_REQUEST['year']."&mm=".$_REQUEST['month']."&dd=".$_REQUEST['day'];
+$path = ($is_partner && $is_partner != "")? "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$_REQUEST['year']."&mm=".$_REQUEST['month']."&dd=".$_REQUEST['day'] : $path;
 $message = $_REQUEST['year']."년".$_REQUEST['month']."월".$_REQUEST['day']."일 신규 예약등록";
-a_push($artist_id, "반짝, 반려생활의 단짝. 예약 확인", $message, $path, $image);
+a_push($artist_id, "반짝, 반려생활의 단짝. 예약 확인", $message, $path, $image, $partner);
 
 ?>
 

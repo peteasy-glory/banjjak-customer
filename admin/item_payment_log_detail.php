@@ -147,6 +147,7 @@ asort($banks); // 가나다순
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .btn_wrap button { width: 100%; height: 30px; background-color: #fff; border: 1px solid #f5bf2e; color: #f5bf2e; }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .btn_wrap ul.table { display: table; width: 100%; table-layout:fixed; }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .btn_wrap ul.table>li { display: table-cell; white-space: nowrap; }
+	.return_finish { width: 90%; height: 30px; background-color: white !important; border: 1px solid #f5bf2e; color: #f5bf2e; }
 	/*
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .btn_wrap>button.item_payment_log_product_pay_status_btn,
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .btn_wrap>button.item_payment_log_product_kakao_btn,
@@ -161,6 +162,7 @@ asort($banks); // 가나다순
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .content .product_data ul.item { margin-left: 100px; padding-left: 10px; width: calc(100% - 100px); min-height: 100px; }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .content .product_data ul.item li { padding: 5px 0px; }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .content .product_data ul.item .supply_1 { background-color: #c4e4a5; text-align: center; padding: 3px 0px; width: calc(100% - 10px); }
+	#item_order_list .item_order_list_wrap .item_payment_log_wrap .content .product_data ul.item .supply_11 { background-color: #F2AAAA; text-align: center; padding: 3px 0px; width: calc(100% - 10px); }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .content .product_data ul.item .supply_2 { background-color: #fce985; text-align: center; padding: 3px 0px; width: calc(100% - 10px); }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap .content .product_data ul.item .item_price { font-weight: Bold; text-align: right; padding-right: 10px; margin-top: -10px; }
 	#item_order_list .item_order_list_wrap .item_payment_log_wrap.jbook_list>.title { background-color: #0A8242; color: #fff; }
@@ -213,6 +215,39 @@ asort($banks); // 가나다순
 			.then(get_item_payment_log_jbook);
 	});
 
+	// 반품 완료 처리
+	$item_order_list.on("click", ".return_finish", function(){
+		$.MessageBox({
+			buttonDone: "확인",
+			buttonFail: "취소",
+			message: "반품완료처리를 하시겠습니까?"
+		}).done(function(){
+			$.ajax({
+				url: '<?=$item_directory ?>/item_list_ajax.php',
+				data: {
+					mode : "set_update_return_finish",
+					order_num: order_num
+				},
+				type: 'POST',
+				dataType: 'JSON',
+				success: function(data) {
+					if(data.code == "000000"){
+						location.reload();
+					}else{
+						alert(data.data+"("+data.code+")");
+						console.log(data.data);
+					}
+				},
+				error: function(xhr, status, error) {
+					//alert(error + "네트워크에러");
+					if(xhr.status != 0){
+						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+					}
+				}
+			});
+		});
+	});
+
 	// 상품별 상태변경
 	$item_order_list.on("click", ".product_wrap .item_payment_log_product_pay_status_btn", function(){
 		let _iplp_seq = $(this).data('iplp_seq');
@@ -244,10 +279,12 @@ asort($banks); // 가나다순
 
 	$item_order_popup.on("click", ".item_payment_log_product .set_update_item_payment_log_product_pay_status_btn", function(){
 		let _iplp_seq = $(this).data('iplp_seq');
+		let _product_no = $(this).data('product_no');
+		let _first_pay_status = $(this).data('first_pay_status');
 		let _pay_status = $item_order_popup.find('select[name="pay_status"] option:selected').val();
 
 		console.log(_iplp_seq, _pay_status);
-		set_update_item_payment_log_product_pay_status(_iplp_seq, _pay_status);
+		set_update_item_payment_log_product_pay_status(_iplp_seq, _pay_status, _product_no, _first_pay_status);
 	});
 
 
@@ -655,17 +692,27 @@ asort($banks); // 가나다순
 				success: function(data) {
 					if(data.code == "000000"){
 						console.log(data.data); 
+
 						let html = '';
 
 						if(data.data && data.data.length > 0){
 							$.each(data.data, function(i, v){
+								var black_friday = ((v.product_price)*1) + ((v.shipping_price)*1) - ((v.point_price)*1); // 블프 이벤트 여부 != v.total_price 일때 
 								let _pay_type = (v.pay_type == "1")? '<span class="t_red t_s12">카드</span>' : '<span class="t_blue t_s12">계좌</span>';
 								let _shipping_invoice = (v.shipping_invoice && v.shipping_invoice != "")? v.shipping_invoice : '';
+
+								// 반품일 시 결제완료로 표시
+								var order_status_text = order_status_arr[v.order_status];
+								if(v.is_return == "2"){
+									order_status_text = "결제완료";
+								}else if(v.is_return == "3"){
+									order_status_text = "결제완료";
+								}
 							
 								// 결제금액
 								html += '<div class="item_payment_log_wrap price_wrap">';
 								html += '	<div class="title">';
-								html += '		<span>'+order_status_arr[v.order_status]+' / '+_pay_type+'</span>';
+								html += '		<span>'+order_status_text+' / '+_pay_type+'</span>';
 								html += '		<div class="right_menu"><span class="order_num t_s12">주문번호: '+v.order_num+'</span></div>';
 								html += '	</div>';
 								html += '	<div class="content">';
@@ -681,7 +728,7 @@ asort($banks); // 가나다순
 									is_test = 0; // 테스트 flag
 								}
 
-								// 고객 취소/반품 여부
+								// 고객 취소 여부
 								if(v.is_cancel == '2'){
 									var cancel_reason = {
 										'1' : '단순변심',
@@ -703,7 +750,37 @@ asort($banks); // 가나다순
 									html += '		</ul>';
 								}
 
+								// 고객 반품 여부
 								if(v.is_return == '2'){
+									var return_reason = {
+										'1' : '단순변심',
+										'2' : '상품불량',
+										'3' : '제품변경',
+										'etc' : '기타'
+									};
+									
+									html += '		<ul class="return_box">';
+									html += '			<li>';
+									html += '				<div>';
+									html += '					고객 반품사유 : '+return_reason[v.return_result.split('|')[0]]+' ('+v.return_dt+')';
+									html += (v.return_result.split('|')[1] != '')? '</br><span>'+v.return_result.split('|')[1]+'</span>' : '';
+									if(v.return_result2.split('|')[1] == "2"){
+										console.log("반품상태값"+v.return_result.split('|')[0]);
+										// 제품변경일때(고객계좌가 없으므로)
+										if(v.return_result.split('|')[0] == '3'){
+											html += '						<br/><button type="button" class="return_finish">반품완료</button>';
+										}else{
+											html += '						<br/>(환불계좌 : '+banks[fillZero(3, v.return_result2.split('|')[3])]+' '+v.return_result2.split('|')[2]+' '+v.return_result2.split('|')[4].format()+'원)';
+											html += '						<br/><button type="button" class="return_finish">반품완료</button>';
+										}
+									}
+									html += '				</div>';
+									html += '			</li>';
+									html += '		</ul>';
+								}
+
+								// 반품 완료 시
+								if(v.is_return == '3'){
 									var return_reason = {
 										'1' : '단순변심',
 										'2' : '상품불량',
@@ -717,7 +794,14 @@ asort($banks); // 가나다순
 									html += '					고객 반품사유 : '+return_reason[v.return_result.split('|')[0]]+' ('+v.return_dt+')';
 									html += (v.return_result.split('|')[0] == 'etc')? '<span>'+v.return_result.split('|')[1]+'</span>' : '';
 									if(v.return_result2.split('|')[1] == "2"){
-										html += '						<br/>(환불계좌 : '+banks[fillZero(3, v.return_result2.split('|')[3])]+' '+v.return_result2.split('|')[2]+' '+v.return_result2.split('|')[4].format()+'원)';
+										console.log("반품상태값"+v.return_result.split('|')[0]);
+										// 제품변경일때(고객계좌가 없으므로)
+										if(v.return_result.split('|')[0] == '3'){
+											html += '						<br/><span style="font-size:16px; color:blue;">반품완료 ('+v.update_dt+')</span>';
+										}else{
+											html += '						<br/>(환불계좌 : '+banks[fillZero(3, v.return_result2.split('|')[3])]+' '+v.return_result2.split('|')[2]+' '+v.return_result2.split('|')[4].format()+'원)';
+											html += '						<br/><span style="font-size:16px; color:blue;">반품완료 ('+v.update_dt+')</span>';
+										}
 									}
 									html += '				</div>';
 									html += '			</li>';
@@ -727,7 +811,13 @@ asort($banks); // 가나다순
 								html += '		<ul class="customer_info">';
 								html += '			<li>';
 								html += '				<div class="title">구매자명</div>';
-								html += '				<div class="right_menu"><span class="price">'+v.guest_info.split(',')[0]+' ( '+phoneFomatter(v.cellphone)+' )</span></div>';
+								html += '				<div class="right_menu">';
+								if(v.customer_id != ''){ // 비회원 주문 표시하기
+								}else{
+									html += '<span style="color:#2E2EFE; font-size:12px;">*비회원 </span>';									
+								}
+								html += '					<span class="price">'+v.guest_info.split(',')[0]+' ( '+phoneFomatter(v.cellphone)+' )</span>';
+								html += '				</div>';
 								html += '			</li>';
 								// 계좌이체일시 입금자명 노출
 								if(v.pay_type != "1"){
@@ -754,6 +844,12 @@ asort($banks); // 가나다순
 								html += '				<div class="title">포인트사용</div>';
 								html += '				<div class="right_menu"><span class="price">'+v.point_price.format()+'원</span></div>';
 								html += '			</li>';
+//								if(black_friday*0.95 == v.total_price){
+//									html += '			<li>';
+//									html += '				<div class="title"><span style="background-color:yellow;">블랙프라이데이 5% 할인</span></div>';
+//									html += '				<div class="right_menu"><span class="price">'+(black_friday - v.total_price).format()+'원</span></div>';
+//									html += '			</li>';
+//								}
 								html += '			<li>';
 								html += '				<div class="title t_bold t_s18">총결제금액</div>';
 								html += '				<div class="right_menu"><span class="price t_bold t_s18">'+v.total_price.format()+'원</span></div>';
@@ -909,13 +1005,15 @@ asort($banks); // 가나다순
 							$.each(data.data, function(i, v){
 								let _option_data = $.parseJSON(v.option_data.replace(/\\/g, ''));
 								let _is_supply = (v.is_supply == "1")? "업체배송" : "직배송";
+//								let _is_consignment = (v.ip_seq == "2" || v.ip_seq == "3" || v.ip_seq == "8" || v.ip_seq == "9" || v.ip_seq == "10" || v.ip_seq == "11" || v.ip_seq == "12" || v.ip_seq == "13" || v.ip_seq == "14")? "1" : "";
+								let _is_consignment = (v.ip_seq != '' && v.ip_seq > 0)? "1" : "";
 								let _pay_status = (post_data[0].order_status == "2")? order_status_arr[post_data[0].order_status] : pay_status_arr[v.pay_status];
 								let _pay_status_color = (post_data[0].order_status == "2")? order_status_color[post_data[0].order_status] : pay_status_color[v.pay_status];
 								// 결제상품 정보
 								html += '		<div class="product_data" data-id="'+v.iplp_seq+'">';
 								html += '			<div class="item_image" style="background-image: url(\'/pet/images/product_img.png\'); "></div>';
 								html += '			<ul class="item">';
-								html += '				<li class="is_supply supply_'+v.is_supply+'">'+_is_supply+'</li>';
+								html += '				<li class="is_supply supply_'+v.is_supply+_is_consignment+'">'+_is_supply+'</li>';
 								html += '				<li class="pay_status t_s18" data-pay_status="'+v.pay_status+'" style="border-left: 5px solid '+_pay_status_color+'; padding-left: 5px;">'+_pay_status+'</li>';
 								$.each(_option_data, function(i2, v2){
 									html += '				<li class="item_name">'+v2.txt+'</li>';
@@ -1391,7 +1489,7 @@ asort($banks); // 가나다순
 		});
 	}
 	
-	function set_update_item_payment_log_product_pay_status(iplp_seq, pay_status){
+	function set_update_item_payment_log_product_pay_status(iplp_seq, pay_status, product_no, first_pay_status){
 		return new Promise(function(resolve, reject) {
 			if(iplp_seq != ""){
 				$.ajax({
@@ -1406,6 +1504,43 @@ asort($banks); // 가나다순
 					success: function(data) {
 						if(data.code == "000000"){
 							console.log(data.data);
+							if(pay_status == "4" && first_pay_status != "4"){
+								$.ajax({
+									url: '<?=$item_directory ?>/item_list_ajax.php',
+									data: {
+										mode : "increase_sales_cnt",
+										product_no: product_no
+									},
+									type: 'POST',
+									dataType: 'JSON',	
+									success: function(data) {
+									},
+									error: function(xhr, status, error) {
+										//alert(error + "네트워크에러");
+										if(xhr.status != 0){
+											alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+										}
+									}
+								});
+							}else if((pay_status == "8" || pay_status == "9") && first_pay_status == "4"){
+								$.ajax({
+									url: '<?=$item_directory ?>/item_list_ajax.php',
+									data: {
+										mode : "decrease_sales_cnt",
+										product_no: product_no
+									},
+									type: 'POST',
+									dataType: 'JSON',	
+									success: function(data) {
+									},
+									error: function(xhr, status, error) {
+										//alert(error + "네트워크에러");
+										if(xhr.status != 0){
+											alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+										}
+									}
+								});
+							}
 							$.MessageBox({
 								buttonDone: "확인",
 								message: "상품의 상태가 변경되었습니다."
@@ -1534,7 +1669,7 @@ asort($banks); // 가나다순
 								html += '			</li>';
 								html += '		</ul>';
 								html += '		<div class="btn_wrap">';
-								html += '			<button type="button" class="set_update_item_payment_log_product_pay_status_btn" data-iplp_seq="'+iplp_seq+'">변경</button>';
+								html += '			<button type="button" class="set_update_item_payment_log_product_pay_status_btn" data-iplp_seq="'+iplp_seq+'" data-product_no="'+v.product_no+'" data-first_pay_status="'+v.pay_status+'">변경</button>';
 								html += '		</div>';
 								html += '	</div>';
 								html += '</div>';

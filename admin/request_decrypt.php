@@ -233,7 +233,7 @@ if ($result_datas = mysql_fetch_object($result)) {
 <?
 	$seq = $_REQUEST['seq'];
 	if ($seq == null || $seq == "") {
-		$seq = 1;
+		$seq = 2;
 	}
 	?>
 
@@ -269,41 +269,64 @@ if ($result_datas = mysql_fetch_object($result)) {
 	if ($seq == 1) {
 
 
-		$sql = "select * from tb_request_artist where step <= 5 order by update_time desc;";
+		$sql = "select * from tb_request_artist ";
+		$sql = $sql . " order by update_time desc;";
 		$result = mysql_query($sql);
 		$count = mysql_num_rows($result);
 		echo "<font style='font-size:13px;'>총 : " . $count . "건</font><br>";
 		while ($result_datas = mysql_fetch_object($result)) {
-			$customer_id = $result_datas->customer_id;
-			$step = $result_datas->step;
-			$name = $result_datas->name;
-			$cellphone = $result_datas->cellphone;
-			$is_personal = $result_datas->is_personal;
-			$is_business = $result_datas->is_business;
-			$business_number = $result_datas->business_number;
-			$business_license = $result_datas->business_license;
-			if(strpos($business_license, "/pet/") === false && $business_license != ''){
-				$business_license = "https://image.banjjakpet.com/".$business_license;
-			}
-			$region = $result_datas->region;
-			$professional = $result_datas->professional;
-			$is_got_offline_shop = $result_datas->is_got_offline_shop;
-			$offline_shop_name = $result_datas->offline_shop_name;
-			$offline_shop_phonenumber = $result_datas->offline_shop_phonenumber;
-			$offline_shop_address = $result_datas->offline_shop_address;
-			$update_time = $result_datas->update_time;
-			$working_years = $result_datas->working_years;
-			$enter_path = $result_datas->enter_path;
+			$customer_id = ($result_datas->customer_id)? $result_datas->customer_id : "";
+			$step = ($result_datas->step)? $result_datas->step : "";
+			$name = ($result_datas->name)? $result_datas->name : "";
+			$cellphone = ($result_datas->cellphone)? $result_datas->cellphone : "";
+			$is_personal = ($result_datas->is_personal)? $result_datas->is_personal : "";
+			$is_business = ($result_datas->is_business)? $result_datas->is_business : "";
+			$business_number = ($result_datas->business_number)? $result_datas->business_number : "";
+			$business_license = ($result_datas->business_license)? $result_datas->business_license : "";
+			$region = ($result_datas->region)? $result_datas->region : "";
+			$professional = ($result_datas->professional)? $result_datas->professional : "";
+			$is_got_offline_shop = ($result_datas->is_got_offline_shop)? $result_datas->is_got_offline_shop : "";
+			$offline_shop_name = ($result_datas->offline_shop_name)? $result_datas->offline_shop_name : "";
+			$offline_shop_phonenumber = ($result_datas->offline_shop_phonenumber)? $result_datas->offline_shop_phonenumber : "";
+			$offline_shop_address = ($result_datas->offline_shop_address)? $result_datas->offline_shop_address : "";
+			$update_time = ($result_datas->update_time)? $result_datas->update_time : "";
+			$working_years = ($result_datas->working_years)? $result_datas->working_years : 0;
+			$lat = ($result_datas->lat)? $result_datas->lat : "";
+			$lng = ($result_datas->lng)? $result_datas->lng : "";
+			$enter_path = ($result_datas->enter_path)? $result_datas->enter_path : "";
+			$choice_service = ($result_datas->choice_service)? $result_datas->choice_service : "";
 
-			$customer_id = $crypto->decode($customer_id, $access_key, $secret_key);
-			$name = $crypto->decode($name, $access_key, $secret_key);
-			$cellphone = $crypto->decode($cellphone, $access_key, $secret_key);
-			$business_number = $crypto->decode($business_number, $access_key, $secret_key);
-			$region = $crypto->decode($region, $access_key, $secret_key);
-			$professional = $crypto->decode($professional, $access_key, $secret_key);
-			$offline_shop_name = $crypto->decode($offline_shop_name, $access_key, $secret_key);
-			$offline_shop_phonenumber = $crypto->decode($offline_shop_phonenumber, $access_key, $secret_key);
-			$offline_shop_address = $crypto->decode($offline_shop_address, $access_key, $secret_key);
+			$customer_id = ($result_datas->customer_id)? $crypto->decode($customer_id, $access_key, $secret_key):"";
+			$name = ($result_datas->name)? $crypto->decode($name, $access_key, $secret_key):"";
+			$cellphone = ($result_datas->cellphone)? $crypto->decode($cellphone, $access_key, $secret_key):"";
+			$business_number = ($result_datas->business_number)? $crypto->decode($business_number, $access_key, $secret_key):"";
+			$region = ($result_datas->region)? $crypto->decode($region, $access_key, $secret_key):"";
+			$professional = ($result_datas->professional)? $crypto->decode($professional, $access_key, $secret_key):"";
+			$offline_shop_name = ($result_datas->offline_shop_name)? $crypto->decode($offline_shop_name, $access_key, $secret_key):"";
+			$offline_shop_phonenumber = ($result_datas->offline_shop_phonenumber)? $crypto->decode($offline_shop_phonenumber, $access_key, $secret_key):"";
+			$offline_shop_address = ($result_datas->offline_shop_address)? $crypto->decode($offline_shop_address, $access_key, $secret_key):"";
+
+
+
+//			if($customer_id == 'petatest2@pickmon.com'){
+				$insert_sql = "
+					INSERT INTO `tb_request_artist_decrypt` 
+						(`customer_id`, `step`, `name`, `cellphone`, `is_personal`, `is_business`, `business_number`, `business_license`, 
+						`region`, `professional`, `is_got_offline_shop`, `offline_shop_name`, `offline_shop_phonenumber`, `offline_shop_address`, `update_time`, 
+						`working_years`, `lat`, `lng`, `enter_path`, `choice_service`) 
+					VALUES 
+						('".$customer_id."', NULLIF('".$step."',''), '".$name."', '".$cellphone."', NULLIF('".$is_personal."',''), NULLIF('".$is_business."',''), '".$business_number."', '".$business_license."', 
+						'".$region."', '".$professional."', NULLIF('".$is_got_offline_shop."',''), '".$offline_shop_name."', '".$offline_shop_phonenumber."', '".$offline_shop_address."', '".$update_time."', 
+						".$working_years.", NULLIF('".$lat."',''), NULLIF('".$lng."',''), '".$enter_path."', '".$choice_service."');
+				";
+				$insert_result = mysql_query($insert_sql);
+				if(!$insert_result){
+				echo $insert_sql;
+				}
+//			}
+
+
+
 			?>
 <div class="my_menu_div">
 	<table width="100%">
@@ -322,7 +345,7 @@ if ($result_datas = mysql_fetch_object($result)) {
 								echo $name;
 								echo "/사업자 (<span style='color:#fff;'>/</span>";
 								echo $business_number . "<span style='color:#fff;'>/</span>) <br>";
-								echo "<img src='" . $business_license . "' width='100%'><br>";
+//								echo "<img src='" . $business_license . "' width='100%'><br>";
 							}
 							?>
 				전화번호 : 신청시 <?= $cellphone ?> / 가입시
@@ -360,16 +383,8 @@ if ($result_datas = mysql_fetch_object($result)) {
 		}
 	} else {
 		?>
-<form action="manage_request_artist.php" method="POST" style="margin-top: 20px;">
-	<input type="hidden" name="seq" value="<?= $seq ?>" />
-	고객ID : <input type="text" name="ph_customer_id" value="<?= $_REQUEST['ph_customer_id'] ?>" /> <button type="submit">검 색</button> <br>
-</form>
 <?php
-		$sql = "select * from tb_request_artist where step > 5 ";
-		if ($_REQUEST['ph_customer_id']) {
-			$enc_customer_id = $crypto->encode($_REQUEST['ph_customer_id'], $access_key, $secret_key);
-			$sql = $sql . " and customer_id = '" . $enc_customer_id . "' ";
-		}
+		$sql = "select * from tb_request_artist_decrypt ";
 		$sql = $sql . " order by update_time desc;";
 		$result = mysql_query($sql);
 		$count = mysql_num_rows($result);
@@ -383,9 +398,6 @@ if ($result_datas = mysql_fetch_object($result)) {
 			$is_business = $result_datas->is_business;
 			$business_number = $result_datas->business_number;
 			$business_license = $result_datas->business_license;
-			if(strpos($business_license, "/pet/") === false && $business_license != ''){
-				$business_license = "https://image.banjjakpet.com/".$business_license;
-			}
 			$region = $result_datas->region;
 			$professional = $result_datas->professional;
 			$is_got_offline_shop = $result_datas->is_got_offline_shop;
@@ -395,15 +407,15 @@ if ($result_datas = mysql_fetch_object($result)) {
 			$update_time = $result_datas->update_time;
 			$working_years = $result_datas->working_years;
 
-			$customer_id = $crypto->decode($customer_id, $access_key, $secret_key);
-			$name = $crypto->decode($name, $access_key, $secret_key);
-			$cellphone = $crypto->decode($cellphone, $access_key, $secret_key);
-			$business_number = $crypto->decode($business_number, $access_key, $secret_key);
-			$region = $crypto->decode($region, $access_key, $secret_key);
-			$professional = $crypto->decode($professional, $access_key, $secret_key);
-			$offline_shop_name = $crypto->decode($offline_shop_name, $access_key, $secret_key);
-			$offline_shop_phonenumber = $crypto->decode($offline_shop_phonenumber, $access_key, $secret_key);
-			$offline_shop_address = $crypto->decode($offline_shop_address, $access_key, $secret_key);
+//			$customer_id = $crypto->decode($customer_id, $access_key, $secret_key);
+//			$name = $crypto->decode($name, $access_key, $secret_key);
+//			$cellphone = $crypto->decode($cellphone, $access_key, $secret_key);
+//			$business_number = $crypto->decode($business_number, $access_key, $secret_key);
+//			$region = $crypto->decode($region, $access_key, $secret_key);
+//			$professional = $crypto->decode($professional, $access_key, $secret_key);
+//			$offline_shop_name = $crypto->decode($offline_shop_name, $access_key, $secret_key);
+//			$offline_shop_phonenumber = $crypto->decode($offline_shop_phonenumber, $access_key, $secret_key);
+//			$offline_shop_address = $crypto->decode($offline_shop_address, $access_key, $secret_key);
 			?>
 <div class="my_menu_div">
 	<table width="100%">

@@ -1,5 +1,5 @@
 <?php include "../include/top.php"; ?>
-<?php include "../include/Crypto.class.php"; ?>
+<?php include "../include/Crypto.class_old.php"; ?>
 
 <?php
 	$artist_id = $_REQUEST['artist_id'];
