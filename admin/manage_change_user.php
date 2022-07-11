@@ -140,7 +140,8 @@ if ($result_datas = mysql_fetch_object($result)) {
     <script>
         function on_login() {
             var id = document.getElementById('gobeauty_user_name').value;
-            return window.Android.onLogin(id);
+			console.log(id);
+//            return window.Android.onLogin(id);
         }
     </script>
     <div class="header-back-btn"><a href="<?= $admin_directory ?>/"><img src="<?= $image_directory ?>/back.png" width="35px"></a></div>

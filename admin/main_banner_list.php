@@ -29,7 +29,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 	#main_banner .btn_wrap button.insert_banner_btn { position: absolute; right: 0px; bottom: 0px; border: 1px solid #f5bf2e; background-color: #f5bf2e; color: #fff; }
 	#main_banner .tab_wrap {  }
 	#main_banner .tab_wrap ul.table { display: table; width: 100%; margin: 10px 0px; }
-	#main_banner .tab_wrap ul.table li { display: table-cell; width: 25%; text-align: center; height: 40px; line-height: 40px; background-color: #f9f9f9; color: #999; white-space: nowrap; }
+	#main_banner .tab_wrap ul.table li { display: table-cell; width: 20%; text-align: center; height: 40px; line-height: 40px; background-color: #f9f9f9; color: #999; white-space: nowrap; }
 	#main_banner .tab_wrap ul.table li.on { background-color: #f5bf2e; border: 1px solid #f5bf2e; color: #fff; }
 	#main_banner .banner_list {  }
 	#main_banner .banner_list table { font-size: 16px; font-family: 'NL2GR'; }
@@ -125,6 +125,9 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			html += '		</li>';
 			html += '		<li>';
 			html += '			<div data-tab="4">상품(고양이)</div>';
+			html += '		</li>';
+			html += '		<li>';
+			html += '			<div data-tab="5">전문몰</div>';
 			html += '		</li>';
 			html += '	<ul>';
 			html += '</div>';

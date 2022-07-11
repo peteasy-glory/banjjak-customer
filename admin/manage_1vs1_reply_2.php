@@ -187,6 +187,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						if(data.data && data.data.length > 0){
 							html += '<div class="reply">';
 							$.each(data.data, function(i, v){
+//20211005 대표님요청 1 이라고 쓴 답글 안보이게 처리 by glory
+if(v.title != '1'){
 								html += '	<div class="reply_wrap" data-qna_id="'+v.id+'">';
 								html += '		<ul>';
 								html += '			<li>'+v.update_time+' ('+v.request_main_type+''+v.request_sub_type+')</li>';
@@ -196,6 +198,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 								html += '		</ul>';
 								html += '		<div class="reply_sub"></div>';
 								html += '	</div>';
+}
 							});
 							html += '</div>';
 

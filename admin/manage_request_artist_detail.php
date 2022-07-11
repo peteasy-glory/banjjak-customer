@@ -207,6 +207,24 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 		html += '					<span>첨부된 이미지가 없습니다.</span>';
 		html += '				</div>';
 		html += '			</li>';
+		html += '			<li>'; // 계좌 수정 시작
+		html += '				<div class="title">정산계좌 은행명</div>';
+		html += '				<div class="content">';
+		html += '					<input type="text" name="bank_bankname" value="" />';
+		html += '				</div>';
+		html += '			</li>';
+		html += '			<li>';
+		html += '				<div class="title">정산계좌 예금주명</div>';
+		html += '				<div class="content">';
+		html += '					<input type="text" name="bank_name" value="" />';
+		html += '				</div>';
+		html += '			</li>';
+		html += '			<li>';
+		html += '				<div class="title">정산계좌 번호</div>';
+		html += '				<div class="content">';
+		html += '					<input type="text" name="bank_number" value="" />';
+		html += '				</div>';
+		html += '			</li>'; // 계좌 수정 끝
 		html += '			<li>';
 		html += '				<div class="title">지역</div>';
 		html += '				<div class="content" style="text-align: left;">';
@@ -306,6 +324,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						if(typeof data.data.business_license != "undefined" && data.data.business_license != ""){
 							$manage_request_artist_detail.find(".business_license").html('<a data-fancybox="gallery" href="'+data.data.business_license+'"><div class="pet_image" style="background-image:url('+data.data.business_license+');"></div></a>');
 						}
+						// 계좌 정보 뿌려주기
+						$manage_request_artist_detail.find("input[name='bank_bankname']").val(data.data.bank_bankname);
+						$manage_request_artist_detail.find("input[name='bank_name']").val(data.data.bank_name);
+						$manage_request_artist_detail.find("input[name='bank_number']").val(data.data.bank_number);
 						if(data.data.region != ""){
 							get_top_region(data.data.region);
 						}

@@ -96,6 +96,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
 	var random_id = Math.floor(Math.random() * 4) + 7;
 
+
+
+출처: https://hianna.tistory.com/454 [어제 오늘 내일]
+
 	$(function(){
 		get_item_review_html();
 		
@@ -404,6 +408,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 	});
 
 	function get_item_review_html(){
+		var now_dt = new Date().format('yyyy-MM-dd')
 		var html = '';
 		html += '<form id="item_review_write_form" method="POST">';
 		html += '	<input type="hidden" name="product_no" value="" />';
@@ -439,6 +444,12 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 		html += '			<div class="title">평점</div>';
 		html += '			<div class="content star-rating">';
 		html += '				<input type="text" id="rating" class="rating" name="rating" value="5" data-size="xs" title="평점" />';
+		html += '			</div>';
+		html += '		</li>';
+		html += '		<li>';
+		html += '			<div class="title">리뷰 작성일</div>';
+		html += '			<div class="content">';
+		html += '				<input type="date" name="date" value="'+now_dt+'">';
 		html += '			</div>';
 		html += '		</li>';
 		html += '		<li>';
@@ -486,6 +497,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						$item_review_write.find("input[name='review_image']").val(v.review_image);
 						$item_review_write.find("#rating").rating('update', v.rating);
 						$item_review_write.find("input[name='name']").val(name);
+						var date = new Date(v.reg_dt).format('yyyy-MM-dd');
+						$item_review_write.find("input[name='date']").val(date);
 						order_num = v.order_num;
 						product_no = v.product_no;
 						product_option_txt = v.product_option_txt;

@@ -97,7 +97,7 @@ for($_i = 1; $_i <= 6; $_i++){
 		<input type="text" id="searchDate" name="searchDate" class="datePicker" value="<?=$n_date?>" />
 		<button type="button" class="search_btn"><i class="fas fa-search"></i> 검색</button>
 <!-- 		<button onclick="window.open('http://dev.gopet.kr/pet/artist/index_glory.php')">test</button> -->
-		<button onclick="location.href='http://dev.gopet.kr/pet/artist/index_glory.php?artist_name=그을로리'">test</button>
+<!-- 		<button onclick="location.href='http://dev.gopet.kr/pet/artist/index_glory.php?artist_name=그을로리'">test</button> -->
 		<span style="font-size: 13px; color: red;">2021-06-07 부터 인포뱅크로 변경</span>
 <!-- 		<div id="test"> -->
 <!-- 			연도:<p id="year"></p> -->

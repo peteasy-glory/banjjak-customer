@@ -147,7 +147,7 @@
 					FROM tb_payment_log AS pl 
 					LEFT JOIN tb_shop AS sh
 					ON pl.artist_id = sh.customer_id
-					WHERE 1=1 
+					WHERE pay_type IS NOT null  
 						".$where_qy."
 					ORDER BY buy_time DESC
 					LIMIT ".$r_limit_0.", ".$r_limit_1."

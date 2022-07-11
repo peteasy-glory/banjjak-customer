@@ -86,55 +86,14 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
 <div class="bjj_top_menu">
     <div class="bjj-back-btn"><a href="<?= $admin_directory ?>/"><img src="<?= $image_directory ?>/btn_back_2.png"></a></div>
-    <div class="bjj_top_title"><p>인기 검색어 관리</p></div>
+    <div class="bjj_top_title"><p> 전문몰 인기 검색어 관리</p></div>
 </div>
 
 <div id="item_list"></div>
 <div id="beauty_item_payment"></div>
 <div class="btn_wrap">
-	<button type="button" class="search_btn1">검색어 수정</button>	<button type="button" onclick="location.href='<?= $admin_directory ?>/item_search_manage_shop.php'">전문몰 검색어 관리(파트너샵)</button>
+	<button type="button" class="search_btn1">검색어 수정</button>
 	<br><br><hr><br>
-</div>
-<div id="search_banner">
-	<div class="banner_list">
-		<table>
-			<colgroup>
-				<col width="1%" />
-				<col width="80px" />
-				<col width="*" />
-			</colgroup>
-			<thead>
-			<tr>
-					<th class="th_col">No</th>
-					<th>배너</th>
-					<th>현재 노출되어있는 배너</th>
-				</tr>
-			</thead>
-			<tbody class="banner_list_wrap">
-			</tbody>
-		</table>
-	</div>
-</div>
-<br><hr><br>
-<div id="main_banner">
-	<div class="banner_list">
-		<table>
-			<colgroup>
-				<col width="1%" />
-				<col width="80px" />
-				<col width="*" />
-			</colgroup>
-			<thead>
-			<tr>
-					<th>No</th>
-					<th>배너</th>
-					<th>배너명 선택시 해당 배너로 교체</th>
-				</tr>
-			</thead>
-			<tbody class="banner_list_wrap">
-			</tbody>
-		</table>
-	</div>
 </div>
 
 <script>
@@ -146,9 +105,7 @@ var $search_banner = $("#search_banner");
 
 	$(function(){
 		init_html()
-			.then(get_beauty_list)
-			.then(get_search_banner)
-			.then(get_main_banner);
+			.then(get_beauty_list);
 	});
 
 	function init_html(){
@@ -182,7 +139,7 @@ var $search_banner = $("#search_banner");
 			$.ajax({
 				url: 'item_search_manage_ajax.php',
 				data: {
-					mode : "get_rank"
+					mode : "get_rank_partner"
 				},
 				type: 'POST',
 				dataType: 'JSON',
@@ -242,7 +199,7 @@ var $search_banner = $("#search_banner");
 		$.ajax({
 			url: 'item_search_manage_ajax.php',
 			data: {
-				mode : "change_rank",
+				mode : "change_rank_partner",
 				rank_one : rank_one,
 				rank_two : rank_two,
 				rank_three : rank_three,
@@ -252,7 +209,7 @@ var $search_banner = $("#search_banner");
 			type: 'POST',
 			dataType: 'JSON',
 			success: function(data) {
-				location.href = "item_search_manage.php";
+				location.href = "item_search_manage_shop.php";
 			},
 			error: function(xhr, status) {
 //				location.href = "item_search_manage.php";
@@ -262,183 +219,7 @@ var $search_banner = $("#search_banner");
 		});
 	});
 	
-	// 인기검색어 페이지에 노출되어있는 베너
-	function get_search_banner(){
-		return new Promise(function(resolve, reject) {
-			$.ajax({
-				url: 'item_search_manage_ajax.php',
-				data: {
-					mode: "get_search_banner",
-				},
-				type: 'POST',
-				dataType: 'JSON',
-				success: function(data) {
-					if(data.code == "000000"){
-						console.log(data.data);
-						var html = '';
-
-						if(data.data && data.data.length > 0){
-							$.each(data.data, function(i, v){
-								var link = (v.link && v.link != "")? '<a class="link" href="'+v.link+'" target="_blank">'+v.mb_seq+'</a>' : v.mb_seq;
-								html += '<tr id="sort_'+i+'" data-id="'+v.mb_seq+'">';
-								html += '	<td class="">'+link+'</td>';
-								html += '	<td><div class="banner_img"></div></td>';
-								html += '	<td class="lft update_banner_btn" style="text-align:center">'+v.title+'</td>';
-								html += '</tr>';
-							});
-							$search_banner.find(".banner_list_wrap").append(html);
-							$.each(data.data, function(i, v){
-								get_file_list(".banner_list_wrap tr", v.mb_seq, v.banner);
-							});
-						}else{
-							html += '<tr>';
-							html += '	<td colspan="4" class="no_data">등록된 배너가 없습니다.</td>';
-							html += '</tr>';
-							$search_banner.find(".banner_list_wrap").append(html);
-						}
-
-						resolve();
-					}else{
-						alert(data.data+"("+data.code+")");
-						console.log(data.code);
-					}
-				},
-				error: function(xhr, status, error) {
-					//alert(error + "네트워크에러");
-					if(xhr.status != 0){
-						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-					}
-				}
-			});
-			resolve();
-		});
-	}
-
-	// 배너 리스트 불러오기
-	function get_main_banner(){
-		return new Promise(function(resolve, reject) {
-			$.ajax({
-				url: 'item_search_manage_ajax.php',
-				data: {
-					mode: "get_main_banner",
-				},
-				type: 'POST',
-				dataType: 'JSON',
-				success: function(data) {
-					if(data.code == "000000"){
-						console.log(data.data);
-						var html = '';
-
-						if(data.data && data.data.length > 0){
-							$.each(data.data, function(i, v){
-								var link = (v.link && v.link != "")? '<a class="link" href="'+v.link+'" target="_blank">'+v.mb_seq+'</a>' : v.mb_seq;
-								html += '<tr id="sort_'+i+'" data-id="'+v.mb_seq+'">';
-								html += '	<td class="">'+link+'</td>';
-								html += '	<td><div class="banner_img"></div></td>';
-								html += '	<td class="lft update_banner_btn" style="text-align:center">'+v.title+'</td>';
-								html += '</tr>';
-							});
-							$main_banner.find(".banner_list_wrap").append(html);
-							$.each(data.data, function(i, v){
-								get_file_list(".banner_list_wrap tr", v.mb_seq, v.banner);
-							});
-						}else{
-							html += '<tr>';
-							html += '	<td colspan="4" class="no_data">등록된 배너가 없습니다.</td>';
-							html += '</tr>';
-							$main_banner.find(".banner_list_wrap").append(html);
-						}
-
-						resolve();
-					}else{
-						alert(data.data+"("+data.code+")");
-						console.log(data.code);
-					}
-				},
-				error: function(xhr, status, error) {
-					//alert(error + "네트워크에러");
-					if(xhr.status != 0){
-						alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-					}
-				}
-			});
-			resolve();
-		});
-	}
-
-	// 배너사진 노출
-	function get_file_list(target, seq, img_list){
-		return new Promise(function(resolve, reject) {
-			console.log(img_list);
-			// img_loading
-			if(img_list && img_list != ""){
-				$.ajax({
-					url: '../test/test_fileupload_ajax.php',
-					data: {
-						mode : "get_file_list",
-						file_list: img_list
-					},
-					type: 'POST',
-					dataType: 'JSON',
-					success: function(data) {
-						if(data.code == "000000"){
-							console.log(data.data);
-							var html = '';
-							$.each(data.data, function(i, v){
-								if(i == 0){
-									$main_banner.find(target+"[data-id='"+seq+"'] .banner_img").css("background-image", "url('"+v.file_path+"')");
-									$search_banner.find(target+"[data-id='"+seq+"'] .banner_img").css("background-image", "url('"+v.file_path+"')");
-								}
-							});
-
-							resolve();
-						}else{
-							alert(data.data+"("+data.code+")");
-							console.log(data.code);
-						}
-					},
-					error: function(xhr, status, error) {
-						//alert(error + "네트워크에러");
-						if(xhr.status != 0){
-							alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
-						}
-					}
-				});
-			}else{
-				$main_banner.find(target+"[data-id='"+seq+"'] .banner_img").css("background-image", "url('../images/product_img.png')");
-			}
-		});
-	}
-
-	$main_banner.on("click", ".update_banner_btn", function(){
-		var mb_seq = $(this).parent().data("id");
-//		location.href = "main_banner_write.php?seq="+seq;
-
-		$.ajax({
-			url: 'item_search_manage_ajax.php',
-			data: {
-				mode : "change_banner",
-				mb_seq : mb_seq
-			},
-			type: 'POST',
-			dataType: 'JSON',
-			success: function(data) {
-				location.href = "item_search_manage.php";
-			},
-			error: function(xhr, status) {
-//				location.href = "item_search_manage.php";
-				 alert(xhr + " : " + status);
-			}
-
-		});
-	});
-
-// function 안에 넣기
-//var rank_one = document.getElementById('rank_1').value;
-//var rank_two = document.getElementById('rank_2').value;
-//var rank_three = document.getElementById('rank_3').value;
-//var rank_four = document.getElementById('rank_4').value;
-//var rank_five = document.getElementById('rank_5').value;
+	
 </script>
 
 <?php
