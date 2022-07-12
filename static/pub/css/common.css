@@ -1111,7 +1111,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 
 
 /*2022.07.12 펫 삭제 팝업 수정*/
-.msg-txt {
+.msg-txt-add {
 	background: #fff45d;
 	width: 90%;
 	border-radius: 8px;
