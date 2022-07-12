@@ -1,21 +1,15 @@
 <?php
-include "../include/top.php";
-include "../include/Crypto.class.php";
-include "../include/VAT.class.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 ?>
 
-<?php
-$cl_result = include "../include/check_login.php";
-if ($cl_result == 0) {
-    return false;
-}
-?>
 
 <?php
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 ?>
-
+    <link rel="stylesheet" href="m_new.css">
 <style>
     a {
         text-decoration: none;
@@ -194,9 +188,9 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
 <?php
 $login_insert_sql = "select * from tb_customer where id = '" . $user_id . "' and (admin_flag = true or operator_flag = true)";
-$result = mysql_query($login_insert_sql);
+$result = mysqli_query($connection,$login_insert_sql);
 
-if ($result_datas = mysql_fetch_object($result)) {
+if ($result_datas = mysqli_fetch_object($result)) {
     $nickname = $result_datas->nickname;
     $photo = $result_datas->photo;
     $c_cellphone = $result_datas->cellphone;
@@ -218,10 +212,10 @@ if ($result_datas = mysql_fetch_object($result)) {
 
     <?
         $sql = "select * from tb_shop where is_finish_open_magic = true and open_flag = false;";
-        $result = mysql_query($sql);
-        $count = mysql_num_rows($result);
+        $result = mysqli_query($connection,$sql);
+        $count = mysqli_num_rows($result);
         echo "<font style='font-size:13px;'>신청 수 : " . $count . "개</font><br>";
-        while ($result_datas = mysql_fetch_object($result)) {
+        while ($result_datas = mysqli_fetch_object($result)) {
             $customer_id = $result_datas->customer_id;
             $artist_id = $result_datas->customer_id;
             $name = $result_datas->name;
@@ -252,8 +246,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                                 }
                                 echo "전문분야 : ";
                                 $custom_sql = "select * from tb_professional where customer_id = '" . $customer_id . "';";
-                                $custom_result = mysql_query($custom_sql);
-                                while ($custom_datas = mysql_fetch_object($custom_result)) {
+                                $custom_result = mysqli_query($connection,$custom_sql);
+                                while ($custom_datas = mysqli_fetch_object($custom_result)) {
                                     echo $custom_datas->value . " ";
                                 }
                                 echo "<br>";
@@ -263,8 +257,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                         <table width="100%" style="font-size:13px;">
                             <?php
                                     $now_sql = "select distinct tr.middle, tr.top from tb_working_region twr, tb_region tr where twr.customer_id = '" . $customer_id . "' and twr.region_id = tr.id;";
-                                    $now_result = mysql_query($now_sql);
-                                    while ($now_datas = mysql_fetch_object($now_result)) {
+                                    $now_result = mysqli_query($connection,$now_sql);
+                                    while ($now_datas = mysqli_fetch_object($now_result)) {
                                         $now_top = $now_datas->top;
                                         $now_middle = $now_datas->middle;
                                         ?>
@@ -273,8 +267,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                                         <b><?= $now_top ?> <?= $now_middle ?></b><br>
                                         <?php
                                                     $select_bottom_sql = "select distinct tr.bottom, tr.id from tb_working_region twr, tb_region tr where twr.customer_id = '" . $customer_id . "' and twr.region_id = tr.id and tr.top = '" . $now_top . "' and tr.middle = '" . $now_middle . "';";
-                                                    $sb_result = mysql_query($select_bottom_sql);
-                                                    while ($sb_datas = mysql_fetch_object($sb_result)) {
+                                                    $sb_result = mysqli_query($connection,$select_bottom_sql);
+                                                    while ($sb_datas = mysqli_fetch_object($sb_result)) {
                                                         ?>
                                             <?= $sb_datas->bottom ?>
                                     <?php
@@ -286,15 +280,15 @@ if ($result_datas = mysql_fetch_object($result)) {
                         출장비 : <br>
                         <?php
                                 $now_sql = "select distinct tr.middle, tr.top from tb_working_region twr, tb_region tr where twr.customer_id = '" . $customer_id . "' and twr.region_id = tr.id;";
-                                $now_result = mysql_query($now_sql);
+                                $now_result = mysqli_query($connection,$now_sql);
                                 $notice_flag = 1;
-                                while ($now_datas = mysql_fetch_object($now_result)) {
+                                while ($now_datas = mysqli_fetch_object($now_result)) {
                                     $now_top = $now_datas->top;
                                     $now_middle = $now_datas->middle;
 
                                     $select_bottom_sql = "select distinct tr.bottom, tr.id from tb_working_region twr, tb_region tr where twr.customer_id = '" . $customer_id . "' and twr.region_id = tr.id and tr.top = '" . $now_top . "' and tr.middle = '" . $now_middle . "' and twr.zone_id is null;";
-                                    $sb_result = mysql_query($select_bottom_sql);
-                                    $count = mysql_num_rows($sb_result);
+                                    $sb_result = mysqli_query($connection,$select_bottom_sql);
+                                    $count = mysqli_num_rows($sb_result);
                                     if ($count) {
                                         if ($notice_flag) {
                                             $notice_flag = 0;
@@ -308,7 +302,7 @@ if ($result_datas = mysql_fetch_object($result)) {
                                         <td>
                                             <div style="position:related;text-align:left;right:30px;top:5px;padding:5px;background-color:#ababab;color:#ffffff;font-size:15px;font-weight:bold;"><?= $now_top ?> <?= $now_middle ?></div>
                                             <?php
-                                                            while ($sb_datas = mysql_fetch_object($sb_result)) {
+                                                            while ($sb_datas = mysqli_fetch_object($sb_result)) {
                                                                 ?>
                                                 <div class='region_bottom' style='font-size:14px;margin:2px;float:left;border:0px dotted #999999;'>
                                                     <table>
@@ -339,8 +333,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                                 $vat_class = new VAT();
                                 $is_vat = $vat_class->is_vat($artist_id);
                                 $shop_fi_sql = "select * from tb_product_dog where customer_id = '" . $artist_id . "';";
-                                $shop_fi_result = mysql_query($shop_fi_sql);
-                                while ($shop_fi_datas = mysql_fetch_object($shop_fi_result)) {
+                                $shop_fi_result = mysqli_query($connection,$shop_fi_sql);
+                                while ($shop_fi_datas = mysqli_fetch_object($shop_fi_result)) {
                                     $n_first_type = $shop_fi_datas->first_type;
                                     $n_second_type = $shop_fi_datas->second_type;
                                     $n_in_shop_product = $shop_fi_datas->in_shop_product;
@@ -434,8 +428,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                                 ?>
                         <?php
                                 $shop_fi_sql = "select * from tb_product_cat where customer_id = '" . $artist_id . "';";
-                                $shop_fi_result = mysql_query($shop_fi_sql);
-                                while ($shop_fi_datas = mysql_fetch_object($shop_fi_result)) {
+                                $shop_fi_result = mysqli_query($connection,$shop_fi_sql);
+                                while ($shop_fi_datas = mysqli_fetch_object($shop_fi_result)) {
                                     $n_first_type = $shop_fi_datas->first_type;
                                     $n_second_type = $shop_fi_datas->second_type;
                                     $n_in_shop_product = $shop_fi_datas->in_shop_product;
@@ -560,8 +554,8 @@ if ($result_datas = mysql_fetch_object($result)) {
 
                         <?php
                                 $shop_fi_sql = "select * from tb_product_dog_common where customer_id = '" . $artist_id . "';";
-                                $shop_fi_result = mysql_query($shop_fi_sql);
-                                while ($shop_fi_datas = mysql_fetch_object($shop_fi_result)) {
+                                $shop_fi_result = mysqli_query($connection,$shop_fi_sql);
+                                while ($shop_fi_datas = mysqli_fetch_object($shop_fi_result)) {
                                     $n_first_type = $shop_fi_datas->first_type;
                                     $n_second_type = $shop_fi_datas->second_type;
                                     $n_in_shop_product = $shop_fi_datas->in_shop_product;
@@ -752,8 +746,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                                         </tr>
                                         <?php
                                                 $shop_fi_sql = "select * from tb_product_dog_etc where customer_id = '" . $artist_id . "';";
-                                                $shop_fi_result = mysql_query($shop_fi_sql);
-                                                for ($vi = 0; $shop_fi_datas = mysql_fetch_object($shop_fi_result); $vi = $vi + 1) {
+                                                $shop_fi_result = mysqli_query($connection,$shop_fi_sql);
+                                                for ($vi = 0; $shop_fi_datas = mysqli_fetch_object($shop_fi_result); $vi = $vi + 1) {
                                                     $n_name = $shop_fi_datas->name;
                                                     $n_price = $shop_fi_datas->price;
                                                     $n_sequence = $shop_fi_datas->sequence;
@@ -808,8 +802,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                                         </tr>
                                         <?php
                                                 $shop_fi_sql = "select * from tb_product_cat_etc where customer_id = '" . $artist_id . "';";
-                                                $shop_fi_result = mysql_query($shop_fi_sql);
-                                                for ($vi = 0; $shop_fi_datas = mysql_fetch_object($shop_fi_result); $vi = $vi + 1) {
+                                                $shop_fi_result = mysqli_query($connection,$shop_fi_sql);
+                                                for ($vi = 0; $shop_fi_datas = mysqli_fetch_object($shop_fi_result); $vi = $vi + 1) {
                                                     $n_name = $shop_fi_datas->name;
                                                     $n_price = $shop_fi_datas->price;
                                                     $n_sequence = $shop_fi_datas->sequence;
@@ -841,8 +835,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                         </table>
 <?php
         $shop_fi_sql = "select * from tb_product where customer_id = '" . $customer_id . "' order by sequence asc;";
-        $shop_fi_result = mysql_query($shop_fi_sql);
-        while ($shop_fi_datas = mysql_fetch_object($shop_fi_result)) {
+        $shop_fi_result = mysqli_query($connection,$shop_fi_sql);
+        while ($shop_fi_datas = mysqli_fetch_object($shop_fi_result)) {
             $name = $shop_fi_datas->name;
             $price = $shop_fi_datas->price;
             $sequence = $shop_fi_datas->sequence;
@@ -864,8 +858,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                             <tr>
                                 <?
                                         $shop_sql = "select * from tb_portfolio where customer_id = '" . $customer_id . "'";
-                                        $shop_result = mysql_query($shop_sql);
-                                        for ($ii = 0; $shop_datas = mysql_fetch_object($shop_result); $ii++) {
+                                        $shop_result = mysqli_query($connection,$shop_sql);
+                                        for ($ii = 0; $shop_datas = mysqli_fetch_object($shop_result); $ii++) {
                                             $image_value = $shop_datas->image;
                                             ?>
                                     <td>
@@ -884,8 +878,8 @@ if ($result_datas = mysql_fetch_object($result)) {
                         계좌정보 :<br>
                         <?php
                                 $bank_sql = "select * from tb_artist_payment_info where customer_id = '" . $customer_id . "';";
-                                $bank_result = mysql_query($bank_sql);
-                                if ($bank_datas = mysql_fetch_object($bank_result)) {
+                                $bank_result = mysqli_query($connection,$bank_sql);
+                                if ($bank_datas = mysqli_fetch_object($bank_result)) {
                                     $enc_bankname = $bank_datas->bankname;
                                     $enc_account_holder = $bank_datas->account_holder;
                                     $enc_bank_account = $bank_datas->bank_account;
@@ -916,41 +910,28 @@ if ($result_datas = mysql_fetch_object($result)) {
     <br><br><br><br>
     <script>
         function delete_artist(c_id) {
-            $.MessageBox({
-                buttonFail: "취소",
-                buttonDone: "확인",
-                message: "삭제하시겠습니까?"
-            }).done(function() {
+            var result = confirm("삭제하시겠습니까?");
+            if(result){
                 $.ajax({
-                    url: '<?= $admin_directory ?>/delete_request_artist.php',
+                    url: 'delete_request_artist.php',
                     data: {
                         customer_id: c_id
                     },
                     type: 'POST',
                     success: function(data) {
-                        $.MessageBox({
-                            buttonDone: "확인",
-                            message: data
-                        }).done(function() {
-                            location.reload();
-                        });
+                        alert(data);
+                        location.reload();
                     },
                     error: function(xhr, status, error) {
-                        $.MessageBox({
-                            buttonDone: "확인",
-                            message: "적용 실패."
-                        }).done(function() {});
+                        alert("적용실패");
                     }
                 });
-            });
+            }
         }
 
         function agree_artist(c_id) {
-            $.MessageBox({
-                buttonFail: "취소",
-                buttonDone: "확인",
-                message: "승인하시겠습니까?"
-            }).done(function() {
+            var result = confirm("승인하시겠습니까?");
+            if(result){
                 $.ajax({
                     url: '<?= $admin_directory ?>/agree_request_open_shop.php',
                     data: {
@@ -958,29 +939,19 @@ if ($result_datas = mysql_fetch_object($result)) {
                     },
                     type: 'POST',
                     success: function(data) {
-                        $.MessageBox({
-                            buttonDone: "확인",
-                            message: data
-                        }).done(function() {
-                            location.reload();
-                        });
+                        alert(data);
+                        location.reload();
                     },
                     error: function(xhr, status, error) {
-                        $.MessageBox({
-                            buttonDone: "확인",
-                            message: "적용 실패."
-                        }).done(function() {});
+                        alert("적용실패");
                     }
                 });
-            });
+            }
         }
 
         function return_artist(c_id) {
-            $.MessageBox({
-                buttonFail: "취소",
-                buttonDone: "확인",
-                message: "반려하시겠습니까?"
-            }).done(function() {
+            var result = confirm("반려하시겠습니까?");
+            if(result){
                 $.ajax({
                     url: '<?= $admin_directory ?>/return_request_open_shop.php',
                     data: {
@@ -988,24 +959,16 @@ if ($result_datas = mysql_fetch_object($result)) {
                     },
                     type: 'POST',
                     success: function(data) {
-                        $.MessageBox({
-                            buttonDone: "확인",
-                            message: data
-                        }).done(function() {
-                            location.reload();
-                        });
+                        alert(data);
+                        location.reload();
                     },
                     error: function(xhr, status, error) {
-                        $.MessageBox({
-                            buttonDone: "확인",
-                            message: "적용 실패."
-                        }).done(function() {});
+                        alert("적용실패");
                     }
                 });
-            });
+            }
         }
     </script>
 <?php
-    include "../include/bottom.php";
 }
 ?>
