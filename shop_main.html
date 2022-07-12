@@ -778,8 +778,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                            location.href = "intent://#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
-                            // location.href="intent://login#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
+                            location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
                         }
 
 
@@ -789,7 +788,8 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
                 setTimeout(
                     function(){
-                        location.href = 'banjjack://';
+                        // location.href = "intent://shop_view#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
+                        location.href ="banjjack://"
                     }
                     ,0);
             }
