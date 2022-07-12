@@ -724,6 +724,8 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
         return num.format();
     };
+
+
     let visitedAt = (new Date()).getTime();
 
     $('.app-download-link').on('click',function(){
@@ -758,7 +760,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
             setTimeout(
                 function(){
-                    location.href = "intent://shop_view#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
+                    location.href = "intent://category?category=<?php echo $category?>#Intent;scheme=banjjack;action=andrddoid.intent.action.VIEW;package=m.kr.gobeauty;end";
                 }
                 ,0);
         }

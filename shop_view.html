@@ -1898,6 +1898,8 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
         }
 
 
+
+
         let visitedAt = (new Date()).getTime();
 
         $('.app-download-link').on('click',function(){
@@ -1914,7 +1916,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
                 setTimeout(
                     function(){
-                        location.href = 'banjjack://shop_view?product_no=<?=$product_no?>';
+                        location.href = 'banjjack://';
                     }
                     ,0);
             }else{
@@ -1932,8 +1934,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
                 setTimeout(
                     function(){
-                        // location.href = "intent://shop_view#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
-                        location.href ="banjjack://shop_view?product_no=<?=$product_no?>";
+                        location.href = "intent://shop_view?product_no=<?php echo $product_no?>#Intent;scheme=banjjack;action=andrddoid.intent.action.VIEW;package=m.kr.gobeauty;end";
                     }
                     ,0);
             }
