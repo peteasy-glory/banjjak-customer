@@ -1110,6 +1110,20 @@ h6.con-title {font-size:15px; line-height:20px;}
 }
 
 
+/*2022.07.12 펫 삭제 팝업 수정*/
+.msg-txt {
+	background: #fff45d;
+	width: 90%;
+	border-radius: 8px;
+	padding: 15px;
+}
+
+.msg-txt span {
+	color: #e74f55;
+	font-weight: 700;
+}
+
+
 /* 정보성 테이블 */
 .read-table table {width:100%; table-layout:fixed;}
 .read-table col.hide,
@@ -1561,7 +1575,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 .alert-pop-data {position:relative; background-color:#fff; padding-top:8px; border-radius:16px; overflow:hidden;}
 .alert-pop-data .pop-header {display:flex; height:63px; align-items:center; justify-content:center;}
 .alert-pop-data .pop-header + .pop-body {}
-.alert-pop-data .pop-body {display:flex; align-items:center; justify-content:center; flex-direction:column; padding:20px 24px; font-size:16px; line-height:23px; color:#202020; text-align:center; box-sizing:border-box; word-break:keep-all;}
+.alert-pop-data .pop-body {display:flex; align-items:center; justify-content:center; flex-direction:column; padding:25px 24px; font-size:16px; line-height:23px; color:#202020; text-align:center; box-sizing:border-box; word-break:keep-all;}
 .alert-pop-data .pop-body.type-2 {padding:0 20px 30px 20px;}
 .alert-pop-data .pop-body.type-3 {padding:0 20px 20px 20px;}
 .alert-pop-data .pop-footer {display:flex; border-top:1px solid #ebebeb;}
@@ -1570,7 +1584,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 .alert-pop-data .pop-footer .btn.btn-cancel {color:#202020;}
 .alert-pop-data .pop-footer .btn.btn-confirm {color:#202020;}
 .alert-pop-data .pop-footer .btn.press {background:#f0f0f0;}
-.alert-pop-data .msg-title {font-size:18px; line-height:21px; font-weight:700; margin-bottom:10px;}
+.alert-pop-data .msg-title {font-size:18px; line-height:21px; font-weight:700; margin-bottom:15px;}
 .alert-pop-data .form-group {width:100%; margin-top:20px;}
 .alert-pop-data .form-group:only-child {margin-top:0;}
 .alert-pop-data .btn-pop-close {position:absolute;top:12px;right:10px;width:56px;height:56px; font-size:0; z-index:5;background:url(../images/icon/btn-top-close@2x.png) center center no-repeat; background-size:24px auto;}
