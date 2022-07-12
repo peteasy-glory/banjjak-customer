@@ -13,7 +13,7 @@ if ($seq == null || $seq == "") {
 }
 
 ?>
-
+    <link rel="stylesheet" href="m_new.css">
 <script>
     function change_region(in_status, in_top, in_middle) {
         $.ajax({
@@ -39,7 +39,7 @@ $result = mysqli_query($connection,$login_insert_sql);
 if ($result_datas = mysqli_fetch_object($result)) {
     ?>
 
-    <div class="header-back-btn"><a href="<?= $admin_directory ?>/"><img src="<?= $image_directory ?>/back.png" width="35px"></a></div>
+    <div class="header-back-btn"><a href="index.php"><img src="<?= $image_directory ?>/back.png" width="35px"></a></div>
     <div style="width:100%;height:19px;text-align:center;font-size:18px;font-weight:bold;">
         <p>계좌이체 결제 관리</p>
     </div>

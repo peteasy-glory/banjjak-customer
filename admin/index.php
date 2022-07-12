@@ -115,7 +115,7 @@ if ($result_datas = mysqli_fetch_object($result)) {
             <?php
             if ($admin_flag || $is_bank_account) {
             ?>
-                <a href="manage_bank_payment">
+                <a href="manage_bank_payment.php">
                     <div class="my_menu_div">
                         <table class="my_shop_text">
                             <tr>
@@ -124,7 +124,7 @@ if ($result_datas = mysqli_fetch_object($result)) {
                         </table>
                         <table class="my_menu_img2">
                             <tr>
-                                <td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
+                                <td><img src="/images/setting2.png" width="20px"></td>
                             </tr>
                         </table>
                     </div>
