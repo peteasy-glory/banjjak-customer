@@ -760,7 +760,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
             setTimeout(
                 function(){
-                    location.href = "intent://category?category=<?php echo $category?>#Intent;scheme=banjjack;action=andrddoid.intent.action.VIEW;package=m.kr.gobeauty;end";
+                    location.href = "intent://shop_category?category=<?php echo $category?>#Intent;scheme=banjjack;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
                 }
                 ,0);
         }
