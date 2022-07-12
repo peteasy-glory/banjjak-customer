@@ -135,7 +135,7 @@ if ($result_datas = mysqli_fetch_object($result)) {
             <?php
             if ($admin_flag || $is_request_artist) {
             ?>
-                <a href="<?= $admin_directory ?>/manage_request_artist.php">
+                <a href="manage_request_artist.php">
                     <div class="my_menu_div">
                         <table class="my_shop_text">
                             <tr>

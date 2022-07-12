@@ -1,20 +1,17 @@
 <?php
-include "../include/top.php";
-include "../include/Crypto.class.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
 ?>
 
-<?php
-$cl_result = include "../include/check_login.php";
-if ($cl_result == 0) {
-	return false;
-}
-?>
+
 
 <?php
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 ?>
-
+    <link rel="stylesheet" href="m_new.css">
 <style>
 	@font-face {font-family: 'NL2GB';src: url("../fonts/NEXON_Lv2_Gothic_Bold.woff");}
 	@font-face {font-family: 'NL2GR';src: url('../fonts/NEXON_Lv2_Gothic.woff') format('woff');}
@@ -204,9 +201,9 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 $crypto = new Crypto();
 
 $login_insert_sql = "select * from tb_customer where id = '" . $user_id . "' and (admin_flag = true or operator_flag = true)";
-$result = mysql_query($login_insert_sql);
+$result = mysqli_query($connection,$login_insert_sql);
 
-if ($result_datas = mysql_fetch_object($result)) {
+if ($result_datas = mysqli_fetch_object($result)) {
 	$nickname = $result_datas->nickname;
 	$photo = $result_datas->photo;
 	$c_cellphone = $result_datas->cellphone;
@@ -270,10 +267,10 @@ if ($result_datas = mysql_fetch_object($result)) {
 
 
 		$sql = "select * from tb_request_artist where step <= 5 order by update_time desc;";
-		$result = mysql_query($sql);
-		$count = mysql_num_rows($result);
+		$result = mysqli_query($connection,$sql);
+		$count = mysqli_num_rows($result);
 		echo "<font style='font-size:13px;'>총 : " . $count . "건</font><br>";
-		while ($result_datas = mysql_fetch_object($result)) {
+		while ($result_datas = mysqli_fetch_object($result)) {
 			$customer_id = $result_datas->customer_id;
 			$step = $result_datas->step;
 			$name = $result_datas->name;
@@ -328,8 +325,8 @@ if ($result_datas = mysql_fetch_object($result)) {
 				전화번호 : 신청시 <?= $cellphone ?> / 가입시
 				<?php
 							$s_sql = "select * from tb_customer where id = '" . $customer_id . "'";
-							$s_result = mysql_query($s_sql);
-							if ($s_result_datas = mysql_fetch_object($s_result)) {
+							$s_result = mysqli_query($connection,$s_sql);
+							if ($s_result_datas = mysqli_fetch_object($s_result)) {
 								echo $crypto->decode($s_result_datas->cellphone, $access_key, $secret_key);
 							}
 							?>
@@ -371,10 +368,10 @@ if ($result_datas = mysql_fetch_object($result)) {
 			$sql = $sql . " and customer_id = '" . $enc_customer_id . "' ";
 		}
 		$sql = $sql . " order by update_time desc;";
-		$result = mysql_query($sql);
-		$count = mysql_num_rows($result);
+		$result = mysqli_query($connection,$sql);
+		$count = mysqli_num_rows($result);
 		echo "<font style='font-size:13px;'>총 : " . $count . "건</font><br>";
-		while ($result_datas = mysql_fetch_object($result)) {
+		while ($result_datas = mysqli_fetch_object($result)) {
 			$customer_id = $result_datas->customer_id;
 			$step = $result_datas->step;
 			$name = $result_datas->name;
@@ -428,8 +425,8 @@ if ($result_datas = mysql_fetch_object($result)) {
 				전화번호 : 신청시 <?= $cellphone ?> / 가입시
 				<?php
 							$s_sql = "select * from tb_customer where id = '" . $customer_id . "'";
-							$s_result = mysql_query($s_sql);
-							if ($s_result_datas = mysql_fetch_object($s_result)) {
+							$s_result = mysqli_query($connection,$s_sql);
+							if ($s_result_datas = mysqli_fetch_object($s_result)) {
 								echo $crypto->decode($s_result_datas->cellphone, $access_key, $secret_key);
 							}
 							?>
@@ -461,63 +458,43 @@ if ($result_datas = mysql_fetch_object($result)) {
 <div class="btn_top" style="position: fixed; right: 10px; bottom: 10px; width: 50px; height: 50px; text-align: center; line-height: 50px; border: 1px solid #ccc; background-color: #fff; border-radius: 25px;">top</div>
 <script>
 	function delete_artist(c_id) {
-		$.MessageBox({
-			buttonFail: "취소",
-			buttonDone: "확인",
-			message: "삭제하시겠습니까?"
-		}).done(function() {
-			$.ajax({
-				url: '<?= $admin_directory ?>/delete_request_artist.php',
-				data: {
-					customer_id: c_id
-				},
-				type: 'POST',
-				success: function(data) {
-					$.MessageBox({
-						buttonDone: "확인",
-						message: data
-					}).done(function() {
-						location.reload();
-					});
-				},
-				error: function(xhr, status, error) {
-					$.MessageBox({
-						buttonDone: "확인",
-						message: "적용 실패."
-					}).done(function() {});
-				}
-			});
-		});
+        var result = confirm("삭제하시겠습니까?");
+        if(result){
+            $.ajax({
+                url: 'delete_request_artist.php',
+                data: {
+                    customer_id: c_id
+                },
+                type: 'POST',
+                success: function(data) {
+                    alert(data);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert("적용실패");
+                }
+            });
+        }
 	}
 
 	function agree_artist(c_id) {
-		$.MessageBox({
-			buttonFail: "취소",
-			buttonDone: "확인",
-			message: "승인하시겠습니까?"
-		}).done(function() {
-			$.ajax({
-				url: '<?= $admin_directory ?>/agree_request_artist.php',
-				data: {
-					customer_id: c_id
-				},
-				type: 'POST',
-				success: function(data) {
-					$.MessageBox({
-						buttonDone: "확인",
-						message: data
-					}).done(function() {
-						location.reload();
-					});
-				},
-				error: function(xhr, status, error) {
-					$.MessageBox({
-						buttonDone: "확인",
-						message: "적용 실패."
-					}).done(function() {});
-				}
-			});
-		});
+        var result = confirm("승인하시겠습니까?");
+        if(result){
+            $.ajax({
+                url: 'agree_request_artist.php',
+                data: {
+                    customer_id: c_id
+                },
+                type: 'POST',
+                success: function(data) {
+                    alert(data);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert("적용실패");
+                }
+            });
+        }
 	}
 
 	$(document).on("click", ".btn_top", function(){
@@ -527,5 +504,4 @@ if ($result_datas = mysql_fetch_object($result)) {
 <?php
 }
 
-include "../include/bottom.php";
 ?>
