@@ -1899,32 +1899,45 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
 
 
-        $(document).ready(function(){
 
+        let visitedAt = (new Date()).getTime();
 
-            let link = document.getElementsByClassName('app-download-link');
+        $('.app-download-link').on('click',function(){
 
+            if(userAgent.match(/iphone|ipad|ipod/i)){
 
+                setTimeout(
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
+                        }
+                    }
+                    ,1500);
 
-
-            if(userAgent.match(/iphone|ipad|ipod/i) ){
-
-
-                Array.from(link).forEach(function(el,i){
-
-                    el.setAttribute('href','https://apps.apple.com/kr/app/id1436568194');
-                })
-
-
+                setTimeout(
+                    function(){
+                        location.href = 'banjjack://';
+                    }
+                    ,0);
             }else{
-                Array.from(link).forEach(function(el,i){
 
-                    el.setAttribute('href','https://play.google.com/store/apps/details?id=m.kr.gobeauty');
-                })
+                setTimeout(
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+                        }
+
+
+
+                    }
+                    ,1500);
+
+                setTimeout(
+                    function(){
+                        location.href = "intent://shop_view?product_no=<?php echo $product_no?>#Intent;scheme=banjjack;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
+                    }
+                    ,0);
             }
-
-
-
         })
     </script>
 <?
