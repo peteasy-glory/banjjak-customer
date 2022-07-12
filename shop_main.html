@@ -587,7 +587,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
         //	page-bottom 이 있을 경우 이위치
         <div class="page-bottom">
         </div>
-        -->-
+        -->
         <!-- page-bottom -->
 
         <!-- //page-bottom -->
@@ -735,36 +735,65 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
 
+
         $(document).ready(function(){
-
-
             let link = document.getElementsByClassName('app-download-link');
-
-
-
-
             if(userAgent.match(/iphone|ipad|ipod/i) ){
-
-
                 Array.from(link).forEach(function(el,i){
-
                     el.setAttribute('href','https://apps.apple.com/kr/app/id1436568194');
                 })
-
-
-            }else{
-                Array.from(link).forEach(function(el,i){
-
-                    el.setAttribute('href','https://play.google.com/store/apps/details?id=m.kr.gobeauty');
+            }else {
+                Array.from(link).forEach(function (el, i) {
+                    el.setAttribute('href', 'https://play.google.com/store/apps/details?id=m.kr.gobeauty');
                 })
             }
-            
-
-
         })
 
 
 
+
+
+
+        let visitedAt = (new Date()).getTime();
+
+        $('.app-download-link').on('click',function(){
+
+            if(userAgent.match(/iphone|ipad|ipod/i)){
+
+                setTimeout(
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
+                        }
+                    }
+                ,1500);
+
+                setTimeout(
+                    function(){
+                        location.href = 'banjjack://';
+                    }
+                ,0);
+            }else{
+
+                setTimeout(
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            location.href = "intent://#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
+                            // location.href="intent://login#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
+                        }
+
+
+
+                            }
+                    ,1500);
+
+                setTimeout(
+                    function(){
+                        location.href = 'banjjack://';
+                    }
+                    ,0);
+            }
+        })
 
     </script>
 

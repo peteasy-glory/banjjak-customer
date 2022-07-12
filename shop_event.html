@@ -2,6 +2,9 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
+if($_SESSION['backurl1'] == null)
+    $_SESSION['backurl1'] = 'main';
+
 $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_user_nickname'] : "";
 $seq = (isset($_GET['seq']))? $_GET['seq'] : "";
