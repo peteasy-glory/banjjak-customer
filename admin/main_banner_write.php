@@ -1,24 +1,14 @@
 <?php
-include "../include/top.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-$cl_result = include "../include/check_login.php";
-if ($cl_result == 0) {
-    return false;
-}
 
 $r_seq = ($_GET["seq"] && $_GET["seq"] != "")? $_GET["seq"] : "";
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 ?>
-
-<link rel="stylesheet" href="<?= $css_directory ?>/fancybox.min.css" />
-<link rel="stylesheet" href="<?= $css_directory ?>/jquery.timepicker.min.css" />
-<script src="<?= $js_directory ?>/fancybox.min.js"></script>
-<script src="<?= $js_directory ?>/jquery.timepicker.min.js"></script>
-<script src="<?= $js_directory ?>/fontawesome.min.js"></script>
-<script src="<?= $js_directory ?>/jquery.ui.widget.js"></script>
-<script src="<?= $js_directory ?>/jquery.iframe-transport.js"></script>
-<script src="<?= $js_directory ?>/jquery.fileupload.js"></script>
+    <link rel="stylesheet" href="m_new.css">
 <style>
 	table { width: 100%; border-collapse: collapse; margin: 0px; padding: 0px; }
 	ul { list-style: none; padding: 0px; margin: 0px; }
@@ -146,13 +136,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
 	$main_banner_write.on("click", ".img_list .set_delete_file_btn", function(){
 		var f_seq = $(this).data("seq");
-		$.MessageBox({
-			buttonFail: "아니오",
-			buttonDone: "예",
-			message: "<center><font style='font-size:15px;font-weight:bold;'>해당 이미지를 삭제 하시겠습니까?</font></center>"
-		}).done(function() {
-			set_delete_banner_img(f_seq);
-		});
+        var result = confirm('해당 이미지를 삭제하시겠습니까?');
+        if(result){
+            set_delete_banner_img(f_seq);
+        }
 	});
 
 	$main_banner_write.on("click", "input[name='is_use_time']", function(){
@@ -451,21 +438,21 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			html += '			<input type="checkbox" id="is_use" name="is_use" value="1" />';
 			html += '			<label for="is_use">사용</label>';
 			html += '		</li>';
-			html += '		<li>';
-			html += '			<div class="title">게시일시사용여부</div>';
-			html += '			<input type="checkbox" id="is_use_time" name="is_use_time" value="1" />';
-			html += '			<label for="is_use_time">사용</label>';
-			html += '		</li>';
-			html += '		<li class="use_time_box">';
-			html += '			<div class="title">게시시작일시</div>';
-			html += '			<input type="text" name="start_date" value="" />~';
-			html += '			<input type="text" name="start_time" value="00:00:00" />';
-			html += '		</li>';
-			html += '		<li class="use_time_box">';
-			html += '			<div class="title">게시마감일시</div>';
-			html += '			<input type="text" name="end_date" value="" />~';
-			html += '			<input type="text" name="end_time" value="23:45:00" />';
-			html += '		</li>';
+			// html += '		<li>';
+			// html += '			<div class="title">게시일시사용여부</div>';
+			// html += '			<input type="checkbox" id="is_use_time" name="is_use_time" value="1" />';
+			// html += '			<label for="is_use_time">사용</label>';
+			// html += '		</li>';
+			// html += '		<li class="use_time_box">';
+			// html += '			<div class="title">게시시작일시</div>';
+			// html += '			<input type="text" name="start_date" value="" />~';
+			// html += '			<input type="text" name="start_time" value="00:00:00" />';
+			// html += '		</li>';
+			// html += '		<li class="use_time_box">';
+			// html += '			<div class="title">게시마감일시</div>';
+			// html += '			<input type="text" name="end_date" value="" />~';
+			// html += '			<input type="text" name="end_time" value="23:45:00" />';
+			// html += '		</li>';
 			html += '		<li>';
 			html += '			<div class="title">정렬순서 (수동변경)</div>';
 			html += '			<ul>';
@@ -500,10 +487,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			html += '</div>';
 
 			$main_banner_write.html(html);
-			$main_banner_write.find('input[name="start_date"]').datepicker({ dateFormat: 'yy-mm-dd' });
-			$main_banner_write.find('input[name="end_date"]').datepicker({ dateFormat: 'yy-mm-dd' });
-			$main_banner_write.find('input[name="start_time"]').timepicker({ timeFormat: 'HH:mm:ss', interval: 15 });
-			$main_banner_write.find('input[name="end_time"]').timepicker({ timeFormat: 'HH:mm:ss', interval: 15 });
+			// $main_banner_write.find('input[name="start_date"]').datepicker({ dateFormat: 'yy-mm-dd' });
+			// $main_banner_write.find('input[name="end_date"]').datepicker({ dateFormat: 'yy-mm-dd' });
+			// $main_banner_write.find('input[name="start_time"]').timepicker({ timeFormat: 'HH:mm:ss', interval: 15 });
+			// $main_banner_write.find('input[name="end_time"]').timepicker({ timeFormat: 'HH:mm:ss', interval: 15 });
 			resolve();
 		});
 	}
@@ -532,8 +519,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						var _lst_img = '';
 						$.each(data.data, function(i, v){
 							html += '<div class="upload_file_wrap">';
-							html += '	<a data-fancybox="gallery" href="'+v.file_path+'">';
-							html += '		<img src="'+v.file_path+'" alt="'+v.file_name+'" title="'+v.file_name+'" />';
+							html += '	<a data-fancybox="gallery" href="https://image.banjjakpet.com'+img_link_change(v.file_path)+'">';
+							html += '		<img src="https://image.banjjakpet.com'+img_link_change(v.file_path)+'" alt="'+v.file_name+'" title="'+v.file_name+'" />';
 							html += '	</a>';
 							html += '	<div class="set_delete_file_btn" data-seq="'+v.f_seq+'"><i class="fas fa-times"></i></div>';
 							html += '</div>';
@@ -629,7 +616,3 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 		});
 	}
 </script>
-
-<?php
-    include "../include/bottom.php";
-?>

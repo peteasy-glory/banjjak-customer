@@ -69,15 +69,16 @@ $new_item_array = sql_fetch_array($new_item_sql);
 
 // 새로 입점했어요
 $new_shop_sql = "
-
-SELECT group_concat(a.second_type) type, b.name name, b.front_image photo, c.offline_shop_address address,     
+SELECT group_concat(if(a.second_type = '직접입력',a.direct_title,a.second_type)) type, b.name name, b.front_image photo, c.offline_shop_address address,     
 d.working_start start_time, d.working_end end_time, d.rest_public_holiday public_holiday, e.*
 FROM tb_product_dog_static a
 LEFT JOIN tb_shop b ON a.customer_id = b.customer_id
 LEFT JOIN tb_request_artist c ON c.customer_id = a.customer_id
 LEFT JOIN tb_working_schedule d ON d.customer_id = a.customer_id
 LEFT JOIN tb_regular_holiday e ON e.customer_id = a.customer_id
-WHERE b.is_mainshop_new = '1' GROUP BY customer_id ORDER BY RAND()
+WHERE b.is_mainshop_new = '1'
+AND NOT a.second_type = '기타공통'
+GROUP BY customer_id ORDER BY RAND()
 ";
 $new_shop_array = sql_fetch_array($new_shop_sql);
 
@@ -596,7 +597,7 @@ if($_SESSION['is_token'] == "1"){
                                     }
 
                                     // 미용타입 구하기
-                                    $type_txt = "";
+                                    /*$type_txt = "";
                                     if(strpos($rs['type'],'소형견미용') !== false){
                                         $type_txt .= "소형견, ";
                                     }
@@ -609,10 +610,13 @@ if($_SESSION['is_token'] == "1"){
                                     if(strpos($rs['type'],'특수견미용') !== false){
                                         $type_txt .= "특수견, ";
                                     }
+                                    if(strpos($rs['type'],'직접입력') !== false){
+                                        $type_txt .= $rs['type'];
+                                    }
 
                                     if($type_txt != ''){
                                         $type_txt = substr($type_txt, 0, -2);
-                                    }
+                                    }*/
                                     ?>
                                     <div class="list-cell">
                                         <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="basic-list-item store">
@@ -622,7 +626,7 @@ if($_SESSION['is_token'] == "1"){
                                             <div class="info-wrap">
                                                 <div class="item-name"><?=$rs['name']?></div>
                                                 <div class="item-address"><?=$shop_address[1]?></div>
-                                                <div class="item-cate"><?=$type_txt?></div>
+                                                <div class="item-cate"><?=$rs['type']?></div>
                                                 <div class="item-option-group">
                                                     <div class="group-inner">
                                                         <!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->

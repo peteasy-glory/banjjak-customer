@@ -1,9 +1,6 @@
 <?php
-	include "../include/configure.php";
-	include "../include/Crypto.class.php";
-	include "../include/session.php";
-	include "../include/db_connection.php";
-	include "../include/php_function.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
 
 	$data = array();
 	$return_data = array("code" => "999999", "data" => "잘못된 접근입니다.");
@@ -44,8 +41,8 @@
 				WHERE is_delete = '2'
 					".$where_qy."
 			";
-			$result = mysql_query($sql);
-			$data["total_cnt"] = mysql_num_rows($result);
+			$result = mysqli_query($connection,$sql);
+			$data["total_cnt"] = mysqli_num_rows($result);
 
 			$sql = "
 				SELECT *
@@ -55,9 +52,9 @@
 				".$order_qy."
 				".$limit_qy."
 			";
-			$result = mysql_query($sql);
-			$data["list_cnt"] = $r_limit_0 + mysql_num_rows($result);
-			while($row = mysql_fetch_assoc($result)){
+			$result = mysqli_query($connection,$sql);
+			$data["list_cnt"] = $r_limit_0 + mysqli_num_rows($result);
+			while($row = mysqli_fetch_assoc($result)){
 				$data["list"][] = $row;
 			}
 
@@ -152,9 +149,9 @@
 						".$insert_2_qy." NOW()
 					)
 				";
-				$result = mysql_query($sql);
+				$result = mysqli_query($connection,$sql);
 				if($result){
-					$return_data = array("code" => "000000", "data" => mysql_insert_id());	
+					$return_data = array("code" => "000000", "data" => mysqli_insert_id());
 				}else{
 					$return_data = array("code" => "000002", "data" => "배너 생성에 실패했습니다.");
 				}
@@ -238,7 +235,7 @@
 					WHERE is_delete = '2'
 						AND mb_seq = '".$r_mb_seq."'
 				";
-				$result = mysql_query($sql);
+				$result = mysqli_query($connection,$sql);
 				if($result){
 					$return_data = array("code" => "000000", "data" => "OK");	
 				}else{
@@ -261,7 +258,7 @@
 					WHERE is_delete = '2'
 						AND mb_seq = '".$r_mb_seq."'
 				";
-				$result = mysql_query($sql);
+				$result = mysqli_query($connection,$sql);
 				if($result){
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{
@@ -276,8 +273,8 @@
 				FROM tb_shop
 				ORDER BY name ASC
 			";
-			$result = mysql_query($sql);
-			$cnt = mysql_num_rows($result);
+			$result = mysqli_query($connection,$sql);
+			$cnt = mysqli_num_rows($result);
 			$return_data = array("code" => "000000", "data" => $cnt);
 		}else if($r_mode == "get_main_banner_shop_list"){
 			$r_limit_0 = ($_POST["limit_0"] && $_POST["limit_0"] != "")? $_POST["limit_0"] : "0";
@@ -293,8 +290,8 @@
 				ORDER BY name ASC
 				".$limit_qy."
 			";
-			$result = mysql_query($sql);
-			while($row = mysql_fetch_assoc($result)){
+			$result = mysqli_query($connection,$sql);
+			while($row = mysqli_fetch_assoc($result)){
 				$data[] = $row;
 			}
 			$return_data = array("code" => "000000", "data" => $data);
@@ -312,7 +309,7 @@
 							`".$r_column_name."` = '".$r_column_value."'
 						WHERE customer_id = '".$r_customer_id."'
 					";
-					$result = mysql_query($sql);
+					$result = mysqli_query($connection,$sql);
 					if($result){
 						$return_data = array("code" => "000000", "data" => "OK");
 					}else{

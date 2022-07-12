@@ -1,16 +1,14 @@
 <?php
-include "../include/top.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
-$cl_result = include "../include/check_login.php";
-if ($cl_result == 0) {
-    return false;
-}
 
 $r_tab = ($_GET["tab"] && $_GET["tab"] != "")? $_GET["tab"] : "";
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 ?>
-
+<link rel="stylesheet" href="m_new.css">
 <script src="<?= $js_directory ?>/fontawesome.min.js"></script>
 <style>
 	table { width: 100%; border-collapse: collapse; margin: 0px; padding: 0px; }
@@ -48,7 +46,6 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 <div class="bjj_top_menu">
     <div class="bjj-back-btn"><a href="<?= $admin_directory ?>/"><img src="<?= $image_directory ?>/btn_back_2.png"></a></div>
     <div class="bjj_top_title"><p>메인페이지 관리</p></div>
-	<div class="bjj_top_home"><a href="../test/test_index_2021.php"><i class="fas fa-home"></i></a></div>
 </div>
 
 <div id="main_banner">
@@ -134,10 +131,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			html += '<div class="banner_list">';
 			html += '	<table>';
 			html += '		<colgroup>';
-			html += '			<col width="1%" />';
-			html += '			<col width="80px" />';
-			html += '			<col width="*" />';
-			html += '			<col width="100px" />';
+			html += '			<col style="width:7%;" />';
+			html += '			<col style="width:80px;" />';
+			html += '			<col style="width:*" />';
+			html += '			<col style="width:100px;" />';
 			html += '		</colgroup>';
 			html += '		<thead>';
 			html += '			<tr>';
@@ -266,7 +263,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			// img_loading
 			if(img_list && img_list != ""){
 				$.ajax({
-					url: '../test/test_fileupload_ajax.php',
+					url: '/data/fileupload_ajax.php',
 					data: {
 						mode : "get_file_list",
 						file_list: img_list
@@ -279,7 +276,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 							var html = '';
 							$.each(data.data, function(i, v){
 								if(i == 0){
-									$main_banner.find(target+"[data-id='"+seq+"'] .banner_img").css("background-image", "url('"+v.file_path+"')");
+									$main_banner.find(target+"[data-id='"+seq+"'] .banner_img").css("background-image", "url('https://image.banjjakpet.com"+img_link_change(v.file_path)+"')");
 								}
 							});
 
@@ -303,6 +300,3 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 	}
 </script>
 
-<?php
-    include "../include/bottom.php";
-?>
