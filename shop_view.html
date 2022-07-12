@@ -1914,7 +1914,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
                 setTimeout(
                     function(){
-                        location.href = 'banjjack://shop_view?<?=$product_no?>';
+                        location.href = 'banjjack://shop_view?product_no=<?=$product_no?>';
                     }
                     ,0);
             }else{
@@ -1933,7 +1933,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                 setTimeout(
                     function(){
                         // location.href = "intent://shop_view#Intent;scheme=banjjack;package=m.kr.gobeauty;end";
-                        location.href ="banjjack://shop_view?<?=$product_no?>";
+                        location.href ="banjjack://shop_view?product_no=<?=$product_no?>";
                     }
                     ,0);
             }
