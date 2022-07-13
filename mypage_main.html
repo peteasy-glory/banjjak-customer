@@ -167,9 +167,9 @@ if($user_id != ""){
                         $photo = $pet_rows->photo;
                         if(!$photo || $photo == "") {
                             if ($type == 'cat') {
-                                echo "<div class='list-cell'><a href='mypage_pet_list' class='btn-user-pet-item'><div class='icons'><img src='/static/pub/images/icon/icon-cat-select-off.png' alt=''/></div><div class='txt'>$pet_name </div></a></div>";
+                                echo "<div class='list-cell'><a href='mypage_pet_list' class='btn-user-pet-item'><div class='icons'><img src='/static/pub/images/icon/icon-cat-white.png' alt=''/></div><div class='txt'>$pet_name </div></a></div>";
                             } else {
-                                echo "<div class='list-cell'><a href='mypage_pet_list' class='btn-user-pet-item'><div class='icons'><img src='/static/pub/images/icon/icon-pup-select-off.png' alt=''/></div><div class='txt'>$pet_name </div></a></div>";
+                                echo "<div class='list-cell'><a href='mypage_pet_list' class='btn-user-pet-item'><div class='icons'><img src='/static/pub/images/icon/icon-pup-white.png' alt=''/></div><div class='txt'>$pet_name </div></a></div>";
                             }
                         }else{
                             echo "<div class='list-cell'><a href='mypage_pet_list' class='btn-user-pet-item'><div class='icons'><img src='https://image.banjjakpet.com".img_link_change($photo)."' alt=''/></div><div class='txt'>$pet_name </div></a></div>";
