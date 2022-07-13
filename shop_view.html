@@ -2053,13 +2053,14 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
 
         $(document).ready(function(){
 
-            if(userAgent.match("kakao")){
+            if(userAgent.match(/kakao/i)){
 
                 location.href = 'kakaotalk://inappbrowser/close';
 
                 if(userAgent.match(/iphone|ipad|ipod/i)){
 
                     alert('아이폰디바이스입니다');
+                    location.href='x-web-search://?';
                 }else{
 
 
