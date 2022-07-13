@@ -147,7 +147,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 								for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
 									$event_name = $result_datas->event_name;
 									$type = $result_datas->type;
-									$adding_point = $result_datas->adding_point;
+									//$adding_point = $result_datas->adding_point;
+                                    $spending_point = $result_datas->spending_point;
 									$payment_log_seq = $result_datas->payment_log_seq;
 									$update_time = $result_datas->update_time;
 									$title = "";
@@ -179,7 +180,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 							<div class="point-detail-item">
 								<div class="item-title"><?= $title ?></div>
 								<div class="item-date"><?= $update_time ?></div>
-								<div class="item-value"><?= number_format($adding_point) ?>P</div>
+								<div class="item-value"><?= number_format($spending_point) ?>P</div>
 							</div>
 							<? } ?>
 
