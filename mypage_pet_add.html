@@ -29,7 +29,7 @@ if($pet_seq) {
 
     if ($pet_rows = mysqli_fetch_object($pet_result)) {
         $p_type = $pet_rows->type;
-        $mypet_name = $pet_rows->name;
+        $mypet_name = ($pet_rows->name_for_owner)? $pet_rows->name_for_owner : $pet_rows->name;
         $p_pet_type = $pet_rows->pet_type;
         $p_pet_type2 = $pet_rows->pet_type2;
         $p_year = $pet_rows->year;

@@ -65,7 +65,7 @@ if (isset($s_rows)) {
     $init_result = mysqli_query($connection, $init_sql);
     $mypet_seq = $s_rows->pet_seq;
     $sql = "UPDATE tb_mypet SET 
-                name = '{$mypet_name}',
+                name_for_owner = '{$mypet_name}',
                 type = '{$pet_type}', 
                 pet_type = '{$mypet_type}', 
                 pet_type2 = '{$mypet_type2}', 
