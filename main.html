@@ -1,6 +1,6 @@
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
-
+include($_SERVER['DOCUMENT_ROOT']."/common/TRestAPI.php");
 $user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
 
@@ -193,14 +193,35 @@ if($_SESSION['is_token'] == "1"){
 }
 ?>
 
+<?php
+
+$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
+
+$data = ['req_idx' => 5];
+$data_json = json_encode($data);
+$today_msg_org = $api->get("/home/today-msg/".$user_id,$data_json);
+
+
+
+
+
+
+
+?>
+
+
+
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=21wrh1y95y&submodules=geocoder"></script>
 <!-- header -->
 <header id="header">
+
     <div class="header-left">
+        <?php print_r($today_msg_org)?>
+
         <a href="reserve_search_area" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt" id="areaTxt"></div></a>
     </div>
     <div class="header-right">
-        <!--		<a href="#" class="btn-page-ui btn-page-alarm"><div class="icon icon-size-24 icon-page-alarm">알람</div></a>-->
+        <!--		<a href="main_alarm" class="btn-page-ui btn-page-alarm"><div class="icon icon-size-24 icon-page-alarm">알람</div></a>-->
     </div>
 </header>
 <!-- //header -->
@@ -213,9 +234,17 @@ if($_SESSION['is_token'] == "1"){
         <div class="page-contents" style="padding:0px;">
             <div class="main-wrap">
                 <!-- 오늘의 메세지 -->
-                <!--<div class="main-today-banner">
-                    <a href="#" class="btn-main-today-item"><img src="/static/pub/images/14-banner-main-message@2x.png" alt=""/></a>
-                </div>-->
+
+                <div class="main-today-banner">
+                    <a href="#" class="btn-main-today-item">
+                        <div class="item-desc">
+                            <span></span>
+                        </div>
+                    </a>
+                </div>
+
+
+
                 <!-- //오늘의 메세지 -->
 
 
