@@ -736,20 +736,6 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
 
-        $(document).ready(function(){
-            let link = document.getElementsByClassName('app-download-link');
-            if(userAgent.match(/iphone|ipad|ipod/i) ){
-                Array.from(link).forEach(function(el,i){
-                    el.setAttribute('href','https://apps.apple.com/kr/app/id1436568194');
-                })
-            }else {
-                Array.from(link).forEach(function (el, i) {
-                    el.setAttribute('href', 'https://play.google.com/store/apps/details?id=m.kr.gobeauty');
-                })
-            }
-        })
-
-
 
 
 
@@ -770,7 +756,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
                 setTimeout(
                     function(){
-                        location.href = 'banjjack://';
+                        location.href = 'banjjack://shop_main';
                     }
                 ,0);
             }else{
@@ -793,6 +779,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                     ,0);
             }
         })
+
 
     </script>
 
