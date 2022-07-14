@@ -199,9 +199,10 @@ if($_SESSION['is_token'] == "1"){
 
 $api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
 
-$data = ['req_idx' => 5];
+$data = array('req_idx'=>1);
 $data_json = json_encode($data);
-$today_msg_org = $api->get("/home/today-msg/".$user_id,$data_json);
+$today_msg_org = $api->get("/home/today-msg ",$data_json);
+$today_msg = $today_msg_org['body'];
 
 
 
