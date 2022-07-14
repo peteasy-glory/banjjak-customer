@@ -153,6 +153,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 		<form id="item_form">
 			<input type="hidden" name="il_seq" value="<?=$r_seq ?>" />
 			<input type="hidden" name="is_shop" value="1" />
+			<input type="hidden" name="is_supply" value="1" />
 			<ul>
 				<li>
 					<div class="info">카테고리 <span>*</span></div>
@@ -241,7 +242,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						<input type="text" name="sale_price" class="amount" value="" />
 					</div>
 				</li>
-				<!--li>
+				<li>
 					<div class="info"><span style="line-height: 24px; color: #000;">판매촉진<br/>노출선택</span></div>
 					<div class="value">
 						<span>
@@ -253,16 +254,8 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 							<label for="is_view_main_2">메인NEW</label>
 						</span>
 						<span>
-							<input type="checkbox" id="is_view_main_3" name="is_view_main_3" value="1" />
-							<label for="is_view_main_3">쇼핑MD</label>
-						</span>
-						<span>
-							<input type="checkbox" id="is_view_main_4" name="is_view_main_4" value="1" />
-							<label for="is_view_main_4">쇼핑NEW</label>
-						</span>
-						<span>
 							<input type="checkbox" id="is_view_main_5" name="is_view_main_5" value="1" />
-							<label for="is_view_main_5">베스트</label>
+							<label for="is_view_main_5">메인BEST</label>
 						</span>
 						<span>
 							<input type="checkbox" id="is_view_main_6" name="is_view_main_6" value="1" />
@@ -270,7 +263,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						</span>
 					</div>
 				</li>
-				<li class="md_list">
+				<!--<li class="md_list">
 					<ul>
 						<li>
 							<div class="info">MD 이름</div>
@@ -1347,7 +1340,7 @@ $(document).on("click", "#item_write .cate_write_btn", function(){
 						var html = '';
 						html += '<option value="">선택</option>';
 						$.each(data.data, function(i, v){			
-							html += '<option value="'+v.ismc_seq+'" data-path="'+v.node_path+'">'+v.cate_name+'</option>';
+							html += '<option value="'+v.ismc_seq+'" data-path="'+v.node_path+'">'+v.parent_name+v.cate_name+'</option>';
 						});
 						$("#category_wrap .cate_1").html('').html(html);
 	

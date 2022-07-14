@@ -202,6 +202,7 @@ if ($result_datas = mysql_fetch_object($result)) {
 		WHERE pl.update_time BETWEEN '".DATE("Y-m-d 00:00:00", strtotime("-1 day"))."' AND '".DATE("Y-m-d 23:59:59")."'
 			AND pl.approval <> 1
 			AND pl.product_type != 'A'
+			AND mp.tmp_yn = 'N'
 		ORDER BY pl.update_time DESC
 	";
 	$result = mysql_query($sql);

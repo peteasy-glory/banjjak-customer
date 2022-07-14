@@ -442,7 +442,8 @@ function get_item_list(search_cate, search_supp, search_word, search_sold){
 			search_sold : search_sold,
 			is_shop : "1",
 			flag : item_list_flag,
-			cnt  : item_list_page_cnt
+			cnt  : item_list_page_cnt,
+			orderby : "admin"
 		},
 		type: 'POST',
 		dataType: 'JSON',

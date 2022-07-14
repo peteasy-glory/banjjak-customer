@@ -1,8 +1,8 @@
 <?
-ini_set('memory_limit', -1); 
+ini_set('memory_limit', -1);
 
-include "../include/top.php";
-include "../include/Crypto.class.php";
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
 
 $user_id = $_SESSION['gobeauty_user_id'];
 
@@ -12,11 +12,11 @@ $crypto = new Crypto();
 $enc_customer_id = $crypto->encode(trim($customer_id), $access_key, $secret_key);
 
 $sql = "update tb_customer set my_shop_flag = true where id = '".$customer_id."';";
-$result = mysql_query($sql);
+$result = mysqli_query($connection,$sql);
 
 
 $sql1 = "update tb_request_artist set step = 6 where customer_id = '".$enc_customer_id."';";
-$result1 = mysql_query($sql1);
+$result1 = mysqli_query($connection,$sql1);
 if ($result)
 {
 	$artist_id = $customer_id;
@@ -35,5 +35,4 @@ else
 	echo "승인이 안되었어요. 개발자에게 연락부탁드립니다.";
 }
 
-include "../include/bottom.php";
 ?>

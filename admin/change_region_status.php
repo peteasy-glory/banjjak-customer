@@ -1,5 +1,9 @@
-<?php include "../include/top.php"; ?>
-<?php include "../include/Region.class.php"; ?>
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/Region.class.php");
+?>
 
 <?php
 $region = new Region();
@@ -17,4 +21,3 @@ if ($status == '1') {
 }
 ?>
 
-<?php include "../include/bottom.php"; ?>

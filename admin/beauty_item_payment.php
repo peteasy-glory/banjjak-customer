@@ -57,10 +57,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 			html += '		<div class="title"></div>';
 			html += '		<div class="content">';
 			html += '			<ul>';
-			html += '				<li>미용이용 누적 회원 수 : <span class="beauty_cnt">0</span>건</li>';
-			html += '				<li>상품결제 누적 회원 수 : <span class="item_cnt">0</span>건</li>';
-			html += '				<li>미용+상품 누적 회원 수 : <span class="beauty_item_cnt">0</span>건 (<span class="beauty_item_percent">0</span>%)</li>';
-			html += '				<li>상품 재구매 비율 : <span class="rebuy_percent">0</span>%</li>';
+			html += '				<li>미용이용 누적 회원 수 : <span class="beauty_cnt">0</span>명 / 미용이용 누적 건 수 : <span class="beauty_total_cnt">0</span>건</li>';
+			html += '				<li>상품결제 누적 회원 수 : <span class="item_cnt">0</span>명 / 상품결제 누적 건 수 : <span class="item_total_cnt">0</span>건</li>';
+			html += '				<li>상품 구매자 중 미용 이용 회원 수 : <span class="beauty_item_cnt">0</span>명 (<span class="beauty_item_percent">0</span>%)</li>';
+			html += '				<li>상품 구매자 중 재구매 수 : <span class="rebuy_cnt">0</span>명 (<span class="rebuy_percent">0</span>%)</li>';
 			html += '			</ul>';
 			html += '		</div>';
 			html += '	</div>';
@@ -85,7 +85,9 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						console.log(data.data);
 
 						$beauty_item_payment.find(".beauty_cnt").html(data.data.beauty_cnt);
+						$beauty_item_payment.find(".beauty_total_cnt").html(data.data.beauty_total_cnt);
 						$beauty_item_payment.find(".item_cnt").html(data.data.item_cnt);
+						$beauty_item_payment.find(".item_total_cnt").html(data.data.item_total_cnt);
 						$beauty_item_payment.find(".item_cnt").attr("data-cnt", data.data.item_cnt);
 						$beauty_item_payment.find(".beauty_item_cnt").html(data.data.beauty_item_cnt);
 						$beauty_item_payment.find(".beauty_item_percent").html((Math.round(data.data.beauty_item_cnt / data.data.item_cnt * 100 * 10)/10));
@@ -159,6 +161,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 								}
 							});
 							$beauty_item_payment.find('.item_beauty_list tbody').append(html);
+							$beauty_item_payment.find(".rebuy_cnt").html(rebuy);
 							$beauty_item_payment.find(".rebuy_percent").html((Math.round(rebuy / $beauty_item_payment.find(".item_cnt").data("cnt") * 100 * 10)/10));
 							console.log();
 

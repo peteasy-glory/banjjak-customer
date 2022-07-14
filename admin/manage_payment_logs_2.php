@@ -280,7 +280,7 @@
 						console.log(data.data);
 						var html = '';
 						$.each(data.data, function(i, v){
-							var _product = v.product.split('|');
+							var _product = (v.product)? v.product.split('|') : "";
 							var _is_vat = (v.is_vat == "1")? '부가세 10%' : '-';
 							var _customer_id = (v.customer_id && v.customer_id != "")? v.customer_id : '<span class="gray">'+v.cellphone+' (가)</span>';
 							var _go_2_offline = (v.go_2_offline == "1")? '매장방문' : v.address1+v.address2+v.cellphone;
@@ -306,9 +306,11 @@
 							}else if(v.pay_type == "bank"){
 								_pay_type = 'BANK';
 							}
+							var update_time_info_1 = (v.update_time)? v.update_time.split(' ')[0] : "";
+							var update_time_info_2 = (v.update_time)? v.update_time.split(' ')[1] : "";
 							html += '<tr>';
 							html += '	<td><span class="gray">'+v.buy_time.split(' ')[0]+'</span><br/>'+v.buy_time.split(' ')[1]+'</td>';
-							html += '	<td><span class="gray">'+v.update_time.split(' ')[0]+'</span><br/>'+v.update_time.split(' ')[1]+'</td>';
+							html += '	<td><span class="gray">'+update_time_info_1+'</span><br/>'+update_time_info_2+'</td>';
 							html += '	<td>'+_customer_id+'</td>';
 							html += '	<td>'+v.artist_id+'<br/>'+v.name+'</td>';
 							html += '	<td>'+_service+'</td>';
@@ -324,7 +326,7 @@
 							html += '</tr>';
 
 							summary[0]++; // 건 수
-							summary[1] += ((v.pay_type == 'card' || v.pay_type == 'bank')? (parseInt(v.total_price) - parseInt(_spend_point)) + _local_price : _local_price); // 거래금액
+							summary[1] += ((v.pay_type == 'card' || v.pay_type == 'bank')? (parseInt((v.total_price > 0)? v.total_price : 0) - parseInt((v.spend_point > 0)? v.spend_point : 0)) + _local_price : _local_price); // 거래금액
 							summary[2] += (v.customer_id && v.customer_id != "")? 1 : 0; // 정회원
 							summary[3] += (v.customer_id && v.customer_id != "")? 0 : 1; // 가회원
 							artist_list.push(v.artist_id); // 펫샵

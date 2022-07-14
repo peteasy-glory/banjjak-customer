@@ -130,10 +130,10 @@
 					'".$img_y."', '".$r_target."', NOW()
 				)
 			";
-			$result = mysql_query($sql);
+			$result = mysqli_query($connection,$sql);
 			if($result){
 				@unlink($file); // 기존 업로드된 파일 삭제처리
-				$file_id = mysql_insert_id();
+				$file_id = mysqli_insert_id();
 
 				$img_data = array(
 					"f_seq" => $file_id,
@@ -184,7 +184,7 @@
 					`delete_dt` = NOW()
 				WHERE f_seq = '".$r_f_seq."'
 			";
-			$result = mysql_query($sql);
+			$result = mysqli_query($connection,$sql);
 			if($result){
 				$return_data = array("code" => "000000", "data" => "OK");
 			}else{

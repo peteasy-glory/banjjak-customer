@@ -20,32 +20,31 @@ if($push_title != "" and $push_message != "" and $push_url != "" and $push_image
 		//
 		$_tot_cnt = "7";
 		$arr_userapikey=array();
-		$sql = "SELECT id, token
+		$sql = "SELECT *
 					FROM gobeautypet.tb_customer
 					where id in (
-							'itseokbeom@gmail.com',
-							'kungem@hotmail.com',
-							'ttme93@gmail.com',
-							'pickmon@pickmon.com',
-							'saychanjin@naver.com',
-							'sally@peteasy.kr',
-							'chansworld@pickmon.com',
-							'sunny@peteasy.kr',
-							'power0617@naver.com'
-						) and (token is not null and token !='') and enable_flag =1 and push_option =1 and token!='-'
+							
+							'itseokbeom@gmail.com'
+						) and enable_flag =1 and push_option =1
 					";
 					/*
 					
 					*/
 		$result = mysql_query($sql);
 		while($rs = mysql_fetch_object($result)) {
-			if ($rs->token != null && $rs->token != "") {
-						array_push($arr_userapikey,$rs->token);
+			if($_SERVER['HTTP_HOST'] == "partner.gopet.kr"){
+				if ($rs->partner_token != null && $rs->partner_token != "") {
+							array_push($arr_userapikey,$rs->partner_token);
+				}
+			}else{
+				if ($rs->token != null && $rs->token != "") {
+							array_push($arr_userapikey,$rs->token);
+				}
 			}
 		}
 		
 		// 
-		app_push($arr_userapikey, $push_title, $push_message, $push_url, $push_image);
+		app_push($arr_userapikey, $push_title, $push_message, $push_url, $push_image, "");
 	
 	// 대상자 - 전체 회원 (발송시 실시간 확인, 1000명씩 발송)
 	} else if($_REQUEST['sendto'] == "alluser") {

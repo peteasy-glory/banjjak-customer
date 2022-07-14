@@ -95,12 +95,14 @@ $pay_status_color_old = array(
 	#admin_item_payment_log .search_btn { border: 1px solid #ccc; background-color: #eee; height: 30px; padding: 0px 10px; border-radius: 5px; }
 	#admin_item_payment_log .search_reset_btn { border: 1px solid #ccc; background-color: #eee; height: 30px; padding: 0px 10px; border-radius: 5px; }
 	#admin_item_payment_log .old_item_payment_log_btn { border: 1px solid #ccc; background-color: #eee; height: 30px; padding: 0px 10px; border-radius: 5px; }
+	#admin_item_payment_log .item_rental_payment_log_btn { border: 1px solid #ccc; background-color: #eee; height: 30px; padding: 0px 10px; border-radius: 5px; }
 	#admin_item_payment_log .order_box_title { text-align: right; font-size: 14px; padding: 0px 5px 5px 0px; }
 	#admin_item_payment_log .order_table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
 	#admin_item_payment_log .order_table tr { border-bottom: 1px solid #eee; }
 	#admin_item_payment_log .order_table tr:hover { background-color: #fff9ee; }
 	#admin_item_payment_log .order_table tr.cancel { background-color: #fcc; color: #f00; }
 	#admin_item_payment_log .order_table tr.return { background-color: #ff9966; color: #660000; }
+	#admin_item_payment_log .order_table tr.return_finish { background-color: #ff9966; color: #660000; }
 	#admin_item_payment_log .order_table tr.ready { color: #ccc; }
 	#admin_item_payment_log .order_table tr.ready td>a { color: #ccc; }
 	#admin_item_payment_log .order_table tr th { padding: 5px; background-color: #ddd; white-space: nowrap; }
@@ -150,6 +152,7 @@ $pay_status_color_old = array(
 		<button type="button" class="search_btn"><i class="fas fa-search"></i></button>
 		<button type="button" class="search_reset_btn"><i class="fas fa-undo"></i></button>
 		<button type="button" class="old_item_payment_log_btn">이전 상품결제관리 보기</button>
+		<button type="button" class="item_rental_payment_log_btn" onclick="location.href='<?=$admin_directory?>/item_rental_payment_log.php'">상담신청이력</button>
 	</div>
 	<div class="order_box">
 		<div class="order_box_title">주문 <span class="total_cnt">0건</span> / 반품(취소) <span class="cancel_cnt">0건</span></div>
@@ -272,18 +275,39 @@ $pay_status_color_old = array(
 						var idx = 0;
 					
 						$.each(json.data, function(i, v){
+							var order_status_text = order_status_arr[v.order_status];
+							var return_info = "";
+							if(v.is_return == "2"){
+								if(v.return_result2.split('|')[5] == "1"){
+									return_info = " </br> (전체반품요청) ";
+								}else if(v.return_result2.split('|')[5] == "2"){
+									return_info = " </br> (부분반품요청) ";
+								}else{
+									return_info = " </br> (반품요청) ";
+								}
+								order_status_text = "결제완료";
+							}else if(v.is_return == "3"){
+								return_info = " </br> (반품완료) ";
+								order_status_text = "결제완료";
+							}
+//							switch(v.is_return){
+//								case "2" : return_info = " </br> (반품요청) ";
+//								break;
+//								case "3" : return_info = " </br> (반품완료) ";
+//							}
 							var pay_dt = (v.pay_dt != null)? v.pay_dt : "-";
 							var is_ready = (v.order_status == "1")? " ready " : "";
 							var is_user_cancel = (v.is_cancel == "2")? " cancel " : "";
 							var cancel_dt = (v.cancel_dt != null)? v.cancel_dt : "-";
 							var is_user_return = (v.is_return == "2")? " return " : "";
+							var is_return_finish = (v.is_return == "3")? " return_finish " : "";
 							var return_dt = (v.return_dt != null)? v.return_dt : "-";
 							var pay_type = (v.pay_type == "1")? "<span class='card'>카드</span>" : "<span class='bank'>계좌</span>";
 							var is_jbook = (v.jbOrdNo && v.jbOrdNo != "")? '<span class="jbook"><i class="fas fa-circle"></i></span>' : '';
 							var is_test = (v.receipt_id && v.receipt_id.indexOf('INIpayTest') != -1)? '<span style="color: #fff;font-weight: Bold; background-color: #f00;">[!TEST!]</span>' : '';
 
-							html += '			<tr class="'+is_user_cancel+' '+is_user_return+' '+is_ready+'" data-id="'+v.order_num+'">';
-							html += '				<td style="border-right: 2px solid '+order_status_color[v.order_status]+'; white-space: nowrap;">'+order_status_arr[v.order_status]+'</td>';
+							html += '			<tr class="'+is_user_cancel+' '+is_user_return+' '+is_return_finish+' '+is_ready+'" data-id="'+v.order_num+'">';
+							html += '				<td style="border-right: 2px solid '+order_status_color[v.order_status]+'; white-space: nowrap;">'+order_status_text+return_info+'</td>';
 							html += '				<td><div class="product_img" data-ip_log_seq="'+v.ip_log_seq+'" style="background-image: url(\'/pet/images/product_img.png\'); "></div></td>';
 							html += '				<td class="lft item_data"><a href="javascript:;" class="go_item_payment_detail_btn" data-order_num="'+v.order_num+'"><span style="font-size: 9px;">'+v.order_num+'</span>'+pay_type+'<br/>'+is_test+''+v.product_name+' '+is_jbook+'</a></td>';
 							html += '				<td class="rht">'+v.guest_info.split(',')[0]+'<br/><span style="font-size: 10px;">'+v.cellphone+'</span><br/>'+v.total_price.format()+'원</td>';
@@ -291,6 +315,8 @@ $pay_status_color_old = array(
 								html += '				<td>'+(cancel_dt.substring(2, cancel_dt.length)).substring(0, cancel_dt.length-5)+'</td>';
 							}else if(v.is_return == "2"){
 								html += '				<td>'+(return_dt.substring(2, return_dt.length)).substring(0, return_dt.length-5)+'</td>';
+							}else if(v.order_status == "2"){
+								html += '				<td style="color:#ccc;">'+(v.reg_dt.substring(2, v.reg_dt.length)).substring(0, v.reg_dt.length-5)+'</td>';
 							}else{
 								html += '				<td>'+(pay_dt.substring(2, pay_dt.length)).substring(0, pay_dt.length-5)+'</td>';
 							}
@@ -391,8 +417,9 @@ $pay_status_color_old = array(
 					if(data.code == "000000"){
 						console.log('ㅁㄴㅇㅁㄴㅇ', data.data);
 						var html = '';
-						// 직배송 카운트 변수
-						var direct = 0;
+
+						var direct = 0; // 직배송 카운트
+						var consignment = 0; // 위탁판매 카운트
 						if(data.data && data.data.length > 0){
 							//html += '<tr>';
 							//html += '	<td colspan="5">';
@@ -409,6 +436,11 @@ $pay_status_color_old = array(
 									if(v.is_supply == "2"){
 										direct += 1;
 									}
+									// 위탁판매 카운트
+									//if(v.ip_seq == "2" || v.ip_seq == "3" || v.ip_seq == "8" || v.ip_seq == "9" || v.ip_seq == "10" || v.ip_seq == "11" || v.ip_seq == "12" || v.ip_seq == "13" || v.ip_seq == "14"){
+									if(v.ip_seq != '' && v.ip_seq > 0){
+										consignment += 1;
+									}
 								});
 							});
 							html += '		</div>';
@@ -419,6 +451,10 @@ $pay_status_color_old = array(
 							if(direct > 0) {
 								var direct_result = "\n\n<span style='background-color:yellow; font-size:11px;'>직배송 : "+direct+"건</span>";
 								$("#admin_item_payment_log tbody.order_list_wrap tr[data-id='"+order_num+"'] .item_data .go_item_payment_detail_btn").append(direct_result);
+							}
+							if(consignment > 0) {
+								var consignment_result = "\n\n<span style='background-color:#F2AAAA; font-size:11px;'>위탁판매 : "+consignment+"건</span>";
+								$("#admin_item_payment_log tbody.order_list_wrap tr[data-id='"+order_num+"'] .item_data .go_item_payment_detail_btn").append(consignment_result);
 							}
 						}else{
 							// 삭제된 상품이 있음
@@ -576,7 +612,7 @@ $pay_status_color_old = array(
 								$.each(data.data, function(i, v){
 									if(i == 0){
 										//console.log(target, product_no);
-										$("#admin_item_payment_log .order_list_wrap").find(target+"[data-id='"+product_no+"']").css("background-image", "url('"+v.file_path+"')");
+										$("#admin_item_payment_log .order_list_wrap").find(target+"[data-id='"+product_no+"']").css("background-image", "url('https://image.banjjakpet.com"+img_link_change(v.file_path)+"')");
 									}
 								});
 							}
@@ -603,6 +639,15 @@ $pay_status_color_old = array(
 			}
 		});
 	}
+
+	// aws 이미지 가져오기 위한 경로변경
+	function img_link_change(img){
+	var img 	= img.replace("/pet/images", "/images");
+	var img 	= img.replace("/pet/upload", "/upload");
+	var img 	= img.replace("/pet/mainpage", "");
+	
+	return img;
+}
 
 	function get_item_payment_cnt(){
 		$.ajax({

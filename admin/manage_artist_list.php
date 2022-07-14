@@ -21,6 +21,7 @@ $sql = "
 	FROM tb_shop
 	WHERE 1=1
 		".$where_qy."
+		AND working_years < 100 
 	ORDER BY update_time DESC
 ";
 $result = mysql_query($sql);
@@ -207,7 +208,7 @@ foreach($data AS $key => $value){
 				<?=$is_open_flag ?>/<?=$is_got_offline_shop ?>/<?=$is_business ?>/<?=$enter_path ?>
 			</td>
 			<td>
-				<a href="<?=$artist_directory ?>/?artist_name=<?=$value["name"] ?>" target="_blank"><?=$value["name"] ?></a><br/>
+				<a href="<?=$artist_directory ?>/?artist_id=<?=$value["customer_id"] ?>" target="_blank"><?=$value["name"] ?></a><br/>
 				(<a href="<?=$admin_directory ?>/manage_request_artist_detail.php?artist_id=<?=$value["customer_id"] ?>"><?=$value["request"]["offline_shop_name"] ?></a>)
 				<br/><?=$value["customer_id"] ?>
 			</td>

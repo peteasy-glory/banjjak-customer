@@ -92,7 +92,7 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 <div id="item_list"></div>
 <div id="beauty_item_payment"></div>
 <div class="btn_wrap">
-	<button type="button" class="search_btn1">검색어 수정</button>
+	<button type="button" class="search_btn1">검색어 수정</button>	<button type="button" onclick="location.href='<?= $admin_directory ?>/item_search_manage_shop.php'">전문몰 검색어 관리(파트너샵)</button>
 	<br><br><hr><br>
 </div>
 <div id="search_banner">

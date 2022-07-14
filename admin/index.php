@@ -1,43 +1,42 @@
-<?php include "../include/top.php"; ?>
-
 <?php
-$cl_result = include "../include/check_login.php";
-if ($cl_result == 0) {
-    return false;
-}
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 ?>
+
+
 
 <?php
 $user_id = $_SESSION['gobeauty_user_id'];
 $user_name = $_SESSION['gobeauty_user_nickname'];
 ?>
-<link rel="stylesheet" href="<?= $css_directory ?>/m_new.css?<?= filemtime($upload_static_directory . $css_directory . '/m_new.css') ?>">
+<link rel="stylesheet" href="m_new.css">
 <style>
 @font-face {font-family: 'BMJUA';src: url("../fonts/BMJUA.ttf");}
 .top_menu { z-index: 6; }
 
 .pna_cnt{background-color:red; font-size:15px; padding:3px; border-radius:5px; color:white; margin:0px 4px 0px; color:white;}
 </style>
-<div class="top_menu">
-    <div class="top_back"><a href="<?= $mainpage_directory ?>/mainpage_my_menu.php"><img src="<?= $image_directory ?>/btn_back_2.png" width="26px"></a></div>
-    <div class="top_title">
-        <p>관리자 모드</p>
+<header id="header">
+    <div class="header-left">
+        <a href="../mypage_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
-</div>
+    <div class="page-title">관리자모드</div>
+</header>
 
 <?php
 //////////////// 1대1 문의 답변 카운트 시작
 
-// 문의 갯수
-$pna_sql = "SELECT COUNT(*) AS pna_cnt FROM tb_1vs1_pna WHERE pna_seq > 400";
-$pna_result = mysql_query($pna_sql);
-$pna_datas = mysql_fetch_object($pna_result);
+// 문의 갯수 || 20211005 대표님 요청 1로 등록된 문의글 안보이게 처리 by glory (AND NOT title = '1')
+$pna_sql = "SELECT COUNT(*) AS pna_cnt FROM tb_1vs1_pna WHERE pna_seq > 400 AND NOT title = '1'";
+$pna_result = mysqli_query($connection,$pna_sql);
+$pna_datas = mysqli_fetch_object($pna_result);
 $pna_cnt = $pna_datas->pna_cnt;
 
 // 답변 갯수
 $pna_sub_sql = "SELECT COUNT(*) AS pna_sub_cnt FROM tb_1vs1_pna_sub WHERE sub_seq > 323";
-$pna_sub_result = mysql_query($pna_sub_sql);
-$pna_sub_datas = mysql_fetch_object($pna_sub_result);
+$pna_sub_result = mysqli_query($connection,$pna_sub_sql);
+$pna_sub_datas = mysqli_fetch_object($pna_sub_result);
 $pna_sub_cnt = $pna_sub_datas->pna_sub_cnt;
 
 // 신규 문의 갯수
@@ -45,9 +44,9 @@ $pna_cnt_result = $pna_cnt - $pna_sub_cnt;
 //////////////// 1대1 문의 답변 카운트 끝
 
 $login_insert_sql = "select * from tb_customer where id = '" . $user_id . "' and ( admin_flag = true or operator_flag = true);";
-$result = mysql_query($login_insert_sql);
+$result = mysqli_query($connection,$login_insert_sql);
 
-if ($result_datas = mysql_fetch_object($result)) {
+if ($result_datas = mysqli_fetch_object($result)) {
     $nickname = $result_datas->nickname;
     $photo = $result_datas->photo;
     $cellphone = $result_datas->cellphone;
@@ -60,7 +59,7 @@ if ($result_datas = mysql_fetch_object($result)) {
     $admin_flag = $result_datas->admin_flag;
     $operator_flag = $result_datas->operator_flag;
 ?>
-    <center id="manager_set" style="margin-top: 57px;">
+    <section id="manager_set" style="margin-top: 57px;">
         <?php
         if ($admin_flag || $operator_flag) {
 
@@ -87,8 +86,8 @@ if ($result_datas = mysql_fetch_object($result)) {
             $is_recommend = 0;
 
             $sqqql = "select * from tb_operator_management;";
-            $sqqq_result = mysql_query($sqqql);
-            if ($sq_rows = mysql_fetch_object($sqqq_result)) {
+            $sqqq_result = mysqli_query($connection,$sqqql);
+            if ($sq_rows = mysqli_fetch_object($sqqq_result)) {
                 $is_bank_account = $sq_rows->is_bank_account;
                 $is_request_artist = $sq_rows->is_request_artist;
                 $is_shop_open = $sq_rows->is_shop_open;
@@ -114,61 +113,9 @@ if ($result_datas = mysql_fetch_object($result)) {
         ?>
 
             <?php
-            if ($admin_flag || $is_push_to_all) {
-            ?>
-				<!--a href="/pet/test/test_andlogin.php" style="color: #fff;">a</a-->
-				<!--a href="/pet/test/test_manage_counseling.php?artist_name=알라숑"-->
-				<!--a href="../test/test_playroom_attendance.php"-->
-				<!--a href="../login/registration_success.php"-->
-				<a href="http://dev.gopet.kr/pet/mainpage">
-                    <div class="my_menu_div">
-                        <table class="my_shop_text">
-                            <tr>
-                                <td>*산책페이지테스트</td>
-                            </tr>
-                        </table>
-                        <table class="my_menu_img2">
-                            <tr>
-                                <td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </a>
-				<!--a href="../test/test_manage_statistics.php">
-                    <div class="my_menu_div">
-                        <table class="my_shop_text">
-                            <tr>
-                                <td>*(임시) tmp_link - 정산조회</td>
-                            </tr>
-                        </table>
-                        <table class="my_menu_img2">
-                            <tr>
-                                <td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </a>
-				<a href="../test/test_manage_customer_allview.php">
-                    <div class="my_menu_div">
-                        <table class="my_shop_text">
-                            <tr>
-                                <td>*(임시) tmp_link2 - 전체고객조회</td>
-                            </tr>
-                        </table>
-                        <table class="my_menu_img2">
-                            <tr>
-                                <td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </a-->
-            <?php
-            }
-            ?>
-            <?php
             if ($admin_flag || $is_bank_account) {
             ?>
-                <a href="<?= $admin_directory ?>/manage_bank_payment.php">
+                <a href="manage_bank_payment.php">
                     <div class="my_menu_div">
                         <table class="my_shop_text">
                             <tr>
@@ -177,7 +124,7 @@ if ($result_datas = mysql_fetch_object($result)) {
                         </table>
                         <table class="my_menu_img2">
                             <tr>
-                                <td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
+                                <td><img src="/images/setting2.png" width="20px"></td>
                             </tr>
                         </table>
                     </div>
@@ -858,35 +805,13 @@ if ($result_datas = mysql_fetch_object($result)) {
                 </a>
             <?php
             }
-            ?>
-            <?php   // 20210706 by migo - 앱 이동용 dev.gopet.kr
-            if ($admin_flag || $is_point) {
-            ?>
-                <a href="http://dev.gopet.kr/pet/mainpage/">
-                    <div class="my_menu_div">
-                        <table class="my_shop_text">
-                            <tr>
-                                <td>[app] dev.gopet.kr 이동용 </td>
-                            </tr>
-                        </table>
-                        <table class="my_menu_img2">
-                            <tr>
-                                <td><img src="<?= $image_directory ?>/setting2.png" width="20px"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </a>
-            <?php
-            }
-            ?>
-        <?php
         }
         ?>
 
-    </center>
+    </section>
 
 <?php
 }
 ?>
 
-<?php include "../include/bottom.php"; ?>
+
