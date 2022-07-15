@@ -217,7 +217,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                             $href = '#';
                                         }
                                     ?>
-<!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"></a></div></div>-->
+                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"></a></div></div>
                                     <div class="swiper-slide"><div class="slider-item"><a href="<?=$href ?>" class="btn-main-big-item"><img src="https://image.banjjakpet.com<?=img_link_change($path)?>" alt=""/></a></div></div>
 <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
 <!--                                    <div class="swiper-slide"><div class="slider-item"><a href="#" class="btn-main-big-item"><img src="/static/pub/images/shop_main_banner.png" alt=""/></a></div></div>-->
@@ -743,7 +743,6 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
         let visitedAt = (new Date()).getTime();
 
         $('.app-download-link').on('click',function(){
-
             if(userAgent.match(/iphone|ipad|ipod/i)){
 
                 setTimeout(
@@ -766,9 +765,6 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                         if((new Date()).getTime() - visitedAt < 2000){
                             location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
                         }
-
-
-
                             }
                     ,1500);
 
