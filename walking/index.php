@@ -7,8 +7,9 @@
 <script>
 
     let visitedAt = (new Date()).getTime();
-    
-    $(document).ready(function(){
+
+
+
 
         let userAgent = navigator.userAgent.toLowerCase();
 
@@ -37,12 +38,12 @@
             if(userAgent.match(/APP_GOBEAUTY_AND/i)){
                 Banjjak_Android.SET_MoveMenu(idx, email);
             }else{
-                setTimeout(
-                    function(){
-                        if((new Date()).getTime() - visitedAt < 2000){
-                            location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                        }
-                    } ,1500);
+                // setTimeout(
+                //     function(){
+                //         if((new Date()).getTime() - visitedAt < 2000){
+                //             location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+                //         }
+                //     } ,1500);
 
                 setTimeout(
                     function(){
@@ -59,7 +60,7 @@
                 location.href = "/main"
         }
 
-    })
+
 
 
     //$('#app-link').on('click',function(){
