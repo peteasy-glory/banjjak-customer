@@ -132,6 +132,12 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 		});
         $('#loading').removeClass("actived");
 	})
+
+    $(document).keyup(function(){
+        if (window.event.keyCode == 13) {
+            $("#cs_login_all").submit();
+        }
+    })
 		
 		
 		
