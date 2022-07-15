@@ -23,9 +23,25 @@
                         location.href = "intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
                     },0);
             }
-        }else if((varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1)
-            && varUA.indexOf("APP_GOBEAUTY_iOS") > -1){
-            webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
+        }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
+
+            if (varUA.indexOf("APP_GOBEAUTY_iOS") > -1) {
+                webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
+            }else {
+                setTimeout(
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
+                        }
+                    }
+                    ,1500);
+
+                setTimeout(
+                    function(){
+                        location.href = 'banjjakpet://walking';
+                    }
+                    ,0);
+            }
         }else{
             if('<?=$user_id?>' === '')
                 location.href = "/login_1"
