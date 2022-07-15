@@ -1905,10 +1905,10 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				// 장바구니 > 상품내역 기록(+추가)
 				$sql = "
 					INSERT INTO tb_item_payment_log_product (
-						`session_id`, `product_no`, `order_num`, `customer_id`, `product_price`, 
+						`session_id`, `product_no`, `order_num`, `customer_id`, `product_price`, `ip_seq`, 
 						`is_supply`, `supplier`, `option_data`
 					) SELECT 
-						session_id, product_no, order_num, customer_id, cart_price, 
+						session_id, product_no, order_num, customer_id, cart_price, ip_seq, 
 						is_supply, supplier, cart_data
 					FROM tb_item_cart 
 					WHERE is_delete = '1' 
