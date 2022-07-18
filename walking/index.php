@@ -4,18 +4,31 @@
     $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 ?>
 
-    <a href="market://details?id=m.kr.gobeauty" id="app-link-market" ><strong style="display:none;">market</strong></a>
+    <a href="https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty" id="app-link-market" ><strong style="display:none;">market</strong></a>
     <a href="itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194" id="app-link-appstore" ><strong  style="display:none;">appstore</strong></a>
 
     <a href="intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end" id="app-link-intent" ><strong  style="display:none;">intent</strong></a>
     <a href="banjjakpet://walking" id="app-link-walking" ><strong  style="display:none;">walking</strong></a>
 
-    <div style="width:100px;height: 100px" id="click" onclick="console.log('클릭')">
-    </div>
+
+
 <script>
 
-    
-    document.getElementById('click').click();
+    const install = async () => {
+
+            const installed = await navigator.getInstalledRelatedApps();
+            const nativeApp = installed.find(app => app.id === 'm.kr.beauty');
+
+            if(nativeApp && doesVersionSendPushMessages(nativeApp.version)){
+
+                alert('있다');
+            }else{
+                alert('없다');
+            }
+
+    }
+
+    install();
 
     let userAgent = navigator.userAgent.toLowerCase();
 
@@ -61,7 +74,7 @@
 
                         // document.getElementById('app-link-intent').click();
                         $('#app-link-intent').get(0).click();
-                    },2500);
+                    },500);
 
 
             }else{
@@ -70,13 +83,13 @@
 
                         // document.getElementById('app-link-intent').click();
                         $('#app-link-intent').get(0).click();
-                    },2500);
+                    },500);
                 setTimeout(
                     function(){
                        // document.getElementById('app-link-market').click()
                         $('#app-link-market').get(0).click();
                         }
-                 ,2800);
+                 ,800);
             }
 
         }
