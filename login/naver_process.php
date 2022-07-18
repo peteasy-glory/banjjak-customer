@@ -26,7 +26,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 ?>
 		<script>
 			alert("이미 탈퇴한 회원입니다. 메인화면으로 이동합니다.");
-			location.href = "/index.php";
+			location.href = "/";
 		</script>
 <?php
 			return false;

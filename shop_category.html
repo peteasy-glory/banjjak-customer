@@ -810,19 +810,19 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
 
             if(userAgent.match(/iphone|ipad|ipod/i)){
 
-                $('.app-download-link').attr('href',  `banjjakpet://shop_category?=category=${$(data).attr('data-id')}`)
+                $('.app-download-link').attr('href',  `banjjakpet://shop_category?category=${$(data).attr('data-id')}`)
 
             }else if(userAgent.match(/android/i)){
 
                 if(userAgent.match(/chrome/i)){
 
-                          $('.app-download-link').attr('href',`intent://shop_category?=category=${$(data).attr('data-id')}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`)
+                          $('.app-download-link').attr('href',`intent://shop_category?category=${$(data).attr('data-id')}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`)
 
 
                 }else{
 
 
-                        $('.app-download-link').attr('href', `banjjakpet://shop_category?=category=${$(data).attr('data-id')}`);
+                        $('.app-download-link').attr('href', `banjjakpet://shop_category?category=${$(data).attr('data-id')}`);
 
                 }
 

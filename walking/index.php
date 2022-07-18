@@ -12,29 +12,15 @@
 
 
 
+
 <script>
 
-    const install = async () => {
-
-            const installed = await navigator.getInstalledRelatedApps();
-            const nativeApp = installed.find(app => app.id === 'm.kr.beauty');
-
-            if(nativeApp && doesVersionSendPushMessages(nativeApp.version)){
-
-                alert('있다');
-            }else{
-                alert('없다');
-            }
-
-    }
-
-    install();
 
     let userAgent = navigator.userAgent.toLowerCase();
 
     let visitedAt = (new Date()).getTime();
 
-    $(document).ready(function(){
+
 
         if(userAgent.match(/iphone|ipad|ipod/i)){
 
@@ -45,7 +31,7 @@
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                             // document.getElementById('app-link-walking').click();
+                            // document.getElementById('app-link-walking').click();
                             $('#app-link-walking').get(0).click();
 
 
@@ -64,7 +50,7 @@
             }
         }else if(userAgent.match(/android/i)){
             if(userAgent.match(/APP_GOBEAUTY_AND/i)){
-                           Banjjak_Android.SET_MoveMenu(idx, email);
+                Banjjak_Android.SET_MoveMenu(idx, email);
             }
 
 
@@ -86,14 +72,19 @@
                     },500);
                 setTimeout(
                     function(){
-                       // document.getElementById('app-link-market').click()
+                        // document.getElementById('app-link-market').click()
                         $('#app-link-market').get(0).click();
-                        }
-                 ,800);
+                    }
+                    ,800);
             }
 
         }
-    })
+
+
+
+
+
+
 
 
 

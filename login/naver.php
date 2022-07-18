@@ -50,6 +50,30 @@ $pc_url = ($r_pc != "")? "?pc=".$r_pc : "";
 			$age= $json_info->response->age;
 			$email= $json_info->response->email;
 			$gender= $json_info->response->gender;
+
+            $login_insert_sql = "select * from tb_customer where id = '".$email."';";
+            $result = mysqli_query($connection, $login_insert_sql);
+            if ($rows = mysqli_fetch_object($result)) {
+                // 회원 탈퇴하면 로그인 취소
+                if($rows->enable_flag == 0){
+                    $url = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=".$client_id."&client_secret=".$client_secret."&access_token=".$json_response->access_token."&service_provider=NAVER";
+                    $is_post = false;
+                    $chd = curl_init();
+                    curl_setopt($chd, CURLOPT_URL, $url);
+                    curl_setopt($chd, CURLOPT_POST, $is_post);
+                    curl_setopt($chd, CURLOPT_RETURNTRANSFER, true);
+                    $headers = array();
+                    $response = curl_exec ($chd);
+                    $status_coded = curl_getinfo($chd, CURLINFO_HTTP_CODE);
+                    curl_close ($chd);
+                    ?>
+                    <script>
+                        alert("이미 탈퇴한 회원입니다. 로그인화면으로 이동합니다.");
+                        location.href='../login_1';
+                    </script>
+                    <?php
+                }
+            }
 ?>
 			<script>
 				location.href='naver_process.php?email=<?=$email?>&age=<?=$age?>&gender=<?=$gender?>&pc=<?=$r_pc?>';
@@ -64,12 +88,8 @@ $pc_url = ($r_pc != "")? "?pc=".$r_pc : "";
 
 ?>
 <script>
-                $.MessageBox({
-                        buttonDone      : "확인",
-                        message         : "로그인에 실패하였습니다. 다시 확인해주세요."
-                }).done(function(){
-			location.href='/pet/login/index.php';
-                });
+    alert('로그인에 실패했습니다. 다시 확인해주세요.');
+    location.href='../login_1';
 </script>
 
 	<!--script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script-->
@@ -123,5 +143,5 @@ $pc_url = ($r_pc != "")? "?pc=".$r_pc : "";
 
 
 <?php
-include "../include/bottom.php";
+//include "../include/bottom.php";
 ?>
