@@ -132,6 +132,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			if ($token_index > 0) {
 ?>
 		<script>
+            webkit.messageHandlers.SET_MemberJoin.postMessage('1','<?=$email ?>');
 			window.webkit.messageHandlers.onAppLogin.postMessage('<?=$email?>');
 		</script>
 <?php
@@ -143,6 +144,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			if ($token_index > 0) {
 ?>
 		<script>
+            Banjjak_Android.SET_MemberJoin('1','<?=$email ?>');
 			window.Android.onAppLogin('<?=$email?>');
 		</script>
 <?php

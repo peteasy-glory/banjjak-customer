@@ -102,6 +102,7 @@ class Point
     // 포인트 사용
     function spend_point($point, $payment_log_seq, $order_id)
     {
+        global $connection;
         if ($point <= 0) {
             return false;
         }
@@ -110,30 +111,57 @@ class Point
         }
         if (($this->accumulate_point + $this->purchase_point) < $point) {
             // 사용하고자 하는 포인트가 일반 포인트보다 많을때 산책포인트에서 사용가능 포인트 조회
-            $sql = "
-             SELECT SUM(POINT) point, SUM(is_invalid_point) invalid_point FROM tb_tracking_mgr 
-            WHERE owner_id = '".$this->customer_id."'
+            $tracking_sql = "
+             SELECT SUM(point) point, SUM(is_invalid_point) invalid_point FROM tb_tracking_mgr 
+            WHERE owner_id = '".$this->customer_id."' 
+            AND NOT POINT = is_invalid_point 
             GROUP BY owner_id;
         ";
-            $result = mysqli_query($connection,$sql);
-            if($row = mysqli_fetch_object($result)){
-                $tracking_point = $row->point - $row->invalid_point;
+            $tracking_result = mysqli_query($connection,$tracking_sql);
+            if($tracking_row = mysqli_fetch_object($tracking_result)){
+                $tracking_point = $tracking_row->point - $tracking_row->invalid_point;
                 // 산책포인트까지 합쳐도 포인트가 모자라면 false
                 if(($point - $this->accumulate_point) > $tracking_point){
-                    //return false; // 값 제대로 들어가면 false 주석 풀어야함
+                    return false;
                 }
             };
 
         }
         $spending_accumulate_point = 0;
         $spending_purchase_point = 0;
+        // 보유 일반포인트가 사용하고자 하는 포인트보다 많을때(일반포인트에서만 쓰면됨)
         if ($this->accumulate_point >= $point) {
             $this->accumulate_point -= $point;
             $spending_accumulate_point = $point;
+
+        // 차액 포인트 산책포인트에서 사용해야함
         } else {
             $spend_point = $point - $this->accumulate_point; // 산책포인트에서 차감해야할 포인트
+            $point = $this->accumulate_point; // 현재 보유하고있는 포인트 전부 사용
             $spending_accumulate_point = $this->accumulate_point; // history에 차감할 포인트(일반포인트 전체)
             $this->accumulate_point = 0; // 보유 포인트 0으로 변경
+
+            // 구매타입 구하기
+            $pos_type = strpos($order_id, "product_");
+            if($pos_type === false){
+                $type = '0';
+            }else{
+                $type = '1';
+            }
+            $tracking_insert_sql = "
+                INSERT INTO `tb_tracking_point_history` (`payment_seq`, `pay_type`, `pay_status`, `reg_date`, `mod_date`, `is_delete`) 
+                VALUES ('".$payment_log_seq."', ".$type.", 0, NOW(), NOW(), 0);
+            ";
+            $tracking_insert_result = mysqli_query($connection,$tracking_insert_sql);
+
+            $tracking_point_history_sql = "
+                SELECT * FROM tb_tracking_mgr 
+                WHERE owner_id = '".$this->customer_id."'
+                AND POINT > 0
+                AND NOT POINT = is_invalid_point
+                ORDER BY st_date DESC
+            ";
+            $tracking_point_history_result = mysqli_query($connection,$tracking_point_history_sql);
         }
 
         $this->insert_history("SPEND", "-", $payment_log_seq, $order_id, $point, "0", $spending_accumulate_point, $spending_purchase_point);

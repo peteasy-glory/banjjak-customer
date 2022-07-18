@@ -369,12 +369,14 @@ $r_status = ($_GET["status"] && $_GET["status"] != "")? $_GET["status"] : "";
                     //		if (data.code == "000000"){
                     if(tmp_url == "APP_GOBEAUTY_iOS"){
                         try {
+                            webkit.messageHandlers.SET_MemberJoin.postMessage('1','<?=$r_email ?>');
                             window.webkit.messageHandlers.onAppLogin.postMessage('<?=$r_email ?>');
                             location.href = "/mypage_main";
                         } catch(e) {
                             console.log(e);
                         }
                     }else if(tmp_url == "APP_GOBEAUTY_AND"){
+                        Banjjak_Android.SET_MemberJoin('1','<?=$r_email ?>');
                         window.Android.onAppLogin('<?=$r_email ?>');
                         location.href = "/mypage_main";
                     }else{
