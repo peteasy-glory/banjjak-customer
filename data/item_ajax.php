@@ -525,11 +525,21 @@ if($mode){
 //        include "../include/Point.class.php"; // global에 있음
         $r_customer_id	   = ($_POST["customer_id"] && $_POST["customer_id"] != "")? $_POST["customer_id"] : "";
 
+        $sql = "
+             SELECT SUM(POINT) point, SUM(is_invalid_point) invalid_point FROM tb_tracking_mgr 
+            WHERE owner_id = '{$r_customer_id}'
+            GROUP BY owner_id
+    
+        ";
+        $result = mysqli_query($connection,$sql);
+        $datas = mysqli_fetch_object($result);
+        $tracking_point = $datas->point - $datas->invalid_point;
+
         if($r_customer_id != ""){
             $point = new Point;
             $result = $point->select_point($r_customer_id);
             if ($result == true) {
-                $data = $point->get_point();
+                $data = $point->get_point() + $tracking_point;
             } else {
                 $data = "0";
             }

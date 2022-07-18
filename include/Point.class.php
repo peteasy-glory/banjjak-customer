@@ -71,7 +71,8 @@ class Point
     function insert_history($type, $event_name, $payment_log_seq, $order_id = "-", $spending_point, $adding_point, $spending_accumulate_point, $spending_purchase_point)
     {
         global $connection;
-        $sql = "insert into tb_point_history (customer_id, event_name, type, spending_point, adding_point, accumulate_point, purchase_point, payment_log_seq, order_id, update_time, spending_accumulate_point, spending_purchase_point) values ('" . $this->customer_id . "', '" . $event_name . "', '" . $type . "', '" . $spending_point . "', '" . $adding_point . "', '" . $this->accumulate_point . "', '" . $this->purchase_point . "', '" . $payment_log_seq . "', '" . $order_id . "', now(), '" . strval($spending_accumulate_point) . "', '" . strval($spending_purchase_point) . "');";
+        $sql = "insert into tb_point_history (customer_id, event_name, type, spending_point, adding_point, accumulate_point, purchase_point, payment_log_seq, order_id, update_time, spending_accumulate_point, spending_purchase_point) 
+                values ('" . $this->customer_id . "', '" . $event_name . "', '" . $type . "', '" . $spending_point . "', '" . $adding_point . "', '" . $this->accumulate_point . "', '" . $this->purchase_point . "', '" . $payment_log_seq . "', '" . $order_id . "', now(), '" . strval($spending_accumulate_point) . "', '" . strval($spending_purchase_point) . "');";
         $result = mysqli_query($connection, $sql);
         if (mysqli_affected_rows($connection) > 0) {
             return true;
@@ -108,22 +109,31 @@ class Point
             return false;
         }
         if (($this->accumulate_point + $this->purchase_point) < $point) {
-            return false;
+            // 사용하고자 하는 포인트가 일반 포인트보다 많을때 산책포인트에서 사용가능 포인트 조회
+            $sql = "
+             SELECT SUM(POINT) point, SUM(is_invalid_point) invalid_point FROM tb_tracking_mgr 
+            WHERE owner_id = '".$this->customer_id."'
+            GROUP BY owner_id;
+        ";
+            $result = mysqli_query($connection,$sql);
+            if($row = mysqli_fetch_object($result)){
+                $tracking_point = $row->point - $row->invalid_point;
+                // 산책포인트까지 합쳐도 포인트가 모자라면 false
+                if(($point - $this->accumulate_point) > $tracking_point){
+                    //return false; // 값 제대로 들어가면 false 주석 풀어야함
+                }
+            };
+
         }
         $spending_accumulate_point = 0;
         $spending_purchase_point = 0;
-        $spend_point = $point;
         if ($this->accumulate_point >= $point) {
             $this->accumulate_point -= $point;
             $spending_accumulate_point = $point;
         } else {
-            $spend_point = $point - $this->accumulate_point;
-            $spending_accumulate_point = $this->accumulate_point;
-            $spending_purchase_point = $spend_point;
-            $this->accumulate_point = 0;
-            if ($spend_point > 0) {
-                $this->purchase_point -= $spend_point;
-            }
+            $spend_point = $point - $this->accumulate_point; // 산책포인트에서 차감해야할 포인트
+            $spending_accumulate_point = $this->accumulate_point; // history에 차감할 포인트(일반포인트 전체)
+            $this->accumulate_point = 0; // 보유 포인트 0으로 변경
         }
 
         $this->insert_history("SPEND", "-", $payment_log_seq, $order_id, $point, "0", $spending_accumulate_point, $spending_purchase_point);

@@ -168,12 +168,17 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
         var banner = ["https://image.banjjakpet.com/images/scratcher.jpg"];
         var sub_title = [''];
         var event_item_list0 = ['ETCB-BANDI-A06', 'ETCB-BANDI-A36', 'JB-SB-C71', 'JB-SB-C70', 'JB-SB-C60', 'JB-SB-C61', 'JB-SB-C58', 'JB-SB-C52', 'JB-SB-C37', 'JB-SB-C38', 'JB-SB-C39', 'JB-SB-C27', 'JB-SB-C26', 'JB-SB-C25', 'JB-SB-C63', 'JB-SB-C69', 'JB-SB-C68', 'JB-SB-C64'];
-    }else if(seq == '67'){
+    }else if(seq == '67') {
         <?php
         unset($_SESSION['backurl_shop']);
         $_SESSION['backurl_shop'] = $_SESSION["backurl1"];
         ?>
         location.replace("shop_view?product_no=ETCB-LUCOMS-A01");
+    }else if(seq == '70'){
+        var title = "조아루 기획전";
+        var banner = ["https://image.banjjakpet.com/images"];
+        var sub_title = [''];
+        var event_item_list0 = ['ETCB-JOARU-A01', 'ETCB-JOARU-A02', 'ETCB-JOARU-A03', 'ETCB-JOARU-A04'];
     }
 
 
