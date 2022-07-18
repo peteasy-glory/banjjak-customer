@@ -12,29 +12,41 @@
 
 
 
+    <div style="width:100px; height: 100px" onclick="test()" id="test"></div>
+
 <script>
+    var appSchem = 'intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end';
 
-    const install = async () => {
+    isMyApp();
+    location.href = appSchem;
 
-            const installed = await navigator.getInstalledRelatedApps();
-            const nativeApp = installed.find(app => app.id === 'm.kr.beauty');
+    function isMyApp(){
+        function clearTimers(){
+            clearInterval(heartbeat);
+            clearTimeout(timer);
+        }
 
-            if(nativeApp && doesVersionSendPushMessages(nativeApp.version)){
-
-                alert('있다');
-            }else{
-                alert('없다');
+        function intervalHeartbeat(){
+            if(document.webkitHidden || document.hidden){
+                clearTimers();
+                alert('앱이 설치 되어 있습니다.');
             }
-
+        }
+        heartbeat = setInterval(intervalHeartbeat, 200);
+        var deLay = 1000;
+        timer = setTimeout(function() {
+            alert('앱이 없습니다.');
+        }, deLay);
     }
 
-    install();
 
     let userAgent = navigator.userAgent.toLowerCase();
 
     let visitedAt = (new Date()).getTime();
 
-    $(document).ready(function(){
+    document.getElementById('test').click()
+
+    function test (){
 
         if(userAgent.match(/iphone|ipad|ipod/i)){
 
@@ -45,7 +57,7 @@
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                             // document.getElementById('app-link-walking').click();
+                            // document.getElementById('app-link-walking').click();
                             $('#app-link-walking').get(0).click();
 
 
@@ -64,7 +76,7 @@
             }
         }else if(userAgent.match(/android/i)){
             if(userAgent.match(/APP_GOBEAUTY_AND/i)){
-                           Banjjak_Android.SET_MoveMenu(idx, email);
+                Banjjak_Android.SET_MoveMenu(idx, email);
             }
 
 
@@ -86,14 +98,20 @@
                     },500);
                 setTimeout(
                     function(){
-                       // document.getElementById('app-link-market').click()
+                        // document.getElementById('app-link-market').click()
                         $('#app-link-market').get(0).click();
-                        }
-                 ,800);
+                    }
+                    ,800);
             }
 
         }
-    })
+
+
+
+    }
+
+
+
 
 
 
