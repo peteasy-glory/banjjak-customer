@@ -37,18 +37,32 @@
 
             if(userAgent.match(/APP_GOBEAUTY_AND/i)){
                 Banjjak_Android.SET_MoveMenu(idx, email);
-            }else{
-                // setTimeout(
-                //     function(){
-                //         if((new Date()).getTime() - visitedAt < 2000){
-                //             location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                //         }
-                //     } ,1500);
+            }
 
+
+
+            if(userAgent.match(/chrome/i){
                 setTimeout(
                     function(){
                         location.href = "intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
-                    },0);
+                    },500);
+
+            }else{
+                setTimeout(
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            // location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+                            location.href = "market://details?id=m.kr.gobeauty";
+                        }
+                    } ,1500);
+
+                let iframe = document.createElement('iframe');
+                iframe.style.visibility ='hidden';
+                iframe.src = 'banjjakpet://';
+                document.body.appendChild(iframe);
+                document.body.removeChild(iframe);
+                
+
 
 
             }
