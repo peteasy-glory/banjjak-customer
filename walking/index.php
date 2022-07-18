@@ -4,14 +4,18 @@
     $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 ?>
 
-    <a href="market://details?id=m.kr.gobeauty" id="app-link-market" ><strong style="color:black;">market</strong></a>
-    <a href="itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194" id="app-link-appstore" ><strong  style="color:black">appstore</strong></a>
+    <a href="market://details?id=m.kr.gobeauty" id="app-link-market" ><strong style="display:none;">market</strong></a>
+    <a href="itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194" id="app-link-appstore" ><strong  style="display:none;">appstore</strong></a>
 
-    <a href="intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end" id="app-link-intent" ><strong  style="color:black;">intent</strong></a>
-    <a href="banjjakpet://walking" id="app-link-walking" ><strong  style="color:black;">walking</strong></a>
+    <a href="intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end" id="app-link-intent" ><strong  style="display:none;">intent</strong></a>
+    <a href="banjjakpet://walking" id="app-link-walking" ><strong  style="display:none;">walking</strong></a>
 
+    <div style="width:100px;height: 100px" id="click" onclick="console.log('클릭')">
+    </div>
 <script>
 
+    
+    document.getElementById('click').click();
 
     let userAgent = navigator.userAgent.toLowerCase();
 
