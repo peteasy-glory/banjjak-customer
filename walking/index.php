@@ -3,7 +3,7 @@
     include($_SERVER['DOCUMENT_ROOT'] . "/include/skin/header.php");
     $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 ?>
-<!--    <a href="#" id="app-link" ><strong >앱 다운로드</strong></a>-->
+    <a href="market://details?id=m.kr.gobeauty" id="app-link" ><strong >테스트</strong></a>
 <script>
 
     let visitedAt = (new Date()).getTime();
@@ -52,7 +52,7 @@
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
                             // location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                            location.href = "market://details?id=m.kr.gobeauty";
+                            location.href = "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty";
                         }
                     } ,1500);
 
@@ -61,7 +61,7 @@
                 iframe.src = 'banjjakpet://';
                 document.body.appendChild(iframe);
                 document.body.removeChild(iframe);
-                
+
 
 
 
