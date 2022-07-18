@@ -28,7 +28,9 @@
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                             document.getElementById('app-link-walking').click();
+                             // document.getElementById('app-link-walking').click();
+                            $('#app-link-walking').get(0).click();
+
 
                         }
                     }
@@ -37,8 +39,8 @@
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                            document.getElementById('app-link-appstore').click();
-
+                            // document.getElementById('app-link-appstore').click();
+                            $('#app-link-appstore').get(0).click();
                         }
                     }
                     ,1500);
@@ -53,19 +55,22 @@
                 setTimeout(
                     function(){
 
-                        document.getElementById('app-link-intent').click();
+                        // document.getElementById('app-link-intent').click();
+                        $('#app-link-intent').get(0).click();
                     },2500);
+
 
             }else{
                 setTimeout(
                     function(){
 
-                        document.getElementById('app-link-intent').click();
+                        // document.getElementById('app-link-intent').click();
+                        $('#app-link-intent').get(0).click();
                     },2500);
                 setTimeout(
                     function(){
-                       document.getElementById('app-link-market').click()
-
+                       // document.getElementById('app-link-market').click()
+                        $('#app-link-market').get(0).click();
                         }
                  ,2800);
             }
