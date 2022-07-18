@@ -4,16 +4,16 @@
     $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 ?>
 
-    <a href="market://details?id=m.kr.gobeauty" id="app-link-market" ><strong style="color:white;">market</strong></a>
-    <a href="itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194" id="app-link-appstore" ><strong  style="color:white;">appstore</strong></a>
+    <a href="market://details?id=m.kr.gobeauty" id="app-link-market" ><strong style="color:black;">market</strong></a>
+    <a href="itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194" id="app-link-appstore" ><strong  style="color:black">appstore</strong></a>
 
-    <a href="intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end" id="app-link-intent" ><strong  style="color:white;">intent</strong></a>
-    <a href="banjjakpet://walking" id="app-link-walking" ><strong  style="color:white;">walking</strong></a>
+    <a href="intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end" id="app-link-intent" ><strong  style="color:black;">intent</strong></a>
+    <a href="banjjakpet://walking" id="app-link-walking" ><strong  style="color:black;">walking</strong></a>
 
 <script>
 
 
-       let userAgent = navigator.userAgent.toLowerCase();
+    let userAgent = navigator.userAgent.toLowerCase();
 
     let visitedAt = (new Date()).getTime();
 
@@ -54,20 +54,20 @@
                     function(){
 
                         document.getElementById('app-link-intent').click();
-                    },1000);
+                    },2500);
 
             }else{
                 setTimeout(
                     function(){
 
                         document.getElementById('app-link-intent').click();
-                    },1000);
+                    },2500);
                 setTimeout(
                     function(){
                        document.getElementById('app-link-market').click()
 
                         }
-                 ,1500);
+                 ,2800);
             }
 
         }
