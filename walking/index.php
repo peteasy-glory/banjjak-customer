@@ -47,7 +47,7 @@
                 setTimeout(
                     function(){
                         window.location.href = "intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
-                    },500);
+                    },3500);
 
             }else{
                 setTimeout(
@@ -56,7 +56,7 @@
                             // location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
                             window.location.href = "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty";
                         }
-                    } ,1500);
+                    } ,2500);
 
 
 
@@ -67,9 +67,17 @@
 
         }else{
             if('<?=$user_id?>' === '')
-                window.location.href = "/login_1"
+                setTimeout(
+                    function(){
+                        window.location.href = "/login_1"
+                    }
+                    ,2500)
             else
-                window.location.href = "/main"
+                setTimeout(
+                    function(){
+                        window.location.href = "/main"
+                    }
+                    ,2500)
         }
 
 

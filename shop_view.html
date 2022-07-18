@@ -2044,6 +2044,13 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
                         },500);
 
                 }else{
+
+                    setTimeout(
+                        function(){
+                            window.location.href = 'banjjakpet://shop_view?product_no=<?php echo $product_no;?>';
+                        },500);
+
+
                     setTimeout(
                         function(){
                             if((new Date()).getTime() - visitedAt < 2000){

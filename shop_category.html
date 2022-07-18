@@ -527,7 +527,7 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
                     html += '    <div class="shop-category-menu-list">';
                     $.each(data.data[0], function (i, v) {
                         var checked = (v.ic_seq == middle_category) ? 'actived' : '';
-                        html += '        <a href="javascript:click_category(' + v.ic_seq + ',\'' + v.cate_name + '\');" class="middle_category ' + checked + '" data-id="' + v.ic_seq + '">' + v.cate_name + '</a>';
+                        html += '        <a href="javascript:click_category(' + v.ic_seq + ',\'' + v.cate_name + '\');" class="middle_category ' + checked + '" data-id="' + v.ic_seq + '" onclick="link_change(this)">' + v.cate_name + '</a>';
                     });
                     html += '    </div>';
                     html += '</div>';
@@ -573,7 +573,7 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
                     html += '</div>'
 
                     html += '<div class="swiper-slide">';
-                    html += '    <div class="shop-category-menu-list">';
+                    html += '    <div class="shop-category-menu-list ">';
                     for (var i = 18; i < length; i++) {
                         html += '        <a href="javascript:click_category(' + data.data[0][i]['ic_seq'] + ',\'' + data.data[0][i]['cate_name'] + '\');" class="middle_category" data-id="' + data.data[0][i]['ic_seq'] + '">' + data.data[0][i]['cate_name'] + '</a>';
                     }
@@ -751,6 +751,7 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
 
     $('.app-download-link').on('click',function(){
 
+        if($(this).attr('href') === '#'){
         if(userAgent.match(/iphone|ipad|ipod/i)){
 
             setTimeout(
@@ -781,6 +782,12 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
                     },500);
 
             }else{
+
+                setTimeout(
+                    function(){
+                        window.location.href = 'banjjakpet://shop_category?=category=<?php echo $category?>'
+                    },500);
+
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
@@ -792,7 +799,38 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
             }
         }
 
+        }
+
     })
+
+
+
+        function link_change(data){
+
+
+            if(userAgent.match(/iphone|ipad|ipod/i)){
+
+                $('.app-download-link').attr('href',  `banjjakpet://shop_category?=category=${$(data).attr('data-id')}`)
+
+            }else if(userAgent.match(/android/i)){
+
+                if(userAgent.match(/chrome/i)){
+
+                          $('.app-download-link').attr('href',`intent://shop_category?=category=${$(data).attr('data-id')}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`)
+
+
+                }else{
+
+
+                        $('.app-download-link').attr('href', `banjjakpet://shop_category?=category=${$(data).attr('data-id')}`);
+
+                }
+
+            }
+        }
+
+
+
 </script>
 
 <?
