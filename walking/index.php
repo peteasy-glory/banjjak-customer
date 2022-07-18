@@ -3,13 +3,15 @@
     include($_SERVER['DOCUMENT_ROOT'] . "/include/skin/header.php");
     $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 ?>
-    <a href="market://details?id=m.kr.gobeauty" id="app-link" ><strong >테스트</strong></a>
+<!--    <a href="market://details?id=m.kr.gobeauty" id="app-link" ><strong >테스트</strong></a>-->
 <script>
 
     let visitedAt = (new Date()).getTime();
 
 
 
+
+    $(document).ready(function(){
 
         let userAgent = navigator.userAgent.toLowerCase();
 
@@ -20,14 +22,14 @@
                 setTimeout(
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
-                            location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
+                            window.location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
                         }
                     }
                     ,1500);
 
                 setTimeout(
                     function(){
-                        location.href = 'banjjakpet://walking';
+                        window.location.href = 'banjjakpet://walking';
                     }
                     ,0);
             }
@@ -41,10 +43,10 @@
 
 
 
-            if(userAgent.match(/chrome/i){
+            if(userAgent.match(/chrome/i)){
                 setTimeout(
                     function(){
-                        location.href = "intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
+                        window.location.href = "intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
                     },500);
 
             }else{
@@ -52,15 +54,11 @@
                     function(){
                         if((new Date()).getTime() - visitedAt < 2000){
                             // location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                            location.href = "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+                            window.location.href = "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty";
                         }
                     } ,1500);
 
-                let iframe = document.createElement('iframe');
-                iframe.style.visibility ='hidden';
-                iframe.src = 'banjjakpet://';
-                document.body.appendChild(iframe);
-                document.body.removeChild(iframe);
+
 
 
 
@@ -69,10 +67,14 @@
 
         }else{
             if('<?=$user_id?>' === '')
-                location.href = "/login_1"
+                window.location.href = "/login_1"
             else
-                location.href = "/main"
+                window.location.href = "/main"
         }
+
+
+    })
+
 
 
 

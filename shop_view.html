@@ -189,7 +189,7 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
             </div>
             <div class="layer-pop-jack-bottom">
                 <div class="layer-pop-jack-bottom-top">
-                    <a href="#" class="app-download-link"><strong>반짝 앱 다운받기</strong></a>
+                    <a href="#" class="app-download-link"><strong>반짝 앱으로 보기</strong></a>
 
                 </div>
                 <div class="layer-pop-jack-bottom-bottom">
@@ -215,7 +215,7 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
                 <strong><strong style="color:#e74f55">최대 3,000원</strong> 할인!</strong>
             </div>
             <div class="layer-top-3">
-                <a href="#" class="app-download-link"><strong>앱 다운로드</strong></a>
+                <a href="#" class="app-download-link"><strong>앱으로 보기</strong></a>
             </div>
             <div class="layer-top-4">
                 <img src="images/btn_close.png" alt=""
@@ -2013,62 +2013,51 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
 
         let visitedAt = (new Date()).getTime();
 
-        $('.app-download-link').on('click', function () {
+        $('.app-download-link').on('click',function(){
 
-            if (userAgent.match(/iphone|ipad|ipod/i)) {
+            if(userAgent.match(/iphone|ipad|ipod/i)){
 
                 setTimeout(
-                    function () {
-                        if ((new Date()).getTime() - visitedAt < 2000) {
-                            location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
+                    function(){
+                        if((new Date()).getTime() - visitedAt < 2000){
+                            window.location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
                         }
-                    }
-                    , 1500);
+                    },1500);
 
                 setTimeout(
-                    function () {
-                        location.href = 'banjjack://';
+                    function(){
+                        window.location.href = 'banjjakpet://shop_view?product_no=<?php echo $product_no;?>';
                     }
-                    , 0);
-            } else {
-
-                setTimeout(
-                    function () {
-                        if ((new Date()).getTime() - visitedAt < 2000) {
-                            location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                        }
+                    ,0);
 
 
-                    }
-                    , 1500);
+            }else if(userAgent.match(/andriod/i)){
+                if(userAgent.match(/APP_GOBEAUTY_AND/i)){
+                    Banjjak_Android.SET_MoveMenu(idx, email);
+                }
 
-                setTimeout(
-                    function () {
-                        location.href = "intent://shop_view?product_no=<?php echo $product_no?>#Intent;scheme=banjjack;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
-                    }
-                    , 0);
+
+                if(userAgent.match(/chrome/i)){
+                    setTimeout(
+                        function(){
+                            window.location.href = "intent://shop_view?product_no=<?php echo $product_no;?>#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
+                        },500);
+
+                }else{
+                    setTimeout(
+                        function(){
+                            if((new Date()).getTime() - visitedAt < 2000){
+                                // location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+                                window.location.href = "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty";
+                            }
+                        } ,1500);
+
+                }
             }
+
         })
 
 
-        $(document).ready(function(){
-
-            if(userAgent.match(/kakao/i)){
-
-                location.href = 'kakaotalk://inappbrowser/close';
-
-                if(userAgent.match(/iphone|ipad|ipod/i)){
-
-                    alert('아이폰디바이스입니다');
-                    location.href='x-web-search://?';
-                }else{
-
-
-                        location.href = 'intent://'+location.href.replace(/https?:\/\//i,'')+'#Intent;scheme=http;package=com.android.chrome;end';
-                    }
-
-                }
-            })
     </script>
 <?
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
