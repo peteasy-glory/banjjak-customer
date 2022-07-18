@@ -12,41 +12,15 @@
 
 
 
-    <div style="width:100px; height: 100px" onclick="test()" id="test"></div>
 
 <script>
-    var appSchem = 'intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end';
-
-    isMyApp();
-    location.href = appSchem;
-
-    function isMyApp(){
-        function clearTimers(){
-            clearInterval(heartbeat);
-            clearTimeout(timer);
-        }
-
-        function intervalHeartbeat(){
-            if(document.webkitHidden || document.hidden){
-                clearTimers();
-                alert('앱이 설치 되어 있습니다.');
-            }
-        }
-        heartbeat = setInterval(intervalHeartbeat, 200);
-        var deLay = 1000;
-        timer = setTimeout(function() {
-            alert('앱이 없습니다.');
-        }, deLay);
-    }
 
 
     let userAgent = navigator.userAgent.toLowerCase();
 
     let visitedAt = (new Date()).getTime();
 
-    document.getElementById('test').click()
 
-    function test (){
 
         if(userAgent.match(/iphone|ipad|ipod/i)){
 
@@ -108,7 +82,6 @@
 
 
 
-    }
 
 
 
