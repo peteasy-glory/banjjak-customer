@@ -70,10 +70,10 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
                     //산책포인트
                     $total_tracking = 0;
-                    $select_sql = "select point from tb_tracking_mgr where owner_id = '" . $user_id . "';";
+                    $select_sql = "select point, is_invalid_point from tb_tracking_mgr where owner_id = '" . $user_id . "';";
                     $select_result = mysqli_query($connection, $select_sql);
                     for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-                        $total_tracking += $result_datas->point;
+                        $total_tracking += $result_datas->point - $result_datas->is_invalid_point;
                     }
 
                     //소멸 예정 산책포인트

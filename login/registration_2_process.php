@@ -135,6 +135,15 @@ if ($result_datas = mysqli_fetch_object($result)) {
         mysqli_query($connection, $payment_update_query);
     ?>
         <script language="javascript">
+            var varUA = window.navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+            var email = "<?=$email_id?>";
+
+            if(varUA.indexOf("android") >-1){
+                Banjjak_Android.SET_MemberJoin(email);
+            }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
+                webkit.messageHandlers.SET_MemberJoin.postMessage(email);
+            }
+
             location.href = "/join4";
         </script>
 <?php
