@@ -762,12 +762,13 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
 
             setTimeout(
                 function(){
-                    window.location.href = 'banjjakpet://shop_main';
+                    window.location.href = 'banjjakpet://shop_category?=category=<?php echo $category?>';
                 }
                 ,0);
 
 
-        }else if(userAgent.match(/andriod/i)){
+        }else if(userAgent.match(/android/i)){
+
             if(userAgent.match(/APP_GOBEAUTY_AND/i)){
                 Banjjak_Android.SET_MoveMenu(idx, email);
             }
@@ -776,7 +777,7 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
             if(userAgent.match(/chrome/i)){
                 setTimeout(
                     function(){
-                        window.location.href = "intent://shop_category#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
+                        window.location.href = "intent://shop_category?=category=<?php echo $category;?>#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
                     },500);
 
             }else{
