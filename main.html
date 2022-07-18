@@ -197,11 +197,14 @@ if($_SESSION['is_token'] == "1"){
 
 <?php
 
-$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
+$api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
 
-$data = array('req_idx'=>1);
+
+$user = array('status'=>5);
+
+$data = array('req_idx'=>$user['status']);
 $data_json = json_encode($data);
-$today_msg_org = $api->get("/home/today-msg ",$data_json);
+$today_msg_org = $api->get("/home/today-msg/".$user_id,$data_json);
 $today_msg = $today_msg_org['body'];
 
 
@@ -219,7 +222,6 @@ $today_msg = $today_msg_org['body'];
 <header id="header">
 
     <div class="header-left">
-        <?php print_r($today_msg_org)?>
 
         <a href="reserve_search_area" class="btn-page-ui btn-page-map"><div class="icon icon-size-24 icon-page-map"></div><div class="txt" id="areaTxt"></div></a>
     </div>
@@ -238,13 +240,27 @@ $today_msg = $today_msg_org['body'];
             <div class="main-wrap">
                 <!-- 오늘의 메세지 -->
 
-                <div class="main-today-banner">
+                <?php
+                if($user['status'] !== ''){
+
+                    echo '   <div class="main-today-banner">
                     <a href="#" class="btn-main-today-item">
                         <div class="item-desc">
-                            <span></span>
+                            <span>'.$today_msg['message'].'</span>
+                        </div>
+                        <div class="item-visual">
+                            <img src="'.$today_msg['icon'].'" alt="">
                         </div>
                     </a>
-                </div>
+                </div>';
+                }else{
+                    echo '';
+
+                }
+
+
+                ?>
+
 
 
 
