@@ -141,7 +141,11 @@ if ($result_datas = mysqli_fetch_object($result)) {
             if(varUA.indexOf("android") >-1){
                 Banjjak_Android.SET_MemberJoin('1',email);
             }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
-                webkit.messageHandlers.SET_MemberJoin.postMessage('1',email);
+                let messages = {
+                    'agency': '1',
+                    'email': email
+                };
+                webkit.messageHandlers.SET_MemberJoin.postMessage(messages);
             }
 
             location.href = "/join4";

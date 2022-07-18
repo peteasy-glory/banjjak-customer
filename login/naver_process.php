@@ -132,7 +132,11 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			if ($token_index > 0) {
 ?>
 		<script>
-            webkit.messageHandlers.SET_MemberJoin.postMessage('1','<?=$email ?>');
+            let messages = {
+                'agency': '2',
+                'email': '<?=$email?>'
+            };
+            webkit.messageHandlers.SET_MemberJoin.postMessage(messages);
 			window.webkit.messageHandlers.onAppLogin.postMessage('<?=$email?>');
 		</script>
 <?php

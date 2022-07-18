@@ -369,7 +369,11 @@ $r_status = ($_GET["status"] && $_GET["status"] != "")? $_GET["status"] : "";
                     //		if (data.code == "000000"){
                     if(tmp_url == "APP_GOBEAUTY_iOS"){
                         try {
-                            webkit.messageHandlers.SET_MemberJoin.postMessage('1','<?=$r_email ?>');
+                            let messages = {
+                                'agency': '3',
+                                'email': '<?=$r_email ?>'
+                            };
+                            webkit.messageHandlers.SET_MemberJoin.postMessage(messages);
                             window.webkit.messageHandlers.onAppLogin.postMessage('<?=$r_email ?>');
                             location.href = "/mypage_main";
                         } catch(e) {
