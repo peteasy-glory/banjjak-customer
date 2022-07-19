@@ -158,7 +158,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
     }
 
 
-    let userAgent =  'kakao,android';;
+    let userAgent =  navigator.userAgent;
     //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
     if(userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)){
         document.getElementById('appDownloadPopup').classList.remove('actived');
@@ -806,7 +806,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
                     alert("카카오 & 안드로이드");
 
-                    location.href = 'kakaotalk://inappbrowser/close';
+                    // location.href = 'kakaotalk://inappbrowser/close';
 
                     setTimeout(function () {
 
