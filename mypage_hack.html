@@ -1,7 +1,8 @@
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
-include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");   
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
+$user_id = $_SESSION['gobeauty_user_id'];
 ?>
 
 <!-- header -->
@@ -90,6 +91,28 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 <script>
 
+    var user_id = '<?=$user_id?>';
+    // 기기 체크
+    function checkMobile2(){
+        var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if ( varUA.indexOf("app_gobeauty_and") > -1 ) {
+            //APP
+            return "in_app_and";
+        } else if (varUA.indexOf("app_gobeauty_ios") > -1 ) {
+            //안드로이드
+            return "in_app_ios";
+        } else if ( varUA.indexOf('android') > -1 ) {
+            //안드로이드
+            return "android";
+        } else if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+            //IOS
+            return "ios";
+        } else {
+            //아이폰, 안드로이드 외
+            return "other";
+        }
+    }
+
 	$(document).ready(function(){
 		//체크박스 : 변화
 		$("#ckb").change(function(){
@@ -129,7 +152,19 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 			}).done(function(data) {
 				if(data.ret == true){
 					//성공 시 로직
-					pop.open('hackMsg2');
+                    var tmp_url = checkMobile2();
+                    if(tmp_url == "in_app_ios"){
+                        try {
+                            webkit.messageHandlers.SET_Withdrawal.postMessage(user_id);
+                            pop.open('hackMsg2');
+                        } catch(e) {
+                            console.log(e);
+                        }
+                    }else if(tmp_url == "in_app_and"){
+                        Banjjak_Android.SET_Withdrawal(user_id);
+                        pop.open('hackMsg2');
+                    }
+
 				}
 			});
 		});
