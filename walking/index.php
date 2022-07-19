@@ -77,13 +77,18 @@ window.onload = function(){
 
                         // document.getElementById('app-link-intent').click();
                         // $('#app-link-intent').get(0).click();
-                        window.location.href = 'banjjakpet://walking';
+
+                            window.location.href = 'banjjakpet://walking';
+                        
+
                     },500);
                 setTimeout(
                     function(){
                         // document.getElementById('app-link-market').click()
                         // $('#app-link-market').get(0).click();
-                        window.location.href = 'market://details?id=m.kr.gobeauty';
+                        if(new Date().getTime() - visitedAt < 2000) {
+                            window.location.href = 'market://details?id=m.kr.gobeauty';
+                        }
                     }
 
                     ,800);
