@@ -104,9 +104,9 @@ $past = time() - 3600;
 				window.Android.onAppLogin ('<?=$user_name?>');
                 // 로그인 상태 유지 값 전달
                 if('<?=$_POST['remember']?>' == 'on'){ // 유지
-                    window.Android.SET_AutoLogin (1);
+                    window.Banjjak_Android.SET_AutoLogin (1);
                 }else{ // 미유지
-                    window.Android.SET_AutoLogin (0);
+                    window.Banjjak_Android.SET_AutoLogin (0);
                 }
 			</script>
 <?php
