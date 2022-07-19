@@ -380,7 +380,11 @@ $r_status = ($_GET["status"] && $_GET["status"] != "")? $_GET["status"] : "";
                             console.log(e);
                         }
                     }else if(tmp_url == "APP_GOBEAUTY_AND"){
-                        Banjjak_Android.SET_MemberJoin('1','<?=$r_email ?>');
+                        let messages = {
+                            'agency': '3',
+                            'email': '<?=$r_email ?>'
+                        };
+                        Banjjak_Android.SET_MemberJoin(messages);
                         window.Android.onAppLogin('<?=$r_email ?>');
                         location.href = "/mypage_main";
                     }else{

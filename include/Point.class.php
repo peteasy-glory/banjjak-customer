@@ -155,13 +155,18 @@ class Point
             $tracking_insert_result = mysqli_query($connection,$tracking_insert_sql);
 
             $tracking_point_history_sql = "
-                SELECT * FROM tb_tracking_mgr 
+                SELECT idx, (POINT-is_invalid_point) FROM tb_tracking_mgr 
                 WHERE owner_id = '".$this->customer_id."'
                 AND POINT > 0
                 AND NOT POINT = is_invalid_point
                 ORDER BY st_date DESC
             ";
             $tracking_point_history_result = mysqli_query($connection,$tracking_point_history_sql);
+            $data = array();
+            while ($tracking_point_history_row = mysqli_fetch_object($tracking_point_history_result)) {
+                $data[] = $tracking_point_history_row;
+            }
+
         }
 
         $this->insert_history("SPEND", "-", $payment_log_seq, $order_id, $point, "0", $spending_accumulate_point, $spending_purchase_point);

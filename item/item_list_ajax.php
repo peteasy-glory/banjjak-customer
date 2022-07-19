@@ -2405,7 +2405,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			$r_iplp_seq = (isset($_POST["iplp_seq"]) && $_POST["iplp_seq"] && $_POST["iplp_seq"] != "")? $_POST["iplp_seq"] : "";
 			$r_customer_id = (isset($_POST["customer_id"]) && $_POST["customer_id"] && $_POST["customer_id"] != "")? $_POST["customer_id"] : "";
 			$r_review = ($_POST["review"] && $_POST["review"] != "")? $_POST["review"] : "";
-			$r_review_image = ($_POST["review_image"] && $_POST["review_image"] != "")? $_POST["review_image"] : "";
+			$r_review_image = ($_POST["review_images"] && $_POST["review_images"] != "")? $_POST["review_images"] : "";
 			$r_rating = ($_POST["rating"] && $_POST["rating"] != "")? $_POST["rating"] : "";
 			$r_is_admin = ($_POST["is_admin"] && $_POST["is_admin"] != "")? $_POST["is_admin"] : "";
 			$r_name = ($_POST["name"] && $_POST["name"] != "")? $_POST["name"] : "";

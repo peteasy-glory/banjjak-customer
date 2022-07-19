@@ -33,7 +33,7 @@ $review_sql = "
     FROM tb_item_payment_log_product a
     LEFT JOIN tb_item_list b ON b.product_no = a.product_no
     LEFT JOIN (
-        SELECT * FROM tb_item_review WHERE customer_id = '".$user_id."'
+        SELECT * FROM tb_item_review WHERE customer_id = '".$user_id."' AND NOT is_delete = '1'
     ) c ON c.product_no = a.product_no
     LEFT JOIN tb_file d ON d.f_seq = b.product_img 
     WHERE a.customer_id = '".$user_id."'
@@ -168,8 +168,8 @@ $total_reviews = sql_fetch_array($review_sql);
                                 <div class="basic-item basic-item-ui">
                                     <button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
                                     <div class="basic-item-ui-list">
-                                        <a href="mypage_review_write?artist_id=<?php echo $rs['shop_id']; ?>&payment_log_seq=<?php echo $rs['pls']; ?>" class="btn-basic-item-ui-item report_review">수정</a>
-                                        <a href="#" class="btn-basic-item-ui-item report_review" onclick="review_delete('<?php echo $rs['shop_id']; ?>', '<?php echo $rs['pls']; ?>');">삭제</a>
+                                        <a href="mypage_review_write_item?ir_seq=<?php echo $rs['ir_seq']; ?>" class="btn-basic-item-ui-item report_review">수정</a>
+                                        <a href="#" class="btn-basic-item-ui-item report_review" onclick="review_delete('<?php echo $rs['ir_seq']; ?>');">삭제</a>
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +198,7 @@ $total_reviews = sql_fetch_array($review_sql);
                             // 리뷰 없을 경우
                         }else{
                             ?>
-                            <div class="item-btns"><a href="mypage_review_write_item?customer_id=<?=$user_id ?>&seq="<?=$rs['iplp_seq'] ?> class="btn btn-outline-purple btn-middle-size btn-border-radius-5"><em>후기작성</em></a></div>
+                            <div class="item-btns"><a href="mypage_review_write_item?customer_id=<?=$user_id ?>&iplp_seq=<?=$rs['iplp_seq'] ?>" class="btn btn-outline-purple btn-middle-size btn-border-radius-5"><em>후기작성</em></a></div>
                             </div>
                             <?php
                         }
@@ -239,19 +239,50 @@ $total_reviews = sql_fetch_array($review_sql);
             </div>
         </div>
     </article>
+
+    <article id="sucess_pop" class="layer-pop-wrap " style="z-index: 100000;">
+        <div class="layer-pop-parent">
+            <div class="layer-pop-children">
+                <div class="pop-data alert-pop-data">
+                    <div class="pop-body">
+                        <div class="msg-txt">삭제되었습니다.</div>
+                    </div>
+                    <div class="pop-footer">
+                        <button type="button" class="btn btn-confirm" onclick="location.reload();">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
     <script>
 
-        function review_delete(shop_id, seq){
-            $("#delete_ok").data('id',shop_id);
+        function review_delete(seq){
             $("#delete_ok").data('seq',seq);
             popalert.open('delete_pop');
         }
 
         $("#delete_ok").click(function(){
-            var payment_log_seq = $(this).data("seq");
-            var artist_id = $(this).data("id");
+            var ir_seq = $(this).data("seq");
+            var customer_id = "<?=$user_id?>";
 
-            location.href = "mainpage/insert_usage_review.php?key=delete&payment_log_seq="+payment_log_seq+"&artist_id="+artist_id;
+            $.ajax({
+                type: "POST",
+                url: 'item/item_list_ajax.php',
+                data: {
+                    mode : "set_delete_item_review",
+                    ir_seq : ir_seq,
+                    delete_id : customer_id,
+                    delete_msg : "리뷰삭제"
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    pop.open('sucess_pop');
+                },
+                error: function(xhr, status, error) {
+                    alert(error + "에러발생");
+                }
+            });
 
         });
     </script>
