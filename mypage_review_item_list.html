@@ -29,7 +29,7 @@ if($user_id != ""){
 }
 
 $review_sql = "
-    SELECT a.iplp_seq, b.reg_dt buy_dt, b.product_name, b.product_img, c.ir_seq, c.review, c.review_image, c.rating, c.is_reply, c.reply, c.reg_dt review_dt, c.is_delete, d.file_path
+    SELECT a.iplp_seq, a.reg_dt buy_dt, b.product_name, b.product_img, c.ir_seq, c.review, c.review_image, c.rating, c.is_reply, c.reply, c.reg_dt review_dt, c.is_delete, d.file_path
     FROM tb_item_payment_log_product a
     LEFT JOIN tb_item_list b ON b.product_no = a.product_no
     LEFT JOIN (

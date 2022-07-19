@@ -1,5 +1,6 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 
 	$curl_error_arr = array();
 	$curl_error_arr["1"] = "CURLE_UNSUPPORTED_PROTOCOL"; // libcurl에 전달한 URL이이 libcurl이 지원하지 않는 프로토콜을 사용했습니다. 지원은 사용하지 않은 컴파일 타임 옵션 일 수 있으며, 철자가 틀린 프로토콜 문자열이거나 단지 프로토콜 libcurl에 코드가 없을 수 있습니다.
@@ -2400,11 +2401,13 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				$return_data = array("code" => "004601", "data" => "중요 데이터가 누락되었습니다.");
 			}
 		}else if($r_mode == "set_insert_item_review"){
+			$emoji = new TEmoji();
+
 			$r_product_no = ($_POST["product_no"] && $_POST["product_no"] != "")? $_POST["product_no"] : "";
 			$r_order_num = (isset($_POST["order_num"]) && $_POST["order_num"] &&  $_POST["order_num"] != "")? $_POST["order_num"] : "";
 			$r_iplp_seq = (isset($_POST["iplp_seq"]) && $_POST["iplp_seq"] && $_POST["iplp_seq"] != "")? $_POST["iplp_seq"] : "";
 			$r_customer_id = (isset($_POST["customer_id"]) && $_POST["customer_id"] && $_POST["customer_id"] != "")? $_POST["customer_id"] : "";
-			$r_review = ($_POST["review"] && $_POST["review"] != "")? $_POST["review"] : "";
+			$r_review = ($_POST["review"] && $_POST["review"] != "")? $emoji->emojiStrToDB($_POST["review"]) : "";
 			$r_review_image = ($_POST["review_images"] && $_POST["review_images"] != "")? $_POST["review_images"] : "";
 			$r_rating = ($_POST["rating"] && $_POST["rating"] != "")? $_POST["rating"] : "";
 			$r_is_admin = ($_POST["is_admin"] && $_POST["is_admin"] != "")? $_POST["is_admin"] : "";
@@ -2435,13 +2438,15 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 				$return_data = array("code" => "004701", "data" => "리뷰 등록에 실패했습니다.");
 			}
 		}else if($r_mode == "set_update_item_review"){
+			$emoji = new TEmoji();
+
 			$r_ir_seq = (isset($_POST["ir_seq"]) && $_POST["ir_seq"] && $_POST["ir_seq"] != "")? $_POST["ir_seq"] : "";
 			$r_product_no = ($_POST["product_no"] && $_POST["product_no"] != "")? $_POST["product_no"] : "";
 			$r_order_num = (isset($_POST["order_num"]) && $_POST["order_num"] &&  $_POST["order_num"] != "")? $_POST["order_num"] : "";
 			$r_iplp_seq = (isset($_POST["iplp_seq"]) && $_POST["iplp_seq"] && $_POST["iplp_seq"] != "")? $_POST["iplp_seq"] : "";
 			$r_customer_id = (isset($_POST["customer_id"]) && $_POST["customer_id"] && $_POST["customer_id"] != "")? $_POST["customer_id"] : "";
-			$r_review = ($_POST["review"] && $_POST["review"] != "")? $_POST["review"] : "";
-			$r_review_image = ($_POST["review_image"] && $_POST["review_image"] != "")? $_POST["review_image"] : "";
+			$r_review = ($_POST["review"] && $_POST["review"] != "")? $emoji->emojiStrToDB($_POST["review"]) : "";
+			$r_review_image = ($_POST["review_images"] && $_POST["review_images"] != "")? $_POST["review_images"] : "";
 			$r_rating = ($_POST["rating"] && $_POST["rating"] != "")? $_POST["rating"] : "";
 			$r_is_blind = ($_POST["is_blind"] != "")? $_POST["is_blind"] : "";
 			$r_is_reply = ($_POST["is_reply"] != "")? $_POST["is_reply"] : "";
@@ -2472,7 +2477,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			if($r_review != ""){
 				$update_qy .= " review = '".trim(addslashes($r_review))."', ";
 			}
-			if(isset($_POST["review_image"])){
+			if(isset($_POST["review_images"])){
 				$update_qy .= " review_image = '".$r_review_image."', ";
 			}
 			if($r_rating != ""){

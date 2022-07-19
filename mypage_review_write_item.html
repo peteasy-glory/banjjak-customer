@@ -20,23 +20,34 @@ $iplp_seq = $_REQUEST['iplp_seq'];
 $backurl = $_GET["backurl"];
 
 // 주문내역확인
-$p_sql = "select * from tb_item_payment_log_product where iplp_seq = {$iplp_seq}";
+$p_sql = "
+    SELECT a.product_no, a.order_num, b.product_name from tb_item_payment_log_product a
+    LEFT JOIN tb_item_list b ON a.product_no = b.product_no
+    WHERE a.iplp_seq = {$iplp_seq}
+    AND b.is_delete = 1
+";
 $p_result = mysqli_query($connection,$p_sql);
 if ($p_rows = mysqli_fetch_object($p_result)) {
     $product_no = $p_rows->product_no;
     $order_num = $p_rows->order_num;
+    $product_name = $p_rows->product_name;
 }
 
 $memo = "";
 $update_time = "";
 $rating = 0;
-$sql = "select * from tb_item_review where ir_seq = '" . $ir_seq . "' and is_delete = 2;";
+$sql = "
+    SELECT a.review, a.rating, a.update_dt, a.review_image, b.product_name from tb_item_review a
+    LEFT JOIN tb_item_list b ON a.product_no = b.product_no
+    WHERE a.ir_seq = '{$ir_seq}' AND a.is_delete = 2 AND b.is_delete = 1
+";
 $result = mysqli_query($connection,$sql);
 if ($rows = mysqli_fetch_object($result)) {
     $memo = $emoji->emojiDBToStr($rows->review);
     $rating = $rows->rating;
-    $update_time = $rows->update_time;
+    $update_time = $rows->update_dt;
     $review_images = $rows->review_image;
+    $product_name = $rows->product_name;
 }
 
 ?>
@@ -64,7 +75,7 @@ if ($rows = mysqli_fetch_object($result)) {
         <!-- page-contents -->
         <div class="page-contents">
             <div class="review-write-wrap">
-                <div class="page-info-desc">상품명</div>
+                <div class="page-info-desc"><?=$product_name?></div>
                 <div class="review-write-form">
                     <div class="form-group">
                         <div class="form-group-cell">

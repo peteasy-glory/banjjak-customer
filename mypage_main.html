@@ -57,7 +57,7 @@ if($user_id != ""){
 			(SELECT COUNT(*) FROM tb_like_artist WHERE customer_id = '".$user_id."') AS like_artist_cnt,
 			COUNT(*) AS item_review_cnt,
 			(SELECT COUNT(*) FROM tb_usage_reviews WHERE customer_id = '".$user_id."' AND is_delete = '0') AS payment_review_cnt
-		FROM tb_item_review WHERE customer_id = '".$user_id."'
+		FROM tb_item_review WHERE customer_id = '".$user_id."' and is_delete = '2'
 	";
     $cnt_result = mysqli_query($connection,$cnt_sql);
     $cnt_row = mysqli_fetch_assoc($cnt_result);
