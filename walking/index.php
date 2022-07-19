@@ -24,77 +24,71 @@
 
 
 
-window.onload = function(){
-    if(userAgent.match(/iphone|ipad|ipod/i)){
+window.onload = function() {
+    if (userAgent.match(/iphone|ipad|ipod/i)) {
 
-            if(userAgent.match(/APP_GOBEAUTY_iOS/i)){
-                webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
-            }else{
+        if (userAgent.match(/APP_GOBEAUTY_iOS/i)) {
+            webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
+        } else {
 
-                setTimeout(
-                    function(){
-                        if((new Date()).getTime() - visitedAt < 2000){
-                            window.location.href = 'banjjakpet://walking'
+            setTimeout(
+                function () {
+                    if ((new Date()).getTime() - visitedAt < 2000) {
+                        window.location.href = 'banjjakpet://walking'
 
 
-
-                        }
                     }
-                    ,300);
+                }
+                , 300);
 
-                setTimeout(
-                    function(){
-                        if((new Date()).getTime() - visitedAt < 2000){
-                            window.location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194'
-                        }
+            setTimeout(
+                function () {
+                    if ((new Date()).getTime() - visitedAt < 2000) {
+                        window.location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194'
                     }
-                    ,500);
-            }
-        }else if(userAgent.match(/android/i)){
-            if(userAgent.match(/APP_GOBEAUTY_AND/i)){
-                Banjjak_Android.SET_MoveMenu(idx, email);
-            }
+                }
+                , 500);
+        }
+    } else if (userAgent.match(/android/i)) {
+        if (userAgent.match(/APP_GOBEAUTY_AND/i)) {
+            Banjjak_Android.SET_MoveMenu(idx, email);
+        }
 
 
-            if(userAgent.match(/chrome/i)){
-                setTimeout(
-                    function(){
+        if (userAgent.match(/chrome/i)) {
+            setTimeout(
+                function () {
 
-                        // document.getElementById('app-link-intent').click();
-                        // $('#app-link-intent').get(0).click();
-                        window.location.href = 'intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end')';
-                    },500);
-
-
-
-            }else{
-                setTimeout(
-                    function(){
-
-                            window.location.href = 'banjjakpet://walking';
+                    // document.getElementById('app-link-intent').click();
+                    // $('#app-link-intent').get(0).click();
+                    window.location.href = 'intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end';
+                }, 500);
 
 
-                    },500);
-                setTimeout(
-                    function(){
+        } else {
+            setTimeout(
+                function () {
 
-                        if(new Date().getTime() - visitedAt < 2000) {
-                            window.location.href = 'market://details?id=m.kr.gobeauty';
-                        }
+                    window.location.href = 'banjjakpet://walking';
+
+
+                }, 500);
+            setTimeout(
+                function () {
+
+                    if (new Date().getTime() - visitedAt < 2000) {
+                        window.location.href = 'market://details?id=m.kr.gobeauty';
                     }
+                }
 
-                    ,800);
+                , 800);
             // }
 
         }
 
 
-
-
-
-
+    }
 }
-
 
 
 </script>

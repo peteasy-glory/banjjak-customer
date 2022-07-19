@@ -1126,7 +1126,9 @@ h6.con-title {font-size:15px; line-height:20px;}
 /*2022.07.19 딥링크*/
 
 .app-download-link{
-	width:100%
+	width:100%;
+	display:flex;
+	justify-content: center;
 }
 
 
