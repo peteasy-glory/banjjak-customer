@@ -225,6 +225,7 @@ if($_SESSION['is_token'] == "1"){
         var todayDate = new Date();
         todayDate.setDate(todayDate.getDate() + expiredays);
         document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure ';
+
     }
 
 
@@ -284,7 +285,7 @@ if($_SESSION['is_token'] == "1"){
 
 
                 <div class="layer-pop-jack-bottom-bottom">
-                    <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1); document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
+                    <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1); document.cookie = `anymore = ${escape('Y')}; path=/; SameSite=None; Secure`; document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
                 </div>
 
 
@@ -1166,8 +1167,10 @@ if($_SESSION['is_token'] == "1"){
 
     })
 
+
     window.onload = function (){
 
+        if(getCookie_popup('anymore') !=='Y'){
 
         if(userAgent.match(/iphone|ipad|ipod/i)){ //ios 일때
 
@@ -1221,6 +1224,7 @@ if($_SESSION['is_token'] == "1"){
 
 
         }
+    }
     }
 
 
