@@ -123,19 +123,39 @@ $_SESSION['remember'] = 1; // naver, apple auto_login 판별 1: 로그인유지,
 
 <script>
 
-    $(".remember").change(function(){
-        if($(".remember").is(":checked")){
-            <?php
-            $_SESSION['remember'] = 1;
-            ?>
-            console.log('<?=$_SESSION['remember']?>');
+    $('.naver').click(function(){
+        var varUA = window.navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if($("input:checkbox[name=remember]").is(":checked") == true){
+            if(varUA.indexOf("android") >-1){
+                window.Banjjak_Android.SET_AutoLogin(1);
+            }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
+                window.webkit.messageHandlers.SET_AutoLogin.postMessage(1);
+            }
         }else{
-            <?php
-            $_SESSION['remember'] = 0;
-            ?>
-            console.log('<?=$_SESSION['remember']?>');
+            if(varUA.indexOf("android") >-1){
+                window.Banjjak_Android.SET_AutoLogin(0);
+            }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
+                window.webkit.messageHandlers.SET_AutoLogin.postMessage(0);
+            }
         }
-    });
+    })
+
+    $('.apple').click(function(){
+        var varUA = window.navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+        if($("input:checkbox[name=remember]").is(":checked") == true){
+            if(varUA.indexOf("android") >-1){
+                window.Banjjak_Android.SET_AutoLogin(1);
+            }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
+                window.webkit.messageHandlers.SET_AutoLogin.postMessage(1);
+            }
+        }else{
+            if(varUA.indexOf("android") >-1){
+                window.Banjjak_Android.SET_AutoLogin(0);
+            }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
+                window.webkit.messageHandlers.SET_AutoLogin.postMessage(0);
+            }
+        }
+    })
 
 	var customer_id = "";
 

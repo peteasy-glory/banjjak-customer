@@ -39,10 +39,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 		$_SESSION['gobeauty_user_id'] = $rows->id;
 		$_SESSION['gobeauty_user_nickname'] = $rows->nickname;
 
-        // 로그인 유지 여부
-        if($_SESSION['remember'] == 1){
-            cookie_save($rows->id,$master_key_name);
-        }
+        cookie_save($rows->id,$master_key_name);
 
 		// 20200716 ulmo 최근 로그인 시간 기록
 		$last_login_sql = "
@@ -128,6 +125,8 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 		if ($result_login) {
 			$_SESSION['gobeauty_user_id'] = $email;
 			$_SESSION['gobeauty_user_nickname'] = $nickname;
+
+            cookie_save($email,$master_key_name);
 		}
 
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];

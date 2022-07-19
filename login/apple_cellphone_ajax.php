@@ -64,9 +64,7 @@ if($r_mode){
             }
 
             // 로그인 유지 여부
-            if($_SESSION['remember'] == 1){
-                cookie_save($r_email,$master_key_name);
-            }
+            cookie_save($r_email,$master_key_name);
 
             $url = "";
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -148,6 +146,8 @@ if($r_mode){
             if($result){
                 $_SESSION['gobeauty_user_id'] = $r_customer_id;
                 $_SESSION['gobeauty_user_nickname'] = $nickname;
+
+                cookie_save($r_customer_id,$master_key_name);
 
                 $url = "";
                 $user_agent = $_SERVER['HTTP_USER_AGENT'];
