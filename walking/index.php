@@ -60,34 +60,34 @@ window.onload = function(){
             }
 
 
-            if(userAgent.match(/chrome/i)){
+            // if(userAgent.match(/chrome/i)){
+            //     setTimeout(
+            //         function(){
+            //
+            //             // document.getElementById('app-link-intent').click();
+            //             // $('#app-link-intent').get(0).click();
+            //             window.location.replace('intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end');
+            //         },500);
+
+
+
+            // }else{
                 setTimeout(
                     function(){
 
                         // document.getElementById('app-link-intent').click();
                         // $('#app-link-intent').get(0).click();
-                        window.location.replace('intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end');
-                    },500);
-
-
-
-            }else{
-                setTimeout(
-                    function(){
-
-                        // document.getElementById('app-link-intent').click();
-                        // $('#app-link-intent').get(0).click();
-                        window.location.replace('intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end');
+                        window.location.href = 'banjjakpet://walking';
                     },500);
                 setTimeout(
                     function(){
                         // document.getElementById('app-link-market').click()
                         // $('#app-link-market').get(0).click();
-                        window.location.replace('https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty');
+                        window.location.href = 'https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty';
                     }
 
                     ,800);
-            }
+            // }
 
         }
 
