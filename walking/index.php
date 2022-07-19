@@ -83,7 +83,7 @@ window.onload = function(){
                     function(){
                         // document.getElementById('app-link-market').click()
                         // $('#app-link-market').get(0).click();
-                        window.location.href = 'https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty';
+                        window.location.href = 'market://details?id=m.kr.gobeauty';
                     }
 
                     ,800);
