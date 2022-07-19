@@ -739,6 +739,8 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
 
+        let other_browser = String(location.href).split('//');
+
 
 
         let visitedAt = (new Date()).getTime();
@@ -788,7 +790,6 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
                         setTimeout(function () {
 
-                            alert("안드");
 
                             if (new Date().getTime() - visitedAt < 2000) {
 
@@ -797,14 +798,12 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
                         }, 300);
 
-                        $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty')
+                        $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
 
                     }
 
 
                 }else if(userAgent.match(/kakao/i) && userAgent.match(/android/i)){
-
-                    alert("카카오 & 안드로이드");
 
                     // location.href = 'kakaotalk://inappbrowser/close';
 
@@ -820,10 +819,14 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                     setTimeout(function(){
 
 
-                        location.href = `intent://${location.href}#Intent;scheme=http;package=com.android.chrome;end`;
+
+                        location.href = `intent://${other_browser[1]}#Intent;scheme=http;package=com.android.chrome;end`;
+
 
 
                     },500);
+
+                    $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
                 }
             }
         }
