@@ -274,10 +274,13 @@ if($_SESSION['is_token'] == "1"){
 
             </div>
             <div class="layer-pop-jack-bottom">
-                <div class="layer-pop-jack-bottom-top">
-                    <a href="#" class="app-download-link" ><strong >반짝 앱으로 보기</strong></a>
+                <a href="#" class="app-download-link">
+                    <div class="layer-pop-jack-bottom-top">
+                    <strong >반짝 앱 다운받기</strong>
+                    </div>
+                </a>
 
-                </div>
+
                 <div class="layer-pop-jack-bottom-bottom">
                     <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1); document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
                 </div>
@@ -302,7 +305,7 @@ if($_SESSION['is_token'] == "1"){
                 <strong><strong style="color:#e74f55">최대 3,000원</strong> 할인!</strong>
             </div>
             <div class="layer-top-3">
-                <a href="#" class="app-download-link" ><strong >앱으로 보기</strong></a>
+                <a href="#" class="app-download-link" ><strong >앱 다운로드</strong></a>
             </div>
             <div class="layer-top-4">
                 <img src="images/btn_close.png" alt="" onclick="document.getElementById('appDownloadTop').classList.remove('actived'); document.getElementById('appDownloadTop').style.display = 'none'; setCookie_popup('appDownloadTop','Y',1);">
@@ -1155,57 +1158,70 @@ if($_SESSION['is_token'] == "1"){
 
     let visitedAt = (new Date()).getTime();
 
-    $('.app-download-link').on('click',function(){
 
-        if(userAgent.match(/iphone|ipad|ipod/i)){
-
-            setTimeout(
-                function(){
-                    if((new Date()).getTime() - visitedAt < 2000){
-                        window.location.href = 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194';
-                    }
-                },1500);
-
-            setTimeout(
-                function(){
-                    window.location.href = 'banjjakpet://main';
-                }
-                ,0);
-
-
-        }else if(userAgent.match(/android/i)){
-            if(userAgent.match(/APP_GOBEAUTY_AND/i)){
-                Banjjak_Android.SET_MoveMenu(idx, email);
-            }
-
-
-            if(userAgent.match(/chrome/i)){
-                setTimeout(
-                    function(){
-                        window.location.href = "intent://main#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end";
-                    },500);
-
-            }else{
-
-                setTimeout(
-                    function(){
-                        window.location.href = 'banjjakpet://main';
-                    }
-                    ,0);
-
-
-                setTimeout(
-                    function(){
-                        if((new Date()).getTime() - visitedAt < 2000){
-                            // location.href = "https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                            window.location.href = "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=m.kr.gobeauty";
-                        }
-                    } ,1500);
-
-            }
-        }
+    $('.layer-pop-jack').click(function (event) {
+        event.stopPropagation();
 
     })
+
+    window.onload = function (){
+
+
+        if(userAgent.match(/iphone|ipad|ipod/i)){ //ios 일때
+
+
+
+            if(userAgent.match(/APP_GOBEAUTY_iOS/i)){ //ios app 일때
+                webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
+
+            }else{ //ios web 일때
+
+                setTimeout( // 앱이 있으면 앱으로
+
+                    function(){
+                        if((new Date()).getTime() - visitedAt <2000){
+                            location.href = 'banjjakpet://main';
+                        }
+                    }
+                ,300);
+
+
+
+                $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
+
+
+            }
+
+        }else if(userAgent.match(/android/i)){ //안드로이드 일때
+
+            if(userAgent.match(/APP_GOBEAUTY_AND/i)){ // 안드로이드 app 일때
+                Banjjak_Android.SET_MoveMenu(idx, email);
+            }else{ // 안드로이드 web 일때
+
+                
+                setTimeout(function(){
+
+                    if(new Date().getTime() - visitedAt < 2000){
+
+                        location.href = 'banjjakpet://main'
+                    }
+
+                },300);
+
+                $('.app-download-link').attr('href','market://details?id=m.kr.gobeauty')
+
+            }
+
+
+
+
+
+
+
+        }
+    }
+
+
 
 
 </script>

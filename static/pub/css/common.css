@@ -1123,6 +1123,12 @@ h6.con-title {font-size:15px; line-height:20px;}
 	font-weight: 700;
 }
 
+/*2022.07.19 딥링크*/
+
+.app-download-link{
+	width:100%
+}
+
 
 /* 정보성 테이블 */
 .read-table table {width:100%; table-layout:fixed;}
