@@ -75,7 +75,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
 
-<article id="appDownloadPopup" class="layer-pop-wrap actived" onclick="pop.close('#appDownloadPopup'); document.getElementById('appDownloadTop').classList.add('actived')">
+<article id="appDownloadPopup" class="layer-pop-wrap" onclick="pop.close('#appDownloadPopup'); document.getElementById('appDownloadTop').classList.add('actived')">
     <div class="layer-pop-jack">
         <div class="layer-pop-jack-top">
             <div class="layer-pop-jack-top-left">
@@ -95,7 +95,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
             </div>
             <div class="layer-pop-jack-bottom-bottom">
-                <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1); document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
+                <span onclick="pop.close('#appDownloadPopup'); document.cookie = `anymore = ${escape('Y')}; path=/; SameSite=None; Secure`; setCookie_popup('appDownloadpopup','Y',1); document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
             </div>
 
 
@@ -749,60 +749,55 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
         })
 
-        window.onload = function (){
+        window.onload = function () {
 
 
-            if(userAgent.match(/iphone|ipad|ipod/i)){ //ios 일때
+            if (getCookie_popup('anymore') !== 'Y') {
+                if (userAgent.match(/iphone|ipad|ipod/i)) { //ios 일때
 
 
+                    if (userAgent.match(/APP_GOBEAUTY_iOS/i)) { //ios app 일때
+                        webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
 
-                if(userAgent.match(/APP_GOBEAUTY_iOS/i)){ //ios app 일때
-                    webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
+                    } else { //ios web 일때
 
-                }else{ //ios web 일때
+                        setTimeout( // 앱이 있으면 앱으로
 
-                    setTimeout( // 앱이 있으면 앱으로
-
-                        function(){
-                            if((new Date()).getTime() - visitedAt <2000){
-                                location.href = 'banjjakpet://shop_main';
+                            function () {
+                                if ((new Date()).getTime() - visitedAt < 2000) {
+                                    location.href = 'banjjakpet://shop_main';
+                                }
                             }
-                        }
-                        ,300);
+                            , 300);
 
 
+                        $('.app-download-link').attr('href', 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
 
-                    $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
+
+                    }
+
+                } else if (userAgent.match(/android/i)) { //안드로이드 일때
+
+                    if (userAgent.match(/APP_GOBEAUTY_AND/i)) { // 안드로이드 app 일때
+                        Banjjak_Android.SET_MoveMenu(idx, email);
+                    } else { // 안드로이드 web 일때
+
+
+                        setTimeout(function () {
+
+                            if (new Date().getTime() - visitedAt < 2000) {
+
+                                location.href = 'banjjakpet://shop_main'
+                            }
+
+                        }, 300);
+
+                        $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty')
+
+                    }
 
 
                 }
-
-            }else if(userAgent.match(/android/i)){ //안드로이드 일때
-
-                if(userAgent.match(/APP_GOBEAUTY_AND/i)){ // 안드로이드 app 일때
-                    Banjjak_Android.SET_MoveMenu(idx, email);
-                }else{ // 안드로이드 web 일때
-
-
-                    setTimeout(function(){
-
-                        if(new Date().getTime() - visitedAt < 2000){
-
-                            location.href = 'banjjakpet://shop_main'
-                        }
-
-                    },300);
-
-                    $('.app-download-link').attr('href','market://details?id=m.kr.gobeauty')
-
-                }
-
-
-
-
-
-
-
             }
         }
 
