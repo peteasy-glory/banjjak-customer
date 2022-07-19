@@ -170,7 +170,7 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
     </article>
 
 
-    <article id="appDownloadPopup" class="layer-pop-wrap actived"
+    <article id="appDownloadPopup" class="layer-pop-wrap"
              onclick="pop.close('#appDownloadPopup'); document.getElementById('appDownloadTop').classList.add('actived')">
         <div class="layer-pop-jack">
             <div class="layer-pop-jack-top">
@@ -263,9 +263,13 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
             document.getElementById('appDownloadPopup').classList.remove('actived');
         }
 
-        if (getCookie_popup('appDownloadpopup') === 'Y') {
-            document.getElementById('appDownloadPopup').classList.remove('actived');
+        if(getCookie_popup('appDownloadpopup') !== 'Y'){
+            setTimeout(function(){
+                document.getElementById('appDownloadPopup').classList.add('actived')
+
+            },1500);
         }
+
 
         if (getCookie_popup('appDownloadTop') === 'Y') {
             document.getElementById('appDownloadTop').classList.remove('actived');
@@ -2020,6 +2024,8 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
         })
 
         window.onload = function (){
+
+
 
 
             if(userAgent.match(/iphone|ipad|ipod/i)){ //ios 일때
