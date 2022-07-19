@@ -29,9 +29,10 @@ if($user_id != ""){
 }
 
 $review_sql = "
-    SELECT a.payment_log_seq pls, CONCAT(a.year,'-', a.month,'-', a.day,' ', a.hour,':', a.minute) beauty_date, a.product, a.artist_id shop_id, b.*
+    SELECT a.payment_log_seq pls, CONCAT(a.year,'-', a.month,'-', a.day,' ', a.hour,':', a.minute) beauty_date, a.product, a.artist_id shop_id, b.*, c.front_image
     FROM tb_payment_log a
     LEFT JOIN tb_usage_reviews b ON b.payment_log_seq = a.payment_log_seq
+    LEFT JOIN tb_shop c ON b.artist_id = c.customer_id
     WHERE a.customer_id = '".$user_id."'
     AND a.is_cancel = '0'
     AND a.worker IS NOT null
@@ -179,7 +180,7 @@ $total_reviews = sql_fetch_array($review_sql);
                                     <div class="recomment-cell">
                                         <div class="recomment-item">
                                             <div class="user-thumb-wrap">
-                                                <div class="user-thumb"><img src="/static/pub/images/user_thumb.png" alt=""></div>
+                                                <div class="user-thumb"><img src="https://image.banjjakpet.com<?=img_link_change($rs['front_image'])?>" alt=""></div>
                                             </div>
                                             <div class="recomment-data">
                                                 <div class="item-name"><?php echo $product[2]; ?><span class="date"><?php echo $rs['reply_time'] ?></span></div>

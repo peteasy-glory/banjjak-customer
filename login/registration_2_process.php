@@ -139,11 +139,7 @@ if ($result_datas = mysqli_fetch_object($result)) {
             var email = "<?=$email_id?>";
 
             if(varUA.indexOf("android") >-1){
-                let messages = {
-                    'agency': '1',
-                    'email': email
-                };
-                Banjjak_Android.SET_MemberJoin(messages);
+                Banjjak_Android.SET_MemberJoin('1',email);
             }else if(varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1){
                 let messages = {
                     'agency': '1',

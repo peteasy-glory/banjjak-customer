@@ -148,11 +148,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 			if ($token_index > 0) {
 ?>
 		<script>
-            let messages = {
-                'agency': '2',
-                'email': '<?=$email?>'
-            };
-            Banjjak_Android.SET_MemberJoin(messages);
+            Banjjak_Android.SET_MemberJoin('2','<?=$email ?>');
 			window.Android.onAppLogin('<?=$email?>');
 		</script>
 <?php

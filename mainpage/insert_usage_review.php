@@ -112,7 +112,7 @@ if ($key == "delete") {
 				$update_result = mysqli_query($connection,$update_sql);
 				if ($update_result) {
 					if ($artist_id != null && $artist_id != "") {
-						$path = "http://gopet.kr/pet/shop/manage_my_post_story.php";
+						$path = "https://partner.banjjakpet.com/shop_review_list";
 						//$image = "http://gopet.kr/pet/images/logo_login.jpg";
 						$image = "";
 						a_push($artist_id, "반짝, 반려생활의 단짝. 후기등록 알림", "새로운 후기등록. 내용을 확인하세요.", $path, $image);
