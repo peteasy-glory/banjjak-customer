@@ -797,29 +797,30 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                     }
 
 
+                }else if(userAgent.match(/kakao/i) && userAgent.match(/android/i)){
+
+                    location.href = 'kakaotalk://inappbrowser/close';
+
+                    setTimeout(function () {
+
+                        if (new Date().getTime() - visitedAt < 2000) {
+
+                            location.href = 'banjjakpet://shop_main'
+                        }
+
+                    }, 300);
+
+                    setTimeout(function(){
+
+
+                        location.href = `intent://${location.href}#Intent;scheme=http;package=com.android.chrome;end`;
+
+
+                    },500);
                 }
             }
         }
 
-        // 카카오톡 링크 대응
-        // $(document).ready(function(){
-        //
-        //     if(userAgent.match(/kakao/i)){
-        //
-        //         window.location.href = 'kakaotalk://inappbrowser/close';
-        //
-        //         if(userAgent.match(/iphone|ipad|ipod/i)){
-        //
-        //             alert('아이폰디바이스입니다');
-        //             location.href='x-web-search://?';
-        //         }else{
-        //
-        //
-        //             location.href = 'intent://main#Intent;scheme=http;package=com.android.chrome;end';
-        //         }
-        //
-        //     }
-        // })
 
 
     </script>
