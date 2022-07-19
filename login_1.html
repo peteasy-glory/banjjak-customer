@@ -61,6 +61,9 @@ function RandomToken($length = 32){
 
 
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$_SESSION['remember'] = 1; // naver, apple auto_login 판별 1: 로그인유지, 0: 로그인 미유지
+
 ?>
 <script>
     //	function onLogin (id) {
@@ -98,7 +101,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 				</div>
 			</div>
 			<div class="login-agree">
-				<div class="check"><label class="form-checkbox"><input type="checkbox" id="c12" name="remember" checked><span class="form-check-icon"><em>로그인 상태유지</em></span></label></div>
+				<div class="check"><label class="form-checkbox"><input type="checkbox" id="c12" class="remember" name="remember" checked><span class="form-check-icon"><em>로그인 상태유지</em></span></label></div>
 				<div class="btn-ui"><a href="/find_id_password" class="btn-member">아이디/비밀번호 찾기</a></div>
 			</div>
 			<div class="login-btn-group">
@@ -119,7 +122,20 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 
 <script>
-	
+
+    $(".remember").change(function(){
+        if($(".remember").is(":checked")){
+            <?php
+            $_SESSION['remember'] = 1;
+            ?>
+            console.log('<?=$_SESSION['remember']?>');
+        }else{
+            <?php
+            $_SESSION['remember'] = 0;
+            ?>
+            console.log('<?=$_SESSION['remember']?>');
+        }
+    });
 
 	var customer_id = "";
 

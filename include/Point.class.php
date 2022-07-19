@@ -153,9 +153,10 @@ class Point
                 VALUES ('".$payment_log_seq."', ".$type.", 0, NOW(), NOW(), 0);
             ";
             $tracking_insert_result = mysqli_query($connection,$tracking_insert_sql);
+            $history_idx = mysqli_insert_id($connection);
 
             $tracking_point_history_sql = "
-                SELECT idx, (POINT-is_invalid_point) FROM tb_tracking_mgr 
+                SELECT idx, point, is_invalid_point, (point-is_invalid_point) pos_point FROM tb_tracking_mgr 
                 WHERE owner_id = '".$this->customer_id."'
                 AND POINT > 0
                 AND NOT POINT = is_invalid_point
@@ -164,7 +165,18 @@ class Point
             $tracking_point_history_result = mysqli_query($connection,$tracking_point_history_sql);
             $data = array();
             while ($tracking_point_history_row = mysqli_fetch_object($tracking_point_history_result)) {
-                $data[] = $tracking_point_history_row;
+                if($spend_point > $tracking_point_history_row->pos_point){
+                    $update_sql = "UPDATE tb_tracking_mgr SET is_invalid_point = point WHERE idx = {$tracking_point_history_row->idx}";
+                    $update_result = mysqli_query($connection,$update_sql);
+                    $insert_sql = "
+                        INSERT INTO `tb_tracking_point_used` (`history_idx`, `tracking_idx`, `point`) 
+                        VALUES ('".$history_idx."', ".$tracking_point_history_row->idx.", ".$tracking_point_history_row->pos_point.");
+                    ";
+                    $insert_result = mysqli_query($connection,$insert_sql);
+
+                    // 각 로우에 적용하고 남은 포인트
+                    $spend_point -= $tracking_point_history_row->pos_point;
+                }
             }
 
         }

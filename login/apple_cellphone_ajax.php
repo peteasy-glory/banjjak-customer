@@ -62,7 +62,12 @@ if($r_mode){
                     $_SESSION['shop_user_nickname'] = $artist_data["name"];
                 }
             }
-            cookie_save($r_email,$master_key_name);
+
+            // 로그인 유지 여부
+            if($_SESSION['remember'] == 1){
+                cookie_save($r_email,$master_key_name);
+            }
+
             $url = "";
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
             if ($user_agent) {
