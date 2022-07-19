@@ -158,7 +158,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
     }
 
 
-    let userAgent =  navigator.userAgent;
+    let userAgent =  'kakao,android';;
     //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
     if(userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)){
         document.getElementById('appDownloadPopup').classList.remove('actived');
@@ -749,7 +749,9 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
         })
 
+
         window.onload = function () {
+
 
 
             if (getCookie_popup('anymore') !== 'Y') {
@@ -776,14 +778,17 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
                     }
 
-                } else if (userAgent.match(/android/i)) { //안드로이드 일때
+                } else if (!userAgent.match(/kakao/i)&& userAgent.match(/android/i)) { //안드로이드 일때
 
-                    if (userAgent.match(/APP_GOBEAUTY_AND/i)) { // 안드로이드 app 일때
+
+                   if (userAgent.match(/APP_GOBEAUTY_AND/i)) { // 안드로이드 app 일때
                         Banjjak_Android.SET_MoveMenu(idx, email);
                     } else { // 안드로이드 web 일때
 
 
                         setTimeout(function () {
+
+                            alert("안드");
 
                             if (new Date().getTime() - visitedAt < 2000) {
 
@@ -798,6 +803,8 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
 
                 }else if(userAgent.match(/kakao/i) && userAgent.match(/android/i)){
+
+                    alert("카카오 & 안드로이드");
 
                     location.href = 'kakaotalk://inappbrowser/close';
 
