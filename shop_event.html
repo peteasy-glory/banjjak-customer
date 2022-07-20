@@ -1,6 +1,6 @@
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
-include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+//include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 if($_SESSION['backurl1'] == null)
     $_SESSION['backurl1'] = 'main';
@@ -24,6 +24,215 @@ unset($_SESSION['backurl_shop']);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
 ?>
+
+
+<!DOCTYPE html>
+<html lang="ko" class="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>반짝 - 반려생활의 단짝</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="facebook-domain-verification" content="663zro6ll5klfq6g4wte3d8w4ky8ps"/>
+<!--    <meta property="og:description" content="--><?//= $product_row['product_name'] ?><!--">-->
+    <link rel="shortcut icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.png"/>
+    <link href="/static/pub/css/reset.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
+    <link href="/static/pub/css/swiper.min.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
+    <link href="/static/pub/css/jquery-ui.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
+    <link href="/static/pub/css/common.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
+    <link href="/static/pub/css/form.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
+    <script src="/static/pub/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/pub/js/jquery-ui.min.js"></script>
+    <script src="/static/pub/js/swiper.min.js"></script>
+    <script src="/static/pub/js/common.js?v=<?= $jsVersion ?>"></script>
+    <script src="/static/pub/js/dev_common.js?v=<?= $jsVersion ?>"></script>
+    <script src="/static/pub/js/jquery.fileupload.js"></script>
+    <script src="/static/pub/js/jquery.ui.widget.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TWTXXK9HE7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-TWTXXK9HE7');
+
+
+
+            $('.layer-pop-jack').click(function (event) {
+            event.stopPropagation();
+
+        })
+
+            // 팝업
+            function getCookie_popup(name) {
+            var obj = name + "=";
+            var x = 0;
+            while (x <= document.cookie.length) {
+            var y = (x + obj.length);
+            if (document.cookie.substring(x, y) == obj) {
+            if ((endOfCookie = document.cookie.indexOf(";", y)) == -1)
+            endOfCookie = document.cookie.length;
+            return unescape(document.cookie.substring(y, endOfCookie));
+        }
+            x = document.cookie.indexOf(" ", x) + 1;
+            if (x == 0)
+            break;
+        }
+            return "";
+        }
+
+            function setCookie_popup(name, value, expiredays) {
+            var todayDate = new Date();
+            todayDate.setDate(todayDate.getDate() + expiredays);
+            document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure ';
+
+        }
+
+
+            let userAgent = navigator.userAgent;
+            //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
+            if (userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)) {
+            document.getElementById('appDownloadPopup').classList.remove('actived');
+        }
+
+            if(getCookie_popup('appDownloadpopup') !== 'Y'){
+            setTimeout(function(){
+                document.getElementById('appDownloadPopup').classList.add('actived')
+
+            },1500);
+        }
+
+            if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
+
+            document.getElementById('appDownloadTop').classList.remove('actived');
+        }
+
+
+
+    </script>
+
+</head>
+<!-- 로딩화면 -->
+<!--<div id="loading" class="actived">-->
+<!--    <div class="loading-wrap">-->
+<!--        <div class="loading-bar">-->
+<!--            <div class="loading-obj">-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg">-->
+<!--                    <circle cx="50%" cy="50%" r="24"  class="background" stroke-linecap="butt"></circle>-->
+<!--                    <circle cx="50%" cy="50%" r="24"  class="yellow" stroke-linecap="butt" ></circle>-->
+<!--                </svg>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<script>
+    // window.onload = function(){
+    //     $('#loading').removeClass("actived");
+    // }
+</script>
+<body>
+<!-- [필수사항]을(를) 입력해주세요.  -->
+<article id="firstRequestMsg1" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
+
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt"></div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm" onclick="pop.close();">확인</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!--  기본 메세지 팝업(버튼2) -->
+<!-- popalert.confirm('firstRequestMsg2', '안내문구', '확인시 이동url'); -->
+<article id="firstRequestMsg2" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
+
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt">텍스트 입니다.</div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm btn-cf">확인</button>
+                    <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">취소</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
+
+<article id="appDownloadPopup" class="layer-pop-wrap" onclick="pop.close('#appDownloadPopup'); document.getElementById('appDownloadTop').classList.add('actived')">
+    <div class="layer-pop-jack">
+        <div class="layer-pop-jack-top">
+            <div class="layer-pop-jack-top-left">
+                <img src="images/app_logo2.png" alt="">
+
+            </div>
+            <div class="layer-pop-jack-top-right">
+                <strong>첫 구매 시 <storng style="color:#e74f55">최대 3,000원</storng> 할인!</strong><br>
+                <span>미용예약 	&#183; 산책 	&#183; 쇼핑까지!</span><br>
+                <span>이제 반짝하세요!</span>
+            </div>
+
+        </div>
+        <div class="layer-pop-jack-bottom">
+            <a href="#" class="app-download-link">
+                <div class="layer-pop-jack-bottom-top">
+                    <strong >반짝 앱 다운받기</strong>
+                </div>
+            </a>
+
+
+            <div class="layer-pop-jack-bottom-bottom">
+                <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1); document.cookie = `anymore = ${escape('Y')}; path=/; SameSite=None; Secure`; document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+</article>
+
+<article id="appDownloadTop" class="layer-top-wrap">
+    <div class="layer-top">
+
+        <div class="layer-top-1">
+            <img src="images/app_logo2.png" alt="">
+        </div>
+        <div class="layer-top-2">
+            <span>앱 설치하고 회원가입 시</span><br>
+            <strong><strong style="color:#e74f55">최대 3,000원</strong> 할인!</strong>
+        </div>
+        <div class="layer-top-3">
+            <a href="#" class="app-download-link" ><strong >앱 다운로드</strong></a>
+        </div>
+        <div class="layer-top-4">
+            <img src="images/btn_close.png" alt="" onclick="document.getElementById('appDownloadTop').classList.remove('actived'); document.getElementById('appDownloadTop').style.display = 'none'; setCookie_popup('appDownloadTop','Y',1);">
+        </div>
+    </div>
+</article>
+
 <!-- header -->
 <header id="header">	
 	<div class="header-left">
@@ -316,6 +525,101 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
         return num.format();
     };
+
+
+
+    let visitedAt = (new Date()).getTime();
+
+
+    $('.layer-pop-jack').click(function (event) {
+        event.stopPropagation();
+
+    })
+
+
+    window.onload = function (){
+
+        if(getCookie_popup('anymore') !=='Y'){
+
+            if(userAgent.match(/iphone|ipad|ipod/i)){ //ios 일때
+
+
+
+                if(userAgent.match(/APP_GOBEAUTY_iOS/i)){ //ios app 일때
+                    webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
+
+                }else{ //ios web 일때
+
+                    setTimeout( // 앱이 있으면 앱으로
+
+                        function(){
+                            if((new Date()).getTime() - visitedAt <2000){
+                                location.href = 'banjjakpet://shop_event?seq=<?=$seq?>';
+                            }
+                        }
+                        ,300);
+
+
+
+                    $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
+
+
+                }
+
+            }else if(!userAgent.match(/kakao/i) && userAgent.match(/android/i)){ //안드로이드 일때
+
+                if(userAgent.match(/APP_GOBEAUTY_AND/i)){ // 안드로이드 app 일때
+                    Banjjak_Android.SET_MoveMenu(idx, email);
+                }else{ // 안드로이드 web 일때
+
+
+                    setTimeout(function(){
+
+                        if(new Date().getTime() - visitedAt < 2000){
+
+                            location.href = 'banjjakpet://shop_event?seq=<?=$seq?>';
+                        }
+
+                    },300);
+
+                    $('.app-download-link').attr('href','market://details?id=m.kr.gobeauty')
+
+                }
+
+
+
+
+
+
+
+            }else if(userAgent.match(/kakao/i) && userAgent.match(/android/i)){
+
+                // location.href = 'kakaotalk://inappbrowser/close';
+
+                setTimeout(function () {
+
+                    if (new Date().getTime() - visitedAt < 2000) {
+
+                        location.href = 'banjjakpet://shop_event?seq=<?=$seq?>';
+                    }
+
+                }, 300);
+
+                setTimeout(function(){
+
+
+
+                    location.href = `intent://${other_browser[1]}#Intent;scheme=http;package=com.android.chrome;end`;
+
+
+
+                },500);
+
+                $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
+            }
+        }
+    }
+
 
 </script>
 	

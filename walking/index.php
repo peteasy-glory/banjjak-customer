@@ -49,7 +49,7 @@ window.onload = function() {
                 }
                 , 500);
         }
-    } else if (userAgent.match(/android/i)) {
+    } else if (!userAgent.match(/kakao/i) && userAgent.match(/android/i)) {
         if (userAgent.match(/APP_GOBEAUTY_AND/i)) {
             Banjjak_Android.SET_MoveMenu(idx, email);
         }
@@ -87,6 +87,30 @@ window.onload = function() {
         }
 
 
+    }else if(userAgent.match(/kakao/i) && userAgent.match(/android/i)){
+
+        // location.href = 'kakaotalk://inappbrowser/close';
+
+        setTimeout(function () {
+
+            if (new Date().getTime() - visitedAt < 2000) {
+
+                location.href = 'banjjakpet://walking'
+            }
+
+        }, 300);
+
+        setTimeout(function(){
+
+
+
+            location.href = `intent://${other_browser[1]}#Intent;scheme=http;package=com.android.chrome;end`;
+
+
+
+        },500);
+
+        $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
     }
 }
 
