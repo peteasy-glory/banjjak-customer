@@ -26,40 +26,58 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 $meta_photo = "";
 if($seq == 57){
     $meta_photo = "https://image.banjjakpet.com/upload/shop/164482718304.jpg";
+    $meta_name = "[반짝] 꼬모드 프리미엄 강아지/고양이 펫 소파";
 }else if($seq == 58) {
     $meta_photo = "https://image.banjjakpet.com/images/bathmon.jpg";
+    $meta_name = "바스몽 할인전";
 }else if($seq == 56){
     $meta_photo = "https://image.banjjakpet.com/images/event_daengdaeng.png";
+    $meta_name = "댕댕하냥 할인전";
 }else if($seq == 54){
     $meta_photo = "";
+    $meta_name = "고양이 할인전";
 }else if($seq == 51){
     $meta_photo = "https://image.banjjakpet.com/images/view_event38_inner.gif";
+    $meta_name = "배변용품 할인전";
 }else if($seq == 28){
     $meta_photo = "https://image.banjjakpet.com/images/event_toy_hotdeal.png";
+    $meta_name = "장난감 할인전";
 }else if($seq == 45){
     $meta_photo = "https://image.banjjakpet.com/images/event_nourishingfood.png";
+    $meta_name = "보양식 할인전";
 }else if($seq == 16){
     $meta_photo = "https://image.banjjakpet.com/upload/shop/160464640671.png";
+    $meta_name = "[반짝] 전문가용 펫타월";
 }else if($seq == 3){
     $meta_photo = "https://image.banjjakpet.com/images/review_event.jpg";
+    $meta_name = "리뷰 이벤트";
 }else if($seq ==9){
     $meta_photo = "https://image.banjjakpet.com/images/point_event.jpg";
+    $meta_name = "반짝 포인트 적립";
 }else if($seq == 8){
     $meta_photo = "https://image.banjjakpet.com/images/view_event5_6.jpg";
+    $meta_name = "반짝 포인트 적립";
 }else if($seq == 5){
     $meta_photo = "https://image.banjjakpet.com/images/renewal_1_1.jpg";
+    $meta_name = "입점신청";
 }else if($seq == 38){
     $meta_photo = "https://image.banjjakpet.com/upload/shop/163963954939.jpg";
+    $meta_name = "[1+1 이벤트] 원터치 버튼형 브러쉬";
 }else if($seq == 60){
     $meta_photo = "https://image.banjjakpet.com/upload/shop/163704014563.jpg";
+    $meta_name = "[럽마이펫] 스마트진공미용기 러브마이펫";
 }else if($seq == 61){
     $meta_photo = "https://image.banjjakpet.com/images/event_bugspet.png";
+    $meta_name = "벅스펫 할인전";
 }else if($seq == 66){
     $meta_photo = "https://image.banjjakpet.com/images/scratcher.jpg";
+    $meta_name = "스크래쳐 할인전";
 }else if($seq == 67){
     $meta_photo = "https://image.banjjakpet.com/upload/shop/165648032052.jpg";
+    $meta_name = "[루컴즈] 히밍 펫 드라이룸";
 }else if($seq == 70){
     $meta_photo = "https://image.banjjakpet.com/images/joaru_customer.jpg";
+    $meta_name = "조아루 기획전";
 }
 
 ?>
@@ -74,7 +92,7 @@ if($seq == 57){
     <meta name="format-detection" content="telephone=no">
     <meta name="facebook-domain-verification" content="663zro6ll5klfq6g4wte3d8w4ky8ps"/>
     <meta property="og:image" content="<?=$meta_photo?>" />
-<!--    <meta property="og:description" content="--><?//= $product_row['product_name'] ?><!--">-->
+    <meta property="og:description" content="<?= $meta_name ?>">
     <link rel="shortcut icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.ico"/>
     <link rel="icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.png"/>
     <link href="/static/pub/css/reset.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
