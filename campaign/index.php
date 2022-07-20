@@ -74,7 +74,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
                 setTimeout(
                     function () {
                         if ((new Date()).getTime() - visitedAt < 2000) {
-                            window.location.href = 'banjjakpet://shop'
+                            window.location.href = 'banjjakpet://main'
 
 
                         }
