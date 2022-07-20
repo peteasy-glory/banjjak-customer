@@ -65,18 +65,15 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 
     window.onload = function() {
-        alert(userAgent);
         if (userAgent.match(/iphone|ipad|ipod/i)) {
 
             if (userAgent.match(/APP_GOBEAUTY_iOS/i)) {
                 webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
             } else {
-                alert("아이폰확인");
-
                 setTimeout(
                     function () {
                         if ((new Date()).getTime() - visitedAt < 2000) {
-                            window.location.href = 'banjjakpet://shop_category?category=6'
+                            window.location.href = 'banjjakpet://campaign'
 
 
                         }
