@@ -65,6 +65,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 
     window.onload = function() {
+        alert(userAgent);
         if (userAgent.match(/iphone|ipad|ipod/i)) {
 
             if (userAgent.match(/APP_GOBEAUTY_iOS/i)) {
