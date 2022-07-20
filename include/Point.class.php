@@ -109,6 +109,8 @@ class Point
         if ($this->is_load == false) {
             return false;
         }
+
+        // 보유 일반포인트보다 사용할 포인트가 많을때, 즉 산책포인트를 사용해야할때
         if (($this->accumulate_point + $this->purchase_point) < $point) {
             // 사용하고자 하는 포인트가 일반 포인트보다 많을때 산책포인트에서 사용가능 포인트 조회
             $tracking_sql = "
@@ -120,6 +122,7 @@ class Point
             $tracking_result = mysqli_query($connection,$tracking_sql);
             if($tracking_row = mysqli_fetch_object($tracking_result)){
                 $tracking_point = $tracking_row->point - $tracking_row->invalid_point;
+
                 // 산책포인트까지 합쳐도 포인트가 모자라면 false
                 if(($point - $this->accumulate_point) > $tracking_point){
                     return false;
@@ -148,6 +151,7 @@ class Point
             }else{
                 $type = '1';
             }
+            // 산책포인트 사용 히스토리 insert
             $tracking_insert_sql = "
                 INSERT INTO `tb_tracking_point_history` (`payment_seq`, `pay_type`, `pay_status`, `reg_date`, `mod_date`, `is_delete`) 
                 VALUES ('".$payment_log_seq."', ".$type.", 0, NOW(), NOW(), 0);
@@ -155,6 +159,7 @@ class Point
             $tracking_insert_result = mysqli_query($connection,$tracking_insert_sql);
             $history_idx = mysqli_insert_id($connection);
 
+            // 포인트 사용 가능한 산책 데이터 가져오기
             $tracking_point_history_sql = "
                 SELECT idx, point, is_invalid_point, (point-is_invalid_point) pos_point FROM tb_tracking_mgr 
                 WHERE owner_id = '".$this->customer_id."'
@@ -163,9 +168,12 @@ class Point
                 ORDER BY st_date DESC
             ";
             $tracking_point_history_result = mysqli_query($connection,$tracking_point_history_sql);
-            $data = array();
+
+            //
             while ($tracking_point_history_row = mysqli_fetch_object($tracking_point_history_result)) {
-                if($spend_point > $tracking_point_history_row->pos_point){
+
+                // 가장 최근 tracking_mgr row의 적립포인트 보다 사용해야할 포인트가 많을때(해당 row의 적립 포인트 모두 사용)
+                if($spend_point >= $tracking_point_history_row->pos_point){
                     $update_sql = "UPDATE tb_tracking_mgr SET is_invalid_point = point WHERE idx = {$tracking_point_history_row->idx}";
                     $update_result = mysqli_query($connection,$update_sql);
                     $insert_sql = "
@@ -174,9 +182,21 @@ class Point
                     ";
                     $insert_result = mysqli_query($connection,$insert_sql);
 
-                    // 각 로우에 적용하고 남은 포인트
-                    $spend_point -= $tracking_point_history_row->pos_point;
+                }else{
+                    // 남은 포인트가 해당 row의 적립포인트보다 적을때
+                    if($spend_point != 0){
+                        $update_sql = "UPDATE tb_tracking_mgr SET is_invalid_point = (is_invalid_point + {$spend_point}) WHERE idx = {$tracking_point_history_row->idx}";
+                        $update_result = mysqli_query($connection,$update_sql);
+                        $insert_sql = "
+                        INSERT INTO `tb_tracking_point_used` (`history_idx`, `tracking_idx`, `point`) 
+                        VALUES ('".$history_idx."', ".$tracking_point_history_row->idx.", ".$spend_point.");
+                    ";
+                        $insert_result = mysqli_query($connection,$insert_sql);
+                    }
+                    break;
                 }
+                // 각 로우에 적용하고 남은 포인트
+                $spend_point -= $tracking_point_history_row->pos_point;
             }
 
         }
