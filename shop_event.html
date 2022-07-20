@@ -554,7 +554,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
                         function(){
                             if((new Date()).getTime() - visitedAt <2000){
-                                location.href = 'banjjakpet://shop_event?seq=<?=$seq?>';
+                                location.href = `banjjakpet://shop_event?seq=${seq}`;
                             }
                         }
                         ,300);
@@ -575,9 +575,9 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
                     setTimeout(function(){
 
-                        if(new Date().getTime() - visitedAt < 2000){
+                        if((new Date()).getTime() - visitedAt < 2000){
 
-                            location.href = 'banjjakpet://shop_event?seq=<?=$seq?>';
+                            location.href = `banjjakpet://shop_event?seq=${seq}`;
                         }
 
                     },300);
@@ -600,7 +600,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
                     if (new Date().getTime() - visitedAt < 2000) {
 
-                        location.href = 'banjjakpet://shop_event?seq=<?=$seq?>';
+                        location.href = `banjjakpet://shop_event?seq=${seq}`;
                     }
 
                 }, 300);
