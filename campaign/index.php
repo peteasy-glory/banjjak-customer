@@ -34,28 +34,6 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 
 
-    var lastScrollTop = 0;
-    var timer = null;
-    var customer_id = "<?=$user_id ?>";
-
-    $(document).ready(function(){
-        // 장바구니 개수
-        $.ajax({
-            url: './data/item_ajax.php',
-            data: {
-                mode: "get_cart_cnt",
-                customer_id: "<?=$user_id ?>"
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            success: function(data){
-                $(".btn-page-cart em").text(data.data);
-            }
-        });
-
-    })
-
-
     // 세자리 숫자 콤마
     Number.prototype.format = function() {
         if (this == 0) return 0;
