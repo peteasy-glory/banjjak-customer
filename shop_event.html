@@ -24,6 +24,7 @@ unset($_SESSION['backurl_shop']);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
 $meta_photo = "";
+$meta_name = "";
 if($seq == 57){
     $meta_photo = "https://image.banjjakpet.com/upload/shop/164482718304.jpg";
     $meta_name = "[반짝] 꼬모드 프리미엄 강아지/고양이 펫 소파";
@@ -92,7 +93,7 @@ if($seq == 57){
     <meta name="format-detection" content="telephone=no">
     <meta name="facebook-domain-verification" content="663zro6ll5klfq6g4wte3d8w4ky8ps"/>
     <meta property="og:image" content="<?=$meta_photo?>" />
-    <meta property="og:description" content="<?= $meta_name ?>">
+    <meta property="og:description" content="<?= $meta_name ?>" />
     <link rel="shortcut icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.ico"/>
     <link rel="icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.png"/>
     <link href="/static/pub/css/reset.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
