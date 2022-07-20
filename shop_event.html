@@ -23,6 +23,45 @@ if($seq == ""){
 unset($_SESSION['backurl_shop']);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
+$meta_photo = "";
+if($seq == 57){
+    $meta_photo = "https://image.banjjakpet.com/upload/shop/164482718304.jpg";
+}else if($seq == 58) {
+    $meta_photo = "https://image.banjjakpet.com/images/bathmon.jpg";
+}else if($seq == 56){
+    $meta_photo = "https://image.banjjakpet.com/images/event_daengdaeng.png";
+}else if($seq == 54){
+    $meta_photo = "";
+}else if($seq == 51){
+    $meta_photo = "https://image.banjjakpet.com/images/view_event38_inner.gif";
+}else if($seq == 28){
+    $meta_photo = "https://image.banjjakpet.com/images/event_toy_hotdeal.png";
+}else if($seq == 45){
+    $meta_photo = "https://image.banjjakpet.com/images/event_nourishingfood.png";
+}else if($seq == 16){
+    $meta_photo = "https://image.banjjakpet.com/upload/shop/160464640671.png";
+}else if($seq == 3){
+    $meta_photo = "https://image.banjjakpet.com/images/review_event.jpg";
+}else if($seq ==9){
+    $meta_photo = "https://image.banjjakpet.com/images/point_event.jpg";
+}else if($seq == 8){
+    $meta_photo = "https://image.banjjakpet.com/images/view_event5_6.jpg";
+}else if($seq == 5){
+    $meta_photo = "https://image.banjjakpet.com/images/renewal_1_1.jpg";
+}else if($seq == 38){
+    $meta_photo = "https://image.banjjakpet.com/upload/shop/163963954939.jpg";
+}else if($seq == 60){
+    $meta_photo = "https://image.banjjakpet.com/upload/shop/163704014563.jpg";
+}else if($seq == 61){
+    $meta_photo = "https://image.banjjakpet.com/images/event_bugspet.png";
+}else if($seq == 66){
+    $meta_photo = "https://image.banjjakpet.com/images/scratcher.jpg";
+}else if($seq == 67){
+    $meta_photo = "https://image.banjjakpet.com/upload/shop/165648032052.jpg";
+}else if($seq == 70){
+    $meta_photo = "https://image.banjjakpet.com/images/joaru_customer.jpg";
+}
+
 ?>
 
 
@@ -34,6 +73,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
     <title>반짝 - 반려생활의 단짝</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="facebook-domain-verification" content="663zro6ll5klfq6g4wte3d8w4ky8ps"/>
+    <meta property="og:image" content="<?=$meta_photo?>" />
 <!--    <meta property="og:description" content="--><?//= $product_row['product_name'] ?><!--">-->
     <link rel="shortcut icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.ico"/>
     <link rel="icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.png"/>
