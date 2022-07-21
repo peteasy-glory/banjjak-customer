@@ -73,7 +73,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
                 setTimeout(
                     function () {
                         if ((new Date()).getTime() - visitedAt < 2000) {
-                            window.location.href = 'banjjakpet://campaign'
+                            window.location.href = 'banjjakpet://campaign/'
 
 
                         }
@@ -100,7 +100,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
                         // document.getElementById('app-link-intent').click();
                         // $('#app-link-intent').get(0).click();
-                        window.location.href = 'intent://campaign#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end';
+                        window.location.href = 'intent://campaign/#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end';
                     }, 500);
 
 
@@ -108,7 +108,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
                 setTimeout(
                     function () {
 
-                        window.location.href = 'banjjakpet://campaign';
+                        window.location.href = 'banjjakpet://campaign/';
 
 
                     }, 500);
@@ -134,7 +134,7 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
                 if (new Date().getTime() - visitedAt < 2000) {
 
-                    location.href = 'banjjakpet://campaign'
+                    location.href = 'banjjakpet://campaign/'
                 }
 
             }, 300);
