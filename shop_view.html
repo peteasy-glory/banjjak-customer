@@ -271,10 +271,10 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
         }
 
 
-        if (getCookie_popup('appDownloadTop') === 'Y') {
+        if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
+
             document.getElementById('appDownloadTop').classList.remove('actived');
         }
-
     </script>
     <!-- header -->
     <header id="header">
