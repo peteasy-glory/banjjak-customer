@@ -169,68 +169,68 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
         </div>
     </article>
 
-
-    <article id="appDownloadPopup" class="layer-pop-wrap"
-             onclick="pop.close('#appDownloadPopup'); document.getElementById('appDownloadTop').classList.add('actived')">
-        <div class="layer-pop-jack">
-            <div class="layer-pop-jack-top">
-                <div class="layer-pop-jack-top-left">
-                    <img src="images/app_logo2.png" alt="">
-
-                </div>
-                <div class="layer-pop-jack-top-right">
-                    <strong>첫 구매 시
-                        <storng style="color:#e74f55">최대 3,000원</storng>
-                        할인!</strong><br>
-                    <span>미용예약 	&#183; 산책 	&#183; 쇼핑까지!</span><br>
-                    <span>이제 반짝하세요!</span>
-                </div>
-
-            </div>
-            <div class="layer-pop-jack-bottom">
-                <div class="layer-pop-jack-bottom-top">
-                    <a href="#" class="app-download-link"><strong>반짝 앱 다운받기</strong></a>
-
-                </div>
-                <div class="layer-pop-jack-bottom-bottom">
-                    <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1);  document.cookie = `anymore = ${escape('Y')}; path=/; SameSite=None; Secure`; document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-    </article>
-
-    <article id="appDownloadTop" class="layer-top-wrap">
-        <div class="layer-top">
-
-            <div class="layer-top-1">
-                <img src="images/app_logo2.png" alt="">
-            </div>
-            <div class="layer-top-2">
-                <span>앱 설치하고 회원가입 시</span><br>
-                <strong><strong style="color:#e74f55">최대 3,000원</strong> 할인!</strong>
-            </div>
-            <div class="layer-top-3">
-                <a href="#" class="app-download-link"><strong>앱 다운로드</strong></a>
-            </div>
-            <div class="layer-top-4">
-                <img src="images/btn_close.png" alt=""
-                     onclick="document.getElementById('appDownloadTop').classList.remove('actived'); document.getElementById('appDownloadTop').style.display = 'none'; setCookie_popup('appDownloadTop','Y',1);">
-            </div>
-        </div>
-    </article>
+<!---->
+<!--    <article id="appDownloadPopup" class="layer-pop-wrap"-->
+<!--             onclick="pop.close('#appDownloadPopup'); document.getElementById('appDownloadTop').classList.add('actived')">-->
+<!--        <div class="layer-pop-jack">-->
+<!--            <div class="layer-pop-jack-top">-->
+<!--                <div class="layer-pop-jack-top-left">-->
+<!--                    <img src="images/app_logo2.png" alt="">-->
+<!---->
+<!--                </div>-->
+<!--                <div class="layer-pop-jack-top-right">-->
+<!--                    <strong>첫 구매 시-->
+<!--                        <storng style="color:#e74f55">최대 3,000원</storng>-->
+<!--                        할인!</strong><br>-->
+<!--                    <span>미용예약 	&#183; 산책 	&#183; 쇼핑까지!</span><br>-->
+<!--                    <span>이제 반짝하세요!</span>-->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!--            <div class="layer-pop-jack-bottom">-->
+<!--                <div class="layer-pop-jack-bottom-top">-->
+<!--                    <a href="#" class="app-download-link"><strong>반짝 앱 다운받기</strong></a>-->
+<!---->
+<!--                </div>-->
+<!--                <div class="layer-pop-jack-bottom-bottom">-->
+<!--                    <span onclick="pop.close('#appDownloadPopup'); setCookie_popup('appDownloadpopup','Y',1);  document.cookie = `anymore = ${escape('Y')}; path=/; SameSite=None; Secure`; document.getElementById('appDownloadTop').classList.add('actived')">괜찮아요, 모바일 웹으로 볼래요.</span>-->
+<!--                </div>-->
+<!---->
+<!---->
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!---->
+<!---->
+<!--    </article>-->
+<!---->
+<!--    <article id="appDownloadTop" class="layer-top-wrap">-->
+<!--        <div class="layer-top">-->
+<!---->
+<!--            <div class="layer-top-1">-->
+<!--                <img src="images/app_logo2.png" alt="">-->
+<!--            </div>-->
+<!--            <div class="layer-top-2">-->
+<!--                <span>앱 설치하고 회원가입 시</span><br>-->
+<!--                <strong><strong style="color:#e74f55">최대 3,000원</strong> 할인!</strong>-->
+<!--            </div>-->
+<!--            <div class="layer-top-3">-->
+<!--                <a href="#" class="app-download-link"><strong>앱 다운로드</strong></a>-->
+<!--            </div>-->
+<!--            <div class="layer-top-4">-->
+<!--                <img src="images/btn_close.png" alt=""-->
+<!--                     onclick="document.getElementById('appDownloadTop').classList.remove('actived'); document.getElementById('appDownloadTop').style.display = 'none'; setCookie_popup('appDownloadTop','Y',1);">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </article>-->
 
     <script>
 
-
-        $('.layer-pop-jack').click(function (event) {
-            event.stopPropagation();
-
-        })
+//
+//        $('.layer-pop-jack').click(function (event) {
+//            event.stopPropagation();
+//
+//        })
 
         // 팝업
         function getCookie_popup(name) {
@@ -256,25 +256,25 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
             document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure ';
         }
 
-
-        let userAgent = navigator.userAgent;
-        //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
-        if (userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)) {
-            document.getElementById('appDownloadPopup').classList.remove('actived');
-        }
-
-        if(getCookie_popup('appDownloadpopup') !== 'Y'){
-            setTimeout(function(){
-                document.getElementById('appDownloadPopup').classList.add('actived')
-
-            },1500);
-        }
-
-
-        if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
-
-            document.getElementById('appDownloadTop').classList.remove('actived');
-        }
+        //
+        // let userAgent = navigator.userAgent;
+        // //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
+        // if (userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)) {
+        //     document.getElementById('appDownloadPopup').classList.remove('actived');
+        // }
+        //
+        // if(getCookie_popup('appDownloadpopup') !== 'Y'){
+        //     setTimeout(function(){
+        //         document.getElementById('appDownloadPopup').classList.add('actived')
+        //
+        //     },1500);
+        // }
+        //
+        //
+        // if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
+        //
+        //     document.getElementById('appDownloadTop').classList.remove('actived');
+        // }
     </script>
     <!-- header -->
     <header id="header">
@@ -367,15 +367,23 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
                     <div class="shop-info-delivery-group">
                         <div class="shop-info-delivery"><em>배송비</em><strong><span
                                         class="shipping_price">-</span></strong></div>
-                        <div class="shop-info-grade">
+
+                        <?php
+
+                        if($product_row['rating_cnt'] > 0){
+                            echo '<div class="shop-info-grade">
                             <a href="#review_move">
                                 <button type="button" class="item-grade">
-                                    <span class="icon icon-size-16 icon-star-yellow"></span><em><?= round($product_row['rating_avg']) ?></em>(<?= $product_row['rating_cnt'] ?>
-                                    )
+                                    <span class="icon icon-size-16 icon-star-yellow"></span><em>'.round($product_row['rating_avg']).'</em>('.$product_row['rating_cnt'].')
                                     <span class="icon icon-arrow-right-small"></span>
                                 </button>
                             </a>
-                        </div>
+                        </div>';
+
+                        }
+
+                        ?>
+
                     </div>
                     <div class="product-option-wrap">
                         <!-- 타이틀과 선택 있을 경우 안의 태그 노출 -->
@@ -2017,7 +2025,7 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
 
     </script>
 
-    <script src="include/source/deeplink.js"></script>
+<!--    <script src="include/source/deeplink.js"></script>-->
 
 <?
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
