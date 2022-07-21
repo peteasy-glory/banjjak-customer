@@ -371,10 +371,10 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
                         <?php
 
                         if($product_row['rating_cnt'] > 0){
-                            echo '<div class="shop-info-grade">
+                            echo '<div class="shop-info-grade" >
                             <a href="#review_move">
-                                <button type="button" class="item-grade">
-                                    <span class="icon icon-size-16 icon-star-yellow"></span><em>'.round($product_row['rating_avg']).'</em>('.$product_row['rating_cnt'].')
+                                <button type="button" class="item-grade" style="color:#202020;">
+                                    <span class="icon icon-size-16 icon-star-yellow"></span><em style="color:#202020;">'.round($product_row['rating_avg']).'</em>('.$product_row['rating_cnt'].')
                                     <span class="icon icon-arrow-right-small"></span>
                                 </button>
                             </a>
