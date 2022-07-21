@@ -176,7 +176,8 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
 
         },1500);
     }
-    if(getCookie_popup('appDownloadTop') === 'Y'){
+    if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
+
         document.getElementById('appDownloadTop').classList.remove('actived');
     }
 
