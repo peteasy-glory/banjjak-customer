@@ -182,7 +182,7 @@ if($user_id != ""){
 		</div>
 		<div class="single-btns-list">
 			<!-- 20211025 수정 : 아이콘들 추가 -->
-            <?php if($admin_flag == '1'){ ?>
+            <?php if($admin_flag == '1' && $user_id == 'itseokbeom@gmail.com'){ ?>
                 <div class="list-cell" style="background-color: #03c75a;margin:0 -20px;padding-left:20px;"><a href="admin/" class="btn-single-item large"><div><img src="static/pub/images/icon/icon-set-menu-2.png" style="width:22px;margin-right:9px;"></div><div class="txt" style="color:#fff;font-size:18px;">관리자페이지</div></a></div>
             <?php } ?>
             <?php if($my_shop_flag == '1'){ ?>
