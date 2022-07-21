@@ -294,7 +294,7 @@ class Point
     }
 
     // 이벤트로 인한 적립 point 증가
-    function add_accumulate_point_by_event($point, $event_id)
+    function add_accumulate_point_by_event($point, $event_id, $ip_log)
     {
         if ($point <= 0) {
             return false;
@@ -307,7 +307,7 @@ class Point
         }
         $this->accumulate_point += $point;
 
-        $this->insert_history("EVENT", $event_id, "0", "-", "0", $point, 0, 0);
+        $this->insert_history("EVENT", $event_id, $ip_log, "-", "0", $point, 0, 0);
 
         return $this->update_point();
     }

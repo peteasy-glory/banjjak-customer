@@ -1678,6 +1678,7 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 					";
 					$result = mysqli_query($connection,$sql);
 					$row = mysqli_fetch_assoc($result);
+					$customer_id = $row["customer_id"];
 
 					$sql1 = "
 						UPDATE tb_item_payment_log_product SET
@@ -1695,7 +1696,7 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 							SELECT *
 							FROM tb_point_history
 							WHERE payment_log_seq = '".$row["ip_log_seq"]."'
-								AND customer_id = '".$row["customer_id"]."'
+								AND customer_id = '".$customer_id."'
 								AND order_id = 'product_".$r_order_num."'
 								AND type = 'SPEND'
 						";
@@ -1707,12 +1708,73 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 
 							$result_point = $point->select_point($row["customer_id"]);
 							if ($spending_accumulate_point > 0) {
+
+								// 첫구매 할인이 들어간 주문건인지 확인
+								$first_sql = "
+									SELECT * FROM tb_point_history WHERE payment_log_seq = {$row["ip_log_seq"]}
+									AND TYPE = 'EVENT' AND event_name LIKE 'PAYM_1ODR_%'
+								";
+								$first_result = mysqli_query($connection, $first_sql);
+								$first_count = mysqli_num_rows($first_result);
+
+								if($first_count > 0){
+									// 첫구매 할인일때!!!!!!!!!!!!!!!!!!!!!
+								}
+
+
 								$point->add_accumulate_point($spending_accumulate_point, $row["ip_log_seq"], "cancel_" . $r_order_num);
 							}
 							if ($spending_purchase_point > 0) {
 								$point->add_purchase_point($spending_purchase_point, $row["ip_log_seq"], $r_order_num);
 							}
-							$sql = "
+						}
+
+						// 산책포인트 사용여부 확인
+						$history_sql = "
+							SELECT * FROM tb_tracking_point_history
+							WHERE payment_seq = {$row["ip_log_seq"]}
+							AND pay_type = 1
+						";
+						$history_result = mysqli_query($connection, $history_sql);
+						$history_row = mysqli_fetch_assoc($history_result);
+						$history_count = mysqli_num_rows($history_result);
+
+						// 산책포인트를 사용했다면
+						if($history_count > 0){
+							$used_sql = "
+								SELECT * FROM tb_tracking_point_used
+								WHERE history_idx = {$history_row['idx']}
+							";
+							$used_result = mysqli_query($connection, $used_sql);
+							while ($used_row = mysqli_fetch_object($used_result)){
+
+								// 기간 조회해서 돌려줄지말지 select 먼저 해야함
+								$tracking_select_sql = "
+									SELECT * FROM tb_tracking_mgr
+									WHERE idx = {$used_row->tracking_idx}
+									AND owner_id = '{$customer_id}'
+									AND NOW() < date_add(st_date, INTERVAL 6 MONTH)
+								";
+								$tracking_select_result = mysqli_query($connection, $tracking_select_sql);
+								$tracking_select_row = mysqli_fetch_assoc($tracking_select_result);
+								$tracking_select_count = mysqli_num_rows($tracking_select_result);
+
+								// 포인트 발생일로부터 6개월이 안지났을때
+								if($tracking_select_count > 0){
+									// tracking_mgr 포인트 되돌려주기
+									$tracking_sql = "
+									UPDATE tb_tracking_mgr SET
+									is_invalid_point = (is_invalid_point - {$used_row->point})
+									WHERE idx = {$tracking_select_row['idx']}
+									AND owner_id = '{$customer_id}'
+								";
+									$tracking_result = mysqli_query($connection, $tracking_sql);
+								}
+							}
+						}
+
+						// 포인트 환불 완료 update
+						$sql = "
 								UPDATE tb_item_payment_log SET
 									is_point_return = '2',
 									update_dt = NOW()
@@ -1720,8 +1782,7 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 									AND customer_id = '".$row["customer_id"]."'
 									AND order_num = '".$r_order_num."'
 							";
-							$result3 = mysqli_query($connection,$sql);
-						}
+						$result3 = mysqli_query($connection,$sql);
 					}
 
 					// 관리자 푸시
@@ -1730,8 +1791,8 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 					$pushImage = "";
 					$pushPayType = ($row["pay_type"] == "1")? "카드" : "계좌이체";
 					$admin_message = substr($row["cellphone"], -4) . "(".explode(",", $row["guest_info"])[1].")님이 [".$row["product_name"]."]을 상품결제취소(".$pushPayType."). 상품결제 관리를 확인하세요";
-					a_push("pickmon@pickmon.com", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
-					a_push("joseph@peteasy.kr", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
+					//a_push("pickmon@pickmon.com", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
+					//a_push("joseph@peteasy.kr", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
 
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{
@@ -2014,7 +2075,7 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 								if($event_point > 0){
 									$event_id = "PAYM_1ODR_" . rand_id();
 									//$point->print_stdio();
-									$point->add_accumulate_point_by_event($event_point, $event_id);
+									$point->add_accumulate_point_by_event($event_point, $event_id, $row['ip_log_seq']);
 								}
 							}
 						}

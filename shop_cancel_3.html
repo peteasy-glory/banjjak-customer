@@ -237,6 +237,9 @@ asort($banks); // 가나다순
     var user_id = "<?=$user_id ?>";
     var cancel_pay_type = "<?=$row['pay_type']?>";
     var cancel_price = <?=$row['total_price']?>;
+    var product_price = <?=$row['product_price']?>;
+    var shipping_price = <?=$row['shipping_price']?>;
+    var point_price = <?=$row['point_price']?>;
     var minus_price = 0;
     var receipt_id = "<?=$row['receipt_id']?>";
     var customer_name = "<?=$customer_name?>";
@@ -319,8 +322,11 @@ asort($banks); // 가나다순
         var cancel_bank = $("#container select[name='cancel_bank'] option:selected").val();
 
         if(cancel_price <= 0){
-            alert("환불금액이 없어 진행할 수 없습니다.");
-            return false;
+            if((product_price + shipping_price) != point_price){
+                alert("환불금액이 없어 진행할 수 없습니다.");
+                return false;
+            }
+
         }
 
         if(cancel_pay_type == "2"){
@@ -337,7 +343,7 @@ asort($banks); // 가나다순
         // 따닥방지
         if(double_chk == true){
             double_chk = false;
-            if(cancel_pay_type == "1" && receipt_id != null){ // 카드 결제 취소처리
+            if(cancel_pay_type == "1" && receipt_id != null && cancel_price > 0){ // 카드 결제 취소처리
                 // 0024 상품결제취소
                 $.ajax({
                     url: 'item/item_list_ajax.php',
@@ -381,6 +387,7 @@ asort($banks); // 가나다순
                                     //alert(error + "네트워크에러");
                                     if(xhr.status != 0){
                                         alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                                        console.log("1번");
                                         double_chk = true;
                                     }
                                 }
@@ -395,6 +402,7 @@ asort($banks); // 가나다순
                         //alert(error + "네트워크에러");
                         if(xhr.status != 0){
                             alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                            console.log("2번");
                             double_chk = true;
                         }
                     }
@@ -427,6 +435,7 @@ asort($banks); // 가나다순
                         //alert(error + "네트워크에러");
                         if(xhr.status != 0){
                             alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                            console.log("3번");
                             double_chk = true;
                         }
                     }
