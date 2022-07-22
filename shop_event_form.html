@@ -4,12 +4,16 @@ include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
 
 $user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_user_nickname'] : "";
-$seq = (isset($_GET['seq']))? $_GET['seq'] : "";
+
 
 
 //돌아갈 url을 세션에 저장한다.
 unset($_SESSION['backurl_shop']);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
+
+if($_SESSION['backurl1'] == null){
+    $_SESSION['backurl1'] = "main";
+}
 
 ?>
 <!-- header -->
@@ -25,7 +29,23 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 <section id="container">
     <!-- page-body -->
     <div class="page-body fix-bottom-page" id="event">
+        <div class="main-big-banner">
+            <div class="swiper-slide">
+                <div class="slider-item">
+                    <img src="https://image.banjjakpet.com/images/event/event_firstbuy_01.jpg" alt=""/>
+                </div>
+            </div>
+        </div>
 
+        <div class="basic-data-group">
+            <div class="con-title-group">
+               <h4 class="con-title">타이틀</h4>
+            </div>
+           <div class="product-total-value">소타이틀</div>
+            <div class="product-vertical-list">
+                <div class="list-inner">아마 상품사진</div>
+            </div>
+        </div>
 
     </div>
     <!-- //page-body -->
