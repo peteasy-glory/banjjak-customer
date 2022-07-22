@@ -218,8 +218,9 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
                 <a href="#" class="app-download-link"><strong>앱 다운로드</strong></a>
             </div>
             <div class="layer-top-4">
-                <img src="images/btn_close.png" alt=""
-                     onclick="document.getElementById('appDownloadTop').classList.remove('actived'); document.getElementById('appDownloadTop').style.display = 'none'; setCookie_popup('appDownloadTop','Y',1);">
+                <div class="close-box" onclick="document.getElementById('appDownloadTop').classList.remove('actived'); document.getElementById('appDownloadTop').style.display = 'none'; setCookie_popup('appDownloadTop','Y',1);">
+                    <img src="images/btn_close.png" alt="" >
+                </div>
             </div>
         </div>
     </article>
@@ -259,22 +260,25 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
 
         let userAgent = navigator.userAgent;
         //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
-        if (userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)) {
-            document.getElementById('appDownloadPopup').classList.remove('actived');
-        }
+       $(document).ready(function(){
+           if (userAgent.match(/window/i) || userAgent.match(/app_gobeauty_and/i) || userAgent.match(/app_gobeauty_ios/i)) {
+               document.getElementById('appDownloadPopup').classList.add('display-none');
+           }
 
-        if(getCookie_popup('appDownloadpopup') !== 'Y'){
-            setTimeout(function(){
-                document.getElementById('appDownloadPopup').classList.add('actived')
+           if(getCookie_popup('appDownloadpopup') !== 'Y'){
+               setTimeout(function(){
+                   document.getElementById('appDownloadPopup').classList.add('actived')
 
-            },1500);
-        }
+               },1500);
+           }
+
+           if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
+
+               document.getElementById('appDownloadTop').classList.remove('actived');
+           }
 
 
-        if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
-
-            document.getElementById('appDownloadTop').classList.remove('actived');
-        }
+       })
     </script>
     <!-- header -->
     <header id="header">

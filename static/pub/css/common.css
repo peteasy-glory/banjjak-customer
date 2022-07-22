@@ -1088,7 +1088,7 @@ h6.con-title {font-size:15px; line-height:20px;}
 
 }
 .layer-top-4{
-	width:15px;
+	width:50px;
 	height:100%;
 	display: flex;
 	justify-content: center;
@@ -1101,6 +1101,12 @@ h6.con-title {font-size:15px; line-height:20px;}
 
 }
 
+.close-box{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	height: 50%;
+}
 
 .layer-top-wrap.actived{
 	left: 0;
@@ -1131,6 +1137,10 @@ h6.con-title {font-size:15px; line-height:20px;}
 	justify-content: center;
 }
 
+.display-none {
+
+	display: none !important;
+}
 
 /* 정보성 테이블 */
 .read-table table {width:100%; table-layout:fixed;}
