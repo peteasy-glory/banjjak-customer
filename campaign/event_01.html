@@ -11,15 +11,11 @@ $user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_u
 unset($_SESSION['backurl_shop']);
 $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
 
-if($_SESSION['backurl1'] == null){
-    $_SESSION['backurl1'] = "main";
-}
-
 ?>
 <!-- header -->
 <header id="header">
     <div class="header-left">
-        <a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+        <a href="/shop_main" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
     <div class="page-title" id="title">Welcome 회원 혜택</div>
 </header>
@@ -39,20 +35,20 @@ if($_SESSION['backurl1'] == null){
             </div>
         </div>
 
-<!--        <div class="basic-data-group">-->
-<!--            <div class="con-title-group">-->
-<!--               <h4 class="con-title">타이틀</h4>-->
-<!--            </div>-->
-<!--           <div class="product-total-value">소타이틀</div>-->
-<!--            <div class="product-vertical-list">-->
-<!--                <div class="list-inner">아마 상품사진</div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="basic-data-group">-->
+        <!--            <div class="con-title-group">-->
+        <!--               <h4 class="con-title">타이틀</h4>-->
+        <!--            </div>-->
+        <!--           <div class="product-total-value">소타이틀</div>-->
+        <!--            <div class="product-vertical-list">-->
+        <!--                <div class="list-inner">아마 상품사진</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
 
     </div>
     <!-- //page-body -->
     <div class="common-bottom-ui left">
-        <a href="shop_cart" class="btn-page-cart"><em>0</em></a>
+        <a href="/shop_cart" class="btn-page-cart"><em>0</em></a>
     </div>
     <div class="common-bottom-ui right">
         <button type="button" id="btnPageTop" class="btn-page-top" onclick="common.pageMove(0);">상단 바로가기</button>
@@ -70,7 +66,7 @@ if($_SESSION['backurl1'] == null){
     $(document).ready(function(){
         // 장바구니 개수
         $.ajax({
-            url: './data/item_ajax.php',
+            url: '/data/item_ajax.php',
             data: {
                 mode: "get_cart_cnt",
                 customer_id: "<?=$user_id ?>"

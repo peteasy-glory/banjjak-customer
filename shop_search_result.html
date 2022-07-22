@@ -111,7 +111,10 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
                             html += '                <div class="price-sale">'+Math.round(percent)+'%</div>';
                             html += '                <div class="price-value">'+(v.sale_price).format()+'원</div>';
                             html += '            </div>';
-                            html += '            <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'+Math.round(v.rating_avg)+'</em>('+Math.round(v.rating_cnt)+')</div>';
+                            if(v.rating_cnt >0){
+                                html += '            <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'+Math.round(v.rating_avg)+'</em>('+Math.round(v.rating_cnt)+')</div>';
+
+                            }
                             html += '        </div>';
                             html += '    </a>';
                             html += '</div>';
