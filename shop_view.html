@@ -56,6 +56,7 @@ $percent = ($product_row['product_price'] == 0 || $product_row['sale_price'] == 
 $img_sql = "SELECT * FROM tb_file WHERE f_seq IN (" . $product_row['product_img'] . ") AND is_delete ='1'";
 $img_array = sql_fetch_array($img_sql);
 
+
 // 리뷰 정보
 $review_sql = "
     SELECT a.*, b.photo, b.nickname FROM tb_item_review a
@@ -70,6 +71,7 @@ unset($_SESSION['backurl2']);
 $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
 
 
+$thumb_nail = substr($img_array[0]['file_path'],4)
 ?>
 
     <!DOCTYPE html>
@@ -81,6 +83,7 @@ $_SESSION['backurl2'] = $_SERVER["REQUEST_URI"];
         <meta name="format-detection" content="telephone=no">
         <meta name="facebook-domain-verification" content="663zro6ll5klfq6g4wte3d8w4ky8ps"/>
         <meta property="og:description" content="<?= $product_row['product_name'] ?>">
+        <meta property="og:image" content="https://image.banjjakpet.com<?=$thumb_nail?>">
         <link rel="shortcut icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.ico"/>
         <link rel="icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.png"/>
         <link href="/static/pub/css/reset.css?v=<?= $cssVersion ?>" rel="stylesheet"/>
