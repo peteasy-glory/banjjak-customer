@@ -87,7 +87,7 @@ if ($result_datas = mysqli_fetch_object($result)) {
         $cellphone = $crypto->decode(trim($_SESSION["gobeauty_regist_cellphone"]), $access_key, $secret_key);
 
         //주문에 아이디 넣기
-        $payment_update_query = "UPDATE tb_payment_log SET customer_id = '{$email_id}' WHERE cellphone = '{$cellphone}' AND (customer_id IS NULL OR customer_id = '')";
+        $payment_update_query = "UPDATE tb_payment_log SET customer_id = '{$email_id}' WHERE cellphone = '{$cellphone}' AND (customer_id IS NULL OR customer_id = '' OR customer_id like '%신규등록%')";
         mysqli_query($connection, $payment_update_query);
 
         //임시회원 찾기
