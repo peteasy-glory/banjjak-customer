@@ -27,7 +27,7 @@ window.onload = function (){
 
     if(getCookie_popup('anymore') !=='Y'){
 
-        if(user_agent.match(/iphone|ipad|ipod/i)){ //ios 일때
+        if(user_agent.match(/iphone|ipad|ipod|safari/i)){ //ios 일때
 
 
 
