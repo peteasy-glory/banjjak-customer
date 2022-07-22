@@ -1,6 +1,15 @@
 <?
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
+if($user_id != ""){
+    ?>
+    <script>
+        location.href="/main";
+    </script>
+    <?php
+}
 ?>      
 
 <script>
