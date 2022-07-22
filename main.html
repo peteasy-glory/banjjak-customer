@@ -1205,11 +1205,6 @@ if($_SESSION['is_token'] == "1"){
         window.open("https://ceo.banjjakpet.com/","_blank", "");
     }
 
-    $('.app-download-link').on('click',function(){
-
-        alert($('.app-download-link').attr('href'));
-    })
-
 
     $(document).ready(function(){
 
@@ -1237,7 +1232,10 @@ if($_SESSION['is_token'] == "1"){
         })
 
 
+        $('.app-download-link').on('click',function(){
 
+            alert($('.app-download-link').attr('href'));
+        })
 
 
         if(getCookie_popup('anymore') !=='Y'){
