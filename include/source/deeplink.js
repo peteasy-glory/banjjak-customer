@@ -16,7 +16,7 @@ let other_browser = String(location.href).split('//');
 
 let visitedAt = (new Date()).getTime();
 
-
+alert("alert")
 $('.layer-pop-jack').click(function (event) {
     event.stopPropagation();
 
