@@ -1,3 +1,5 @@
+$(document).ready(function(){
+
 let user_agent = navigator.userAgent.toLowerCase();
 
 let split_url = String(location.href).split('/');
@@ -23,7 +25,7 @@ $('.layer-pop-jack').click(function (event) {
 })
 
 
-$(document).ready(function(){
+
 
 
     if(getCookie_popup('anymore') !=='Y'){
