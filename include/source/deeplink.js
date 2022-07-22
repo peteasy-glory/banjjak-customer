@@ -23,7 +23,7 @@ $('.layer-pop-jack').click(function (event) {
 })
 
 
-window.onload = function (){
+$(document).ready(function(){
 
     if(getCookie_popup('anymore') !=='Y'){
 
@@ -104,4 +104,4 @@ window.onload = function (){
             $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
         }
     }
-}
+})
