@@ -25,18 +25,18 @@ $('.layer-pop-jack').click(function (event) {
 
 $(document).ready(function(){
 
-    alert("document.ready");
+
     if(getCookie_popup('anymore') !=='Y'){
-        alert("anymore !==Y");
+
         if(user_agent.match(/iphone|ipad|ipod|safari/i)){ //ios 일때
-            alert("match ios");
+
 
 
             if(user_agent.match(/APP_GOBEAUTY_iOS/i)){ //ios app 일때
                 webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
-                alert("match ios app");
+
             }else{ //ios web 일때
-                alert("match ios web");
+               
                 setTimeout( // 앱이 있으면 앱으로
 
                     function(){
