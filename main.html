@@ -198,10 +198,14 @@ if($_SESSION['is_token'] == "1"){
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=21wrh1y95y&submodules=geocoder"></script>
 
 <script>
-    $('.layer-pop-jack').click(function (event) {
-        event.stopPropagation();
+    $(document).ready(function(){
 
+        $('.layer-pop-jack').click(function (event) {
+            event.stopPropagation();
+
+        })
     })
+
 
     // 팝업
     function getCookie_popup(name) {
