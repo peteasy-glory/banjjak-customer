@@ -495,11 +495,11 @@ if($mode){
     // 배송지 추가하기
     }else if($mode == "set_insert_customer_addr"){
         $r_customer_id	   = ($_POST["customer_id"] && $_POST["customer_id"] != "")? $_POST["customer_id"] : "";
-        $r_addr_name	   = ($_POST["addr_name"] && $_POST["addr_name"] != "")? $_POST["addr_name"] : "";
-        $r_road_addr	   = ($_POST["road_addr"] && $_POST["road_addr"] != "")? $_POST["road_addr"] : "";
-        $r_jibun_addr	   = ($_POST["jibun_addr"] && $_POST["jibun_addr"] != "")? $_POST["jibun_addr"] : "";
-        $r_extra_addr	   = ($_POST["extra_addr"] && $_POST["extra_addr"] != "")? $_POST["extra_addr"] : "";
-        $r_detail_addr	   = ($_POST["detail_addr"] && $_POST["detail_addr"] != "")? $_POST["detail_addr"] : "";
+        $r_addr_name	   = ($_POST["save_addr_name"] && $_POST["save_addr_name"] != "")? $_POST["save_addr_name"] : "";
+        $r_road_addr	   = ($_POST["addr1"] && $_POST["addr1"] != "")? $_POST["addr1"] : "";
+        $r_jibun_addr	   = ($_POST["addr2"] && $_POST["addr2"] != "")? $_POST["addr2"] : "";
+        $r_extra_addr	   = ($_POST["addr3"] && $_POST["addr3"] != "")? $_POST["addr3"] : "";
+        $r_detail_addr	   = ($_POST["addr4"] && $_POST["addr4"] != "")? $_POST["addr4"] : "";
         $r_zipcode		   = ($_POST["zipcode"] && $_POST["zipcode"] != "")? $_POST["zipcode"] : "1";
 
         $sql = "

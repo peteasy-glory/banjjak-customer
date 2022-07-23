@@ -186,7 +186,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
 					<label class="form-checkbox"><input type="checkbox" id="same_order_name" class="same_order_name" name=""><span class="form-check-icon"><em>주문자명과 동일</em></span></label>
 				</div>
 				<div class="form-group">
-                    <?php if($user_id == "itseokbeom@gmail.com"){ ?>
+                    <?php if($user_id != ''){ ?>
 					<div class="form-group-cell">
 						<div class="form-group-item">
 							<div class="form-item-label">배송지 선택</div>
@@ -200,7 +200,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
 						</div>
 					</div>
                     <div class="con-title-group save_addr_wrap" style="margin-bottom:25px">
-                        <input class="con-title" type="text" placeholder="주소명칭" style="width:55%;">
+                        <input class="con-title" type="text" id="save_addr_name" name="save_addr_name" placeholder="주소명칭" style="width:55%;">
                         <label class="form-checkbox"><input type="checkbox" id="save_addr" class="save_addr" name=""><span class="form-check-icon"><em>배송지 저장</em></span></label>
                     </div>
                     <?php } ?>
@@ -1646,6 +1646,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
         if(is_payment == false){
             is_payment = true; // 따닥방지
             direct_buy_cancel = false; // 결제시에는 바로구매 카트 삭제 안하게
+            save_addr();
             $.ajax({
                 type: 'post',
                 url: "item/item_list_ajax.php",
@@ -1841,6 +1842,32 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
             // 따닥방지
             is_payment = false;
         }
+    }
+
+    function save_addr(){
+        var post_data = $("#item_payment").serialize();
+        post_data += "&mode=set_insert_customer_addr";
+        $.ajax({
+            type: 'post',
+            url: "data/item_ajax.php",
+            data: post_data,
+            dataType: 'json',
+            error: function() {
+            },
+            success: function(json) {
+                if(json.code == "000000"){
+                    //console.log(json.data);
+
+                }else{
+                    alert(json.data+"("+json.code+")");
+                }
+            },
+            complete: function() {
+                // console.log('complete');
+                //서브밋 차단 해제
+                $("#loading").css("display","none");
+            }
+        });
     }
 
 
