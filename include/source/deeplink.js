@@ -1,3 +1,5 @@
+$(document).ready(function(){
+
 let user_agent = navigator.userAgent.toLowerCase();
 
 let split_url = String(location.href).split('/');
@@ -9,12 +11,11 @@ if(needed === ''){
     needed = 'main';
 }
 
-console.log(needed);
-
 
 let other_browser = String(location.href).split('//');
 
 let visitedAt = (new Date()).getTime();
+
 
 
 $('.layer-pop-jack').click(function (event) {
@@ -23,7 +24,7 @@ $('.layer-pop-jack').click(function (event) {
 })
 
 
-$(document).ready(function(){
+
 
 
     if(getCookie_popup('anymore') !=='Y'){
@@ -49,6 +50,10 @@ $(document).ready(function(){
 
 
                 $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
+                $('.app-download-link').on('click',function(){
+
+                    alert($('.app-download-link').attr('href'));
+                })
 
 
             }

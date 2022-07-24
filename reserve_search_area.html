@@ -9,6 +9,9 @@ $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_
 
 $r_tab = (isset($_GET['tab']))? $_GET['tab'] : "tab1";
 
+if ($_SESSION['backurl_home'] == null)
+    $_SESSION['backurl_home'] = 'main';
+
 ?>    
 
 <!-- header -->
