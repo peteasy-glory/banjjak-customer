@@ -1242,7 +1242,7 @@ if($_SESSION['is_token'] == "1"){
 
                 if(user_agent.match(/APP_GOBEAUTY_iOS/i)){ //ios app 일때
                     webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
-                    
+
                 }else{ //ios web 일때
 
                     setTimeout( // 앱이 있으면 앱으로
@@ -1263,6 +1263,8 @@ if($_SESSION['is_token'] == "1"){
 
             }else if(!user_agent.match(/kakao/i) && user_agent.match(/android/i)){ //안드로이드 일때
 
+                alert(user_agent);
+                
                 if(user_agent.match(/APP_GOBEAUTY_AND/i)){ // 안드로이드 app 일때
                     Banjjak_Android.SET_MoveMenu(idx, email);
                 }else{ // 안드로이드 web 일때
