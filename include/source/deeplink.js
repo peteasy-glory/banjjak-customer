@@ -74,6 +74,7 @@ alert(document.referrer);
 
     if(document.referrer === ''){
 
+        alert('리퍼러 = 없다')
     if(getCookie_popup('anymore') !=='Y') {
 
         if (user_agent.match(/iphone|ipad|ipod/i)) { //ios 일때
