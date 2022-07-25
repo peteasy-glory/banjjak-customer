@@ -72,7 +72,7 @@ if (user_agent.match(/iphone|ipad|ipod/i)) {
 
 
 
-    // if(document.referrer === ''){
+    if(document.referrer === ''){
 
     if(getCookie_popup('anymore') !=='Y') {
 
@@ -145,4 +145,4 @@ if (user_agent.match(/iphone|ipad|ipod/i)) {
         }
 
     }
-// }
+}
