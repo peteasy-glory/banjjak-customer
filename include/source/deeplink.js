@@ -2,12 +2,16 @@ let user_agent = navigator.userAgent.toLowerCase();
 
 
 
-let needed = location.pathname + location.search;
+let needed ;
 
 if(location.pathname === '/'){
 
     needed = '/main';
+}else{
+
+    needed = location.pathname + location.search;
 }
+
 
 
 let other_browser = String(location.href).split('//');
@@ -44,11 +48,31 @@ $('.layer-pop-jack').click(function (event) {
 
 
 
+if (user_agent.match(/iphone|ipad|ipod/i)) {
+
+    $('.app-download-link').on('click',function (){
+
+        location.href = `banjjakpet:/${needed}`;
+        setTimeout(function(){
+            location.href = `itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194`;
+
+        },1500)
+    })
+}else{
+
+    $('.app-download-link').on('click',function(){
+
+        location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
+
+    })
+
+}
 
 
 
 
 
+    if(document.referrer === ''){
 
     if(getCookie_popup('anymore') !=='Y') {
 
@@ -70,7 +94,7 @@ $('.layer-pop-jack').click(function (event) {
                     , 300);
 
 
-                $('.app-download-link').attr('href', 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
+
 
 
             }
@@ -86,12 +110,12 @@ $('.layer-pop-jack').click(function (event) {
 
                     if ((new Date()).getTime() - visitedAt < 2000) {
 
-                        location.href = `banjjakpet:/${needed}`;
+                        location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
                     }
 
                 }, 300);
 
-                $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty')
+
 
             }
 
@@ -104,7 +128,7 @@ $('.layer-pop-jack').click(function (event) {
 
                 if (new Date().getTime() - visitedAt < 2000) {
 
-                    location.href = `banjjakpet:/${needed}`;
+                    location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
                 }
 
             }, 300);
@@ -117,7 +141,8 @@ $('.layer-pop-jack').click(function (event) {
 
             }, 500);
 
-            $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
+
         }
 
     }
+}
