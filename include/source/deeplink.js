@@ -53,6 +53,7 @@ $('.layer-pop-jack').click(function (event) {
 
 
 
+if(document.referrer === ''){
 
     if(getCookie_popup('anymore') !=='Y') {
 
@@ -125,3 +126,4 @@ $('.layer-pop-jack').click(function (event) {
         }
 
     }
+}

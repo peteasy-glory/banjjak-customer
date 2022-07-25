@@ -252,7 +252,7 @@ $thumb_nail = substr($img_array[0]['file_path'],4)
         function setCookie_popup(name, value, expiredays) {
             var todayDate = new Date();
             todayDate.setDate(todayDate.getDate() + expiredays);
-            document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure ';
+            document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + ';';
         }
 
     </script>

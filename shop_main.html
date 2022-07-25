@@ -149,7 +149,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
     function setCookie_popup(name, value, expiredays) {
         var todayDate = new Date();
         todayDate.setDate(todayDate.getDate() + expiredays);
-        document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure ';
+        document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; ';
     }
 
 
