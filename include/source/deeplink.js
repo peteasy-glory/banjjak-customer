@@ -2,12 +2,16 @@ let user_agent = navigator.userAgent.toLowerCase();
 
 
 
-let needed = location.pathname + location.search;
+let needed ;
 
 if(location.pathname === '/'){
 
     needed = '/main';
+}else{
+
+    needed = location.pathname + location.search;
 }
+
 
 
 let other_browser = String(location.href).split('//');
