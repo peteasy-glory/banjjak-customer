@@ -50,10 +50,7 @@ $('.layer-pop-jack').click(function (event) {
 
 
                 $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
-                $('.app-download-link').on('click',function(){
-
-                    alert($('.app-download-link').attr('href'));
-                })
+                
 
 
             }
