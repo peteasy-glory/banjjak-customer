@@ -410,7 +410,37 @@ $INI_url = array(
                             ?>
                         </div>
                     </div>
-                    <div class="basic-data-group vvsmall3">
+
+                    <!-- 포인트사용 -->
+                    <div style="padding: 20px;border: 1px solid #ebebeb;border-radius: 12px;">
+                        <div class="con-title-group point1" style="">
+                            <h5 class="con-title">포인트사용</h5>
+                        </div>
+                        <div class="form-point">
+                            <div class="form-point-info point2" style="">사용가능 포인트 : <span class="point_score"></span>원</div>
+                            <div class="form-point-input point3" style="">
+                                <input type="number" name="point_price" class="point" placeholder="">
+                                <div class="char">원</div>
+                                <button type="button" class="btn btn-outline-gray btn-round btn-inline point_use">전액 사용</button>
+                            </div>
+                            <!-- 회원 할인 -->
+                            <div class="form-point-sale point4" style="">첫 구매 자동 3,000원 할인!</div>
+                            <!-- //회원 할인 -->
+                            <div class="price-data-wrap">
+                                <div class="price-data-group">
+                                    <div class="price-data-list">
+                                        <div class="price-data-list-cell middle">
+                                            <div class="price-data-list-title">총 결제예정 금액</div>
+                                            <div class="price-data-list-value"><strong class="font-color-purple total_pay_price">원</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //포인트사용 -->
+
+                    <div class="basic-data-group vvsmall3" style="margin-top:15px;">
                         <div class="tab-data-group">
                             <!-- tab-data-cell 클래스에 actived클래스 추가시 활성화 -->
                             <!-- 매장결제 -->
