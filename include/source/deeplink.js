@@ -48,12 +48,31 @@ $('.layer-pop-jack').click(function (event) {
 
 
 
+if (user_agent.match(/iphone|ipad|ipod/i)) {
+
+    $('.app-download-link').on('click',function (){
+
+        location.href = `banjjakpet:/${needed}`;
+        setTimeout(function(){
+            location.href = `itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194`;
+
+        },1500)
+    })
+}else{
+
+    $('.app-download-link').on('click',function(){
+
+        location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
+
+    })
+
+}
 
 
 
 
 
-if(document.referrer === ''){
+    if(document.referrer === ''){
 
     if(getCookie_popup('anymore') !=='Y') {
 
@@ -75,7 +94,7 @@ if(document.referrer === ''){
                     , 300);
 
 
-                $('.app-download-link').attr('href', 'itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
+
 
 
             }
@@ -96,7 +115,7 @@ if(document.referrer === ''){
 
                 }, 300);
 
-                $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty')
+
 
             }
 
@@ -122,7 +141,7 @@ if(document.referrer === ''){
 
             }, 500);
 
-            $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
+
         }
 
     }
