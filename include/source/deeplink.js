@@ -55,7 +55,7 @@ $(document).ready(function(){
 
         $('.app-download-link').on('click',function (){
 
-            location.href = `banjjakpet:/${needed}`;
+            location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
 
             setTimeout(()=>{
 
