@@ -194,6 +194,7 @@ if($mode){
         $total_price = ($_POST["total_price"] && $_POST["total_price"] != "")? $_POST["total_price"] : "";
         $bank = ($_POST["bank"] && $_POST["bank"] != "")? $_POST["bank"] : "";
         $expire_time = ($_POST["expire_time"] && $_POST["expire_time"] != "")? $_POST["expire_time"] : "";
+        $spend_point = ($_POST["spend_point"] && $_POST["spend_point"] != "")? $_POST["spend_point"] : ""; // 포인트 사용 금액
 
 
         if($artist_id != "" && $cellphone != ""){

@@ -412,9 +412,10 @@ $INI_url = array(
                     </div>
 
                     <!-- 포인트사용 -->
-                    <div style="padding: 20px;border: 1px solid #ebebeb;border-radius: 12px;">
+                    <div class="point_wrap" style="padding: 20px;border: 1px solid #ebebeb;border-radius: 12px; display: none;">
                         <div class="con-title-group point1" style="">
                             <h5 class="con-title">포인트사용</h5>
+                            <input type="hidden" class="before_point" value="">
                         </div>
                         <div class="form-point">
                             <div class="form-point-info point2" style="">사용가능 포인트 : <span class="point_score"></span>원</div>
@@ -423,9 +424,6 @@ $INI_url = array(
                                 <div class="char">원</div>
                                 <button type="button" class="btn btn-outline-gray btn-round btn-inline point_use">전액 사용</button>
                             </div>
-                            <!-- 회원 할인 -->
-                            <div class="form-point-sale point4" style="">첫 구매 자동 3,000원 할인!</div>
-                            <!-- //회원 할인 -->
                             <div class="price-data-wrap">
                                 <div class="price-data-group">
                                     <div class="price-data-list">
@@ -670,6 +668,7 @@ $INI_url = array(
 <!-- //카드결제 위한 form -->
 <script>
 
+    var customer_id = "<?=$user_id?>";
     var pet_type = "<?=$pet_type?>";
     var empty_session = "<?=$_SESSION['empty']?>";
 
@@ -803,6 +802,7 @@ $INI_url = array(
         var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price
                         + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
         var is_vat = ("<?=$is_vat?>" == '1')? 1 : 0;
+        var point_score = 0; // 보유 포인트
         var vat_price = 0;
         if(is_vat == 1){
             vat_price = total_price*0.1;
@@ -820,9 +820,13 @@ $INI_url = array(
                 result_price = result_price * ((100-empty_value)/100);
             }
         }
+
+        $(".before_point").val(result_price);
+
         if(total_price > 0){
             $("#total_price").html(total_price+"원");
             $("#result_price").html(result_price+"원");
+            $(".total_pay_price").html(result_price+"원"); // 포인트 하단 총 결제예정금액
             $("#total_price_cell").css("display","flex");
             $("#result_price_cell").css("display","flex");
 
@@ -841,6 +845,10 @@ $INI_url = array(
                $("#payment_now_tab").addClass("actived");
                $("#payment_shop").addClass("disabled");
                $("#payment_now").addClass("actived");
+
+               $('.point_wrap').css('display','block');
+
+               payment_type = 1;
            }else{
                $("#payment_shop_tab").removeClass("actived");
                $("#payment_shop").removeClass("actived");
@@ -851,6 +859,33 @@ $INI_url = array(
                $("#payment_now").addClass("disabled");
            }
        }
+
+       // 포인트 불러오기
+        $.ajax({
+            type: 'post',
+            url: "data/item_ajax.php",
+            data: {
+                mode: "get_customer_point",
+                customer_id: customer_id
+            },
+            dataType: 'json',
+            error: function() {
+            },
+            success: function(json) {
+                if(json.code == "000000"){
+                    console.log(json.data);
+                    $("#container .point_score").html('').html(Math.round(json.data).format());
+                    point_score = json.data;
+                }else{
+                    //alert(json.data+"("+json.code+")");
+                }
+            },
+            complete: function() {
+                // console.log('complete');
+                //서브밋 차단 해제
+                //$("#loading").css("display","none");
+            }
+        });
     });
 
     function clickPayment(type){
@@ -863,6 +898,8 @@ $INI_url = array(
             $("#payment_shop").addClass("disabled");
             $("#payment_now").addClass("actived");
 
+            $('.point_wrap').css('display','block');
+
             payment_type = 1;
         }else if(type == 'shop'){
             $("#payment_now_tab").removeClass("actived");
@@ -873,9 +910,80 @@ $INI_url = array(
             $("#payment_now").addClass("disabled");
             $("#payment_shop").addClass("actived");
 
+            $('.point_wrap').css('display','none');
+
             payment_type = 0;
         }
     }
+
+    ////////////// 포인트 시작
+
+    // 포인트 입력 keyup
+    $(document).on("keyup", "#container input[name='point_price']", function(){
+        console.log("keyup");
+        var _this = $(this);
+        var point_price = parseInt(_this.val());
+        var product_price = parseInt($(".before_point").val());
+        var shipping_price = 0;
+        var total_price = product_price + shipping_price;
+
+        if(point_price > point_score){
+            if(point_score >= total_price){
+                point_price = total_price;
+            }else{
+                point_price = point_score;
+            }
+        }else{
+            if(point_price > total_price){
+                point_price = total_price;
+            }
+        }
+
+        _this.val(point_price);
+        total_price_calculator(); // 결제금액 계산
+    });
+
+    // 포인트 전부 사용
+    $(document).on("click", "#container .point_use", function(){
+        var product_price = parseInt($(".before_point").val());
+        var total_price = product_price;
+        //console.log(total_price, point_score);
+        var point = 0;
+
+        if(point_score > 0){ // 포인트 여부
+            if(point_score >= total_price){
+                point = total_price;
+            }else{
+                point = point_score;
+            }
+        }
+
+        $("#container input[name='point_price']").val(point);
+        total_price_calculator(); // 결제금액 계산
+    });
+
+    // 포인트 계산
+    function total_price_calculator(){
+        var product_price = parseInt($(".before_point").val());
+        var point_price = parseInt($("#container input[name='point_price']").val());
+        var total_price = 0;
+
+        total_price = product_price - point_price;
+        if(total_price <= 0){
+            total_price = 0;
+        }
+
+        if(isNaN(total_price)){
+            total_price = product_price;
+        }
+
+        result_price = total_price;
+        console.log(result_price);
+
+        $("#container .total_pay_price").text(total_price.format()+"원");
+    }
+
+    ////////////// 포인트 끝
 
     // 예약 신청하기
     function submit_reserve(){
@@ -973,6 +1081,7 @@ $INI_url = array(
                 product : product,
                 cellphone : "<?=$user_cellphone?>",
                 total_price : result_price,
+                spend_point : $("#container input[name='point_price']").val(),
                 bank : bank_name,
                 expire_time : "<?=$expire_time?>"
             },
@@ -1014,6 +1123,7 @@ $INI_url = array(
                 to_minute : end_minute,
                 product : product,
                 cellphone : "<?=$user_cellphone?>",
+                spend_point : $("#container input[name='point_price']").val(),
                 total_price : result_price
             },
             type : 'POST',
@@ -1196,6 +1306,25 @@ $INI_url = array(
         return true;
     }
 
+    // 세자리 숫자 콤마
+    Number.prototype.format = function() {
+        if (this == 0) return 0;
+
+        var reg = /(^[+-]?\d+)(\d{3})/;
+        var n = (this + '');
+
+        while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+
+        return n;
+    };
+
+    // 문자열 타입에서 쓸 수 있도록 format() 함수 추가
+    String.prototype.format = function() {
+        var num = parseFloat(this);
+        if (isNaN(num)) return "0";
+
+        return num.format();
+    };
 
 </script>
 
