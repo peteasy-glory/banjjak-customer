@@ -1,6 +1,6 @@
 let user_agent = navigator.userAgent.toLowerCase();
 
-let lo_href = location.href;
+let lo_href = document.location.href;
 let split_url = lo_href.split('/');
 
 let needed = split_url.slice(-1)[0];
