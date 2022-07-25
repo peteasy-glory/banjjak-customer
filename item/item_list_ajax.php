@@ -1715,10 +1715,22 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 									AND TYPE = 'EVENT' AND event_name LIKE 'PAYM_1ODR_%'
 								";
 								$first_result = mysqli_query($connection, $first_sql);
+								$first_row = mysqli_fetch_assoc($first_result);
 								$first_count = mysqli_num_rows($first_result);
 
+								// 첫구매 할인일때!!!!!!!!!!!!!!!!!!!!!
 								if($first_count > 0){
-									// 첫구매 할인일때!!!!!!!!!!!!!!!!!!!!!
+
+									// 총 사용 포인트에서 되돌려줄 포인트 계산(첫구매 할인 들어간 포인트 제외)
+									$spending_accumulate_point = $spending_accumulate_point - $first_row['adding_point'];
+
+									// 첫구매로 적립된 포인트 취소되었다는 표시 하기
+									$update_sql = "
+										UPDATE tb_point_history SET
+										order_id = 'cancel_{$r_order_num}'
+										WHERE point_history_seq = {$first_row['point_history_seq']};
+									";
+									$update_result = mysqli_query($connection, $update_sql);
 								}
 
 
@@ -1771,6 +1783,14 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 									$tracking_result = mysqli_query($connection, $tracking_sql);
 								}
 							}
+
+							// tb_tracking_point_history 취소표시하기
+							$update_history_sql = "
+								UPDATE tb_tracking_point_history SET
+								pay_status = 1
+								WHERE idx = {$history_row['idx']}
+							";
+							$update_history_result = mysqli_query($connection, $update_history_sql);
 						}
 
 						// 포인트 환불 완료 update

@@ -352,7 +352,8 @@ class Point
         FROM tb_point_history 
         WHERE customer_id = '" . $this->customer_id . "' 
         AND payment_log_seq = '" . $payment_log_seq . "' 
-        AND type = 'ACCUMLATE';";
+        AND type = 'ACCUMLATE'
+        AND NOT order_id like 'cancel_%';";
         // error_log('----- cancel_accumulate_new/ $sql : '.$sql);
         $result = mysqli_query($connection, $sql);
         if ($row = mysqli_fetch_object($result)) {
