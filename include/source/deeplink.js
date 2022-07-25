@@ -1,13 +1,12 @@
 let user_agent = navigator.userAgent.toLowerCase();
 
-let lo_href = document.location.href;
-let split_url = lo_href.split('/');
 
-let needed = split_url.slice(-1)[0];
 
-if(needed === ''){
+let needed = location.pathname + location.search;
 
-    needed = 'main';
+if(location.pathname === '/'){
+
+    needed = '/main';
 }
 
 
@@ -65,7 +64,7 @@ $('.layer-pop-jack').click(function (event) {
 
                     function () {
                         if ((new Date()).getTime() - visitedAt < 2000) {
-                            location.href = `banjjakpet://${needed}`;
+                            location.href = `banjjakpet:/${needed}`;
                         }
                     }
                     , 300);
@@ -87,7 +86,7 @@ $('.layer-pop-jack').click(function (event) {
 
                     if ((new Date()).getTime() - visitedAt < 2000) {
 
-                        location.href = `banjjakpet://${needed}`;
+                        location.href = `banjjakpet:/${needed}`;
                     }
 
                 }, 300);
@@ -105,7 +104,7 @@ $('.layer-pop-jack').click(function (event) {
 
                 if (new Date().getTime() - visitedAt < 2000) {
 
-                    location.href = `banjjakpet://${needed}`;
+                    location.href = `banjjakpet:/${needed}`;
                 }
 
             }, 300);
