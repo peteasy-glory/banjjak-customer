@@ -58,7 +58,7 @@ if (user_agent.match(/iphone|ipad|ipod/i)) {
 
         setTimeout(()=>{
 
-            location.href = `itms-apps://itunes.apple.com/developer/id1436568194`;
+            location.href = `itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194`;
         },1500)
 
     })
