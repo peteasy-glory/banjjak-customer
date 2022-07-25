@@ -50,11 +50,16 @@ $('.layer-pop-jack').click(function (event) {
 
 if (user_agent.match(/iphone|ipad|ipod/i)) {
 
+
+
+
     $('.app-download-link').on('click',function (){
+
+        $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
 
         location.href = `banjjakpet:/${needed}`;
         setTimeout(function(){
-            location.href = `itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194`;
+            $(this).unbind('click').click();
 
         },1500)
     })
