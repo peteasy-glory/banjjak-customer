@@ -46,13 +46,6 @@ $('.layer-pop-jack').click(function (event) {
 
 })
 
-function promise(){
-        return new Promise((resolve,reject) =>{
-
-           resolve( $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194'));
-
-    })
-}
 
 if (user_agent.match(/iphone|ipad|ipod/i)) {
 
@@ -61,26 +54,12 @@ if (user_agent.match(/iphone|ipad|ipod/i)) {
 
     $('.app-download-link').on('click',function (){
 
-
-
         location.href = `banjjakpet:/${needed}`;
 
+        setTimeout(()=>{
 
-
-
-            promise().then(
-                setTimeout(function(){
-
-                    $(this).unbind('click').click()
-
-                },1000)
-
-
-            )
-
-
-
-
+            location.href = `itms-apps://itunes.apple.com/developer/id1436568194`;
+        },1500)
 
     })
 }else{
