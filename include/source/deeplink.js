@@ -2,7 +2,7 @@ let user_agent = navigator.userAgent.toLowerCase();
 
 let split_url = String(location.href).split('/');
 
-let needed = split_url.at(-1);
+let needed = split_url[split_url.length-1];
 
 if(needed === ''){
 
@@ -52,7 +52,7 @@ $('.layer-pop-jack').click(function (event) {
 
     if(getCookie_popup('anymore') !=='Y') {
 
-        if (user_agent.match(/iphone|ipad|ipod|safari/i)) { //ios 일때
+        if (user_agent.match(/iphone|ipad|ipod/i)) { //ios 일때
 
 
             if (user_agent.match(/APP_GOBEAUTY_iOS/i)) { //ios app 일때
