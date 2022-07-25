@@ -233,7 +233,53 @@ if($mode){
         }
 
     // 카드결제
-    }else if($mode == "payment_card"){
+    }else if($mode == "payment_card") {
+
+        $user_id = $_SESSION['gobeauty_user_id'];
+        $order_id = ($_POST["order_id"] && $_POST["order_id"] != "") ? $_POST["order_id"] : "";
+        $pet_seq = ($_POST["pet_seq"] && $_POST["pet_seq"] != "") ? $_POST["pet_seq"] : "";
+        $artist_id = ($_POST["artist_id"] && $_POST["artist_id"] != "") ? $_POST["artist_id"] : "";
+        $is_vat = ($_POST["is_vat"] && $_POST["is_vat"] != "") ? $_POST["is_vat"] : 0;
+        $worker = ($_POST["worker"] && $_POST["worker"] != "") ? $_POST["worker"] : "";
+        $year = ($_POST["year"] && $_POST["year"] != "") ? $_POST["year"] : "";
+        $month = ($_POST["month"] && $_POST["month"] != "") ? $_POST["month"] : "";
+        $day = ($_POST["day"] && $_POST["day"] != "") ? $_POST["day"] : "";
+        $hour = ($_POST["hour"] && $_POST["hour"] != "") ? $_POST["hour"] : "";
+        $to_hour = ($_POST["to_hour"] && $_POST["to_hour"] != "") ? $_POST["to_hour"] : "";
+        $minute = ($_POST["minute"] && $_POST["minute"] != "") ? $_POST["minute"] : "";
+        $to_minute = ($_POST["to_minute"] && $_POST["to_minute"] != "") ? $_POST["to_minute"] : "";
+        $product = ($_POST["product"] && $_POST["product"] != "") ? $_POST["product"] : "";
+        $cellphone = ($_POST["cellphone"] && $_POST["cellphone"] != "") ? $_POST["cellphone"] : "";
+        $total_price = ($_POST["total_price"] && $_POST["total_price"] != "") ? $_POST["total_price"] : "";
+
+
+        if ($artist_id != "" && $cellphone != "") {
+            $sql = "INSERT INTO `tb_payment_log` (
+                        pet_seq, is_vat, go_2_offline, is_only_point, total_price,
+                        session_id, order_id, artist_id, worker, customer_id, status, 
+                        year, month, day, hour, to_hour, minute , to_minute , is_cancel, 
+                        product, cellphone, pay_type, per_diem, update_time, buy_time
+                    ) values (
+                        " . $pet_seq . ", " . $is_vat . ", 1, 0, '" . $total_price . "', 
+                        '" . $sessionid . "', '" . $order_id . "','" . $artist_id . "','" . $worker . "', '" . $user_id . "', 'R0', 
+                        " . $year . "," . $month . "," . $day . ", " . $hour . ",'" . $to_hour . "'," . $minute . ",'" . $to_minute . "', 1,
+                        '" . $product . "', '" . $cellphone . "', 'card', 0, now(), now()
+                    )";
+            $result = mysqli_query($connection, $sql);
+            $seq = mysqli_insert_id($connection);
+
+
+            if ($result === true) { // success
+                $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
+            } else { // fail
+                $return_data = array("code" => "000000", "data" => "fail");
+            }
+        } else { // fail
+            $return_data = array("code" => "000000", "data" => "fail");
+        }
+
+    // 포인트로 결제
+    }else if($mode == 'payment_point'){
 
         $user_id = $_SESSION['gobeauty_user_id'];
         $order_id = ($_POST["order_id"] && $_POST["order_id"] != "")? $_POST["order_id"] : "";
@@ -251,23 +297,42 @@ if($mode){
         $product = ($_POST["product"] && $_POST["product"] != "")? $_POST["product"] : "";
         $cellphone = ($_POST["cellphone"] && $_POST["cellphone"] != "")? $_POST["cellphone"] : "";
         $total_price = ($_POST["total_price"] && $_POST["total_price"] != "")? $_POST["total_price"] : "";
+        $bank = ($_POST["bank"] && $_POST["bank"] != "")? $_POST["bank"] : "";
+        $expire_time = ($_POST["expire_time"] && $_POST["expire_time"] != "")? $_POST["expire_time"] : "";
+        $spend_point = ($_POST["spend_point"] && $_POST["spend_point"] != "")? $_POST["spend_point"] : ""; // 포인트 사용 금액
+        // 포인트로만 구매했을 때
+        if($total_price == $spend_point){
+            $is_only_point = 1;
+        }else{
+            $is_only_point = 0;
+        }
 
 
         if($artist_id != "" && $cellphone != ""){
             $sql = "INSERT INTO `tb_payment_log` (
-                        pet_seq, is_vat, go_2_offline, is_only_point, total_price,
+                        pet_seq, is_vat, go_2_offline, is_only_point, total_price, bank,
                         session_id, order_id, artist_id, worker, customer_id, status, 
-                        year, month, day, hour, to_hour, minute , to_minute , is_cancel, 
-                        product, cellphone, pay_type, per_diem, update_time, buy_time
+                        year, month, day, hour, to_hour, minute , to_minute , is_able_to_cancel, 
+                        product, cellphone, pay_type, per_diem, update_time, buy_time, expire_time
                     ) values (
-                        ".$pet_seq.", ".$is_vat.", 1, 0, '".$total_price."', 
-                        '".$sessionid."', '".$order_id."','".$artist_id."','".$worker."', '".$user_id."', 'R0', 
-                        ".$year.",".$month.",".$day.", ".$hour.",'".$to_hour."',".$minute.",'".$to_minute."', 1,
-                        '".$product."', '".$cellphone."', 'card', 0, now(), now()
+                        ".$pet_seq.", ".$is_vat.", 1, ".$is_only_point.", '".$total_price."', '".$bank."', 
+                        '".$sessionid."', '".$order_id."','".$artist_id."','".$worker."', '".$user_id."', 'BR', 
+                        ".$year.",".$month.",".$day.", ".$hour.",'".$to_hour."',".$minute.",'".$to_minute."', 0,
+                        '".$product."', '".$cellphone."', 'bank', 0, now(), now(), '".$expire_time."'
                     )";
             $result = mysqli_query($connection, $sql);
             $seq = mysqli_insert_id($connection);
 
+
+
+            // 알림톡 발송 / PUSH 발송
+            $artist_name = explode("|", $product);
+            $artist_name = $artist_name[2];
+            $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy=".$year."&mm=".$month."&dd=".$day;
+            //$image = "https://www.gopet.kr/pet/images/logo_login.jpg";
+            $image = "";
+            $admin_message = $user_id."가 펫샵(".$artist_id." | ".$artist_name.")에 예약(계좌이체 결제 진행중)하였습니다. ".$year."년".$month."월".$day."일 신규 예약등록. 작업스케줄을 관리하세요.";
+            a_push("pickmon@pickmon.com", "반짝, 반려생활의 단짝. 신규 예약 알림", $admin_message, $path, $image);
 
             if ($result === true){ // success
                 $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);

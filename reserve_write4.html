@@ -913,6 +913,27 @@ $INI_url = array(
             $('.point_wrap').css('display','none');
 
             payment_type = 0;
+
+            // 포인트 사용 0으로 되돌리기
+            var point_price = 0;
+            var product_price = parseInt($(".before_point").val());
+            var shipping_price = 0;
+            var total_price = product_price + shipping_price;
+
+            if(point_price > point_score){
+                if(point_score >= total_price){
+                    point_price = total_price;
+                }else{
+                    point_price = point_score;
+                }
+            }else{
+                if(point_price > total_price){
+                    point_price = total_price;
+                }
+            }
+
+            $("#container input[name='point_price']").val(point_price);
+            total_price_calculator(); // 결제금액 계산
         }
     }
 
@@ -980,6 +1001,7 @@ $INI_url = array(
         result_price = total_price;
         console.log(result_price);
 
+        $("#inicis_result_price").val(result_price);
         $("#container .total_pay_price").text(total_price.format()+"원");
     }
 
@@ -1047,9 +1069,21 @@ $INI_url = array(
                     if(type == 'shop'){
                         paymentShop();
                     }else if(type == 'bank'){
-                        paymentNowBank();
+                        if(result_price == $("#container input[name='point_price']").val()){
+                            // 포인트로만 결제
+                            paymentPoint();
+                        }else{
+                            // 계좌이체
+                            paymentNowBank();
+                        }
                     }else if(type == 'card'){
-                        paymentNowCard();
+                        if(result_price == $("#container input[name='point_price']").val()){
+                            // 포인트로만 결제
+                            paymentPoint();
+                        }else{
+                            // 카드결제
+                            paymentNowCard();
+                        }
                     }else{
                         alert("error");
                     }
@@ -1177,6 +1211,49 @@ $INI_url = array(
                 }else{
                     alert("예약과정에서 에러가 났습니다. 메인페이지로 이동합니다.");
                     location.replace('main');
+                    console.log(data.data);
+                }
+            }
+        });
+    }
+
+    // 포인트로만 결제
+    function paymentPoint(){
+        console.log("포인트");
+        var bank_name = $("#bank_name").val();
+        $.ajax({
+            url: '/data/reserve_payment_ajax.php',
+            data : {
+                mode : "payment_point",
+                pet_seq : "<?=$pet_seq?>",
+                artist_id : "<?=$artist_id?>",
+                order_id : "<?=$order_id?>",
+                is_vat : is_vat,
+                worker : timeResultArray[0].worker,
+                year : year,
+                month : month,
+                day : day,
+                hour : start_hour,
+                to_hour : end_hour,
+                minute : start_minute,
+                to_minute : end_minute,
+                product : product,
+                cellphone : "<?=$user_cellphone?>",
+                total_price : result_price,
+                spend_point : $("#container input[name='point_price']").val(),
+                bank : bank_name,
+                expire_time : "<?=$expire_time?>"
+            },
+            type : 'POST',
+            dataType: 'JSON',
+            success: function(data){
+                if(data.data == "ok"){
+                    console.log("sucess");
+                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=bank&bank_name=${bank_name}&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+                }else if(data.data == 'fail'){
+                    console.log("fail");
+                }else{
+                    console.log("???");
                     console.log(data.data);
                 }
             }
