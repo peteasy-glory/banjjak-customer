@@ -106,6 +106,7 @@ alert(document.referrer);
                 Banjjak_Android.SET_MoveMenu(idx, email);
             } else { // 안드로이드 web 일때
 
+                alert("여기까지왔다");
 
                 setTimeout(function () {
 
