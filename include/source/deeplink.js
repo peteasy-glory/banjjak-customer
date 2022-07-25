@@ -114,7 +114,7 @@ if (user_agent.match(/iphone|ipad|ipod/i)) {
 
                     if ((new Date()).getTime() - visitedAt < 2000) {
 
-                        location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
+                        location.href = `banjjakpet:/${needed}`;
                     }
 
                 }, 300);
