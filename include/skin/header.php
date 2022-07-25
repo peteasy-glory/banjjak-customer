@@ -7,6 +7,7 @@
 	<meta name="format-detection" content="telephone=no">
     <meta name="facebook-domain-verification" content="663zro6ll5klfq6g4wte3d8w4ky8ps" />
     <meta property="og:description" content="미용•쇼핑•산책부터 반려 생활의 모든 것은 반짝에서!">
+    <meta property="og:image" content="https://image.banjjakpet.com/images/meta_main.jpg">
     <link rel="shortcut icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.ico" />
     <link rel="icon" type="image/x-icon" href="https://www.gopet.kr/pet/ico/favicon.png" />
 	<link href="/static/pub/css/reset.css?v=<?=$cssVersion?>" rel="stylesheet"/>
