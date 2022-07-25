@@ -1,8 +1,9 @@
 let user_agent = navigator.userAgent.toLowerCase();
 
-let split_url = String(location.href).split('/');
+let lo_href = location.href;
+let split_url = lo_href.split('/');
 
-let needed = split_url[split_url.length-1];
+let needed = split_url.slice(-1)[0];
 
 if(needed === ''){
 
