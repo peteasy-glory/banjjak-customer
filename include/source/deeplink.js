@@ -111,7 +111,7 @@ alert(document.referrer);
 
                     if ((new Date()).getTime() - visitedAt < 2000) {
 
-                        location.href = `banjjakpet:/${needed}`;
+                        location.href = `intent:/${needed}#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
                     }
 
                 }, 300);
