@@ -168,15 +168,68 @@ if (intval($spend_point) > 0) {
         // error_log('----- $csql222 : ' . $csql);
         $cresult = mysqli_query($connection,$csql);
     }
+
+    // 산책포인트 사용여부 확인
+    $history_sql = "
+        SELECT * FROM tb_tracking_point_history
+        WHERE payment_seq = {$payment_log_seq}
+        AND pay_type = 0
+    ";
+    $history_result = mysqli_query($connection, $history_sql);
+    $history_row = mysqli_fetch_assoc($history_result);
+    $history_count = mysqli_num_rows($history_result);
+
+    // 산책포인트를 사용했다면
+    if($history_count > 0){
+        $used_sql = "
+            SELECT * FROM tb_tracking_point_used
+            WHERE history_idx = {$history_row['idx']}
+        ";
+        $used_result = mysqli_query($connection, $used_sql);
+        while ($used_row = mysqli_fetch_object($used_result)){
+
+            // 기간 조회해서 돌려줄지말지 select 먼저 해야함
+            $tracking_select_sql = "
+                SELECT * FROM tb_tracking_mgr
+                WHERE idx = {$used_row->tracking_idx}
+                AND owner_id = '{$user_id}'
+                AND NOW() < date_add(st_date, INTERVAL 6 MONTH)
+            ";
+            $tracking_select_result = mysqli_query($connection, $tracking_select_sql);
+            $tracking_select_row = mysqli_fetch_assoc($tracking_select_result);
+            $tracking_select_count = mysqli_num_rows($tracking_select_result);
+
+            // 포인트 발생일로부터 6개월이 안지났을때
+            if($tracking_select_count > 0){
+                // tracking_mgr 포인트 되돌려주기
+                $tracking_sql = "
+                    UPDATE tb_tracking_mgr SET
+                    is_invalid_point = (is_invalid_point - {$used_row->point})
+                    WHERE idx = {$tracking_select_row['idx']}
+                    AND owner_id = '{$user_id}'
+                ";
+                $tracking_result = mysqli_query($connection, $tracking_sql);
+            }
+        }
+
+        // tb_tracking_point_history 취소표시하기
+        $update_history_sql = "
+            UPDATE tb_tracking_point_history SET
+            pay_status = 1
+            WHERE idx = {$history_row['idx']}
+        ";
+        $update_history_result = mysqli_query($connection, $update_history_sql);
+    }
+
 }
 
-//if ($is_only_point == 0 && $pay_type == 'card') {
-// 적립한 포인트 회수
-$load_result = $point->select_point($user_id);
-if ($load_result) {
-    $point->cancel_accumulate_new($payment_log_seq, $order_id);
+if ($is_only_point == 0 && $pay_type == 'card') {
+    // 적립한 포인트 회수
+    $load_result = $point->select_point($user_id);
+    if ($load_result) {
+        $point->cancel_accumulate_new($payment_log_seq, $order_id);
+    }
 }
-//}
 
 // 예약 취소하기
 $sql = "UPDATE tb_payment_log SET is_cancel = 1, cancel_time = NOW() WHERE payment_log_seq = '" . $payment_log_seq . "' AND artist_id = '" . $artist_id . "';";

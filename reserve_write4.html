@@ -1019,7 +1019,7 @@ $INI_url = array(
                 return false;
             }
             if($("input:radio[name=pay]:checked").val() == "pay2"){ // 무통장 입금일때
-                if($("#bank_name").val() == "" || !$("#bank_name").val()){
+                if(($("#bank_name").val() == "" || !$("#bank_name").val()) && result_price != 0){
                     alert("입금자명을 입력해주세요.");
                     return false;
                 }
@@ -1069,17 +1069,17 @@ $INI_url = array(
                     if(type == 'shop'){
                         paymentShop();
                     }else if(type == 'bank'){
-                        if(result_price == $("#container input[name='point_price']").val()){
+                        if(result_price == 0 && $(".before_point").val() == $("#container input[name='point_price']").val()){
                             // 포인트로만 결제
-                            paymentPoint();
+                            paymentPoint(type);
                         }else{
                             // 계좌이체
                             paymentNowBank();
                         }
                     }else if(type == 'card'){
-                        if(result_price == $("#container input[name='point_price']").val()){
+                        if(result_price == 0 && $(".before_point").val() == $("#container input[name='point_price']").val()){
                             // 포인트로만 결제
-                            paymentPoint();
+                            paymentPoint(type);
                         }else{
                             // 카드결제
                             paymentNowCard();
@@ -1218,9 +1218,8 @@ $INI_url = array(
     }
 
     // 포인트로만 결제
-    function paymentPoint(){
+    function paymentPoint(type){
         console.log("포인트");
-        var bank_name = $("#bank_name").val();
         $.ajax({
             url: '/data/reserve_payment_ajax.php',
             data : {
@@ -1241,15 +1240,15 @@ $INI_url = array(
                 cellphone : "<?=$user_cellphone?>",
                 total_price : result_price,
                 spend_point : $("#container input[name='point_price']").val(),
-                bank : bank_name,
-                expire_time : "<?=$expire_time?>"
+                expire_time : "<?=$expire_time?>",
+                pay_type : type
             },
             type : 'POST',
             dataType: 'JSON',
             success: function(data){
                 if(data.data == "ok"){
                     console.log("sucess");
-                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=bank&bank_name=${bank_name}&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=bank&bank_name=${type}&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
                 }else if(data.data == 'fail'){
                     console.log("fail");
                 }else{
