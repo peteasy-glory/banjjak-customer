@@ -69,7 +69,7 @@ if (user_agent.match(/iphone|ipad|ipod/i)) {
 }
 
 
-
+alert(document.referrer);
 
 
     if(document.referrer === ''){
