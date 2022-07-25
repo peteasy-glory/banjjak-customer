@@ -624,7 +624,7 @@ button.btn-text-button.btn-before-beauty.actived{background-image:url(../images/
 .wide-tab-inner .tab-cell.actived .btn-tab-item {color:#202020; font-weight:700;}
 .wide-tab-inner .tab-cell.actived .btn-tab-item:after {opacity:1;}
 .wide-tab-inner .tab-cell.hit .btn-tab-item > span:before {display:block;}
-.wide-tab.card {border-bottom:none; height:45px;}
+.wide-tab.card {border-bottom:none; height:45px;margin-bottom:15px;}
 .wide-tab.card .wide-tab-inner .tab-cell {position:relative; z-index:0;}
 .wide-tab.card .wide-tab-inner .tab-cell .btn-tab-item {background:#fff; font-size:14px; height:45px; border:1px solid #ebebeb;}
 .wide-tab.card .wide-tab-inner .tab-cell + .tab-cell {margin-left:-1px;}

@@ -90,13 +90,10 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
     </div>
 </article>
 
+
 <script>
 
 
-   $('.layer-pop-jack').click(function (event) {
-       event.stopPropagation();
-
-   })
 
     // 팝업
     function getCookie_popup(name) {
@@ -121,31 +118,6 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
         todayDate.setDate(todayDate.getDate() + expiredays);
         document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + '; SameSite=None; Secure ';
     }
-
-
-    let userAgent = navigator.userAgent;
-    //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
-   $(document).ready(function(){
-
-       if(!userAgent.match(/app_gobeauty_and/i) && !userAgent.match(/app_gobeauty_ios/i) && !userAgent.match(/windows/i)){
-
-           if(getCookie_popup('appDownloadpopup') !== 'Y'){
-
-               setTimeout(function(){
-                   // document.getElementById('appDownloadPopup').classList.add('actived');
-               },1500);
-           }
-
-
-
-       }
-
-
-       if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
-
-           document.getElementById('appDownloadTop').classList.remove('actived');
-       }
-   })
 
 </script>
 <!-- header -->
@@ -794,123 +766,11 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
 
 
 
-
-        let user_agent = navigator.userAgent.toLowerCase();
-
-        let split_url = String(location.href).split('/');
-
-        let needed = split_url.at(-1);
-
-        if(needed === ''){
-
-            needed = 'main';
-        }
-
-
-        let other_browser = String(location.href).split('//');
-
-        let visitedAt = (new Date()).getTime();
-
-
-
-        $('.layer-pop-jack').click(function (event) {
-            event.stopPropagation();
-
-        })
-
-
-
-
-
-        if(getCookie_popup('anymore') !=='Y'){
-
-            if(user_agent.match(/iphone|ipad|ipod|safari/i)){ //ios 일때
-
-
-
-                if(user_agent.match(/APP_GOBEAUTY_iOS/i)){ //ios app 일때
-                    webkit.messageHandlers.SET_MoveMenu.postMessage(idx, email);
-
-                }else{ //ios web 일때
-
-                    setTimeout( // 앱이 있으면 앱으로
-
-                        function(){
-                            if((new Date()).getTime() - visitedAt <2000){
-                                location.href = `banjjakpet://${needed}`;
-                            }
-                        }
-                        ,300);
-
-
-
-                    $('.app-download-link').attr('href','itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194');
-                    $('.app-download-link').on('click',function(){
-
-                        alert($('.app-download-link').attr('href'));
-                    })
-
-
-                }
-
-            }else if(!user_agent.match(/kakao/i) && user_agent.match(/android/i)){ //안드로이드 일때
-
-                if(user_agent.match(/APP_GOBEAUTY_AND/i)){ // 안드로이드 app 일때
-                    Banjjak_Android.SET_MoveMenu(idx, email);
-                }else{ // 안드로이드 web 일때
-
-
-                    setTimeout(function(){
-
-                        if((new Date()).getTime() - visitedAt < 2000){
-
-                            location.href = `banjjakpet://${needed}`;
-                        }
-
-                    },300);
-
-                    $('.app-download-link').attr('href','market://details?id=m.kr.gobeauty')
-
-                }
-
-
-
-
-
-
-
-            }else if(user_agent.match(/kakao/i) && user_agent.match(/android/i)){
-
-                // location.href = 'kakaotalk://inappbrowser/close';
-
-                setTimeout(function () {
-
-                    if (new Date().getTime() - visitedAt < 2000) {
-
-                        location.href = `banjjakpet://${needed}`;
-                    }
-
-                }, 300);
-
-                setTimeout(function(){
-
-
-
-                    location.href = `intent://${other_browser[1]}#Intent;scheme=http;package=com.android.chrome;end`;
-
-
-
-                },500);
-
-                $('.app-download-link').attr('href', 'market://details?id=m.kr.gobeauty');
-            }
-        }
-
-
-
 </script>
 
-<!--<script type="text/javascript"  src="./include/source/deeplink.js"></script>-->
+<script type="text/javascript"  src="./include/source/deeplink.js"></script>
+
+
 
 <?
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/footer.php");
