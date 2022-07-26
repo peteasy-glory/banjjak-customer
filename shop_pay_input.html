@@ -201,7 +201,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
 					</div>
                     <div class="con-title-group save_addr_wrap" style="margin-bottom:25px">
                         <input class="con-title" type="text" id="save_addr_name" name="save_addr_name" placeholder="주소명칭" style="width:55%;">
-                        <label class="form-checkbox"><input type="checkbox" id="save_addr" class="save_addr" name=""><span class="form-check-icon"><em>배송지 저장</em></span></label>
+                        <label class="form-checkbox"><input type="checkbox" id="save_addr" class="save_addr" name="save_addr"><span class="form-check-icon"><em>배송지 저장</em></span></label>
                     </div>
                     <?php } ?>
 					<div class="form-group-cell">
@@ -1638,6 +1638,14 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 return false;
             }
         }
+        if($("input:checkbox[name=save_addr]").is(":checked") == true){
+            if($("#save_addr_name").val() == ''){
+                $('#firstRequestMsg1').find('.msg-txt').text("저장할 배송지 명칭을 입력해주세요.");
+                pop.open("firstRequestMsg1");
+                _this.prop("disabled", false);
+                return false;
+            }
+        }
 
         var is_payment = false;
         var post_data = $("#item_payment").serialize();
@@ -1646,7 +1654,13 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
         if(is_payment == false){
             is_payment = true; // 따닥방지
             direct_buy_cancel = false; // 결제시에는 바로구매 카트 삭제 안하게
-            save_addr();
+            if($("input:checkbox[name=save_addr]").is(":checked") == true){
+                console.log('true');
+                save_addr();
+            }else{
+                console.log('false');
+            }
+            //save_addr();
             $.ajax({
                 type: 'post',
                 url: "item/item_list_ajax.php",

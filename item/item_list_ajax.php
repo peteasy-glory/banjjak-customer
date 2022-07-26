@@ -1811,8 +1811,8 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 					$pushImage = "";
 					$pushPayType = ($row["pay_type"] == "1")? "카드" : "계좌이체";
 					$admin_message = substr($row["cellphone"], -4) . "(".explode(",", $row["guest_info"])[1].")님이 [".$row["product_name"]."]을 상품결제취소(".$pushPayType."). 상품결제 관리를 확인하세요";
-					//a_push("pickmon@pickmon.com", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
-					//a_push("joseph@peteasy.kr", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
+					a_push("pickmon@pickmon.com", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
+					a_push("joseph@peteasy.kr", "반짝_상품결제취소알림(견주앱)", $admin_message, $pushPath, $pushImage);
 
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{
@@ -2260,8 +2260,8 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 					$pushImage = "";
 					$pushPayType = ($row["pay_type"] == "1")? "카드" : "계좌이체";
 					$admin_message = substr($row["cellphone"], -4) . "(".explode(",", $row["guest_info"])[1].")님이 [".$row["product_name"]."]을 구매(".$pushPayType."). 상품결제 관리를 확인하세요";
-					//a_push("pickmon@pickmon.com", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
-                    //a_push("joseph@peteasy.kr", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
+					a_push("pickmon@pickmon.com", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
+                    a_push("joseph@peteasy.kr", "반짝_상품구매알림(견주앱)", $admin_message, $pushPath, $pushImage);
 
 					$return_data = array("code" => "000000", "data" => "OK");
 				}else{

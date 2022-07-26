@@ -146,14 +146,27 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 						<!-- 리스트 내용 있을 때 -->
 						<div class="point-detail-list">
 							<?
-								$select_sql = "select * from tb_point_history 
-									where customer_id = '{$user_id}' 
-									and type = 'SPEND' 
-									order by update_time desc;";
+								$select_sql = "
+								    SELECT type, payment_log_seq, spending_point, update_time FROM tb_point_history WHERE customer_id = '{$user_id}' AND type = 'SPEND'
+                                    
+                                    UNION ALL
+                                    
+                                    (
+                                    SELECT 'walking' type, a.payment_seq payment_log_seq, sum(d.point) spending_point, mod_date update_time FROM tb_tracking_point_history a
+                                    LEFT JOIN tb_payment_log b ON a.payment_seq = b.payment_log_seq
+                                    LEFT JOIN tb_item_payment_log c ON a.payment_seq = c.ip_log_seq
+                                    LEFT JOIN tb_tracking_point_used d ON a.idx = d.history_idx
+                                    WHERE a.pay_status = 0
+                                    AND ( (b.customer_id = '{$user_id}' AND a.pay_type = 0)
+                                    OR (c.customer_id = '{$user_id}' AND a.pay_type = 1))
+                                    GROUP BY a.payment_seq
+                                    )
+                                    ORDER BY update_time DESC
+								";
 								$select_result = mysqli_query($connection, $select_sql);
 
 								for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
-									$event_name = $result_datas->event_name;
+									//$event_name = $result_datas->event_name;
 									$type = $result_datas->type;
 									//$adding_point = $result_datas->adding_point;
                                     $spending_point = $result_datas->spending_point;
@@ -182,7 +195,9 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
 
 									if($type == 'SPEND'){
 										$title = "사용";
-									}
+									}else if($type == 'walking'){
+                                        $title = "산책 사용";
+                                    }
 									
 							?>
 							<div class="point-detail-item">

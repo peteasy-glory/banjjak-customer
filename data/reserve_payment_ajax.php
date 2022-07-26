@@ -81,6 +81,7 @@ if($mode){
                 $grade_ord = $datas->grade_ord;
                 $customer_idx = $datas->idx;
 
+                // 회원등급 데이터가 없을때(예약승인으로 넘겨야함)
                 if($cnt == 0){
                     // 해당샵 gold 등급 찾아서 넣기
                     $find_sql = "SELECT idx FROM tb_grade_of_shop WHERE artist_id = '".$artist_id."' AND grade_ord = 2";
@@ -116,7 +117,8 @@ if($mode){
                     // 관리자 푸시
                     $admin_message = "{$cellphone}님({$pet_name})이 ({$shop_name})({$artist_id})에 승인요청";
                     a_push("pickmon@pickmon.com", "[예약승인요청]", $admin_message, "", $image);
-                }else{
+                }else{ // 데이터는 있을 때
+                    // vip 고객이 아닐경우(예약승인으로 등록)
                     if($grade_ord != 1){
 
                         $sql2 = "INSERT INTO `tb_grade_reserve_approval_mgr` (`payment_log_seq`, `grade_customer_idx`, `is_approve`, `mod_date`, `reg_date`, `is_delete`) VALUES (".$seq.", ".$customer_idx.", 0, NOW(), NOW(), 0);";
