@@ -39,7 +39,7 @@ let visitedAt = (new Date()).getTime();
 
 
 
-$(document).ready(function(){
+window.onload = function(){
 
     //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
     if(!!document.getElementById('appDownloadPopup')){
@@ -178,4 +178,4 @@ $(document).ready(function(){
         }
     }
 
-})
+}
