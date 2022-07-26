@@ -103,7 +103,7 @@ window.onload = function(){
 
 
 
-    if(document.referrer === '' || document.referrer.match(/naver/i)){
+    if(!document.referrer === 'banjjakpet' || document.referrer.match(/naver/i)){
 
         if(getCookie_deep('anymore') !=='Y') {
 
