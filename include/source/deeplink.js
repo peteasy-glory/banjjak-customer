@@ -1,4 +1,4 @@
-function getCookie_popup(name) {
+function getCookie_deep(name) {
     var obj = name + "=";
     var x = 0;
     while (x <= document.cookie.length) {
@@ -15,12 +15,6 @@ function getCookie_popup(name) {
     return "";
 }
 
-function setCookie_popup(name, value, expiredays) {
-    var todayDate = new Date();
-    todayDate.setDate(todayDate.getDate() + expiredays);
-    document.cookie = name + '=' + escape(value) + '; path=/; expires=' + todayDate.toGMTString() + ';';
-
-}
 
 
 let user_agent = navigator.userAgent.toLowerCase();
@@ -48,21 +42,25 @@ let visitedAt = (new Date()).getTime();
 $(document).ready(function(){
 
     //window 거나 and app 이거나 ios app 인경우 다운로드 popup 비활성화
-    if(!user_agent.match(/app_gobeauty_and/i) && !user_agent.match(/app_gobeauty_ios/i) && !user_agent.match(/windows/i)){
+    if(!!document.getElementById('appDownloadPopup')){
 
-        if(getCookie_popup('appDownloadpopup') !== 'Y'){
 
-            setTimeout(function(){
-                document.getElementById('appDownloadPopup').classList.add('actived');
-            },1500);
+        if(!user_agent.match(/app_gobeauty_and/i) && !user_agent.match(/app_gobeauty_ios/i) && !user_agent.match(/windows/i)){
+
+            if(getCookie_deep('appDownloadpopup') !== 'Y'){
+
+                setTimeout(function(){
+                    document.getElementById('appDownloadPopup').classList.add('actived');
+                },1500);
+            }
+
+
+
         }
 
 
 
-    }
-
-
-    if($('#appDownloadTop').hasClass('actived') && getCookie_popup('appDownloadTop') === 'Y'){
+    if($('#appDownloadTop').hasClass('actived') && getCookie_deep('appDownloadTop') === 'Y'){
 
         document.getElementById('appDownloadTop').classList.remove('actived');
     }
@@ -99,12 +97,15 @@ $(document).ready(function(){
     }
 
 
+    }
+
+
 
 
 
     if(document.referrer === '' || document.referrer.match(/naver/i)){
 
-        if(getCookie_popup('anymore') !=='Y') {
+        if(getCookie_deep('anymore') !=='Y') {
 
             if (user_agent.match(/iphone|ipad|ipod/i)) { //ios 일때
 
