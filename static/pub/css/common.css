@@ -3873,7 +3873,7 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 
 	html {overflow-x:hidden; overflow-y:auto;}
 	body {overflow:visible; box-sizing:border-box;}
-	#header {position:relative; height:52px; width:auto; max-width:1020px; margin:0 40px; padding:0;}
+	#header {position:relative; height:52px; width:auto; max-width:1020px; margin:0 auto; padding:0;}
 	#header ~ #container {padding-top:0;}
 	#container {display:block; height:auto; width:auto; margin:0 0 0 0; overflow:visible;}
 	#container > form {display:block; height:auto; width:auto; margin:0 0 0 0;}
