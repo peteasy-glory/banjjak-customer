@@ -253,6 +253,7 @@ class Point
         }
         $spending_accumulate_point = $point;
         $spending_purchase_point = 0;
+        $this->accumulate_point -= $point;
         // error_log('----- cancel_point_new / purchase_point : '.$this->purchase_point);
         // error_log('----- cancel_point_new / accumulate_point : '.$this->accumulate_point);
 
