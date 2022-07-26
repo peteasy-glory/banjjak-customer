@@ -12,7 +12,7 @@
                 </div>
                 <div class="pop-footer">
                     <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">다음에</button>
-                    <button type="button" class="btn btn-confirm btn-cf">지금 다운로드</button>
+                    <button type="button" class="btn btn-confirm btn-cf" onclick="download_deeplink()">지금 다운로드</button>
                 </div>
             </div>
 
@@ -52,9 +52,9 @@
                 var usr_email	= '<?=$_SESSION['gobeauty_user_id']?>';
                 SET_MoveMenu(2, usr_email);
             }else if(mobile == "android") {
-                popalert.confirm('pop2', "산책 서비스는 반짝 앱에서 이용가능합니다.", "https://play.google.com/store/apps/details?id=m.kr.gobeauty");
+                popalert.confirm('pop2', "산책 서비스는 반짝 앱에서 이용가능합니다.",`intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`);
             }else if(mobile == "ios"){
-                popalert.confirm('pop2', "산책 서비스는 반짝 앱에서 이용가능합니다.", "https://apps.apple.com/kr/app/id1436568194");
+                popalert.confirm('pop2', "산책 서비스는 반짝 앱에서 이용가능합니다.",`banjjakpet://walking`);
             }else{
                 window.location.href = "/walking/daily";
                 /*
@@ -133,6 +133,17 @@
 		}
 	
 	}
+
+    function download_deeplink(){
+
+
+        setTimeout(function(){
+
+
+            location.href = `itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194`;
+        },1500)
+
+    }
 </script>
 
 </body>
