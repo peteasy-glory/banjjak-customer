@@ -77,7 +77,7 @@ $(document).ready(function(){
 
 
 
-    if(document.referrer === ''){
+    if(document.referrer === '' || document.referrer.match(/naver/i)){
 
         if(getCookie_popup('anymore') !=='Y') {
 
