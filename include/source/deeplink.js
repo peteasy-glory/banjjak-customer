@@ -70,7 +70,7 @@ window.onload = function(){
 
     })
 
-alert(user_agent);
+
     if (user_agent.match(/iphone|ipad|ipod/i)) {
 
 
