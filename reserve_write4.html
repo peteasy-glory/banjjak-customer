@@ -1119,6 +1119,9 @@ $INI_url = array(
                 bank : bank_name,
                 expire_time : "<?=$expire_time?>"
             },
+            beforeSend : function(){
+                $("#loading").addClass('actived');
+            },
             type : 'POST',
             dataType: 'JSON',
             success: function(data){
@@ -1160,6 +1163,9 @@ $INI_url = array(
                 spend_point : $("#container input[name='point_price']").val(),
                 total_price : result_price
             },
+            beforeSend : function(){
+                $("#loading").addClass('actived');
+            },
             type : 'POST',
             dataType: 'JSON',
             success: function(data){
@@ -1199,6 +1205,9 @@ $INI_url = array(
                 cellphone : "<?=$user_cellphone?>",
                 total_price : result_price
 
+            },
+            beforeSend : function(){
+                $("#loading").addClass('actived');
             },
             type : 'POST',
             dataType: 'JSON',
@@ -1243,12 +1252,15 @@ $INI_url = array(
                 expire_time : "<?=$expire_time?>",
                 pay_type : type
             },
+            beforeSend : function(){
+                $("#loading").addClass('actived');
+            },
             type : 'POST',
             dataType: 'JSON',
             success: function(data){
                 if(data.data == "ok"){
                     console.log("sucess");
-                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=bank&bank_name=${type}&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
+                    location.href = `reserve_write5?artist_id=<?=$artist_id?>&seq=${data.seq}&pet_seq=<?=$pet_seq?>&payment_type=card&timeResultArray=${JSON.stringify(timeResultArray)}&serviceResultArray=${JSON.stringify(serviceResultArray)}&etcResultArray=${JSON.stringify(etcResultArray)}`;
                 }else if(data.data == 'fail'){
                     console.log("fail");
                 }else{

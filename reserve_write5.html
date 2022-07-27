@@ -92,6 +92,8 @@ $pay_minute = ($payment_datas->minute == '0')? "00" : "30";
 $pay_to_hour = $payment_datas->to_hour;
 $pay_to_minute = ($payment_datas->to_minute == '0')? "00" : "30";
 $pay_total_price = $payment_datas->total_price;
+$is_only_point = $payment_datas->is_only_point;
+$spend_point = $payment_datas->spend_point;
 
 $grade_sql = "
     SELECT * FROM tb_grade_reserve_approval_mgr WHERE payment_log_seq = '".$payment_log_seq."'
@@ -126,7 +128,7 @@ $grade_cnt = mysqli_num_rows($grade_result);
                         <div class="item-info">예약이 완료 되었습니다.<br>
                         <?if($payment_type == 'shop'){?>
                             결제는 매장에서 부탁드리겠습니다.
-                        <?}else if($payment_type == 'bank'){?>
+                        <?}else if($payment_type == 'bank' && $is_only_point != 1){?>
                             아래의 계좌로 입금 부탁드리겠습니다.
                         <?}
                     }
@@ -243,6 +245,10 @@ $grade_cnt = mysqli_num_rows($grade_result);
                             <div class="list-cell" id="total_price_cell" style="display: none;">
                                 <div class="list-title"><strong>합산 금액</strong></div>
                                 <div class="list-value"><strong id="total_price"></strong></div>
+                            </div>
+                            <div class="list-cell" id="point_price_cell" style="display: none;">
+                                <div class="list-title"><strong>사용 포인트</strong></div>
+                                <div class="list-value"><strong id="point_price"></strong></div>
                             </div>
                             <div class="list-cell" id="vat_price_cell" style="display: none;">
                                 <div class="list-title"><strong>부가세 10%</strong></div>
@@ -458,14 +464,27 @@ $grade_cnt = mysqli_num_rows($grade_result);
             $("#vat_price_cell").css("display","flex");
         }
         console.log(vat_price);
+        // 사용 포인트
+        var point_price = parseInt(('<?=$spend_point?>' == '')?0:'<?=$spend_point?>');
+
         var result_price = total_price + vat_price;
         if(total_price > 0){
             $("#total_price").html(total_price+"원");
             $("#result_price").html(result_price+"원");
             $("#total_price_cell").css("display","flex");
             $("#result_price_cell").css("display","flex");
-
+            if(point_price > 0){
+                $("#result_price").html((result_price-point_price)+"원");
+                $("#point_price_cell").css("display","flex");
+                $("#point_price").html(point_price+"P");
+            }
+        }else if('<?=$is_only_point?>' == 1){
+            $("#total_price").html(total_price+"원");
+            $("#point_price").html(point_price+"P");
+            $("#total_price_cell").css("display","flex");
+            $("#point_price_cell").css("display","flex");
         }
+
     //}
 
 
