@@ -12,7 +12,7 @@
                 </div>
                 <div class="pop-footer">
                     <button type="button" class="btn btn-confirm btn-cc" onclick="popalert.close();">다음에</button>
-                    <button type="button" class="btn btn-confirm btn-cf" onclick="download_deeplink()">지금 다운로드</button>
+                    <button type="button" class="btn btn-confirm btn-cf" onclick="download_deeplink()">앱으로 보기</button>
                 </div>
             </div>
 
