@@ -11,7 +11,8 @@ $year = substr($year_month, 0, 4);
 $month = substr($year_month, 4, 6);
 $pet_id = $_POST['pet_id'];
 $cellNumber = $_POST['cellNumber'];
-
+$pet_name = $_POST['pet_name'];
+$pet_photo = $_POST['pet_photo'];
 
 $api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
 //$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
@@ -101,6 +102,13 @@ $count = 0;
 				<!-- //20220115 수정 -->
 			</div>
 			<div class="record-month-list">
+                <div style="display: flex; align-items: center; margin-bottom:20px;">
+                <div class="user-pet-list-wrap" style="width:20%; ">
+                <div class="list-cell" ><a href="#" class="btn-user-pet-item" ><div class="icons"><img src="<?=$pet_photo?>" alt=""/></div></a></div>
+
+                </div>
+                <div class="txt" style="margin-left:10px; font-size:16px;"><?=$pet_name?></div>
+                </div>
 				<ul class="accordion-list">
 
                     <?php
@@ -209,7 +217,7 @@ $count = 0;
 			</div>
 		</div>
 		<!-- //page-contents -->
-        <div class="list-loading"><img src="/images/loading_s.gif" alt="" style="width:100%"></div>
+        <div class="list-loading"><img src="/images/loading_s.gif" alt="" style="width:30px; position:fixed; bottom: 10%;"></div>
 	</div>
 	<!-- //page-body -->
 
