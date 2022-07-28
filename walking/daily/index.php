@@ -339,6 +339,20 @@ function jsAlert($year){
         objs2.setAttribute('value', cellNumber);
         form.appendChild(objs2)
 
+        var objs3 = document.createElement('input');
+        objs3.setAttribute('type','hidden');
+        objs3.setAttribute('name', 'pet_photo');
+        objs3.setAttribute('value','<?=$pet_thumb?>');
+        form.appendChild(objs3);
+
+        var objs4 = document.createElement('input');
+        objs4.setAttribute('type','hidden');
+        objs4.setAttribute('name', 'pet_name');
+        objs4.setAttribute('value','<?=$pet_name?>');
+        form.appendChild(objs4);
+
+
+
 
         form.setAttribute('method', 'post');
         form.setAttribute('action', "/walking/daily/history.php");

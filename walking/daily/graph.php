@@ -16,6 +16,7 @@ if($pet_id == ""){
     $pet_id = (isset($_POST['pet_id'])) ? $_POST['pet_id'] : "";
 }
 
+
 $api = new TRestAPI("https://walkapi.banjjakpet.com:8080");
 //$api = new TRestAPI("http://stg-walkapi.banjjakpet.com:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
 //$api = new TRestAPI("http://192.168.20.128:8080", "token 58de28d6170dcf11edf7c009bff81e37536a2fa4");
@@ -31,19 +32,21 @@ if(count($graph_month) > 0){
     if($select_month == ""){
         $select_month = $graph_month[0];
     }
-    $month_log = $api->get("/walklog/graph/" . $user_id . "/" . $select_year. "/" . $select_month);
+    $month_log = $api->get("/walklog/month/" . $user_id . "/" . $pet_id."/". $select_year. "/" . $select_month);
 }
 
 
 foreach ($month_log["body"] as $days){
 //    array_push($date_arr, substr($days["date"],9));
-    array_push($date_arr, $days["s_date"]);
-    array_push($dist_arr, $days["sum_dist"]);
-    array_push($time_arr, $days["sum_time"]);
+    $date = explode(" ",$days['date'])[0];
+    array_push($date_arr, $date);
+    array_push($dist_arr, $days["distance"]);
+    array_push($time_arr, $days["time"]);
 }
 $date_arr = array_reverse($date_arr);
-$dist_arr = array_reverse($dist_arr );
+$dist_arr = array_reverse($dist_arr);
 $time_arr = array_reverse($time_arr);
+
 
 $graph_max = 0;
 if (count($dist_arr) > 0){
@@ -57,6 +60,7 @@ if (count($dist_arr) > 0){
 
 <!-- header -->
 <header id="header">
+
     <div class="header-left">
         <a href="../daily/" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
@@ -208,9 +212,9 @@ if (count($dist_arr) > 0){
 
 
     let month_log = <?= json_encode($month_log["body"]) ?>;
-    console.log(month_log);
 
-    console.log(month_log[0].s_date.substr(8,2));
+
+
 
     //한자리 숫자 0 채우기
     const fill_0 = function (n,w){
@@ -223,7 +227,7 @@ if (count($dist_arr) > 0){
 
     let chart = [];
     let select_month = <?= json_encode($select_month)?>;
-    console.log(select_month);
+
 
     if(select_month == '02' ){
         for(let i=1; i<=28;i++){
@@ -243,20 +247,22 @@ if (count($dist_arr) > 0){
     }
 
 
-    month_log[0].s_date.substr(8,2);
+    month_log[0].date.substr(8,2);
 
-    console.log(month_log[0].sum_dist)
+
+    console.log(chart);
+    console.log(month_log);
 
 
     for(let i=0; i <= month_log.length; i++){
 
         for(let j=0; j <= chart.length; j++){
 
-            if(chart[j]?.date === month_log[i]?.s_date.substr(8,2) ){
+            if(chart[j]?.date === month_log[i]?.date.substr(8,2) ){
 
-                if(month_log[i]?.sum_dist !== undefined && month_log[i]?.sum_time !== undefined){
-                    chart[j].dist = month_log[i]?.sum_dist;
-                    chart[j].time = month_log[i]?.sum_time;
+                if(month_log[i]?.distance !== undefined && month_log[i]?.time !== undefined){
+                    chart[j].dist += month_log[i]?.distance;
+                    chart[j].time += month_log[i]?.time;
 
                 }
             }
@@ -266,7 +272,7 @@ if (count($dist_arr) > 0){
     }
 
 
-    console.log(chart);
+
 
     $(function(){
 
@@ -311,7 +317,7 @@ if (count($dist_arr) > 0){
         for(let i = 0 ; i <= chart.length; i++){
 
             if(chart[i]?.date !== undefined){
-                console.log($(this));
+
                 $(`<div class="chart-front-container">
                         <div class="chart-front-container">
                             <div class="chart-front-left-box">
@@ -319,12 +325,12 @@ if (count($dist_arr) > 0){
                                     <div class="chart-front-left-balloon" style="${chart[i].dist/max_dist === 1 ? 'display:block;' : 'display:none;'}">${chart[i].dist}</div>
                                 </div>
                             </div>
-                            
+
                             <div class="chart-front-middle">${chart[i].date} 일</div>
 
                             <div class="chart-front-right-box">
                                 <div class="chart-front-right ${chart[i].time/max_time === 1 ? 'chart-front-right-active' : "" }" style="width:${chart[i].time/max_time*100}%">
-                                    <div class="chart-front-right-balloon" style="${chart[i].time/max_time === 1 ? `display:block;right:calc(-100% + 25px)`:"display:none" }">${chart[i].time}</div>
+                                    <div class="chart-front-right-balloon" style="${chart[i].time/max_time === 1 ? `display:block;right:calc(-100% + 25px)`:"display:none" }">${(chart[i].time/60).toFixed()}</div>
                                 </div>
                             </div>
                         </div>
@@ -348,8 +354,7 @@ if (count($dist_arr) > 0){
             $(this).addClass('chart-front-left-active')
             $(this).children('div').css("display","block");
             if($(this).width() < 25){
-                console.log($(this).width())
-                console.log("25이하");
+
                 $(this).children('div').css("left",`-30px`)
             }
         })
@@ -366,12 +371,10 @@ if (count($dist_arr) > 0){
             $(this).addClass('chart-front-right-active')
             $(this).children('div').css("display","block");
             if($(this).width() < 25){
-                // console.log($(this).width())
-                // console.log("25이하");
+
                 $(this).children('div').css("right",`-${$(this).width()}px`)
             }else{
-                // console.log($(this).width())
-                // console.log("25이상");
+
                 $(this).children('div').css("right",`-${$(this).width()-25}px`)
             }
 
