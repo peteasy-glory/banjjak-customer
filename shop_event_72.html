@@ -21,7 +21,7 @@ if($_SESSION['backurl1'] == null){
     <div class="header-left">
         <a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
-    <div class="page-title" id="title">Welcome 회원 혜택</div>
+    <div class="page-title" id="title">펫가전 기획전</div>
 </header>
 <!-- //header -->
 
@@ -59,8 +59,12 @@ if($_SESSION['backurl1'] == null){
     var timer = null;
     var customer_id = "<?=$user_id ?>";
 
-    var sub_title =[''];
-    var event_item_list0 = ['ETCB-STU-A01','ETCB-STU-A02','ETCB-STU-A03','ETCB-STU-A04','ETCB-STU-A05','ETCB-STU-A06'];
+    var sub_title =['침대/공기청정기','드라이룸','미용기','드라이기','자동급수기/급식기'];
+    var event_item_list0 = ['ETCB-DULCIS-A01','ETCB-CUCKOO-A05','ETCB-CUCKOO-A04'];
+    var event_item_list1 = ['ETCB-LUCOMS-A01','ETCB-AVEC-A02','ETCB-AVEC-A01','ETCB-CUCKOO-A01','ETCB-CUCKOO-A02'];
+    var event_item_list2 = ['ETCB-LOVEPET-A01','ETCB-BANDI-A05','ETCB-AVEC-A05'];
+    var event_item_list3 = ['ETCB-LOVEPET-A02','ETCB-AVEC-A04','ETCB-IM-A03','ETCB-IM-A02','ETCB-IM-A01'];
+    var event_item_list4 = ['ETCB-BANDI-A01','ETCB-CUCKOO-A03','JB-FPA-A09'];
 
     $(document).ready(function(){
         // 장바구니 개수
