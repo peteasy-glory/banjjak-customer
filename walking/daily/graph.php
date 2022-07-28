@@ -330,7 +330,7 @@ if (count($dist_arr) > 0){
 
                             <div class="chart-front-right-box">
                                 <div class="chart-front-right ${chart[i].time/max_time === 1 ? 'chart-front-right-active' : "" }" style="width:${chart[i].time/max_time*100}%">
-                                    <div class="chart-front-right-balloon" style="${chart[i].time/max_time === 1 ? `display:block;right:calc(-100% + 25px)`:"display:none" }">${chart[i].time}</div>
+                                    <div class="chart-front-right-balloon" style="${chart[i].time/max_time === 1 ? `display:block;right:calc(-100% + 25px)`:"display:none" }">${(chart[i].time/60).toFixed()}</div>
                                 </div>
                             </div>
                         </div>
