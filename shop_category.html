@@ -5,7 +5,7 @@ include($_SERVER['DOCUMENT_ROOT'] . "/include/skin/header.php");
 $user_id = (isset($_SESSION['gobeauty_user_id'])) ? $_SESSION['gobeauty_user_id'] : "";
 $user_name = (isset($_SESSION['gobeauty_user_nickname'])) ? $_SESSION['gobeauty_user_nickname'] : "";
 
-$pet_type = (isset($_GET['pet_type'])) ? $_GET['pet_type'] : "dog";
+$pet_type = (isset($_COOKIE['pet_type']))? $_COOKIE['pet_type'] : "dog";
 $category = (isset($_GET["category"])) ? $_GET["category"] : "3";
 $category_sql = "SELECT * FROM tb_item_category WHERE ic_seq = '" . $category . "'";
 $category_result = sql_query($category_sql);
@@ -26,7 +26,7 @@ $best_item_sql = "
                 SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
                 FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
                 ) b ON b.p_no = a.product_no
-    WHERE a.is_delete = '1' AND {$best_item} = '1' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt desc";
+    WHERE a.is_delete = '1' AND {$best_item} = '1' AND a.is_view = '1' AND a.is_soldout = '1' AND a.is_shop = '2' ORDER BY a.reg_dt desc";
 $best_item_array = sql_fetch_array($best_item_sql);
 
 //돌아갈 url을 세션에 저장한다.

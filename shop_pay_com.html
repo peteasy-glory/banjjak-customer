@@ -75,9 +75,9 @@ if($order_num != ""){
 </section>
 <!-- //container -->
 <script>
-    var pay_type = "<?=$row["pay_type"]?>";
+    var customer_id = "<?=$row["customer_id"]?>";
     $(document).on("click", "#container .content_ok", function(){
-        if(pay_type != "2"){
+        if(customer_id != ""){
             location.href = "shop_pay_view?no=<?=$order_num?>";
         }else{
             location.href = "shop_pay_other?no=<?=$order_num?>&name=<?=$name?>";

@@ -91,21 +91,21 @@ $user_name = $_SESSION['gobeauty_user_nickname'];
                             $select_result = mysqli_query($connection, $select_sql);
                             for ($ch_index = 0; $result_datas = mysqli_fetch_object($select_result); $ch_index++) {
                                 $spending_point = $result_datas->spending_point;
-                                $payment_log_seq = $result_datas->payment_log_seq;
+                                //$payment_log_seq = $result_datas->payment_log_seq;
                                 $update_time = $result_datas->update_time;
-                                $artist_id = $result_datas->artist_id;
-                                $artist_name = $result_datas->name;
-                                $total_price = $result_datas->total_price;
+                                //$artist_id = $result_datas->artist_id;
+                                //$artist_name = $result_datas->name;
+                                //$total_price = $result_datas->total_price;
                                 $type = $result_datas->type;
-
-								if ($type == 'EVENT') {
-									$title = "구매 취소";
+                                $title = "";
+								if ($type == 'CANCEL') {
+									$title = "예약 취소";
 								}
                             ?>
 							<div class="point-detail-item">
 								<div class="item-title"><?= $title ?></div>
 								<div class="item-date"><?= $update_time ?></div>
-								<div class="item-value"><?= number_format($total_price) ?>P</div>
+								<div class="item-value"><?= number_format($spending_point) ?>P</div>
 							</div>
 							<? } ?>
 						</div>

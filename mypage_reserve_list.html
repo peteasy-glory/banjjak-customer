@@ -60,8 +60,8 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                                     LEFT JOIN tb_request_artist ra ON ra.customer_id = ts.customer_id
                                     WHERE tpl.customer_id = '" . $user_id . "' 
                                           AND tpl.approval = 1 
-                                          AND tpl.status != 'R0'
-                                          $type_query 
+                                          AND (tpl.status != 'R0' OR tpl.status IS NULL)
+                                          {$type_query}
                                     ORDER BY tpl.year DESC, tpl.month DESC, tpl.day DESC, tpl.hour DESC, tpl.minute DESC;";
 
                 $session_id = "";
