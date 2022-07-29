@@ -46,7 +46,7 @@ $_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
                         $artist_id = $result_datas->artist_id;
                         $update_time = $result_datas->update_time;
                         $artist_name = $result_datas->name;
-                        $artist_photo = "https://image.banjjakpet.com".img_link_change($result_datas->photo);
+                        $artist_photo = "https://image.banjjakpet.com".img_link_change($result_datas->front_image);
                         $introduction = str_replace("/", " ", $result_datas->self_introduction);
 
 						//var_dump($result_datas->photo);
