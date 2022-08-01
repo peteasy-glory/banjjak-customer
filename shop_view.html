@@ -888,7 +888,7 @@ $thumb_nail = substr($img_array[0]['file_path'],4)
             // console.log($('.shop-view-detail-data p').children('video:eq(0)').attr("src"));
             // console.log($('.shop-view-detail-data p').children('video').length);
 
-            get_cart_list().then(shipping);
+            get_cart_list().then(get_partner_list).then(shipping);
         });
 
         // 장바구니 수 체크하기
@@ -944,7 +944,6 @@ $thumb_nail = substr($img_array[0]['file_path'],4)
                             $.each(data.data[0], function (i, v) {
                                 shipping_price.push(v.shipping_price); // 배송비
                             });
-                            $item_cart.find('.special_product').prepend(html);
                         } else {
                             alert(data.data + "(" + data.code + ")");
                             console.log(data.code);
@@ -966,7 +965,7 @@ $thumb_nail = substr($img_array[0]['file_path'],4)
             return new Promise(function (resolve, reject) {
                 $.each(shipping_price, function (i, v) {
                     if (is_free_shipping != 1) {
-                        if (v.ip_seq > 0) {
+                        if (ip_seq > 0) {
                             if (i == ip_seq) {
                                 $(".shipping_price").text(v.format() + '원');
                             }

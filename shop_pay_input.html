@@ -550,7 +550,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 },
                 success: function(json) {
                     if(json.code == "000000"){
-                        console.log(json.data);
+                        //console.log(json.data);
                         $("#container .point_score").html('').html(Math.round(json.data).format());
                         $("#container input[name='point_score']").val(Math.round(json.data));
                     }else{
@@ -583,7 +583,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 success: function(data) {
                     if(data.code == "000000"){
 
-                        console.log(data.data[0]);
+                        //console.log(data.data[0]);
                         var html = '<h3 class="delivery-title apricot">위탁배송</h3><br>';
                         $.each(data.data[0], function(i, v){
                             html += '<div class="shop-cart-list cart_list_'+v.ip_seq+'" style="display: none;">['+v.company_name+']</div>';
@@ -634,7 +634,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 dataType: 'JSON',
                 success: function(data) {
                     if(data.code == "000000"){
-                        console.log(data.data);
+                        //console.log(data.data);
 
                         if(data.data[0] && data.data[0].length > 0){
                             item_cart_cnt = data.data[0].length;
@@ -669,7 +669,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
     function get_item_list(cart_data){
         return new Promise(function(resolve, reject) {
             console.log("get_item_list");
-            console.log(cart_data);
+            //console.log(cart_data);
             //var cart_data = JSON.parse(cart_data);
             $.ajax({
                 url: 'data/item_ajax.php',
@@ -681,7 +681,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 dataType: 'JSON',
                 success: function(data) {
                     if(data.code == "000000"){
-                        console.log(data.data['item']);
+                        //console.log(data.data['item']);
                         var html = '';
                         var sum_price = 0;
                         var item_name = '';
@@ -749,7 +749,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                     sum_price += parseInt(v2.value * v2.amount);
 
                                     if(v.is_supply == "1" && v.supplier == "정글북"){ // 외주업체(정글북)
-                                        console.log("goods", v.goodsNo, v2.amount, cart_data.ic_seq);
+                                        //console.log("goods", v.goodsNo, v2.amount, cart_data.ic_seq);
                                         get_jbook_list2("goods", v.goodsNo, v2.amount, cart_data.ic_seq);
                                     }
                                 });
@@ -829,7 +829,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
 
     // 정글북 상품 품절 확인
     function get_jbook_list2(menu, option, amount, ic_seq){
-        console.log(menu, option);
+        //console.log(menu, option);
         $.ajax({
             url: './data/jbook_item_ajax.php',
             data: {
@@ -842,7 +842,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
             success: function(data) {
                 if(data.code == "000000"){
                     console.log("jbookdata");
-                    console.log(data.data);
+                    //console.log(data.data);
                     var result_txt = '0';
                     if(data.data && parseInt(data.data.total) > 0){
                         $.each(data.data.data, function(i, v){
@@ -889,7 +889,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                     console.log(is_free_shipping_price[i]);
                     _total_price += parseInt(is_free_shipping_price[i]);
                 }
-                console.log(_total_price);
+                //console.log(_total_price);
                 console.log("무배 스타트");
 
                 for(var i=1;i<company_cnt;i++){
@@ -952,7 +952,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
     // 도서산간지역 추가배송비
     function plus_shipping(zipcode){
 
-        console.log(zipcode);
+        //console.log(zipcode);
         var parse_zipcode = parseInt(zipcode); // 우편번호 정수로 가공
         var plus_after_shipping = ["",0, 0, 0]; // '', 업체배송, 직배송, 건너뛰기 ==> 배송비
         var total_shipping_price = 0; // 최종 배송비
@@ -960,10 +960,10 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
         var is_shipping_island = plus_shipping_island.indexOf(parse_zipcode); // 섬지역인지 판단(-1:아님, 0이상:섬지역-추가배송비5,000원)
         var is_shipping_jeju = plus_shipping_jeju.indexOf(parse_zipcode); // 제주인지 판단(-1:아님, 0이상:제주-추가배송비3,000원)
         var is_shipping_udo = plus_shipping_udo.indexOf(parse_zipcode);// 제주 추자면,우도인지 판단(-1:아님, 0이상:추자면,우도-추가배송비5,000원)
-        console.log("섬지역여부 "+is_shipping_island);
-        console.log("제주지역여부 "+is_shipping_jeju);
-        console.log("추자,우도여부 "+is_shipping_udo);
-        console.log(plus_before_shipping); // 지역 적용 전 배송비
+        //console.log("섬지역여부 "+is_shipping_island);
+        //console.log("제주지역여부 "+is_shipping_jeju);
+        //console.log("추자,우도여부 "+is_shipping_udo);
+        //console.log(plus_before_shipping); // 지역 적용 전 배송비
 
         // 상품 배열 초기화
         $.ajax({
@@ -975,11 +975,11 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
             dataType: 'JSON',
             success: function(data) {
                 if(data.code == "000000"){
-                    console.log(data.data[0]);
+                    //console.log(data.data[0]);
                     $.each(data.data[0], function(i, v){
                         plus_after_shipping.push(0); // 무료배송 시작 금액
                     });
-                    console.log(plus_after_shipping);
+                    //console.log(plus_after_shipping);
                     // 추가배송비 계산
                     for(var i=1;i<company_cnt;i++){
                         // 배송비가 발생했을때
@@ -1005,6 +1005,8 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                         total_shipping_price += parseInt(plus_after_shipping[i]); // 총 배송비 합
                         total_after_price += parseInt(plus_after_shipping[i]); // 상품 총금액에 배송비 합
 
+                        //console.log(total_shipping_price);
+
                         $("#container input[name='shipping_price']").val(total_shipping_price); // form태그 name 값에 배송비 입력
                         $("#container input[name='total_price']").val(total_after_price); // form태그 name 값에 제품금액 입력
                         $('#container input[name="point_price"]').val(0); // 포인트 사용 금액 초기화
@@ -1012,6 +1014,9 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                         $item_cart.find('.total_pay_price').text(total_after_price.format()+"원");
                         $item_cart.find('.yes_payment').text(total_after_price.format()+"원 결제하기");
                     }
+
+                    // 첫결제인지 판단
+                    get_first_payment([product_total_price, total_shipping_price]);
                 }else{
                     alert(data.data+"("+data.code+")");
                     console.log(data.code);
@@ -1024,9 +1029,6 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 }
             }
         });
-
-        // 첫결제인지 판단
-        get_first_payment([product_total_price, total_shipping_price]);
 
     }
 
@@ -1044,13 +1046,14 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                         dataType: 'json',
                         success: function(json) {
                             if(json.code == "000000"){
-                                console.log(json.data);
+                                //console.log(json.data);
 
                                 if(json.data){
                                     if(json.data.cnt == 0){ // 결제내역 없음 = 첫결제
                                         var event_point = 0;
                                         var point_score = $('#container input[name="point_score"]').val();
-                                        console.log(price_data);
+                                        //console.log(price_data);
+                                        console.log('first!!');
 
                                         if(price_data[0] >= 30000){
                                             event_point = 3000;
@@ -1074,7 +1077,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                             $('#container .point4').show();
                                             $('#container .point4').html('<div class="form-point-sale point4">첫 구매 자동 '+event_point.format()+'원 할인!</div>');
                                         }
-                                        console.log(first_payment);
+                                        //console.log(first_payment);
                                     }else{
                                         console.log("첫결제아님");
                                         console.log(json.data);
@@ -1150,7 +1153,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                 },
                 success: function(json) {
                     if(json.code == "000000"){
-                        console.log(json.data);
+                        //console.log(json.data);
                         var html = '<option value="direct">직접입력</option>';
                         $.each(json.data, function(i, v){
                             html += '<option value="'+v.ca_seq+'">';
@@ -1680,7 +1683,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                     is_payment = false;
                     _this.prop("disabled", false);
                     if(json.code == "000000"){
-                        console.log(json.data);
+                        //console.log(json.data);
                         if(json.data == "0"){
                             if(orderItem.length > 0){ // 정글북이면 정글북 등록 후 결제 준비 > 이동
                                 $.ajax({
@@ -1701,7 +1704,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                     },
                                     success: function(json) {
                                         if(json.code == "000000"){
-                                            console.log(json.data);
+                                            //console.log(json.data);
 
                                             $.ajax({
                                                 type: 'post',
@@ -1713,7 +1716,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                                 },
                                                 success: function(json) {
                                                     if(json.code == "000000"){
-                                                        console.log(json.data);
+                                                        //console.log(json.data);
                                                         order_next(json.data.price, json.data.product_name, json.data.pay_type);
                                                     }else if(json.code == "003902"){ // 이미 등록된 결제 진행이 있음
                                                         popalert.confirm('firstRequestMsg2', '이미 등록된 결제 진행이 있습니다.', '/');
@@ -1723,7 +1726,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                                         return false;
                                                     }else{
                                                         alert(json.data+"("+json.code+")");
-                                                        console.log(json.data);
+                                                        //console.log(json.data);
                                                     }
                                                 },
                                                 complete: function() {
@@ -1757,7 +1760,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                     },
                                     success: function(json) {
                                         if(json.code == "000000"){
-                                            console.log(json.data);
+                                            //console.log(json.data);
                                             order_next(json.data.price, json.data.product_name, json.data.pay_type);
                                         }else if(json.code == "003902"){ // 이미 등록된 결제 진행이 있음
                                             popalert.confirm('firstRequestMsg2', '이미 등록된 결제 진행이 있습니다.', '/');
@@ -1767,7 +1770,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                             return false;
                                         }else{
                                             alert(json.data+"("+json.code+")");
-                                            console.log(json.data);
+                                            //console.log(json.data);
                                         }
                                     },
                                     complete: function() {
@@ -1815,11 +1818,11 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                                         },
                                         success: function(json) {
                                             if(json.code == "000000"){
-                                                console.log(json.data);
+                                                //console.log(json.data);
                                                 order_next(total_price, product_name, pay_type_arr[pay_type]);
                                             }else{
                                                 alert(json.data+"("+json.code+")");
-                                                console.log(json.data);
+                                                //console.log(json.data);
                                             }
                                         },
                                         complete: function() {
@@ -1996,7 +1999,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
             },
             success: function(json) {
                 if(json.code == "000000"){
-                    console.log(json.data);
+                    //console.log(json.data);
                     location.href = "shop_pay_com?no="+order_num;
                 }else{
                     alert(json.data+"("+json.code+")");
