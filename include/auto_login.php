@@ -101,11 +101,31 @@
                 }
 
                 if($my_shop_flag == '1'){
-					?>
-					<script>
-						location.href = "https://partner.gopet.kr/pet/shop?banjjakpet_id=<?=$_SESSION['gobeauty_user_id']?>";
-					</script>
-					<?php
+
+                    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+                    if ($user_agent) {
+                        $token_index = strpos($user_agent, "APP_GOBEAUTY_iOS");
+                        if ($token_index > 0) { ?>
+
+                            <script>
+                                window.webkit.messageHandlers.onAppLogin.postMessage('<?=$id?>');
+                                location.href = "https://partner.gopet.kr/pet/shop?banjjakpet_id=<?=$_SESSION['gobeauty_user_id']?>";
+                            </script>
+
+                        <?php	}
+                    }
+                    if ($user_agent) {
+                        $token_index = strpos($user_agent, "APP_GOBEAUTY_AND");
+                        if ($token_index > 0) { ?>
+
+                            <script>
+                                window.Android.onAppLogin('<?=$id?>');
+                                location.href = "https://partner.gopet.kr/pet/shop?banjjakpet_id=<?=$_SESSION['gobeauty_user_id']?>";
+                            </script>
+
+                        <?php	}
+                    }
+
 				}
 
                 $user_agent = $_SERVER['HTTP_USER_AGENT'];
