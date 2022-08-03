@@ -110,8 +110,8 @@ if($mode){
                     $shop_name = $select_datas->shop_name;
 
                     $message = "{$cellphone}님({$pet_name})이 {$month}월{$day}일 {$hour}시{$minute}분 예약승인을 요청하였습니다.";
-                    $path = "https://partner.banjjakpet.com/reserve_pay_management_1?reserve_approval_idx={$mgr_idx}";
-                    $image = "http://gopet.kr/pet/images/app_logo.png";
+                    $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy={$year}&mm={$month}&dd={$day}";
+                    $image = "https://customer.banjjakpet.com/static/pub/images/icon/icon-logo.png";
                     a_push($artist_id, "[반짝][예약승인대기]", $message, $path, $image);
 
                     // 관리자 푸시
@@ -137,8 +137,8 @@ if($mode){
                         $shop_name = $select_datas->shop_name;
 
                         $message = "{$cellphone}님({$pet_name})이 {$month}월{$day}일 {$hour}시{$minute}분 예약승인을 요청하였습니다.";
-                        $path = "https://partner.banjjakpet.com/reserve_pay_management_1?reserve_approval_idx={$mgr_idx}";
-                        $image = "http://gopet.kr/pet/images/app_logo.png";
+                        $path = "https://partner.banjjakpet.com/reserve_main_day?ch=day&yy={$year}&mm={$month}&dd={$day}";
+                        $image = "https://customer.banjjakpet.com/static/pub/images/icon/icon-logo.png";
                         a_push($artist_id, "[반짝][예약승인대기]", $message, $path, $image);
 
                         // 관리자 푸시

@@ -256,7 +256,7 @@ if($approval_cnt > 0){
 		$message_admin = "[".$mypet_name." (".$cellphone_back_num.")]님이 펫샵(".$artist_name." | ".$artist_id.")에 이용 상담을 신청.";
 		$path = "https://partner.banjjakpet.com/reserve_advice_list_1";
 		$path_admin = "https://www.gopet.kr/pet/mainpage/mainpage_my_menu.php";
-		$image = "https://www.gopet.kr/pet/images/app_logo.png";
+		$image = "https://customer.banjjakpet.com/static/pub/images/icon/icon-logo.png";
 		a_push($artist_id, "반짝, 첫 이용 상담 신청 알림", $message, $path, $image);
 		a_push("pickmon@pickmon.com", "반짝, [이용 상담 신청] 관리자 알림", $message_admin, $path_admin, $image);
 	}
