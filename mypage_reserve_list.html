@@ -142,6 +142,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     $is_vat = $result_datas->is_vat;
                     $d_time = $result_datas->d_time;
                     $is_cancel = $result_datas->is_cancel;
+                    $enable_flag = $result_datas->enable_flag;
                     $cancel_time = date("Y년 m월 d일 H시", strtotime($result_datas->cancel_time));
                     $ds_date = date('Y-m-d', strtotime($year . "-" . $month . "-" . $day));
                     $n_date = date('Y-m-d');
@@ -196,7 +197,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
 					<div class="receipt-reserve-option">
 						<div class="option-cell">
 							<div class="option-title">매장명</div>
-							<div class="option-value"><strong><?= $artist_name ?></strong></div>
+							<div class="option-value"><strong><?= $artist_name ?></strong><span style="color: red;"><?php echo ($enable_flag == 0)? "(탈회)":""; ?></span></div>
 						</div>
 						<div class="option-cell">
 							<div class="option-title">결제타입</div>
