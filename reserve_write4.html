@@ -304,7 +304,7 @@ $INI_url = array(
                     <div class="user-receipt-item">
                         <h5 class="con-title">예약 내용</h5>
                         <div class="receipt-buy-detail">
-                            <div class="item-data-list">
+                            <div class="item-data-list cat_product">
                                 <div class="list-cell" id="main_service_1_cell">
                                     <div class="list-title" id="main_service_1">소형견미용/목욕/~3Kg</div>
                                     <div class="list-value" id="main_service_1_price">20,000원</div>
@@ -701,8 +701,34 @@ $INI_url = array(
 
 
     // product 구하기
-    var product = "<?=$pet_product_name?>|<?=$pet_product_type?>|<?=$artist_name?>|"+serviceResultArray[0].name+"|"+product_service+"|"+product_weight+"|"+product_face+"|"+product_mm+"|"+product_hair+"|"+product_foot_toenail+"|"+product_foot_trumpet+"|"+product_foot_bell+"|||"+product_foot_etc+"|"+product_spa+"|"+product_hair_color+"|0|0|0";
-
+    var product = "";
+    if(pet_type == 'cat'){
+        // var first_len = etcResultArray.length - 3;
+        // console.log(first_len);
+        var etc_len = 0;
+        var etc_product = "";
+        var etc_price = 0;
+        if(etcResultArray.length > 3){
+            for(var i=3; i<etcResultArray.length; i++){
+                etcResultArray.map(result => {
+                    if(result.sequnce == i){
+                        if(result.name != '' && result.price > 0){
+                            etc_len += 1;
+                            etc_price += result.price;
+                            etc_product += "|"+result.name+":"+ result.price;
+                        }
+                    }
+                })
+            }
+        }
+        var cat_hair = (serviceResultArray[1].name != "")? serviceResultArray[1].name+":"+serviceResultArray[1].price : "";
+        var cat_toenail = (etcResultArray[0].name == "발톱" && etcResultArray[0].price > 0)? etcResultArray[0].price : "";
+        var cat_short_shower = (etcResultArray[1].name == "단모목욕" && etcResultArray[1].price > 0)? etcResultArray[1].price : "";
+        var cat_long_shower = (etcResultArray[2].name == "장모목욕" && etcResultArray[2].price > 0)? etcResultArray[2].price : "";
+        product = "<?=$pet_product_name?>|<?=$pet_product_type?>|<?=$artist_name?>|"+serviceResultArray[0].name+"|"+product_weight+"|"+cat_hair+"|"+cat_toenail+"|"+cat_short_shower+"|"+cat_long_shower+"|"+etc_len+etc_product+"|0|0";
+    }else{
+        product = "<?=$pet_product_name?>|<?=$pet_product_type?>|<?=$artist_name?>|"+serviceResultArray[0].name+"|"+product_service+"|"+product_weight+"|"+product_face+"|"+product_mm+"|"+product_hair+"|"+product_foot_toenail+"|"+product_foot_trumpet+"|"+product_foot_bell+"|||"+product_foot_etc+"|"+product_spa+"|"+product_hair_color+"|0|0|0";
+    }
     console.log(product);
 
 
@@ -745,62 +771,123 @@ $INI_url = array(
         console.log(year,month,day, start_hour,start_minute);
 
         // 상세 상품정보 넣기
-        var main_service_1 = serviceResultArray[0].name + "/" + serviceResultArray[1].name + "/" + serviceResultArray[2].name;
-        var main_service_1_price = serviceResultArray[2].price + "원";
-        var main_service_2 = serviceResultArray[3].name;
-        var main_service_2_price = serviceResultArray[3].price + "원";
-        var main_service_3 = serviceResultArray[4].name;
-        var main_service_3_price = serviceResultArray[4].price + "원";
+        if(pet_type == 'cat'){
 
-        var etc_service_1 = etcResultArray[0].name;
-        var etc_service_1_price = etcResultArray[0].price + "원";
-        var etc_service_2 = etcResultArray[1].name;
-        var etc_service_2_price = etcResultArray[1].price + "원";
-        var etc_service_3 = etcResultArray[2].name;
-        var etc_service_3_price = etcResultArray[2].price + "원";
-        var etc_service_4 = etcResultArray[3].name;
-        var etc_service_4_price = etcResultArray[3].price + "원";
+            var main_service_1 = serviceResultArray[0].name + "/" + serviceResultArray[1].name + "/" + serviceResultArray[2].name;
+            var main_service_1_price = serviceResultArray[2].price+serviceResultArray[1].price + "원";
 
-        if(main_service_1 != ''){
-            $("#main_service_1").html(main_service_1);
-            $("#main_service_1_price").html(main_service_1_price);
-            $("#main_service_1_cell").css("display","flex");
-        }
-        if(main_service_2 != ''){
-            $("#main_service_2").html(main_service_2);
-            $("#main_service_2_price").html(main_service_2_price);
-            $("#main_service_2_cell").css("display","flex");
-        }
-        if(main_service_3 != ''){
-            $("#main_service_3").html(main_service_3);
-            $("#main_service_3_price").html(main_service_3_price);
-            $("#main_service_3_cell").css("display","flex");
-        }
+            var etc_service_1 = etcResultArray[0].name;
+            var etc_service_1_price = etcResultArray[0].price + "원";
+            var etc_service_2 = etcResultArray[1].name;
+            var etc_service_2_price = etcResultArray[1].price + "원";
+            var etc_service_3 = etcResultArray[2].name;
+            var etc_service_3_price = etcResultArray[2].price + "원";
 
-        if(etc_service_1 != ''){
-            $("#etc_service_1").html(etc_service_1);
-            $("#etc_service_1_price").html(etc_service_1_price);
-            $("#etc_service_1_cell").css("display","flex");
-        }
-        if(etc_service_2 != ''){
-            $("#etc_service_2").html(etc_service_2);
-            $("#etc_service_2_price").html(etc_service_2_price);
-            $("#etc_service_2_cell").css("display","flex");
-        }
-        if(etc_service_3 != ''){
-            $("#etc_service_3").html(etc_service_3);
-            $("#etc_service_3_price").html(etc_service_3_price);
-            $("#etc_service_3_cell").css("display","flex");
-        }
-        if(etc_service_4 != ''){
-            $("#etc_service_4").html(etc_service_4);
-            $("#etc_service_4_price").html(etc_service_4_price);
-            $("#etc_service_4_cell").css("display","flex");
+
+            var html = '';
+            if(main_service_1 != ''){
+                html += '<div class="list-cell" id="etc_service_cell" style="display: flex">';
+                html += '    <div class="list-title" id="etc_service">'+main_service_1+'</div>';
+                html += '    <div class="list-value" id="etc_service_price">'+main_service_1_price+'</div>';
+                html += '</div>';
+            }
+
+            if(etc_service_1 != ''){
+                html += '<div class="list-cell" id="etc_service_cell" style="display: flex">';
+                html += '    <div class="list-title" id="etc_service">'+etc_service_1+'</div>';
+                html += '    <div class="list-value" id="etc_service_price">'+etc_service_1_price+'</div>';
+                html += '</div>';
+            }
+            if(etc_service_2 != ''){
+                html += '<div class="list-cell" id="etc_service_cell" style="display: flex">';
+                html += '    <div class="list-title" id="etc_service">'+etc_service_2+'</div>';
+                html += '    <div class="list-value" id="etc_service_price">'+etc_service_2_price+'</div>';
+                html += '</div>';
+            }
+            if(etc_service_3 != ''){
+                html += '<div class="list-cell" id="etc_service_cell" style="display: flex">';
+                html += '    <div class="list-title" id="etc_service">'+etc_service_3+'</div>';
+                html += '    <div class="list-value" id="etc_service_price">'+etc_service_3_price+'</div>';
+                html += '</div>';
+            }
+            if(etcResultArray.length > 3){
+                for(var i=3; i<etcResultArray.length; i++){
+                    etcResultArray.map(result => {
+                        if(result.sequnce == i){
+                            if(result.name != '' && result.price > 0){
+                                html += '<div class="list-cell" id="etc_service_cell" style="display: flex">';
+                                html += '    <div class="list-title" id="etc_service">'+result.name+'</div>';
+                                html += '    <div class="list-value" id="etc_service_price">'+result.price+'원</div>';
+                                html += '</div>';
+                            }
+                        }
+                    })
+                }
+            }
+            $('.cat_product').html(html);
+
+        }else{
+            var main_service_1 = serviceResultArray[0].name + "/" + serviceResultArray[1].name + "/" + serviceResultArray[2].name;
+            var main_service_1_price = serviceResultArray[2].price + "원";
+            var main_service_2 = serviceResultArray[3].name;
+            var main_service_2_price = serviceResultArray[3].price + "원";
+            var main_service_3 = serviceResultArray[4].name;
+            var main_service_3_price = serviceResultArray[4].price + "원";
+
+            var etc_service_1 = etcResultArray[0].name;
+            var etc_service_1_price = etcResultArray[0].price + "원";
+            var etc_service_2 = etcResultArray[1].name;
+            var etc_service_2_price = etcResultArray[1].price + "원";
+            var etc_service_3 = etcResultArray[2].name;
+            var etc_service_3_price = etcResultArray[2].price + "원";
+            var etc_service_4 = etcResultArray[3].name;
+            var etc_service_4_price = etcResultArray[3].price + "원";
+
+            if(main_service_1 != ''){
+                $("#main_service_1").html(main_service_1);
+                $("#main_service_1_price").html(main_service_1_price);
+                $("#main_service_1_cell").css("display","flex");
+            }
+            if(main_service_2 != ''){
+                $("#main_service_2").html(main_service_2);
+                $("#main_service_2_price").html(main_service_2_price);
+                $("#main_service_2_cell").css("display","flex");
+            }
+            if(main_service_3 != ''){
+                $("#main_service_3").html(main_service_3);
+                $("#main_service_3_price").html(main_service_3_price);
+                $("#main_service_3_cell").css("display","flex");
+            }
+
+            if(etc_service_1 != ''){
+                $("#etc_service_1").html(etc_service_1);
+                $("#etc_service_1_price").html(etc_service_1_price);
+                $("#etc_service_1_cell").css("display","flex");
+            }
+            if(etc_service_2 != ''){
+                $("#etc_service_2").html(etc_service_2);
+                $("#etc_service_2_price").html(etc_service_2_price);
+                $("#etc_service_2_cell").css("display","flex");
+            }
+            if(etc_service_3 != ''){
+                $("#etc_service_3").html(etc_service_3);
+                $("#etc_service_3_price").html(etc_service_3_price);
+                $("#etc_service_3_cell").css("display","flex");
+            }
+            if(etc_service_4 != ''){
+                $("#etc_service_4").html(etc_service_4);
+                $("#etc_service_4_price").html(etc_service_4_price);
+                $("#etc_service_4_cell").css("display","flex");
+            }
         }
 
         // 총 금액 구하기
-        var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price
-                        + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
+        if(pet_type == 'cat'){
+            var total_price = serviceResultArray[2].price + serviceResultArray[3].price + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etc_price;
+        }else{
+            var total_price = serviceResultArray[2].price + serviceResultArray[3].price + serviceResultArray[4].price + etcResultArray[0].price + etcResultArray[1].price + etcResultArray[2].price + etcResultArray[3].price;
+        }
+
         var is_vat = ("<?=$is_vat?>" == '1')? 1 : 0;
         var point_score = 0; // 보유 포인트
         var vat_price = 0;
@@ -809,7 +896,7 @@ $INI_url = array(
             $("#vat_price").html(vat_price+"원");
             $("#vat_price_cell").css("display","flex");
         }
-        console.log(vat_price);
+        //console.log(vat_price);
         var result_price = total_price + vat_price;
         if(empty_session > 0){ // 빈시간판매하기일때
             var empty_type = "<?=$empty_type?>";
@@ -873,7 +960,7 @@ $INI_url = array(
             },
             success: function(json) {
                 if(json.code == "000000"){
-                    console.log(json.data);
+                    //console.log(json.data);
                     $("#container .point_score").html('').html(Math.round(json.data).format());
                     point_score = json.data;
                 }else{

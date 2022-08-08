@@ -742,7 +742,7 @@ if($pet_seq != ""){
             etcArray.push({"name" : "", "price" : 0, "sequnce" : i});
         }    
     }else{
-        var cattest = $("input:checkbox[name=cat_etc]").length;
+        var cattest = ($("input:checkbox[name=cat_etc]").length > 5)? $("input:checkbox[name=cat_etc]").length : 5;
         for(var i=0;i<cattest;i++){
             etcArray.push({"name" : "", "price" : 0, "sequnce" : i});
         }
@@ -1010,7 +1010,9 @@ if($pet_seq != ""){
                     result.price = price;
                 }
                 breakdownHtml += `<div class="service-selected-list-cell"><div class="list-data">${result.name}</div></div>`;
-            })
+            });
+
+            console.log(resultArray);
 
             $("#product_breakdown").html(breakdownHtml);
         }
@@ -1229,8 +1231,7 @@ if($pet_seq != ""){
             $.ajax({
                 url: '/data/getProduct.php',
                 data : {
-                    second_type: '<?=$second_type?>',
-                    customer_id : '<?=$customer_id?>',
+                    customer_id : '<?=$artist_id?>',
                     pet_type : '<?=$pet_type?>'
                 },
                 type : 'POST',
@@ -1242,7 +1243,7 @@ if($pet_seq != ""){
                     sectionHtml += '<div class="grid-layout-cell grid-2"><label class="form-toggle-box form-toggle-price middle" for="weight_cat2"><input type="radio" name="weight_cat" id="weight_cat2" checked><em>선택안함</em></label></div>';
                     for(var i=0;i<kgs_section.length;i++){
                         console.log(kgs_section[i]);
-                        sectionHtml += '<div onclick="clickWeight(\'~'+kgs_section[i]+'kg\','+product.increase_section_price+')" class="grid-layout-cell grid-2"><label class="form-toggle-box form-toggle-price middle" for="weight_cat2"><input type="radio" name="weight_cat" id="weight_cat2"><em><span>~'+kgs_section[i]+'kg</span><strong>+'+product.increase_section_price+'원</strong></em></label></div>';
+                        sectionHtml += '<div onclick="clickWeight(\'~'+kgs_section[i]+'kg\','+(product.increase_section_price*i)+')" class="grid-layout-cell grid-2"><label class="form-toggle-box form-toggle-price middle" for="weight_cat2"><input type="radio" name="weight_cat" id="weight_cat2"><em><span>~'+kgs_section[i]+'kg</span><strong>+'+(product.increase_section_price*i)+'원</strong></em></label></div>';
                     }
                     $("#service_weight").html(sectionHtml);
 
