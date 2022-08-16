@@ -682,7 +682,7 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             changeMonth: false, //월 선택 불가
             changeYear: false, //년 선택 불가
             showOtherMonths:true, //이전 , 다음 달 일수 활성화
-            minDate : 1, // 오늘날짜 이전 선택 불가(오늘포함)
+            minDate : 2, // 오늘, 내일날짜 이전 선택 불가 : 이틀 뒤 부터 선택 가능 ex) 오늘이 1일이면 3일자부터 예약 가능
             beforeShowDay: function(date){ // 샵 휴일 선택 불가
                 if(holiday_code != '') {
                     var day = date.getDay();
