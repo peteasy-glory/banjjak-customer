@@ -1,0 +1,106 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
+$user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_user_nickname'] : "";
+
+
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl_shop']);
+$_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
+
+if($_SESSION['backurl1'] == null){
+    $_SESSION['backurl1'] = "main";
+}
+
+?>
+<!-- header -->
+<header id="header">
+    <div class="header-left">
+        <a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+    </div>
+    <div class="page-title" id="title">산책 이벤트</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container">
+    <!-- page-body -->
+    <div class="page-body" id="event">
+        <div class="main-big-banner">
+            <div class="swiper-slide">
+                <div class="slider-item">
+                    <img src="https://image.banjjakpet.com/images/event/working_event.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <!-- //page-body -->
+    <div class="common-event-bottom-ui left">
+        <a href="shop_cart" class="btn-page-cart"><em>0</em></a>
+    </div>
+    <div class="common-event-bottom-ui right">
+        <button type="button" id="btnPageTop" class="btn-page-top" onclick="common.pageMove(0);">상단 바로가기</button>
+    </div>
+</section>
+<!-- //container -->
+<script>
+
+
+
+    //var lastScrollTop = 0;
+    //var timer = null;
+    //var customer_id = "<?//=$user_id ?>//";
+    //
+    //var sub_title =['침대/공기청정기','드라이룸','미용기','드라이기','자동급수기/급식기'];
+    //var event_item_list0 = ['ETCB-DULCIS-A01','ETCB-CUCKOO-A05','ETCB-CUCKOO-A04'];
+    //var event_item_list1 = ['ETCB-LUCOMS-A01','ETCB-AVEC-A02','ETCB-AVEC-A01','ETCB-CUCKOO-A01','ETCB-CUCKOO-A02'];
+    //var event_item_list2 = ['ETCB-LOVEPET-A01','ETCB-BANDI-A05','ETCB-AVEC-A05'];
+    //var event_item_list3 = ['ETCB-LOVEPET-A02','ETCB-AVEC-A04','ETCB-IM-A03','ETCB-IM-A02','ETCB-IM-A01'];
+    //var event_item_list4 = ['ETCB-BANDI-A01','ETCB-CUCKOO-A03','JB-FPA-A09'];
+
+    $(document).ready(function(){
+        // 장바구니 개수
+        $.ajax({
+            url: './data/item_ajax.php',
+            data: {
+                mode: "get_cart_cnt",
+                customer_id: "<?=$user_id ?>"
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data){
+                $(".btn-page-cart em").text(data.data);
+            }
+        });
+    })
+
+    // 세자리 숫자 콤마
+    Number.prototype.format = function() {
+        if (this == 0) return 0;
+
+        var reg = /(^[+-]?\d+)(\d{3})/;
+        var n = (this + '');
+
+        while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+
+        return n;
+    };
+
+    // 문자열 타입에서 쓸 수 있도록 format() 함수 추가
+    String.prototype.format = function() {
+        var num = parseFloat(this);
+        if (isNaN(num)) return "0";
+
+        return num.format();
+    };
+
+</script>
+<script type="text/javascript"  src="../include/source/deeplink.js"></script>
+</body>
+</html>
