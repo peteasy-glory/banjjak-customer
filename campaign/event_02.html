@@ -19,7 +19,7 @@ if($_SESSION['backurl1'] == null){
 <!-- header -->
 <header id="header">
     <div class="header-left">
-        <a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+        <a href="javascript:history.back();" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
     <div class="page-title" id="title">산책 이벤트</div>
 </header>
@@ -42,7 +42,7 @@ if($_SESSION['backurl1'] == null){
     </div>
     <!-- //page-body -->
     <div class="common-event-bottom-ui left">
-        <a href="shop_cart" class="btn-page-cart"><em>0</em></a>
+        <a href="/shop_cart" class="btn-page-cart"><em>0</em></a>
     </div>
     <div class="common-event-bottom-ui right">
         <button type="button" id="btnPageTop" class="btn-page-top" onclick="common.pageMove(0);">상단 바로가기</button>
