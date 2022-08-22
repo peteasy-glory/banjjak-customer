@@ -41,9 +41,9 @@ if($_SESSION['backurl1'] == null){
 
     </div>
     <!-- //page-body -->
-    <div class="common-event-bottom-ui left">
+    <!--<div class="common-event-bottom-ui left">
         <a href="/shop_cart" class="btn-page-cart"><em>0</em></a>
-    </div>
+    </div>-->
     <div class="common-event-bottom-ui right">
         <button type="button" id="btnPageTop" class="btn-page-top" onclick="common.pageMove(0);">상단 바로가기</button>
     </div>
@@ -66,6 +66,7 @@ if($_SESSION['backurl1'] == null){
 
     $(document).ready(function(){
         // 장바구니 개수
+        /*
         $.ajax({
             url: '/data/item_ajax.php',
             data: {
@@ -78,6 +79,7 @@ if($_SESSION['backurl1'] == null){
                 $(".btn-page-cart em").text(data.data);
             }
         });
+        */
     })
 
     // 세자리 숫자 콤마
