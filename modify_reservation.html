@@ -14,7 +14,7 @@ include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
 //}
 
 $date = date('Y-m-d');
-$tomorrow = date('Y-m-d', strtotime($date."+1days"));
+$tomorrow = date('Y-m-d', strtotime($date."+2days"));
 $week = date('w', strtotime($tomorrow));
 
 $payment_log_seq = $_GET['payment_log_seq'];
@@ -560,14 +560,18 @@ while ($artist_datas = mysqli_fetch_object($artist_result)) {
             if(is_disabled_brfore < 3 && is_disabled_brfore > 0){
                 $("input[name=time1]").prop('checked', false);
                 console.log("앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!");
-                $('#firstRequestMsg1').find('.msg-txt').text('앞 시간이 비어있어요! 앞 시간에 이어서 선택해 주세요!');
+                $('#firstRequestMsg1').find('.msg-txt').html('앞 시간이 비어있어요!<br> 앞 시간에 이어서 선택해 주세요!');
                 pop.open("firstRequestMsg1");
             }else if(is_disabled == 1){
                 $("input[name=time1]").prop('checked', false);
-                console.log("no1");
+                console.log("뒤에 다른 미용과 겹침");
+                $('#firstRequestMsg1').find('.msg-txt').html('미용 소요 시간이 길어</br> 해당 시간은 예약이 어렵습니다.');
+                pop.open("firstRequestMsg1");
             }else if(is_id == 1){
                 $("input[name=time1]").prop('checked', false);
-                console.log("미용가용시간만큼 비어있는 시간이 없습니다.");
+                console.log("뒤에 근무시간이 없음");
+                $('#firstRequestMsg1').find('.msg-txt').html('미용 소요 시간이 길어</br> 해당 시간은 예약이 어렵습니다.');
+                pop.open("firstRequestMsg1");
             }else{
                 console.log("yes");
                 timeResultArray.map(result => {
