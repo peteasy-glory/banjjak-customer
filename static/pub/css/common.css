@@ -161,7 +161,7 @@ html.fix {overflow:hidden;}
 
 
 /* 컨텐츠 레이아웃 */
-.basic-data-group {margin-top:50px; position:relative;}
+.basic-data-group {margin-top:21px; position:relative;}
 .basic-data-group.none,
 .basic-data-group:first-child,
 .basic-data-group:only-child {margin-top:0 !important;} 
