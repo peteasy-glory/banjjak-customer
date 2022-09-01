@@ -518,10 +518,11 @@ if($seq == 57){
                 }else{
                     html += '<div class="basic-data-group">';
                 }
-
-                html += '    <div class="con-title-group">';
-                html += '        <h4 class="con-title">'+sub_title[i]+'</h4>';
-                html += '    </div>';
+                if(sub_title[i] != ''){
+                    html += '    <div class="con-title-group">';
+                    html += '        <h4 class="con-title">'+sub_title[i]+'</h4>';
+                    html += '    </div>';
+                }
                 html += '    <div class="product-total-value">'+eval("event_item_list"+i).length+'개의 상품</div>';
                 html += '    <div class="product-vertical-list">';
                 html += '        <div class="list-inner" id="list_'+i+'">';
