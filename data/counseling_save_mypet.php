@@ -72,18 +72,37 @@ $mypet_seq = 0;
 
 // 20200724 ulmo 이미 신청된 상태에서 추가로 등록되지 않도록 예외처리 추가
 // 20200807 ulmo 중복 신청되어 정상 신청건 제외 나머지 갯수 체크로 변경 > approval : "= 0" >> "<> 1"
+$diff_12hours_time = strtotime("-12 hours");
+$str_update_time = date('Y-m-d H:i', $diff_12hours_time);
+
+// 12시간 이내 상담 완료 및 취소 안된 신청건 여부
 $sql = "
 	SELECT *
 	FROM tb_payment_log
 	WHERE customer_id = '".$user_id."'
 		AND artist_id = '".$artist_id."'
-		AND approval <> 1
+		AND approval = 0 
 		AND product_type = 'B'
+		and update_time > '{$str_update_time}'
 ";
 $result = mysqli_query($connection, $sql);
 $approval_cnt = mysqli_num_rows($result);
-if($approval_cnt > 0){
-	echo "already";
+
+// 미용 취소되었는지
+$sql = "
+	SELECT *
+	FROM tb_payment_log
+	WHERE customer_id = '".$user_id."'
+		AND artist_id = '".$artist_id."'
+		AND approval = 3 
+		AND product_type = 'B'
+";
+$result = mysqli_query($connection, $sql);
+$denied_cnt = mysqli_num_rows($result);
+if($approval_cnt > 0) {
+    echo "already";
+}else if($denied_cnt > 0){
+    echo "denied";
 }else{
 	$s_sql = "SELECT * FROM tb_mypet 
 	WHERE customer_id = '{$user_id}' 
@@ -257,8 +276,8 @@ if($approval_cnt > 0){
 		$path = "https://partner.banjjakpet.com/reserve_advice_list_1";
 		$path_admin = "https://www.gopet.kr/pet/mainpage/mainpage_my_menu.php";
 		$image = "https://customer.banjjakpet.com/static/pub/images/icon/icon-logo.png";
-		a_push($artist_id, "반짝, 첫 이용 상담 신청 알림", $message, $path, $image);
-		a_push("pickmon@pickmon.com", "반짝, [이용 상담 신청] 관리자 알림", $message_admin, $path_admin, $image);
+		//a_push($artist_id, "반짝, 첫 이용 상담 신청 알림", $message, $path, $image);
+		//a_push("pickmon@pickmon.com", "반짝, [이용 상담 신청] 관리자 알림", $message_admin, $path_admin, $image);
 	}
 
 	echo "OK";

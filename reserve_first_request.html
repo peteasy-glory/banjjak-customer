@@ -731,8 +731,11 @@ if ($shop_datas = mysqli_fetch_object($shop_result)) {
                     alert("상담 신청이 완료되었습니다.");
                     location.replace("reserve_view?artist_id=<?= $artist_id ?>&backurl=<?=$backurl?>");
 //                    location.replace("<?= $mainpage_directory ?>");
+                }else if($.trim(data) == "denied"){
+                    alert("펫샵의 사정으로 예약을 진행할 수 없습니다. 다른 샵을 선택해 보시는 게 어떨까요?");
+                    location.replace("reserve_view?artist_id=<?= $artist_id ?>&backurl=<?=$backurl?>");
                 }else{
-                    alert("미용상담신청 대기중입니다."+data);
+                    alert("미용상담신청 대기중입니다.");
                     location.replace("reserve_view?artist_id=<?= $artist_id ?>&backurl=<?=$backurl?>");
 //                    location.replace("<?= $mainpage_directory ?>");
                 }
