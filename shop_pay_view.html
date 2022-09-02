@@ -354,6 +354,8 @@ $reason_type_arr = array(
 //		$(document).find("#item_order_detail").after(html);
 //		$(document).find("#send_shipping_data").submit();
             window.open("https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnum="+shipping_invoice, "_BLANK");
+        }else if(shipping_company == "3"){
+            window.open("https://www.lotteglogis.com/mobile/reservation/tracking/linkView?InvNo="+shipping_invoice, "_BLANK");
         }
     }
 
