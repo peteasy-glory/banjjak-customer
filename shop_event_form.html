@@ -16,6 +16,7 @@ if($_SESSION['backurl1'] == null){
 }
 
 ?>
+
 <!-- header -->
 <header id="header">
     <div class="header-left">
@@ -94,7 +95,7 @@ if($_SESSION['backurl1'] == null){
 
             for(var i = 0; i < sub_title.length; i++){
                 html += '<div class="basic-data-group">';
-                html += '    <div class="con-title-group">';
+                html += '    <div class="con-title-group css_'+i+'">';
                 html += '        <h4 class="con-title">'+sub_title[i]+'</h4>';
                 html += '    </div>';
                 html += '    <div class="product-total-value">'+eval("event_item_list"+i).length+'개의 상품</div>';
@@ -197,6 +198,8 @@ if($_SESSION['backurl1'] == null){
     };
 
 </script>
-
+<style>
+.css_0{font-size: 30px; background-color: red;}
+</style>
 </body>
 </html>
