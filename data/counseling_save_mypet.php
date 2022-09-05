@@ -276,8 +276,8 @@ if($approval_cnt > 0) {
 		$path = "https://partner.banjjakpet.com/reserve_advice_list_1";
 		$path_admin = "https://www.gopet.kr/pet/mainpage/mainpage_my_menu.php";
 		$image = "https://customer.banjjakpet.com/static/pub/images/icon/icon-logo.png";
-		//a_push($artist_id, "반짝, 첫 이용 상담 신청 알림", $message, $path, $image);
-		//a_push("pickmon@pickmon.com", "반짝, [이용 상담 신청] 관리자 알림", $message_admin, $path_admin, $image);
+		a_push($artist_id, "반짝, 첫 이용 상담 신청 알림", $message, $path, $image);
+		a_push("pickmon@pickmon.com", "반짝, [이용 상담 신청] 관리자 알림", $message_admin, $path_admin, $image);
 	}
 
 	echo "OK";
