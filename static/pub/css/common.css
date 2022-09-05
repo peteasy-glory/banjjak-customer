@@ -2061,6 +2061,9 @@ h6.con-title {font-size:15px; line-height:20px;}
 .common-bottom-ui.left {left:20px; right:auto;}
 .common-bottom-ui.right {right:20px; left:auto;}
 
+/* 이벤트 페이지 */
+.event_chuseok {display: flex; justify-content: center; align-items: center;}
+
 /* 이벤트 페이지 하단 */
 .common-event-bottom-ui {position:fixed; bottom:30px; right:20px; z-index:500;}
 .common-event-bottom-ui.left {left:20px; right:auto;}
