@@ -22,7 +22,7 @@ if($_SESSION['backurl1'] == null){
     <div class="header-left">
         <a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
     </div>
-    <div class="page-title" id="title">Welcome 회원 혜택</div>
+    <div class="page-title" id="title">한가위 대축제</div>
 </header>
 <!-- //header -->
 
@@ -32,10 +32,15 @@ if($_SESSION['backurl1'] == null){
     <div class="page-body" id="event">
         <div class="main-big-banner">
             <div class="swiper-slide">
-                <div class="slider-item">
-                    <a href="#link_0"><img src="https://image.banjjakpet.com/images/event/event_firstbuy_01.jpg" alt=""/></a>
-                    <a href="/join1"><img src="https://image.banjjakpet.com/images/event/event_firstbuy_02.jpg" alt=""/></a>
-                    <img src="https://image.banjjakpet.com/images/event/event_firstbuy_03.jpg" alt=""/>
+                <div class="slider-item" style="background: url('https://image.banjjakpet.com/images/event/event_chuseok_bg.jpg') no-repeat center top; background-size: 100%; padding-top: 80%; padding-bottom: 8%">
+                    <div class="event_chuseok">
+                        <a href="#link_0"><img src="https://image.banjjakpet.com/images/event/event_chuseok_01.png" alt=""/></a>
+                        <a href="#link_1"><img src="https://image.banjjakpet.com/images/event/event_chuseok_02.png" alt=""/></a>
+                    </div>
+                    <div class="event_chuseok">
+                        <a href="#link_2"><img src="https://image.banjjakpet.com/images/event/event_chuseok_03.png" alt=""/></a>
+                        <a href="#link_3"><img src="https://image.banjjakpet.com/images/event/event_chuseok_04.png" alt=""/></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,12 +65,11 @@ if($_SESSION['backurl1'] == null){
     var timer = null;
     var customer_id = "<?=$user_id ?>";
 
-    var sub_title =['침대/공기청정기','드라이룸','미용기','드라이기','자동급수기/급식기'];
-    var event_item_list0 = ['ETCB-DULCIS-A01','ETCB-CUCKOO-A05','ETCB-CUCKOO-A04'];
-    var event_item_list1 = ['ETCB-LUCOMS-A01','ETCB-AVEC-A02','ETCB-AVEC-A01','ETCB-CUCKOO-A01','ETCB-CUCKOO-A02'];
-    var event_item_list2 = ['ETCB-LOVEPET-A01','ETCB-BANDI-A05','ETCB-AVEC-A05'];
-    var event_item_list3 = ['ETCB-LOVEPET-A02','ETCB-AVEC-A04','ETCB-IM-A03','ETCB-IM-A02','ETCB-IM-A01'];
-    var event_item_list4 = ['ETCB-BANDI-A01','ETCB-CUCKOO-A03','JB-FPA-A09'];
+    var sub_title =['맛도리 간식','꼬질이 탈출','외출용품','고양이 전용'];
+    var event_item_list0 = ['ETCB-BUTLERHOLDINGS-A01','ETCB-BUTLERHOLDINGS-A04','ETCB-BUTLERHOLDINGS-A11','ETCB-BUGS-PET-A05','ETCB-BUGS-PET-A04','ETCB-COREADOG-A07','ETCB-COREADOG-A08','ETCB-COREADOG-A09','JB-TREAT-A584','JB-TREAT-A585','JB-TREAT-A85','JB-TREAT-A84','JB-TREAT-A255','JB-TREAT-A250','JB-TREAT-A433','JB-TREAT-A434','JB-TREAT-A536','JB-TREAT-A538','JB-TREAT-A466','JB-TREAT-A467','JB-TREAT-A468'];
+    var event_item_list1 = ['ETCB-JOARU-A01','ETCB-JOARU-A02','ETCB-JOARU-A03','ETCB-JOARU-A04','ETCB-AINSOAP-A27','ETCB-AINSOAP-A28','ETCB-AINSOAP-A01','ETCB-AINSOAP-A04','ETCB-AINSOAP-A20','ETCB-AINSOAP-A29','ETCB-BATHMONG-A01','ETCB-BATHMONG-A03','ETCB-BATHMONG-A07','ETCB-ELAMIGO-A12','ETCB-JAYUPET-A01'];
+    var event_item_list2 = ['ETCB-TAILHIGH-A20','ETCB-TAILHIGH-A25','ETCB-TAILHIGH-A30','ETCB-TAILHIGH-A18','ETCB-ICANDOR-A24','ETCB-ICANDOR-A26','ETCB-ICANDOR-A22','ETCB-ICANDOR-A20','ETCB-ICANDOR-A15','ETCB-ICANDOR-A16','ETCB-ICANDOR-A14','ETCB-ICANDOR-A13','ETCB-ICANDOR-A01','ETCB-ICANDOR-A04','ETCB-ICANDOR-A08','JB-MC-A39','JB-MC-A40','ETCB-ELAMIGO-A11','CN-W-A01-BOGO'];
+    var event_item_list3 = ['ETCB-BANDI-A06','ETCB-BANDI-A36','ETCB-BANDI-A01','ETCB-PAPANYANG-A03','ETCB-PETTAIL-A03','ETCB-COCUMONO-A01','ETCB-COCUMONO-A02','ETCB-PETTIMJANG-A01','ETCB-PETTIMJANG-A03','ETCB-PETTIMJANG-A04','ETCB-JAYUPET-A04'];
 
     $(document).ready(function(){
         // 장바구니 개수
@@ -199,7 +203,10 @@ if($_SESSION['backurl1'] == null){
 
 </script>
 <style>
-.css_0{font-size: 30px; background-color: red;}
+.css_0 {justify-content: center; background: #a15d6c; color: #fff; border-radius: 30px; margin-bottom: 20px;}
+.css_1 {justify-content: center; background: #3087a6; color: #fff; border-radius: 30px; margin-bottom: 20px;}
+.css_2 {justify-content: center; background: #99b792; color: #fff; border-radius: 30px; margin-bottom: 20px;}
+.css_3 {justify-content: center; background: #7575aa; color: #fff; border-radius: 30px; margin-bottom: 20px;}
 </style>
 </body>
 </html>
