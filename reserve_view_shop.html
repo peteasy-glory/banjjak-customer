@@ -889,7 +889,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                             <div class="item-desc"><?= $contents ?> </div>
                                             <div class="item-blog-option">
                                                 <div class="name"><div class="ellipsis"><?= $blog->blogger_name ?></div></div>
-                                                <div class="date"><?= $blog->post_date ?></div>
+                                                <div class="date"><?= explode(' ', $blog->post_date)[0] ?></div>
                                             </div>
                                         </div>
                                     </a>
