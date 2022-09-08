@@ -2,6 +2,8 @@
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/check_login.php");
 include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
+$emoji = new TEmoji();
 
 //jin 일단 주석처리
 //$cl_result = include "../include/check_login.php";
@@ -63,7 +65,7 @@ $_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
 								<div class="content-thumb small"><img src=<?= $artist_photo ?> alt=""></div>
 								<div class="info-wrap">
 									<div class="item-name"><?= $artist_name ?></div>
-									<div class="item-address"><?= $introduction ?></div>
+									<div class="item-address"><?= $emoji->emojiDBToStr($introduction) ?></div>
 								</div>
 							</a>
 							<button type="button" class="btn-like-view <? echo (($is_like == 1)? "actived" :"") ?>" artist_id="<?= $artist_id ?>" is_on="1" id="like<?= $ch_index ?>">좋아요</button>

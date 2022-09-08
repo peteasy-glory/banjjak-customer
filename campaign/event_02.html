@@ -18,6 +18,9 @@ if($_SESSION['backurl1'] == null){
 ?>
 <!-- header -->
 <header id="header">
+    <div class="header-left">
+        <a href="javascript:history.back();" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+    </div>
     <div class="page-title" id="title">산책 이벤트</div>
 </header>
 <!-- //header -->
@@ -38,6 +41,9 @@ if($_SESSION['backurl1'] == null){
 
     </div>
     <!-- //page-body -->
+    <!--<div class="common-event-bottom-ui left">
+        <a href="/shop_cart" class="btn-page-cart"><em>0</em></a>
+    </div>-->
     <div class="common-event-bottom-ui right">
         <button type="button" id="btnPageTop" class="btn-page-top" onclick="common.pageMove(0);">상단 바로가기</button>
     </div>
@@ -58,7 +64,23 @@ if($_SESSION['backurl1'] == null){
     //var event_item_list3 = ['ETCB-LOVEPET-A02','ETCB-AVEC-A04','ETCB-IM-A03','ETCB-IM-A02','ETCB-IM-A01'];
     //var event_item_list4 = ['ETCB-BANDI-A01','ETCB-CUCKOO-A03','JB-FPA-A09'];
 
-
+    $(document).ready(function(){
+        // 장바구니 개수
+        /*
+        $.ajax({
+            url: '/data/item_ajax.php',
+            data: {
+                mode: "get_cart_cnt",
+                customer_id: "<?=$user_id ?>"
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data){
+                $(".btn-page-cart em").text(data.data);
+            }
+        });
+        */
+    })
 
     // 세자리 숫자 콤마
     Number.prototype.format = function() {
@@ -81,6 +103,6 @@ if($_SESSION['backurl1'] == null){
     };
 
 </script>
-
+<script type="text/javascript"  src="../include/source/deeplink.js"></script>
 </body>
 </html>

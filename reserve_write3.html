@@ -14,7 +14,7 @@ include($_SERVER['DOCUMENT_ROOT']."/data/get_artist_id.php");
 //}
 
 $date = date('Y-m-d');
-$tomorrow = date('Y-m-d', strtotime($date."+1days"));
+$tomorrow = date('Y-m-d', strtotime($date."+2days"));
 $week = date('w', strtotime($tomorrow));
 
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";

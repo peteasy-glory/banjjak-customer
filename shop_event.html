@@ -88,6 +88,16 @@ if($seq == 57){
 }else if($seq == 75){
     $meta_photo = "https://image.banjjakpet.com/images/event/pet_avec.jpg";
     $meta_name = "아베크 기획전";
+}else if($seq == 76){
+    $meta_photo = "https://image.banjjakpet.com/images/event/pet_avec.jpg";
+    $meta_name = "아베크 5주년 기획전";
+}else if($seq == 77){
+    $meta_photo = "https://image.banjjakpet.com/images/event/event_ifanimal.jpg";
+    $meta_name = "이프애니멀 기획전";
+
+}else if($seq == 77){
+    $meta_photo = "https://image.banjjakpet.com/images/event/event_ifanimal.jpg";
+    $meta_name = "추석 기획전";
 }
 
 ?>
@@ -452,7 +462,23 @@ if($seq == 57){
         var title = '아베크 기획전';
         var banner = ["https://image.banjjakpet.com/images/event/pet_avec.jpg"];
         var sub_title =[''];
-        var event_item_list0 = ['ETCB-AVEC-A01','ETCB-AVEC-A02','ETCB-AVEC-A03','ETCB-AVEC-A04','ETCB-AVEC-A05','ETCB-AVEC-A06','ETCB-AVEC-A07','ETCB-AVEC-A08','ETCB-AVEC-A09','ETCB-AVEC-A11','ETCB-AVEC-A19','ETCB-AVEC-A20','ETCB-AVEC-A12','ETCB-AVEC-A14','ETCB-AVEC-A15','ETCB-AVEC-A16','ETCB-AVEC-A17','ETCB-AVEC-A18'];
+        var event_item_list0 = ['ETCB-AVEC-A01','ETCB-AVEC-A02','ETCB-AVEC-A03','ETCB-AVEC-A04','ETCB-AVEC-A05','ETCB-AVEC-A06','ETCB-AVEC-A07','ETCB-AVEC-A08','ETCB-AVEC-A09','ETCB-AVEC-A11','ETCB-AVEC-A19','ETCB-AVEC-A20','ETCB-AVEC-A21','ETCB-AVEC-A12','ETCB-AVEC-A14','ETCB-AVEC-A15','ETCB-AVEC-A16','ETCB-AVEC-A17','ETCB-AVEC-A18'];
+    }else if(seq == '76'){
+        var title = '아베크 5주년 기획전';
+        var banner = [""];
+        var sub_title =[''];
+        var event_item_list0 = ['ETCB-AVEC-A06', 'ETCB-AVEC-A07', 'ETCB-AVEC-A08', 'ETCB-AVEC-A09','ETCB-AVEC-A19','ETCB-AVEC-A21','ETCB-AVEC-A14','ETCB-AVEC-A18','ETCB-AVEC-A17','ETCB-AVEC-A16'];
+    }else if(seq == '77'){
+        var title = '이프애니멀 기획전';
+        var banner = ["https://image.banjjakpet.com/images/event/event_ifanimal.jpg"];
+        var sub_title = [''];
+        var event_item_list0 = ['ETCB-IFANIMAL-A01','ETCB-IFANIMAL-A02','ETCB-IFANIMAL-A03','ETCB-IFANIMAL-A04','ETCB-IFANIMAL-A05','ETCB-IFANIMAL-A06','ETCB-IFANIMAL-A07']
+    }else if(seq == '78'){
+        <?php
+        unset($_SESSION['backurl_shop']);
+        $_SESSION['backurl_shop'] = $_SESSION["backurl1"];
+        ?>
+        location.replace("shop_event_chuseok");
     }
 
 
@@ -483,18 +509,29 @@ if($seq == 57){
         return new Promise(function(resolve, reject) {
             var html = '';
 
-            html += '<div class="main-big-banner">';
-            for(var j = 0; j < banner.length; j++){
-                html += '    <div class="swiper-slide"><div class="slider-item"><img src="'+banner[j]+'" alt=""/></div></div>';
+            if(banner[0] !== ''){
+                html += '<div class="main-big-banner">';
+                for(var j = 0; j < banner.length; j++){
+                    html += '    <div class="swiper-slide"><div class="slider-item"><img src="'+banner[j]+'" alt=""/></div></div>';
+                }
+                html += '</div>';
             }
-            html += '</div>';
+
 
 
             for(var i = 0; i < sub_title.length; i++){
-                html += '<div class="basic-data-group">';
-                html += '    <div class="con-title-group">';
-                html += '        <h4 class="con-title">'+sub_title[i]+'</h4>';
-                html += '    </div>';
+
+                if(banner[0] === ''){
+
+                    html += '<div class="basic-data-group none">';
+                }else{
+                    html += '<div class="basic-data-group">';
+                }
+                if(sub_title[i] != ''){
+                    html += '    <div class="con-title-group">';
+                    html += '        <h4 class="con-title">'+sub_title[i]+'</h4>';
+                    html += '    </div>';
+                }
                 html += '    <div class="product-total-value">'+eval("event_item_list"+i).length+'개의 상품</div>';
                 html += '    <div class="product-vertical-list">';
                 html += '        <div class="list-inner" id="list_'+i+'">';
