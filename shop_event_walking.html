@@ -33,7 +33,7 @@ if($_SESSION['backurl1'] == null){
             <div class="swiper-slide">
                 <div class="slider-item">
                     <img src="https://image.banjjakpet.com/images/event/working_event_02_01.jpg" alt=""/>
-                    <a href="#"><img src="https://image.banjjakpet.com/images/event/working_event_02_02.jpg" alt=""/></a>
+                    <a href="#" onclick="go_walking()"><img src="https://image.banjjakpet.com/images/event/working_event_02_02.jpg" alt=""/></a>
                     <img src="https://image.banjjakpet.com/images/event/working_event_02_03.jpg" alt=""/>
                 </div>
             </div>
@@ -79,11 +79,45 @@ if($_SESSION['backurl1'] == null){
             }
         });
 
-        get_event_item_list_html()
-            .then(get_event_list);
+        // get_event_item_list_html()
+        //     .then(get_event_list);
     });
 
 
+    function go_walking(){
+
+        let usr_email	= '<?=$_SESSION['gobeauty_user_id']?>';
+
+        if(usr_email === ''){
+
+            location.href = '/login_1';
+        }else{
+
+
+            if (navigator.userAgent.toLowerCase().match(/iphone|ipad|ipod/i)) {
+
+
+
+
+
+                    location.href = `banjjakpet://walking`;
+
+                    setTimeout(()=>{
+
+                        location.href = `itms-apps://itunes.apple.com/kr/app/apple-store/id1436568194`;
+                    },1500)
+
+            }else{
+
+
+                    location.href = `intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
+
+            }
+
+
+
+        }
+    }
     function get_event_item_list_html(){
         return new Promise(function(resolve, reject) {
             var html = '';
