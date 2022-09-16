@@ -102,6 +102,9 @@
 
                 if($my_shop_flag == '1'){
 
+
+
+
                     $user_agent = $_SERVER['HTTP_USER_AGENT'];
                     if ($user_agent) {
                         $token_index = strpos($user_agent, "APP_GOBEAUTY_iOS");
