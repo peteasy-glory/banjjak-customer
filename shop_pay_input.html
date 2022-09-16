@@ -596,6 +596,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                             is_free_shipping_price.push(0) // 최종 구매 가격
                             is_free_shipping_do.push(parseInt(v.is_free_shipping)); // 무배정책 사용 여부 0: 미사용 1: 가격으로 사용 2: 개수로 사용(우선 가격만 적용)
                         });
+                        console.log(shipping_price);
                         $item_cart.find('.special_product').prepend(html);
                         console.log(is_free_shipping_limit);
                         console.log(is_free_shipping_total);
@@ -898,7 +899,7 @@ $siteDomain = "https://customer.banjjakpet.com"; //가맹점 도메인 입력
                     // 선택한 상품이 있을때
                     }else{
                         // 선택 가격이 무료배송시작금액보다 클 경우
-                        if(is_free_shipping_price[i] >= is_free_shipping_limit[i]){
+                        if((is_free_shipping_price[i] >= is_free_shipping_limit[i]) && is_free_shipping_do[i]>0){
                             _shipping_price[i] = 0;
                             //_shipping_price[i] = parseInt(shipping_price[i]);
                         // 선택 가격이 무료배송시작금액보다 작을 경우

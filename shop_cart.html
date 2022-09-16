@@ -656,7 +656,7 @@ foreach($partner_array as $rs){
                         // 선택한 상품이 있을때
                         }else{
                             // 선택 가격이 무료배송시작금액보다 클 경우
-                            if(is_free_shipping_price[i]>= is_free_shipping_limit[i]){
+                            if((is_free_shipping_price[i]>= is_free_shipping_limit[i]) && is_free_shipping_do[i]>0){
                                 _shipping_price[i] = 0;
                                 if(i == 1){ // 업체배송일때
                                     $item_cart.find('.out_product .delivery-process-info p').html('무료배송');
