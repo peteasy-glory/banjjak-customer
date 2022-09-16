@@ -267,9 +267,63 @@ if($_SESSION['is_token'] == "1"){
     </div>
 </header>
 <!-- //header -->
-
+<div id="popup_wrap">
+    <div class="custom-modal-content">
+        <div class="popup_img">
+            <div class="swiper-container_front swiper-container">
+                <div class="swiper-wrapper" id="popup-wraper">
+                    <div class="swiper-slide">
+                        <a href="/shop_event_walking">
+                            <img src="https://image.banjjakpet.com/images/event/walking_event_pop.jpg" alt="" />
+                        </a>
+                    </div>
+                </div>
+                <div class="next"><i class="fa-solid fa-chevron-left"></i></div>
+                <div class="prev"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="swiper-pagination_front"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- container -->
-
+<script>
+    if (getCookie_popup('guide_walking') != 'Y') {
+        $("#popup_wrap").dialog({
+            modal: true,
+            title: "",
+            autoOpen: true,
+            //maxWidth: "96%",
+            //minHeight: Number($(window).height()) - 40,
+            //width: 'auto',
+            //height: 'auto',
+            autoSize: false,
+            resize: 'auto',
+            resizable: false,
+            draggable: false,
+            buttons: {
+                '닫기': function() {
+                    // setCookie_popup('guide_beauty_shop ', 'Y', 1);
+                    $(this).dialog("close");
+                },
+                "오늘 그만보기": function() {
+                    // location.href = "mypage_notice_view?notice_seq=19";
+                    setCookie_popup('guide_walking', 'Y', 1);
+                    $(this).dialog("close");
+                }
+            },
+            open: function(event, ui) {
+                // swiper2.update();
+                $(event.target).parent().css('position', 'fixed'); // dialog fixed
+                $(event.target).parent().css('top', '50%'); // dialog fixed
+                $(event.target).parent().css('left', '50%'); // dialog fixed
+                $(event.target).parent().css('transform', 'translate(-50%, -50%)'); // dialog fixed
+                // $('.ui-dialog').position({ my: "center", at: "center", of: window });
+            },
+            close: function() {
+            }
+        });
+    }
+</script>
 
 <section id="container">
 
@@ -850,24 +904,7 @@ if($_SESSION['is_token'] == "1"){
     </div>
     <!-- //page-body -->
 
-    <div id="popup_wrap">
-        <div class="custom-modal-content">
-            <div class="popup_img">
-                <div class="swiper-container_front swiper-container">
-                    <div class="swiper-wrapper" id="popup-wraper">
-                        <div class="swiper-slide">
-                            <a href="/shop_event_walking">
-                                <img src="https://image.banjjakpet.com/images/event/walking_event_pop.jpg" alt="" />
-                            </a>
-                        </div>
-                    </div>
-                    <div class="next"><i class="fa-solid fa-chevron-left"></i></div>
-                    <div class="prev"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="swiper-pagination_front"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 </section>
 <!-- //container -->
@@ -1228,42 +1265,7 @@ if($_SESSION['is_token'] == "1"){
 
 
     $(document).ready(function(){
-        if (getCookie_popup('guide_walking') != 'Y' && navigator.userAgent.toLowerCase().match('app_gobeauty')) {
-            $("#popup_wrap").dialog({
-                modal: true,
-                title: "",
-                autoOpen: true,
-                //maxWidth: "96%",
-                //minHeight: Number($(window).height()) - 40,
-                //width: 'auto',
-                //height: 'auto',
-                autoSize: false,
-                resize: 'auto',
-                resizable: false,
-                draggable: false,
-                buttons: {
-                    '닫기': function() {
-                        // setCookie_popup('guide_beauty_shop ', 'Y', 1);
-                        $(this).dialog("close");
-                    },
-                    "오늘 그만보기": function() {
-                        // location.href = "mypage_notice_view?notice_seq=19";
-                        setCookie_popup('guide_walking', 'Y', 1);
-                        $(this).dialog("close");
-                    }
-                },
-                open: function(event, ui) {
-                    // swiper2.update();
-                    $(event.target).parent().css('position', 'fixed'); // dialog fixed
-                    $(event.target).parent().css('top', '50%'); // dialog fixed
-                    $(event.target).parent().css('left', '50%'); // dialog fixed
-                    $(event.target).parent().css('transform', 'translate(-50%, -50%)'); // dialog fixed
-                    // $('.ui-dialog').position({ my: "center", at: "center", of: window });
-                },
-                close: function() {
-                }
-            });
-        }
+
     });
 
     let popup_swiper_reserve = new Swiper('.swiper-container_front', {
