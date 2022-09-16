@@ -391,7 +391,7 @@ $_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
 								if(search_count == Object.keys(data.data).length){
 									resolve();
 								}
-                                console.log(v);
+                                //console.log(v);
 								return get_main_contents(v);
 							});
 						});	
@@ -442,7 +442,7 @@ $_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
 			async: false,
 			success: function(data) {
 				if(data.code == "000000"){
-					console.log(data);
+					console.log(data.data.total_service.length);
                     var shop_address = (typeof data.data.shop_address != "undefined")? data.data.shop_address : "";
                     var photo = "https://image.banjjakpet.com"+img_link_change(list[0].front_image);
                     var rating = (list[0].rating_avg > 0)? list[0].rating_avg : 0;
@@ -462,6 +462,9 @@ $_SESSION['backurl_reserve'] = $_SERVER[ "REQUEST_URI" ];
                     html +=            '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'+Math.round(rating)+'</em>('+cnt_rating+')</div>'
                     html +=            '<div class="item-address">'+shop_address+'</div>'
                     html +=            '<div class="item-cate">'
+                    if(data.data.total_service.length < 3){
+                        html += '소형견 중형견 특수견,';
+                    }
                     for(var _i = 0; _i < tag_list.length; _i++){
 						html += ' ' + tag_list[_i];
 					}

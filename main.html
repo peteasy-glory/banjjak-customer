@@ -721,7 +721,7 @@ if($_SESSION['is_token'] == "1"){
                                     }
 
                                     // 미용타입 구하기
-                                    /*$type_txt = "";
+                                    $type_txt = "";
                                     if(strpos($rs['type'],'소형견미용') !== false){
                                         $type_txt .= "소형견, ";
                                     }
@@ -740,7 +740,10 @@ if($_SESSION['is_token'] == "1"){
 
                                     if($type_txt != ''){
                                         $type_txt = substr($type_txt, 0, -2);
-                                    }*/
+                                    }
+                                    if(strlen($type_txt) < 7){
+                                        $type_txt = "소형견, 중형견, 특수견";
+                                    }
                                     ?>
                                     <div class="list-cell">
                                         <a href="reserve_view?type=beauty&artist_id=<?=$rs['customer_id']?>" class="basic-list-item store">
@@ -750,7 +753,7 @@ if($_SESSION['is_token'] == "1"){
                                             <div class="info-wrap">
                                                 <div class="item-name"><?=$rs['name']?></div>
                                                 <div class="item-address"><?=$shop_address[1]?></div>
-                                                <div class="item-cate"><?=$rs['type']?></div>
+                                                <div class="item-cate"><?=$type_txt?></div>
                                                 <div class="item-option-group">
                                                     <div class="group-inner">
                                                         <!-- 20211024 수정 : tag-item 클래스로 수정 (리스트 이하 동일) -->

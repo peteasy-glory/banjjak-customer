@@ -3275,6 +3275,7 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 			$r_order_num	   = (isset($_POST["order_num"]) && $_POST["order_num"] &&  $_POST["order_num"] != "")? $_POST["order_num"] : "";
 			$r_iplp_seq		   = (isset($_POST["iplp_seq"]) && $_POST["iplp_seq"] && $_POST["iplp_seq"] != "")? $_POST["iplp_seq"] : "";
 			$where_qy = "";
+			$r_limit		   = (isset($_POST["limit"]) && $_POST["limit"] && $_POST["limit"] != "")? "limit 1" : "";
 
 			if($r_order_num != ""){	// 주문번호
 				$where_qy .= " AND order_num = '".$r_order_num."' ";
@@ -3290,6 +3291,7 @@ include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 					FROM tb_item_payment_log_product
 					WHERE is_delete = '1'
 						".$where_qy."
+						".$r_limit."
 				";
 				$result = mysqli_query($connection,$sql);
 				while($row = mysqli_fetch_assoc($result)){

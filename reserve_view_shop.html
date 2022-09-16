@@ -3,12 +3,12 @@
 $title = "펫샵 상세보기";
 include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
 //include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
-
+include($_SERVER['DOCUMENT_ROOT']."/common/TEmoji.php");
 if($_SESSION['backurl_reserve'] == null)
     $_SESSION['backurl_reserve'] = 'main';
 //print_r($_GET);
 //exit;
-
+$emoji = new TEmoji();
 $obj = new module();
 
 $backurl = isset($_GET['backurl']) ? $_GET['backurl'] : "";
@@ -155,9 +155,6 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
 <!-- header -->
 <header id="header">
-    <div class="header-left">
-        <a href="<?=$_SESSION['backurl_reserve']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
-    </div>
     <div class="page-title"><?=$title?></div>
 </header>
 <!-- //header -->
@@ -299,7 +296,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
             </div>
 
             <div class="item-desc">
-                <div class="txt"><?= $artist_datas->self_introduction ?></div>
+                <div class="txt"><?= $emoji->emojiDBToStr($artist_datas->self_introduction) ?></div>
                 <button type="button" class="btn-desc-more">더보기</button>
             </div>
             <div class="item-btns">
@@ -329,7 +326,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
 
                 let t = document.createElement("textarea");
                 document.body.appendChild(t);
-                t.value = currentUrl;
+                t.value = "https://customer.banjjakpet.com/reserve_view?artist_id=<?=$artist_id?>";
                 t.select();
                 document.execCommand('copy');
                 document.body.removeChild(t);
@@ -792,7 +789,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                             </div>
                         </div>
                         <?php if($review_rows->is_blind == "0"){ ?>
-                            <div class="item-detail"><?= strip_tags($review_rows->review) ?></div>
+                            <div class="item-detail"><?= $emoji->emojiDBToStr(strip_tags($review_rows->review)) ?></div>
                             <div class="basic-item basic-item-ui">
                                 <button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
                                 <div class="basic-item-ui-list">
@@ -801,7 +798,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                             </div>
                         <?php }else{ ?>
                             <?php	if($review_rows->customer_id == $user_id || $review_rows->artist_id == $user_id){ ?>
-                                <div class="item-detail"><?= strip_tags($review_rows->review) ?></div>
+                                <div class="item-detail"><?= $emoji->emojiDBToStr(strip_tags($review_rows->review)) ?></div>
                                 <div class="basic-item basic-item-ui">
                                     <button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
                                     <div class="basic-item-ui-list">
@@ -828,10 +825,10 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                     <div class="recomment-data">
                                         <div class="item-name"><?= $artist_datas->name ?><span class="date"> <?= explode(' ', $reply_time)[0]?></span></div>
                                         <?php if($review_rows->is_blind == "0"){ ?>
-                                            <div class="item-detail"><?= $review_rows->artist_reply ?></div>
+                                            <div class="item-detail"><?= $emoji->emojiDBToStr($review_rows->artist_reply) ?></div>
                                         <?php }else{ ?>
                                             <?php	if($review_rows->customer_id == $user_id || $review_rows->artist_id == $user_id){ ?>
-                                                <div class="item-detail"><?= $review_rows->artist_reply ?></div>
+                                                <div class="item-detail"><?= $emoji->emojiDBToStr($review_rows->artist_reply) ?></div>
                                             <?php	}else{ ?>
                                                 <div class="item-detail blind"><i class="fas fa-lock"></i>신고되어 비공개된 글입니다..</div>
                                             <?php	} ?>
@@ -892,7 +889,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                             <div class="item-desc"><?= $contents ?> </div>
                                             <div class="item-blog-option">
                                                 <div class="name"><div class="ellipsis"><?= $blog->blogger_name ?></div></div>
-                                                <div class="date"><?= $blog->post_date ?></div>
+                                                <div class="date"><?= explode(' ', $blog->post_date)[0] ?></div>
                                             </div>
                                         </div>
                                     </a>

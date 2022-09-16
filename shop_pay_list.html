@@ -82,82 +82,6 @@ $pay_status_arr_old = array(
         location.href = "shop_pay_view?no="+no;
     });
 
-    $item_order_list.on("click", ".return_please_btn", function(){ // 반품요청
-        var no = $(this).data("no");
-        location.href = "<?=$item_directory ?>/item_order_return_list.php?no="+no;
-    });
-
-    $item_order_list.on("click", ".shipping_done_btn", function(){ // 수취확인
-        var no = $(this).data("no");
-        $.MessageBox({
-            buttonDone  : "확인",
-            buttonFail  : "취소",
-            message     : "수취 확인 하시겠습니까?"
-        }).done(function(data, button){
-            $.ajax({
-                url: '<?=$item_directory ?>/item_list_ajax.php',
-                data: {
-                    mode : "set_update_product_pay_status",
-                    pay_status: "4",
-                    order_num: no
-                },
-                type: 'POST',
-                dataType: 'JSON',
-                success: function(data) {
-                    if(data.code == "000000"){
-                        console.log(data.data);
-                        console.log(data.sql);
-                        $.MessageBox({
-                            buttonDone  : "확인",
-                            message     : "수취확인 되었습니다."
-                        }).done(function(data, button){
-                            location.reload();
-                        });
-                    }else{
-                        alert(data.data+"("+data.code+")");
-                        console.log(data.code);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert(error + "네트워크에러");
-                }
-            });
-        }).fail(function(data, button){
-        });
-    });
-
-    $item_order_list.on("click", ".cancel_btn", function(){ // 구매취소
-        var no = $(this).data("no");
-        location.href = "<?=$item_directory ?>/item_order_cancel_list.php?no="+no;
-    });
-
-    $item_order_list.on("click", ".review_btn", function(){ // 리뷰작성
-        var no = $(this).data("no");
-        location.href = "<?=$mainpage_directory?>/item_review_write.php?no="+no+"&backurl="+encodeURIComponent(window.location.pathname);
-    });
-
-    $item_order_list.on("click", ".quick_search_btn", function(){ // 배송조회
-        var shipping_invoice = $(this).data("shipping_invoice");
-        var shipping_company = $(this).data("shipping_company");
-
-        if(shipping_company == "우체국"){
-            //window.open("https://service.epost.go.kr/iservice/usr/trace/usrtrc001k01.jsp", "_BLANK");
-        }else if(shipping_company == "대한통운"){
-            window.open("https://www.cjlogistics.com/ko/tool/parcel/newTracking?gnbInvcNo="+shipping_invoice, "_BLANK");
-            //window.open("https://www.cjlogistics.com/ko/tool/parcel/tracking", "_BLANK");
-            //window.open("http://nplus.doortodoor.co.kr/web/detail.jsp?slipno="+shipping_invoice, "_BLANK");
-        }else if(shipping_company == "한진택배"){
-            html = '';
-            html += '<form id="send_shipping_data" method="post" action="https://m.hanex.hanjin.co.kr/inquiry/incoming/resultWaybill" style="display: none;">';
-            html += '	<input type="text" id="div" name="div" value="B" />';
-            html += '	<input type="text" id="show" name="show" value="true" />';
-            html += '	<input type="text" id="wblNum" name="wblNum" value="'+shipping_invoice+'" />';
-            html += '</form>';
-            $(document).find("#container").after(html);
-            $(document).find("#send_shipping_data").submit();
-        }
-    });
-
     function init_html(){
         return new Promise(function(resolve, reject) {
             var html = '';
@@ -188,8 +112,8 @@ $pay_status_arr_old = array(
             dataType: 'JSON',
             success: function(data) {
                 if(data.code == "000000"){
-                    console.log(data.data);
-                    console.log(data.sql);
+                    // console.log(data.data);
+                    // console.log(data.sql);
                     $item_order_list.find(".total_cnt").text(data.data+"건");
                 }else{
                     alert(data.data+"("+data.code+")");
@@ -240,7 +164,7 @@ $pay_status_arr_old = array(
                 dataType: 'JSON',
                 success: function(data) {
                     if(data.code == "000000"){
-                        console.log(data.data);
+                        // console.log(data.data);
                         var html = '';
 
                         if(data.data && data.data.length > 0){
@@ -286,7 +210,8 @@ $pay_status_arr_old = array(
                         url: '<?=$item_directory ?>/item_list_ajax.php',
                         data: {
                             mode : "get_item_payment_log_product",
-                            order_num: v.order_num
+                            order_num: v.order_num,
+                            limit:1
                         },
                         type: 'POST',
                         dataType: 'JSON',
@@ -305,13 +230,15 @@ $pay_status_arr_old = array(
                                         html += '	<div class="item-data" data-no="'+i2+'">';
                                         html += '       <div class="item-data-inner">';
                                         html += '           <div class="item-name">'+v.product_name+'</div>';
-                                        $.each(pay_data, function(i3, v3){
-                                            html += '		<div class="item-option">';
-                                            html += '           <div>'+v3.txt+'</div>';
-                                            html += '           <div class="item-option-division">/</div>';
-                                            html += '		    <div>'+v3.value.format()+'원 x '+v3.amount+'개</div>';
-                                            html += '       </div>';
-                                        });
+                                        if(pay_data != '' & pay_data != undefined){
+                                            $.each(pay_data, function(i3, v3){
+                                                html += '		<div class="item-option">';
+                                                // html += '           <div>'+v3.txt+'</div>';
+                                                // html += '           <div class="item-option-division">/</div>';
+                                                // html += '		    <div>'+v3.value.format()+'원 x '+v3.amount+'개</div>';
+                                                html += '       </div>';
+                                            });
+                                        }
                                         html += '           <div class="item-price">'+v.total_price.format()+'원</div>';
                                         html += '	    </div>';
                                         html += '	</div>';
@@ -326,7 +253,7 @@ $pay_status_arr_old = array(
                                         get_item_image('.user-pay-list .shop-cart-body[data-order_num="'+v.order_num+'"] .item-info-wrap', v2.product_no);
                                     });
                                 }else{
-                                    console.log("!@#!@#");
+                                    console.log(v.product_name);
                                     // tb_item_payment_log_product 없는 경우 표시
                                     let _pay_data_list = (v.pay_data && v.pay_data != "")? ((v.pay_data.indexOf('||') != -1)? v.pay_data.split('||') : [v.pay_data]) : [];
 
@@ -339,13 +266,15 @@ $pay_status_arr_old = array(
                                             html += '       <div class="item-data-inner">';
                                             //html += '		<div class="item_pay_status" data-pay_status="'+v2.pay_status+'">'+pay_status_arr[v2.pay_status]+'</div>';
                                             html += '           <div class="item-name">'+v.product_name+'</div>';
-                                            $.each(pay_data, function(i3, v3){
-                                                html += '		<div class="item-option">';
-                                                html += '           <div>'+v3.txt+'<div>';
-                                                html += '           <div class="item-option-division">/</div>';
-                                                html += '		    <div>'+v3.value.format()+'원 x '+v3.amount+'개</div>';
-                                                html += '       </div>';
-                                            });
+                                            if(pay_data != '' & pay_data != undefined){
+                                                $.each(pay_data, function(i3, v3){
+                                                    html += '		<div class="item-option">';
+                                                    // html += '           <div>'+v3.txt+'<div>';
+                                                    // html += '           <div class="item-option-division">/</div>';
+                                                    // html += '		    <div>'+v3.value.format()+'원 x '+v3.amount+'개</div>';
+                                                    html += '       </div>';
+                                                });
+                                            }
                                             html += '           <div class="item-price">'+v.total_price.format()+'원</div>';
                                             html += '	    </div>';
                                             html += '	</div>';
@@ -413,7 +342,7 @@ $pay_status_arr_old = array(
 
     function get_item_option(order_num, pay_data){
         return new Promise(function(resolve, reject) {
-            console.log("!get_item_option", order_num, pay_data);
+            // console.log("!get_item_option", order_num, pay_data);
             var post_data = {};
             var html = '';
 
@@ -432,7 +361,7 @@ $pay_status_arr_old = array(
                 dataType: 'JSON',
                 success: function(data) {
                     if(data.code == "000000"){
-                        console.log(data.data);
+                        // console.log(data.data);
 
                         if(data.data && data.data.length > 0){
                             $.each(data.data, function(i, v){
@@ -468,7 +397,7 @@ $pay_status_arr_old = array(
                     dataType: 'JSON',
                     success: function(data) {
                         if(data.code == "000000"){
-                            console.log(data.data);
+                            // console.log(data.data);
                             var html = '';
                             $.each(data.data.list, function(i, v){
                                 get_file_list(target, v.product_no, v.product_img, v.goodsRepImage);
@@ -489,7 +418,7 @@ $pay_status_arr_old = array(
 
     function get_file_list(target, product_no, img_list, goodsRepImage){
         return new Promise(function(resolve, reject) {
-            console.log(target, product_no, img_list, goodsRepImage);
+            // console.log(target, product_no, img_list, goodsRepImage);
             // img_loading
             if(img_list && img_list != ""){
                 $.ajax({
@@ -547,7 +476,7 @@ $pay_status_arr_old = array(
                 dataType: 'JSON',
                 success: function(data) {
                     if(data.code == "000000"){
-                        console.log(data.data);
+                        // console.log(data.data);
 
                         resolve();
                     }else{

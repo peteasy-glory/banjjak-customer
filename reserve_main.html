@@ -505,7 +505,7 @@ $_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
 										<div class="icon icon-size-16 icon-star-yellow"></div><em>`+Math.round(rating)+`</em>(`+data.data[i].commentCnt+`)
 									</div>
 									<div class="item-address">`+data.data[i].addr+`</div>
-									<div class="item-cate">`+data.data[i].totalService+`</div>
+									<div class="item-cate">`+((data.data[i].totalService.length > 2)? data.data[i].totalService : `소형견,중형견,특수견,`+data.data[i].totalService)+`</div>
 									<div class="item-option-group">
 										<div class="group-inner">
 											<div class="tag-item">`+data.data[i].workDate.working_start+`:00-`+data.data[i].workDate.working_end+`:00</div>
