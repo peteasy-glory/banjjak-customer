@@ -184,7 +184,7 @@ $total_reviews = sql_fetch_array($review_sql);
                                             </div>
                                             <div class="recomment-data">
                                                 <div class="item-name"><?php echo $product[2]; ?><span class="date"><?php echo $rs['reply_time'] ?></span></div>
-                                                <div class="item-detail"><?php echo $rs['artist_reply']; ?></div>
+                                                <div class="item-detail"><?php echo nl2br($emoji->emojiDBToStr($rs['artist_reply'])); ?></div>
                                             </div>
                                         </div>
                                     </div>
