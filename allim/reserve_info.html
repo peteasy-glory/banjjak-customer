@@ -134,7 +134,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
         <div class="header-left">
             <!--<a href="#" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>-->
         </div>
-        <div class="page-title">예약 내용</div>
+        <div class="page-title"><?php echo ($data->is_cancel == 1)? "<span style='color: red;'>취소내용</span>" : "예약 내용"; ?></div>
     </header>
     <!-- //header -->
 
@@ -147,7 +147,7 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
 
                 <!-- 예약 펫샵 및 일시 -->
                 <div class="view-data-group">
-                    <h5 class="con-title">예약 펫샵 및 일시</h5>
+                    <h5 class="con-title">예약 펫샵 및 <?php echo ($data->is_cancel == 1)? "취소" : ""; ?>일시</h5>
                     <div class="simple-thumb-info">
                         <div class="thumb-wrap">
                             <div class="content-thumb small"><img src="https://image.banjjakpet.com<?= img_link_change($artist_photo) ?>" alt=""></div>
@@ -155,7 +155,17 @@ if ($working_datas = mysqli_fetch_object($working_result)) {
                         <div class="info-wrap">
                             <div class="info-inner">
                                 <div class="item-title"><?php echo $data->shopName; ?></div>
-                                <div class="item-date"><?php echo $startDate; ?> ~ <?php echo $endDate ?></div>
+                                <?php
+                                  if($data->is_cancel == 1){
+                                ?>
+                                    <div class="item-date"><?php echo $data->cancel_time; ?></div>
+                                <?php
+                                  }else{
+                                ?>
+                                      <div class="item-date"><?php echo $startDate; ?> ~ <?php echo $endDate ?></div>
+                                <?php
+                                  }
+                                ?>
                             </div>
                         </div>
                     </div>

@@ -279,6 +279,14 @@ if($mode){
             $result = $point->select_point($user_id);
             $point->spend_point($spend_point, $seq, $order_id);
 
+            // 실 결제 포인트 적립
+            $original_price = intval($total_price) - intval($spend_point);
+            //$saving_point = (($original_price * 0.5) / 100);
+            if ($original_price > 0) {
+                $result = $point->select_point($user_id);
+                $point->add_accumulate_percent_point($original_price, 0.5, $seq, $order_id);
+            }
+
 
             if ($result === true) { // success
                 $return_data = array("code" => "000000", "data" => "ok", "seq" => $seq);
