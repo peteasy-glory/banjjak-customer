@@ -1,0 +1,1001 @@
+<?
+include($_SERVER['DOCUMENT_ROOT']."/include/global.php");
+include($_SERVER['DOCUMENT_ROOT']."/include/skin/header.php");
+
+$user_id = (isset($_SESSION['gobeauty_user_id']))? $_SESSION['gobeauty_user_id'] : "";
+$user_name = (isset($_SESSION['gobeauty_user_nickname']))? $_SESSION['gobeauty_user_nickname'] : "";
+
+
+
+//돌아갈 url을 세션에 저장한다.
+unset($_SESSION['backurl_shop']);
+$_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
+
+if($_SESSION['backurl1'] == null){
+    $_SESSION['backurl1'] = "main";
+}
+
+?>
+
+<style>
+    .page-body tr {
+        border-bottom: #d4d4d4 1px solid;
+    }
+</style>
+<!-- header -->
+<header id="header">
+    <div class="header-left">
+        <a href="<?=$_SESSION['backurl1']?>" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>
+    </div>
+    <div class="page-title" id="title">반짝 리뷰 이벤트 당첨자</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container">
+    <!-- page-body -->
+    <div class="page-body" id="event">
+                    <table style="width: 100%; text-align: center;">
+                        <td colspan="3" style="height:30pt; width:400pt; text-align: center; vertical-align: middle; background: #f4f4f4; font-weight: 700;">앱 리뷰 이벤트 당첨자 명단</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl67" style="height:19.75pt;border-top:none">5490</td>
+                            <td class="xl70" style="border-top:none;border-left:none">9563</td>
+                            <td class="xl65">3081</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6929</td>
+                            <td class="xl71" style="border-left:none">8018</td>
+                            <td class="xl65">8152</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0501</td>
+                            <td class="xl71" style="border-left:none">4117</td>
+                            <td class="xl65">3735(어**티)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8827(jin**** **ek)</td>
+                            <td class="xl71" style="border-left:none">2486(박*서)</td>
+                            <td class="xl65">8123(Gra** *im)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8827(jin **** **ek)</td>
+                            <td class="xl71" style="border-left:none">7948</td>
+                            <td class="xl65">8123(HA***** **ON)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8486</td>
+                            <td class="xl71" style="border-left:none">8261</td>
+                            <td class="xl65">7852</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6712</td>
+                            <td class="xl71" style="border-left:none">7112</td>
+                            <td class="xl65">5792</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9733(sy **n)</td>
+                            <td class="xl71" style="border-left:none">2263(co******ta)</td>
+                            <td class="xl65">1607</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9733(눈**나)</td>
+                            <td class="xl71" style="border-left:none">8901</td>
+                            <td class="xl65">7289</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5454</td>
+                            <td class="xl71" style="border-left:none">3525</td>
+                            <td class="xl65">6108</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6013</td>
+                            <td class="xl71" style="border-left:none">5890</td>
+                            <td class="xl65">2344</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1783</td>
+                            <td class="xl71" style="border-left:none">8326(지*나)</td>
+                            <td class="xl65">1134</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9753(s*)</td>
+                            <td class="xl71" style="border-left:none">4480</td>
+                            <td class="xl65">3699(n** *r)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5282</td>
+                            <td class="xl71" style="border-left:none">7574</td>
+                            <td class="xl65">7319(몸*이)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3336</td>
+                            <td class="xl71" style="border-left:none">0242</td>
+                            <td class="xl65">106<span style="mso-spacerun:yes">&nbsp;</span></td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9936</td>
+                            <td class="xl71" style="border-left:none">3861</td>
+                            <td class="xl65">5622</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0494</td>
+                            <td class="xl71" style="border-left:none">4661</td>
+                            <td class="xl65">5582</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2546</td>
+                            <td class="xl71" style="border-left:none">4579</td>
+                            <td class="xl65">1937</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3827</td>
+                            <td class="xl71" style="border-left:none">3386</td>
+                            <td class="xl65">9465</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7395</td>
+                            <td class="xl71" style="border-left:none">2102</td>
+                            <td class="xl65">3311</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7203</td>
+                            <td class="xl71" style="border-left:none">9753(라*젠)</td>
+                            <td class="xl65">5903</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2689</td>
+                            <td class="xl71" style="border-left:none">6297(Ha** ***u)</td>
+                            <td class="xl65">6821</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9913</td>
+                            <td class="xl71" style="border-left:none">5832</td>
+                            <td class="xl65">3108</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5059(유*랙)</td>
+                            <td class="xl71" style="border-left:none">0126(줄*아)</td>
+                            <td class="xl65">5137</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2872</td>
+                            <td class="xl71" style="border-left:none">3735(주*태)</td>
+                            <td class="xl65">6839</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8194</td>
+                            <td class="xl71" style="border-left:none">0205</td>
+                            <td class="xl65">1806(시**니)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0370</td>
+                            <td class="xl71" style="border-left:none">8464</td>
+                            <td class="xl65">7858</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9469</td>
+                            <td class="xl71" style="border-left:none">9889</td>
+                            <td class="xl65">8134</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7402</td>
+                            <td class="xl71" style="border-left:none">0983</td>
+                            <td class="xl65">3084(김*성)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0034</td>
+                            <td class="xl71" style="border-left:none">8926</td>
+                            <td class="xl65">0127</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1691</td>
+                            <td class="xl71" style="border-left:none">6082</td>
+                            <td class="xl65">4982</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4854</td>
+                            <td class="xl71" style="border-left:none">2537</td>
+                            <td class="xl65">9257</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9024</td>
+                            <td class="xl71" style="border-left:none">4221</td>
+                            <td class="xl65">3907</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2882</td>
+                            <td class="xl71" style="border-left:none">5059(김*수)</td>
+                            <td class="xl65">9080</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6569(김*지)</td>
+                            <td class="xl71" style="border-left:none">2065</td>
+                            <td class="xl65">7216</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5110</td>
+                            <td class="xl71" style="border-left:none">1738</td>
+                            <td class="xl65">6824</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8972</td>
+                            <td class="xl71" style="border-left:none">7392</td>
+                            <td class="xl65">1584(장*연)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2659</td>
+                            <td class="xl71" style="border-left:none">4750</td>
+                            <td class="xl65">3536</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4438</td>
+                            <td class="xl71" style="border-left:none">1971</td>
+                            <td class="xl65">1526(z**** e)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6569(뽀**삐)</td>
+                            <td class="xl71" style="border-left:none">2568(미*)</td>
+                            <td class="xl65">0657(호**맘)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9706</td>
+                            <td class="xl71" style="border-left:none">8982(문**이)</td>
+                            <td class="xl65">6060</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3735(오*준)</td>
+                            <td class="xl71" style="border-left:none">7882</td>
+                            <td class="xl65">7214</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1962</td>
+                            <td class="xl71" style="border-left:none">5873(이*호)</td>
+                            <td class="xl65">5307</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9850</td>
+                            <td class="xl71" style="border-left:none">2631</td>
+                            <td class="xl65">5111</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3630</td>
+                            <td class="xl71" style="border-left:none">0368</td>
+                            <td class="xl65">3735(이*현)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8409</td>
+                            <td class="xl71" style="border-left:none">4755(별*래)</td>
+                            <td class="xl65">8636</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2625</td>
+                            <td class="xl71" style="border-left:none">7813</td>
+                            <td class="xl65">4173</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2747(강*준)</td>
+                            <td class="xl71" style="border-left:none">2761</td>
+                            <td class="xl65">9213</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9701</td>
+                            <td class="xl71" style="border-left:none">0962</td>
+                            <td class="xl65">9749</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0393</td>
+                            <td class="xl71" style="border-left:none">6461</td>
+                            <td class="xl65">7515</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4755(e***a)</td>
+                            <td class="xl71" style="border-left:none">8521</td>
+                            <td class="xl65">9079</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1484</td>
+                            <td class="xl71" style="border-left:none">6469</td>
+                            <td class="xl65">6235</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4826</td>
+                            <td class="xl71" style="border-left:none">9962(유*지)</td>
+                            <td class="xl65">3848</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3969</td>
+                            <td class="xl71" style="border-left:none">1963(박*린)</td>
+                            <td class="xl65">3044(김*현)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1229</td>
+                            <td class="xl71" style="border-left:none">2707(me** ** **ng)</td>
+                            <td class="xl65">3739</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3735(직**다)</td>
+                            <td class="xl71" style="border-left:none">8137</td>
+                            <td class="xl65">3998</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2793</td>
+                            <td class="xl71" style="border-left:none">2470</td>
+                            <td class="xl65">2726(황*정)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2779</td>
+                            <td class="xl71" style="border-left:none">5491</td>
+                            <td class="xl65">8070</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0618</td>
+                            <td class="xl71" style="border-left:none">8679</td>
+                            <td class="xl65">5263</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3752</td>
+                            <td class="xl71" style="border-left:none">6359(워**인)</td>
+                            <td class="xl65">4302(한*진)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8467</td>
+                            <td class="xl71" style="border-left:none">2254(세마***이)</td>
+                            <td class="xl65">0310</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6815</td>
+                            <td class="xl71" style="border-left:none">1330</td>
+                            <td class="xl65">1806(이*린)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7761(캑*스)</td>
+                            <td class="xl71" style="border-left:none">9962(최*순)</td>
+                            <td class="xl65">8588</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2887</td>
+                            <td class="xl71" style="border-left:none">8958</td>
+                            <td class="xl65">2880</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0728</td>
+                            <td class="xl71" style="border-left:none">8691</td>
+                            <td class="xl65">3960</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4569</td>
+                            <td class="xl71" style="border-left:none">1963(할*니)</td>
+                            <td class="xl65">4433</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2743</td>
+                            <td class="xl71" style="border-left:none">9060</td>
+                            <td class="xl65">6636</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9413</td>
+                            <td class="xl71" style="border-left:none">1036(민*)</td>
+                            <td class="xl65">7210</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3567</td>
+                            <td class="xl71" style="border-left:none">0419</td>
+                            <td class="xl65">2726(정*이)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6336(M* J)</td>
+                            <td class="xl71" style="border-left:none">4057</td>
+                            <td class="xl65">4302(권*자)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2916</td>
+                            <td class="xl71" style="border-left:none">6359(조*민)</td>
+                            <td class="xl65">5811</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8594</td>
+                            <td class="xl71" style="border-left:none">9685</td>
+                            <td class="xl65">1052</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0516</td>
+                            <td class="xl71" style="border-left:none">3215</td>
+                            <td class="xl65">3922</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1539</td>
+                            <td class="xl71" style="border-left:none">2263(황*헌)</td>
+                            <td class="xl65">9215</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7627</td>
+                            <td class="xl71" style="border-left:none">5191</td>
+                            <td class="xl65">9175</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4371</td>
+                            <td class="xl71" style="border-left:none">2707(흰*이)</td>
+                            <td class="xl65">6974</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1584(최*정)</td>
+                            <td class="xl71" style="border-left:none">8057</td>
+                            <td class="xl65">1828</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2568(정*준)</td>
+                            <td class="xl71" style="border-left:none">9217</td>
+                            <td class="xl65">8088</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8037</td>
+                            <td class="xl71" style="border-left:none">6347</td>
+                            <td class="xl65">6979</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6208(지**유)</td>
+                            <td class="xl71" style="border-left:none">6358</td>
+                            <td class="xl65">1186</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3112</td>
+                            <td class="xl71" style="border-left:none">0657(이*철)</td>
+                            <td class="xl65">1556</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2568(문*진)</td>
+                            <td class="xl71" style="border-left:none">2704</td>
+                            <td class="xl65">0904</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5679</td>
+                            <td class="xl71" style="border-left:none">8284</td>
+                            <td class="xl65">0553(유*현)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6820</td>
+                            <td class="xl71" style="border-left:none">1526(혜*)</td>
+                            <td class="xl65">0553(김*훈)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8407(U* *i)</td>
+                            <td class="xl71" style="border-left:none">6262</td>
+                            <td class="xl65">7718</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0426</td>
+                            <td class="xl71" style="border-left:none">4090</td>
+                            <td class="xl65">9508</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6208(이***수)</td>
+                            <td class="xl71" style="border-left:none">3699(백*혜)</td>
+                            <td class="xl65">8432</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9873</td>
+                            <td class="xl71" style="border-left:none">7038</td>
+                            <td class="xl65">2714</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9744(홍*화)</td>
+                            <td class="xl71" style="border-left:none">2254(황*헌)</td>
+                            <td class="xl65">6372</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4111</td>
+                            <td class="xl71" style="border-left:none">3675</td>
+                            <td class="xl65">0081</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4477</td>
+                            <td class="xl71" style="border-left:none">3532</td>
+                            <td class="xl65">2486(h*** Jo)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1832</td>
+                            <td class="xl71" style="border-left:none">4723</td>
+                            <td class="xl65">5287(do*******@naver.com)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0019</td>
+                            <td class="xl71" style="border-left:none">9934</td>
+                            <td class="xl65">9410(이르미)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0844</td>
+                            <td class="xl71" style="border-left:none">3990</td>
+                            <td class="xl65">5287(aka******@naver.com)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9106</td>
+                            <td class="xl71" style="border-left:none">9860</td>
+                            <td class="xl65">3044(찰**v)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1793</td>
+                            <td class="xl71" style="border-left:none">0838</td>
+                            <td class="xl65">7872(감*빵)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3810</td>
+                            <td class="xl71" style="border-left:none">2429</td>
+                            <td class="xl65">2236</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6465</td>
+                            <td class="xl71" style="border-left:none">1477</td>
+                            <td class="xl65">7872(강**풀)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5587</td>
+                            <td class="xl71" style="border-left:none">0206</td>
+                            <td class="xl65">9410(이*영)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4308</td>
+                            <td class="xl71" style="border-left:none">9430</td>
+                            <td class="xl65">3342</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9454</td>
+                            <td class="xl71" style="border-left:none">2298</td>
+                            <td class="xl65">7650</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8313</td>
+                            <td class="xl71" style="border-left:none">0910</td>
+                            <td class="xl65">4245</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5130</td>
+                            <td class="xl71" style="border-left:none">3410</td>
+                            <td class="xl65">7872(구**무)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1278</td>
+                            <td class="xl71" style="border-left:none">5284</td>
+                            <td class="xl65">9401</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7436</td>
+                            <td class="xl71" style="border-left:none">3084(k**3)</td>
+                            <td class="xl65">7161</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6799</td>
+                            <td class="xl71" style="border-left:none">2120</td>
+                            <td class="xl65">1036(호*)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3089</td>
+                            <td class="xl71" style="border-left:none">1822</td>
+                            <td class="xl65">8745</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1923</td>
+                            <td class="xl71" style="border-left:none">2677</td>
+                            <td class="xl65">1036(2s**)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3735(ryan muzi)</td>
+                            <td class="xl71" style="border-left:none">7150</td>
+                            <td class="xl65">2203</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3774</td>
+                            <td class="xl71" style="border-left:none">7013</td>
+                            <td class="xl65">7930</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1237</td>
+                            <td class="xl71" style="border-left:none">4878</td>
+                            <td class="xl65">7319(po** ***o)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8407(조*혜)</td>
+                            <td class="xl71" style="border-left:none">7095</td>
+                            <td class="xl65">0247</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7761(가*린)</td>
+                            <td class="xl71" style="border-left:none">3148</td>
+                            <td class="xl65">3724</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9105(후*자)</td>
+                            <td class="xl71" style="border-left:none">8540</td>
+                            <td class="xl65">7812</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9105(손*공)</td>
+                            <td class="xl71" style="border-left:none">4830</td>
+                            <td class="xl65">0343</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9105(후**크)</td>
+                            <td class="xl71" style="border-left:none">0435</td>
+                            <td class="xl65">9635</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1245</td>
+                            <td class="xl71" style="border-left:none">5435</td>
+                            <td class="xl65">1169(김*훈)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0416</td>
+                            <td class="xl71" style="border-left:none">6650</td>
+                            <td class="xl65">8547</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0367</td>
+                            <td class="xl71" style="border-left:none">4261</td>
+                            <td class="xl65">9728</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5524(오*준)</td>
+                            <td class="xl71" style="border-left:none">8866</td>
+                            <td class="xl65">1169(김*)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0125</td>
+                            <td class="xl71" style="border-left:none">0791</td>
+                            <td class="xl65">1993</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5524(케*공)</td>
+                            <td class="xl71" style="border-left:none">4418</td>
+                            <td class="xl65">3656</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4403</td>
+                            <td class="xl71" style="border-left:none">0429</td>
+                            <td class="xl65">3298</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5524(피*)</td>
+                            <td class="xl71" style="border-left:none">8921</td>
+                            <td class="xl65">2248</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0278</td>
+                            <td class="xl71" style="border-left:none">8945</td>
+                            <td class="xl65">2390</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7798</td>
+                            <td class="xl71" style="border-left:none">5588</td>
+                            <td class="xl65">9057</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6336(k** *hh)</td>
+                            <td class="xl71" style="border-left:none">0126(초**빵)</td>
+                            <td class="xl65">2933</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3051</td>
+                            <td class="xl71" style="border-left:none">5036</td>
+                            <td class="xl65">4753</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7331</td>
+                            <td class="xl71" style="border-left:none">1054</td>
+                            <td class="xl65">3803</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9612</td>
+                            <td class="xl71" style="border-left:none">3413</td>
+                            <td class="xl65">6297(방*후)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7530</td>
+                            <td class="xl71" style="border-left:none">2581</td>
+                            <td class="xl65">2692</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4706</td>
+                            <td class="xl71" style="border-left:none">1115</td>
+                            <td class="xl65">0451</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">6467</td>
+                            <td class="xl71" style="border-left:none">7221</td>
+                            <td class="xl65">2407</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3728</td>
+                            <td class="xl71" style="border-left:none">3576</td>
+                            <td class="xl65">9305</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9896</td>
+                            <td class="xl71" style="border-left:none">2568(김*호)</td>
+                            <td class="xl65">8153</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9160</td>
+                            <td class="xl71" style="border-left:none">3829</td>
+                            <td class="xl65">5873(이*엔)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8982(김*진)</td>
+                            <td class="xl71" style="border-left:none">4334</td>
+                            <td class="xl65">5302</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">0145</td>
+                            <td class="xl71" style="border-left:none">6366</td>
+                            <td class="xl65">5967</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4534</td>
+                            <td class="xl71" style="border-left:none">2609</td>
+                            <td class="xl65">3114</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8751</td>
+                            <td class="xl71" style="border-left:none">9652</td>
+                            <td class="xl65">9534</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8982(공**자)</td>
+                            <td class="xl71" style="border-left:none">7962</td>
+                            <td class="xl65">4290</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">4927</td>
+                            <td class="xl71" style="border-left:none">6985</td>
+                            <td class="xl65">1565</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5040</td>
+                            <td class="xl71" style="border-left:none">2747(ma*** **pe)</td>
+                            <td class="xl65">9866(박시* (* 박))</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9744(애*론)</td>
+                            <td class="xl71" style="border-left:none">1635</td>
+                            <td class="xl65">8326(jyl****@naver.com)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">5651</td>
+                            <td class="xl71" style="border-left:none">1323</td>
+                            <td class="xl65">5287(함*빈)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">3275</td>
+                            <td class="xl71" style="border-left:none">9543</td>
+                            <td class="xl65">3729</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">7864</td>
+                            <td class="xl71" style="border-left:none">2315</td>
+                            <td class="xl65">9866(히*)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">9549(m* *y)</td>
+                            <td class="xl71" style="border-left:none">0922</td>
+                            <td class="xl65">9549(기**스)</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">1353</td>
+                            <td class="xl71" style="border-left:none">9970</td>
+                            <td class="xl65">8298</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">2753</td>
+                            <td class="xl71" style="border-left:none">8711</td>
+                            <td class="xl65">8306</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl68" style="height:19.75pt">8610</td>
+                            <td class="xl71" style="border-left:none">5940</td>
+                            <td class="xl65">　</td>
+                        </tr>
+                        <tr height="26" style="mso-height-source:userset;height:19.75pt">
+                            <td height="26" class="xl69" style="height:19.75pt">8688</td>
+                            <td class="xl72" style="border-left:none">0308</td>
+                            <td class="xl66">　</td>
+                        </tr>
+                        <!--[if supportMisalignedColumns]-->
+                        <tr height="0" style="display:none">
+                            <td width="155" style="width:116pt"></td>
+                            <td width="173" style="width:130pt"></td>
+                            <td width="205" style="width:154pt"></td>
+                        </tr>
+                        <!--[endif]-->
+                        </tbody></table>
+
+
+    </div>
+    <!-- //page-body -->
+<!--    <div class="common-event-bottom-ui left">-->
+<!--        <a href="shop_cart" class="btn-page-cart"><em>0</em></a>-->
+<!--    </div>-->
+    <div class="common-event-bottom-ui right">
+        <button type="button" id="btnPageTop" class="btn-page-top" onclick="common.pageMove(0);">상단 바로가기</button>
+    </div>
+</section>
+<!-- //container -->
+<script>
+
+
+
+    var lastScrollTop = 0;
+    var timer = null;
+    var customer_id = "<?=$user_id ?>";
+
+    //var sub_title =['침대/공기청정기','드라이룸','미용기','드라이기','자동급수기/급식기'];
+    //var event_item_list0 = ['ETCB-DULCIS-A01','ETCB-CUCKOO-A05','ETCB-CUCKOO-A04'];
+    //var event_item_list1 = ['ETCB-LUCOMS-A01','ETCB-AVEC-A02','ETCB-AVEC-A01','ETCB-CUCKOO-A01','ETCB-CUCKOO-A02'];
+    //var event_item_list2 = ['ETCB-LOVEPET-A01','ETCB-BANDI-A05','ETCB-AVEC-A05'];
+    //var event_item_list3 = ['ETCB-LOVEPET-A02','ETCB-AVEC-A04','ETCB-IM-A03','ETCB-IM-A02','ETCB-IM-A01'];
+    //var event_item_list4 = ['ETCB-BANDI-A01','ETCB-CUCKOO-A03','JB-FPA-A09'];
+
+    $(document).ready(function(){
+        // 장바구니 개수
+        //$.ajax({
+        //    url: './data/item_ajax.php',
+        //    data: {
+        //        mode: "get_cart_cnt",
+        //        customer_id: "<?//=$user_id ?>//"
+        //    },
+        //    type: 'POST',
+        //    dataType: 'JSON',
+        //    success: function(data){
+        //        $(".btn-page-cart em").text(data.data);
+        //    }
+        //});
+
+        // get_event_item_list_html()
+        //     .then(get_event_list);
+    });
+
+
+    function go_walking(){
+
+        let usr_email	= '<?=$_SESSION['gobeauty_user_id']?>';
+
+        if(usr_email === ''){
+
+            location.href = '/login_1';
+        }else{
+
+
+            if (navigator.userAgent.toLowerCase().match(/iphone|ipad|ipod/i)) {
+
+
+
+
+
+                    location.href = `banjjakpet://walking`;
+
+
+            }else{
+
+
+                    //location.href = `intent://walking#Intent;scheme=banjjakpet;action=android.intent.action.VIEW;package=m.kr.gobeauty;end`;
+                location.href='/mypage_main';
+                Banjjak_Android.SET_MoveMenu(2, customer_id);
+
+            }
+
+
+
+        }
+    }
+    function get_event_item_list_html(){
+        return new Promise(function(resolve, reject) {
+            var html = '';
+
+
+
+            for(var i = 0; i < sub_title.length; i++){
+                html += '<div class="basic-data-group">';
+                html += '    <div class="con-title-group">';
+                html += '        <h4 class="con-title">'+sub_title[i]+'</h4>';
+                html += '    </div>';
+                html += '    <div class="product-total-value">'+eval("event_item_list"+i).length+'개의 상품</div>';
+                html += '    <div class="product-vertical-list">';
+                html += '        <div class="list-inner" id="list_'+i+'">';
+                html += '        </div>';
+                html += '    </div>';
+                html += '</div>';
+                console.log(sub_title[i]);
+            }
+
+            $('.main-big-banner').after(html);
+            resolve();
+        });
+    }
+
+    function get_event_list(){
+        return new Promise(function(resolve, reject) {
+            // 타이들 개수별 반복
+            $.each(sub_title, function(_i, _v){
+                // 상품명 서브쿼리 만들기
+                var product_in = '';
+                $.each(eval("event_item_list"+_i), function(j, b){
+                    product_in += "'"+b+"',";
+                });
+                product_in = product_in.slice(0,-1);
+                $.ajax({
+                    url: 'data/item_ajax.php',
+                    data: {
+                        mode : "get_event_item",
+                        product_in : product_in
+                    },
+                    type: 'POST',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if(data.code == "000000"){
+                            var list = data.data[0]
+                            var html = '';
+                            $.each(list, function(i, v){
+                                console.log(v);
+                                var soldout = (v.is_soldout == '2')? '<div class="label-soldout">품절</div>' : ''; // 품절 확인
+                                var img_link = (v.file_path == '' || v.file_path == null)? v.goodsRepImage : "https://image.banjjakpet.com"+img_link_change(v.file_path); // 상품 이미지
+                                //할인율 구하기
+                                var percent = (v.product_price == 0 || v.sale_price == 0)? 0 : 100 - (v.sale_price / v.product_price * 100);
+                                html += '<div class="list-cell">';
+                                html += '    <a href="shop_view?product_no='+v.product_no+'" class="product-item">';
+                                html += '        <div class="thumb"><div class="obj"><img src="'+img_link+'" alt="">'+soldout+'</div></div>';
+                                html += '        <div class="info-wrap">';
+                                html += '            <div class="item-name">'+v.product_name+'</div>';
+                                html += '            <div class="item-price-group">';
+                                html += '                <div class="price-sale">'+Math.round(percent)+'%</div>';
+                                html += '                <div class="price-value">'+(v.sale_price).format()+'원</div>';
+                                html += '            </div>';
+                                if(v.rating_cnt > 0){
+                                    html += '            <div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'+Math.round(v.rating_avg)+'</em>('+Math.round(v.rating_cnt)+')</div>';
+
+
+                                }
+                                html += '        </div>';
+                                html += '    </a>';
+                                html += '</div>';
+                            });
+                            $('#list_'+_i).html(html);
+                            resolve();
+                        }else{
+                            alert(data.data+"("+data.code+")");
+                            console.log(data.code);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        //alert(error + "네트워크에러");
+                        if(xhr.status != 0){
+                            alert("code = "+ xhr.status + " message = " + xhr.responseText + " error = " + error); // 실패 시 처리
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+
+    // 세자리 숫자 콤마
+    Number.prototype.format = function() {
+        if (this == 0) return 0;
+
+        var reg = /(^[+-]?\d+)(\d{3})/;
+        var n = (this + '');
+
+        while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+
+        return n;
+    };
+
+    // 문자열 타입에서 쓸 수 있도록 format() 함수 추가
+    String.prototype.format = function() {
+        var num = parseFloat(this);
+        if (isNaN(num)) return "0";
+
+        return num.format();
+    };
+
+</script>
+
+</body>
+</html>
