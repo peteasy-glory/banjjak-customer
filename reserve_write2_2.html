@@ -909,7 +909,7 @@ if($pet_seq != ""){
                         // resultArray.push({"name" : second_type, "price" : 0, "sequnce" : 0})
                         resultArray.map(result => {
                             if(result.sequnce == 0){
-                                result.name = second_type
+                                result.name = (second_type == '직접입력')? direct_title : second_type
                                 result.price = 0;
                             }else if(result.sequnce == 1){
                                 result.name = ''
