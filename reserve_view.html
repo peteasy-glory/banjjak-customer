@@ -449,17 +449,8 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                     "summercut" => "썸머컷"
                 );
 
-                $sql = "
-				SELECT *, shop.photo AS photo2 
-				FROM tb_shop shop, tb_customer customer 
-				WHERE shop.customer_id = '" . $artist_id . "'
-					#AND shop.customer_id = customer.id
-			";
-                $result = mysqli_query($connection,$sql);
-                $data["shop"] = mysqli_fetch_assoc($result);
 
-                $vat_class = new VAT();
-                $is_vat = $vat_class->is_vat($artist_id);
+
 
                 $sql = "
 				
@@ -474,7 +465,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                       )
                      ) AS sort 
                 FROM tb_product_dog_static 
-                WHERE customer_id = '".$data["shop"]["customer_id"]."' AND first_type = '개' AND second_type != '기타공통'  ORDER BY sort ASC, update_time;
+                WHERE customer_id = '".$artist_id."' AND first_type = '개' AND second_type != '기타공통'  ORDER BY sort ASC, update_time;
 			";
                 $result = mysqli_query($connection, $sql);
                 while($row = mysqli_fetch_assoc($result)){
@@ -484,7 +475,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                 $sql = "
 				SELECT *
 				FROM tb_product_cat
-				WHERE customer_id = '".$data["shop"]["customer_id"]."'
+				WHERE customer_id = '".$artist_id."'
 			";
                 $result = mysqli_query($connection,$sql);
                 while($row = mysqli_fetch_assoc($result)){
@@ -654,7 +645,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                                 <?php } ?>
                                                 </tbody>
                                             </table>
-                                            <div class="read-table-info"><?=($data["shop"]["is_vat"] == "1")? '<span>* 부가세 10%별도</span>' : ''; ?> (단위, 천원) </div>
+                                            <div class="read-table-info"><?=($is_vat == "1")? '<span>* 부가세 10%별도</span>' : ''; ?> (단위, 천원) </div>
                                         </div>
                                     </div>
                                 </div>
