@@ -356,7 +356,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                                 </div>
 							</div>
                             <? } ?>
-                            <? if(strlen($service_infos[9]) > 0 ) { ?>
+                            <? if(intval($service_infos[9]) > 0 ) { ?>
                             <div class="list-cell">
                                 <div class="list-title">발톱</div>
                                 <div class="list-value">
@@ -369,7 +369,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                                 </div>
                             </div>
                             <? } ?> 
-                            <? if(strlen($service_infos[10]) > 0) { ?>
+                            <? if(intval($service_infos[10]) > 0) { ?>
                             <div class="list-cell">
                                 <div class="list-title">장화</div>
                                 <div class="list-value">
@@ -382,7 +382,7 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                                 </div>
                             </div>
                             <? } ?>  
-                            <? if(strlen($service_infos[11]) > 0) { ?>
+                            <? if(intval($service_infos[11]) > 0) { ?>
                             <div class="list-cell">
                                 <div class="list-title">방울</div>
                                 <div class="list-value">
@@ -468,21 +468,24 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                             $other_p_index = ($dyeing_p_index + 1) + $dyeing_option_count;
                             
                             $other_option_count = intval($service_infos[$other_p_index]);
+                            $etc_price = 0;
                             for ($option_ii = 0; $option_ii < $other_option_count; $option_ii = $option_ii + 1) {
                                 $info = explode(":", $service_infos[$other_p_index + ($option_ii + 1)]);
-                            ?>
-                            <div class="list-cell">
-                                <div class="list-title"><? $info[0] ?></div>
-                                <div class="list-value">
-                                    <?
-                                    $ahbaci = intval($info[1]);
-                                    $total_price = $total_price + $ahbaci;
-                                    $dog_total_i_price = $dog_total_i_price + $ahbaci;
-                                    echo number_format($ahbaci) . "원";
-                                    ?>
+                                $etc_price += intval($info[1]);
+                            }
+                            if($etc_price > 0){
+                                ?>
+                                <div class="list-cell">
+                                    <div class="list-title">기타추가</div>
+                                    <div class="list-value">
+                                        <?
+                                        echo number_format($etc_price) . "원";
+                                        ?>
+                                    </div>
                                 </div>
-                            </div>
-                            <? } ?>
+                                <?
+                            }
+                            ?>
                             <?php
                             $etc_p_index = ($other_p_index + 1) + $other_option_count;                         
                             $etc_count = intval($service_infos[$etc_p_index]);
