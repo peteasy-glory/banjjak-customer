@@ -1,0 +1,323 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT'] . "/include/global.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/include/skin/header.php");
+
+$payment_log_seq = (isset($_GET['payment_log_seq']))? $_GET['payment_log_seq'] : "";
+
+if($payment_log_seq == ""){
+    ?>
+    <script>
+        alert("잘못된 접근입니다.");
+        //location.href = "/";
+    </script>
+    <?php
+}
+
+
+?>
+
+<!-- header -->
+<header id="header">
+    <div class="header-left">
+        <!--        <a href="/" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>-->
+    </div>
+    <!-- page-title 클래스의 태그가 div일 경우 가운데 정렬 , h1일 경우 왼쪽 정렬 -->
+    <div class="page-title">알리미</div>
+</header>
+<!-- //header -->
+
+<!-- container -->
+<section id="container">
+    <!-- page-body -->
+    <div class="page-body">
+
+        <div class="user-reserve-view" id="allimi_preview">
+
+            <div class="allimi-preview-wrap">
+                <div class="allimi-preview-title">
+                                        <span class="allimi-preview-name" id="allimi_preview_name">
+
+                                        </span>
+                    <span class="allimi-preview-date" id="allimi_preview_date">
+
+                                        </span>
+                </div>
+                <div class="allimi-preview-gallery" id="allimi_preview_gallery">
+
+                    <div class="swiper-container allimi-swiper-container">
+                        <div class="swiper-wrapper" id="allimi-preview-swiper">
+
+                        </div>
+                        <div class="next allimi-next" id="allimi_next"><i class="left-arrow""></i></div>
+                        <div class="prev allimi-prev" id="allimi_prev"><i class="right-arrow"></i></div>
+                        <div class="swiper-pagination allimi-pagination"></div>
+                    </div>
+                </div>
+
+                <div class="allimi-preview-info">
+                    <div class="allimi-preview-info-title"><span style="font-size:16px; font-weight: 700;">미용 다이어리</span></div>
+
+                    <div class="allimi-preview-info-content">
+                        <ul>
+                            <li class="list-style-basic" id="allimi_preview_attitude_wrap"><strong>미용예절</strong><br><span id="allimi_preview_attitude"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_tangle_wrap"><strong>엉킴(부위)</strong><br><span id="allimi_preview_tangle"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_bath_wrap"><strong>목욕/드라이</strong><br><span id="allimi_preview_bath"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_skin_wrap"><strong>피부</strong><br><span id="allimi_preview_skin"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_condition_wrap"><strong>컨디션</strong><br><span id="allimi_preview_condition"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_dislike_wrap"><strong>싫어했던 부위</strong><br><span id="allimi_preview_dislike"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_self_wrap"><strong>미용 후 전달사항</strong><br><span id="allimi_preview_self" style="white-space: pre-line"></span></li>
+                            <li class="list-style-basic" id="allimi_preview_none" style="display:none;"><strong>알림 내용이 없습니다.</strong></li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="allimi-preview-info" style="margin-bottom:30px;">
+                    <div class="allimi-preview-info-title"><span style="font-size:16px; font-weight: 700;">샵 정보</span></div>
+
+                    <div class="allimi-preview-info-content" style="padding-left:20px;">
+
+                        <div class="allimi-preview-shop-title"><span id="allimi_preview_shop_title"></span></div>
+                        <div class="allimi-preview-shop-phone">연락처<span id="allimi_preview_shop_phone"></span></div>
+                        <div class="allimi-preview-shop-address">샵 위치<span id="allimi_preview_shop_address"></span></div>
+                        <div class="allimi-preview-shop-map" id="allimi_preview_shop_map"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="page-middle-banner">
+            <a href="https://customer.banjjakpet.com/shop_view?product_no=CN-BANJJAK-A01" class="btn-banner-item"><img src="https://image.banjjakpet.com/images/petsofa_list.gif" alt=""/></a>
+        </div>
+
+        <div class="app-footer">
+            <div class="app-download">
+                <div class="app-icon" style="border:none;"><img src="/static/pub/images/icon/icon-mobile-web-top-logo.png" alt=""/></div>
+                <div class="device-icon">
+                    <a href="https://play.google.com/store/apps/details?id=m.kr.gobeauty" class="btn-aos"><img src="/static/pub/images/icon/badge-google@2x.png" alt="" width="135"/></a>
+                    <a href="https://apps.apple.com/kr/app/id1436568194" class="btn-ios"><img src="/static/pub/images/icon/badge-app@2x.png" alt="" width="135"/></a>
+                </div>
+            </div>
+            <div class="app-info">
+                <div class="info-title">앱 스토어에서 “반짝’을 검색해주세요</div>
+                <div class="info-txt"><em>반짝, 반려생활의 단짝</em>저희 입점샵을 이용해주셔서 감사합니다. 반짝 앱을 이용하시면 더욱 편하고 다양한 혜택을 누리실 수 있습니다. 감사합니다.</div>
+            </div>
+        </div>
+    </div>
+    <article id="pop5" class="layer-pop-wrap bottom">
+        <div class="basic-data-group">
+            <div class="mobile-web-wrap">
+                <div class="mobile-web-info">
+                    <div class="logo"><img src="/static/pub/images/icon/icon-logo.png" alt="반짝" width="88"/></div>
+                    <div class="info-wrap">
+                        <div class="info-title">앱에서는 1초만에!<br>간편하게 로그인하기</div>
+                        <div class="info-txt">
+                            <div class="info-star">
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                                <span class="icon icon-size-16 icon-star-yellow"></span>
+                            </div>
+                            <div class="info-value">특가, 쿠폰 등 앱 전용 혜택까지</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-outline-purple btn-round btn-middle-size btn-app-view"><strong>편리한 앱으로 보기</strong></a>
+                <button type="button" class="btn-web-view" onclick="pop.close();">불편하지만 모바일 웹으로 볼래요</button>
+            </div>
+        </div>
+    </article>
+
+    <!-- //page-body -->
+    <!-- page-bottom -->
+
+    <!-- //page-bottom -->
+</section>
+<!-- //container -->
+
+</body>
+<script>
+
+
+    $.ajax({
+        url:'/data/api.php',
+        type:'post',
+        data:{
+            mode:'get_allimi',
+            payment_log_seq:'<?= $payment_log_seq?>'
+        },
+        success:function(res) {
+            let response = JSON.parse(res);
+            let head = response.data.head;
+            let body = response.data.body;
+            if (head.code === 401) {
+                pop.open('firstRequestMsg1', '잠시 후 다시 시도 해주세요.');
+            } else if (head.code === 200) {
+                console.log(body);
+
+                document.getElementById('allimi_preview_name').innerText = body.pet_name;
+
+                let beauty_date = new Date(body.beauty_date.substr(0,4),body.beauty_date.substr(4,2),body.beauty_date.substr(6,2));
+
+                beauty_date.setMonth(beauty_date.getMonth() -1);
+                let week = ['일','월','화','수','목','금','토'];
+
+                document.getElementById('allimi_preview_date').innerText = `${beauty_date.getFullYear()}년 ${fill_zero(beauty_date.getMonth()+1)}월 ${fill_zero(beauty_date.getDate())}일(${week[beauty_date.getDay()]})`
+
+
+                if(body.etiquette_1 === 0 && body.etiquette_2 === 0 && body.etiquette_3 === 0 && body.etiquette_etc === 0){
+
+                    document.getElementById('allimi_preview_attitude_wrap').style.display = 'none';
+
+
+                }
+
+                if(body.tangles_1 === 0 && body.tangles_2 === 0 && body.tangles_3 === 0 && body.tangles_4 === 0 && body.tangles_5 === 0 &&body.tangles_6 === 0 && body.tangles_7 === 0  && body.tangles_etc === 0  ){
+
+                    document.getElementById('allimi_preview_tangle_wrap').style.display = 'none';
+
+
+                }
+
+                if(body.bath_1 === 0 && body.bath_2 === 0 && body.bath_3 === 0 && body.bath_etc === 0){
+
+                    document.getElementById('allimi_preview_bath_wrap').style.display = 'none';
+
+
+                }
+
+
+                if(body.skin_1 === 0 && body.skin_2 === 0 && body.skin_3 === 0 && body.skin_4 === 0 && body.skin_5 === 0 && body.skin_6 === 0 && body.skin_7 === 0 && body.skin_etc === 0){
+
+                    document.getElementById('allimi_preview_skin_wrap').style.display = 'none';
+
+
+                }
+
+                if(body.condition_1 === 0 && body.condition_2 === 0 && body.condition_3 === 0 && body.condition_etc === 0){
+
+                    document.getElementById('allimi_preview_condition_wrap').style.display = 'none';
+
+
+                }
+
+
+
+                if(body.part_1 === 0 && body.part_2 === 0 && body.part_3 === 0 && body.part_4 === 0 && body.part_5 === 0 && body.part_6 === 0 && body.part_etc === 0){
+
+                    document.getElementById('allimi_preview_dislike_wrap').style.display = 'none';
+
+
+                }
+
+                if(body.notice_1 === 0 && body.notice_2 === 0 && body.notice_3 === 0 && body.notice_etc === 0){
+
+                    document.getElementById('allimi_preview_self_wrap').style.display = 'none';
+
+
+                }
+
+                let none_count = 0;
+                Array.from(document.getElementsByClassName('list-style-basic')).forEach(function(el){
+
+                    if(el.style.display === 'none'){
+
+                        none_count++;
+
+                    }
+                })
+
+
+
+                if(none_count === 8){
+
+                    document.getElementById('allimi_preview_none').style.display = 'list-item';
+                }
+
+
+                document.getElementById('allimi_preview_shop_title').innerText = body.shop_name;
+                document.getElementById('allimi_preview_shop_phone').innerText =body.shop_phone;
+                document.getElementById('allimi_preview_shop_address').innerText =body.shop_address.split('|')[1];
+
+
+
+                let file_path;
+                if(body.file_path === ''){
+                    document.getElementById('allimi_preview_gallery').style.display ='none';
+                }else{
+                    file_path = body.file_path.split('|');
+                    file_path.forEach(function(el){
+                        document.getElementById('allimi-preview-swiper').innerHTML += `<div class="swiper-slide allimi-slide">
+                                                                                            <img src="${img_link_change(el)}" alt="" />
+                                                                                    </div>`
+                    })
+                }
+
+
+
+
+
+
+            }
+        }
+    })
+
+    let popup_swiper = new Swiper('.allimi-swiper-container', {
+
+        direction:'horizontal',
+        slidesPerView:1,
+        pagination:{
+            el:".swiper-pagination",
+            type:"fraction"
+        },
+
+        observer:true,
+        observeParents:true,
+
+        navigation:{
+            nextEl:".prev",
+            prevEl:".next",
+        },
+        watchOverflow:true,
+
+
+    });
+
+    function img_link_change(img){
+        var img 	= img.replace("/pet/images", "/images");
+        var img 	= img.replace("/pet/upload", "/upload");
+
+        return "https://image.banjjakpet.com"+img;
+    }
+
+    function fill_zero(time){
+
+        if(time.toString().length < 2){
+
+            time = `0${time}`
+        }else{
+            time = time;
+        }
+
+        return time;
+    }
+
+    function am_pm_check(hours){
+
+        if(hours > 12){
+            hours = `오후 ${(hours-12).toString().length <2 ? '0' : ''}${hours-12}`
+        }else if(hours === 12){
+            hours = `오후 ${hours}`
+        }else{
+            hours = `오전 ${hours}`
+        }
+
+        return hours;
+    }
+
+
+</script>
+</html>

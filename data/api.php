@@ -118,6 +118,15 @@ if($r_mode) {
         $result = $api ->post('/partner/allim/send',$data_json);
 
         $return_date = array("code"=>"000000","data"=>$result);
+    }else if($r_mode === "get_allimi"){
+
+        $payment_log_seq = $_POST['payment_log_seq'];
+
+        $result = $api ->get('/partner/reserve/diary/'.$payment_log_seq);
+
+        $return_data = array("code"=>"000000","data"=>$result);
+
+
     }
 }
 
