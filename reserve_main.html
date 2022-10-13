@@ -641,7 +641,7 @@ $_SESSION['backurl_home'] = $_SERVER[ "REQUEST_URI" ];
 	}
 
 	function selectDistanceAction() {
-		$('#distanceTxt').html(`<img class="btn_dis" src="https://image.banjjakpet.com/images/icon/icon_distance.png" alt="">`+lastValue + "Km 이내");
+		$('#distanceTxt').html(`<img class="btn_dis" src="https://image.banjjakpet.com/images/icon/icon_distance.png" alt="">`+lastValue + "Km 이내"+`<img class="btn_arrow" src="https://image.banjjakpet.com/images/icon/icon_arrow.png" alt="">`);
 		
 		initValue();
 		setMap(lastValue);
