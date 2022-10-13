@@ -4225,7 +4225,6 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
-	height: 100%;
 	margin-top: 20px;
 
 
@@ -4248,7 +4247,7 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 .allimi-preview-gallery{
 
 
-	width:calc(100% - 40px);
+	width:100%;
 	height:250px;
 	border-radius: 16px;
 	position: relative;
@@ -4339,7 +4338,7 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 .allimi-preview-info{
 	border:1px solid #ebebeb;
 	border-radius: 10px;
-	width:calc(100% - 40px);
+	width:100%;
 	margin-top:30px;
 }
 .allimi-preview-info-content{
@@ -4418,5 +4417,12 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 	font-size:12px;
 	font-weight:300;
 	margin-left:15px;
+
+}
+
+
+.user-reserve-view-2{
+	margin-top: 20px;
+	border-radius: 12px;
 
 }
