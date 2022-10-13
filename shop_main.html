@@ -452,6 +452,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                         $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
                                         $file_result = sql_query($file_sql);
                                         $file_row = sql_fetch($file_result);
+                                        $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
                                         $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
 
                                         //할인율 구하기
@@ -507,6 +508,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                     $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$best_item_array[$i]['product_img']}) LIMIT 1";
                                     $file_result = sql_query($file_sql);
                                     $file_row = sql_fetch($file_result);
+                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
                                     $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $best_item_array[$i]['goodsRepImage'];
 
                                     //할인율 구하기
@@ -546,6 +548,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                     $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$best_item_array[$i]['product_img']}) LIMIT 1";
                                     $file_result = sql_query($file_sql);
                                     $file_row = sql_fetch($file_result);
+                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
                                     $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $best_item_array[$i]['goodsRepImage'];
 
                                     //할인율 구하기
@@ -600,6 +603,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                     $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$new_item_array[$i]['product_img']}) LIMIT 1";
                                     $file_result = sql_query($file_sql);
                                     $file_row = sql_fetch($file_result);
+                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
                                     $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $new_item_array[$i]['goodsRepImage'];
 
                                     //할인율 구하기
@@ -640,6 +644,7 @@ $_SESSION['backurl1'] = $_SERVER[ "REQUEST_URI" ];
                                     $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$new_item_array[$i]['product_img']}) LIMIT 1";
                                     $file_result = sql_query($file_sql);
                                     $file_row = sql_fetch($file_result);
+                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
                                     $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $new_item_array[$i]['goodsRepImage'];
 
                                     //할인율 구하기

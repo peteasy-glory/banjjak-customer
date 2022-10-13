@@ -379,6 +379,7 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
                             $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$best_item_array[$i]['product_img']}) LIMIT 1";
                             $file_result = sql_query($file_sql);
                             $file_row = sql_fetch($file_result);
+                            $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
                             $photo = ($file_row['file_path']) ? "https://image.banjjakpet.com" . img_link_change($file_row['file_path']) : $best_item_array[$i]['goodsRepImage'];
 
                             //할인율 구하기
@@ -633,6 +634,7 @@ $_SESSION['backurl_shop'] = $_SERVER["REQUEST_URI"];
                         var rating_avg = (v.rating_avg != '' && v.rating_avg) ? v.rating_avg : 0; // 별점 평균
                         var rating_cnt = (v.rating_cnt != '' && v.rating_cnt) ? v.rating_cnt : 0; // 후기 수
 
+                        data.data['photo'][i] = data.data['photo'][i].replace('shop/','shop/thumb150/');
                         html += '<div class="list-cell">';
                         html += '    <a href="shop_view?product_no=' + v.product_no + '" class="product-item">';
                         html += '        <div class="thumb"><div class="obj"><img src="' + data.data['photo'][i] + '" alt="">' + soldout + '</div></div>';
