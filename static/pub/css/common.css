@@ -2492,6 +2492,14 @@ table.terms-table > tbody > tr > td {padding:5px 10px; font-size:12px; line-heig
 .area-select-detail-info {font-size:13px; line-height:19px; color:#666; text-align:center; font-weight:500; margin-top:16px;}
 .reserve-area-result {margin-top:-20px;}
 .reserve-area-result .common-none-data {padding-top:52px;}
+.sort-group .arrow.type-2 .btn_dis {
+	width: 15px;
+	padding: 3px 5px 0 0;
+}
+.sort-group .arrow.type-2 .btn_arrow {
+	width: 10px;
+	padding: 6px 0 0 5px;
+}
 
 /* 예약하기 > 첫 방문 */
 .first-request-wrap {margin-top:12px;}
