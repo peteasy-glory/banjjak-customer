@@ -4,6 +4,20 @@ include($_SERVER['DOCUMENT_ROOT'] . "/include/skin/header.php");
 
 $payment_log_seq = (isset($_GET['payment_log_seq']))? $_GET['payment_log_seq'] : "";
 
+$sql = "select artist_id from tb_payment_log where payment_log_seq = '".$payment_log_seq."';";
+$result = mysqli_query($connection,$sql);
+if ($rows = mysqli_fetch_object($result)) {
+    $artist_id = $rows->artist_id;
+}
+
+unset($_SESSION['backurl']);
+$_SESSION['backurl'] = '/allim/diary_info?payment_log_seq='.$payment_log_seq;
+
+
+
+//echo '<br><br>'.$rows;
+
+
 if($payment_log_seq == ""){
     ?>
     <script>
@@ -12,6 +26,22 @@ if($payment_log_seq == ""){
     </script>
     <?php
 }
+
+
+$address = "";
+$lat = "";
+$lng = "";
+
+    $o_sql = "select * from tb_request_artist where customer_id = '".$artist_id."';";
+    $o_result = mysqli_query($connection, $o_sql);
+    if ($rows = mysqli_fetch_object($o_result)) {
+        $address = $rows->offline_shop_address;
+        $address = str_replace("|", "", strstr($address, "|"));
+        $lat = $rows->lat;
+        $lng = $rows->lng;
+    }
+
+
 
 
 ?>
@@ -31,7 +61,7 @@ if($payment_log_seq == ""){
     <!-- page-body -->
     <div class="page-body">
 
-        <div class="user-reserve-view" id="allimi_preview">
+        <div class="user-reserve-view-2" id="allimi_preview">
 
             <div class="allimi-preview-wrap">
                 <div class="allimi-preview-title">
@@ -80,9 +110,16 @@ if($payment_log_seq == ""){
 
                         <div class="allimi-preview-shop-title"><span id="allimi_preview_shop_title"></span></div>
                         <div class="allimi-preview-shop-phone">연락처<span id="allimi_preview_shop_phone"></span></div>
-                        <div class="allimi-preview-shop-address">샵 위치<span id="allimi_preview_shop_address"></span></div>
-                        <div class="allimi-preview-shop-map" id="allimi_preview_shop_map"></div>
+                        <div class="allimi-preview-shop-address">샵 위치</div>
+                        <div class="allimi-preview-shop-map" id="allimi_preview_shop_map">
+                            <div class="map-upside" id="allimi_preview_shop_address" onclick="location.href ='/mypage_reserve_map?artist_id=<?=$artist_id?>&backurl=<?=$_SESSION['backurl']?>'"></div>
+                            <div id="map" class="allimi-map"></div>
+                        </div>
                     </div>
+
+                </div>
+                <div class="item-diary">
+                    <div class="diary-not-exist" id="allimi_before_history"   data-pet_seq="0" onclick="pop.open('allimi_history'); allimi_open_history(this);">지난 알리미 보기</div>
 
                 </div>
             </div>
@@ -130,6 +167,37 @@ if($payment_log_seq == ""){
             </div>
         </div>
     </article>
+    <article id="allimi_history" class="layer-pop-wrap">
+        <div class="layer-pop-parent">
+            <div class="layer-pop-children">
+
+                <div class="pop-data alert-pop-data">
+                    <div class="pop-body">
+                        <button type="button" class="btn-pop-close" onclick="pop.close2('allimi_history'); ">닫기</button>
+                        <div class="allimi-right-body-history" id="allimi_history" style="margin-top:30px">
+
+                            <div class="allimi-title-box" style="justify-content: center">
+                                <div class="allimi-title">
+                                    알리미 발송이력
+                                </div>
+                            </div>
+                            <div class="allimi-history-wrap">
+
+                                <select class="allimi-body-title" id="allimi_history_select" onchange="allimi_history_change(this);">
+                                </select>
+
+                                <div class="allimi-history-list" id="allimi_history_list">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
 
     <!-- //page-body -->
     <!-- page-bottom -->
@@ -139,7 +207,132 @@ if($payment_log_seq == ""){
 <!-- //container -->
 
 </body>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f2cf1f3b7e2ca88cb298196078ef550f&libraries=services"></script>
 <script>
+
+    var view_address = '<?=$address?>';
+    var artist_id = '<?=$artist_id ?>'; // s27nsulove@naver.com <- 이분만 좌표값으로 표시
+    var lat = '<?=$lat ?>';
+    var lng = '<?=$lng ?>';
+    console.log(lat,lng, view_address);
+    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+    var mapOption = {
+        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨
+    };
+
+    if(artist_id == "s27nsulove@naver.com" || artist_id == "clelala32@naver.com"){
+        // 지도를 생성합니다
+        var map = new daum.maps.Map(mapContainer, mapOption);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new daum.maps.services.Geocoder();
+
+        var coords = new daum.maps.LatLng(lat, lng);
+
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        var marker = new daum.maps.Marker({
+            map: map,
+            position: coords
+        });
+        // 인포윈도우로 장소에 대한 설명을 표시합니다
+        var infowindow = new daum.maps.InfoWindow({
+            content: '<div style="width: 300px;text-align:center;padding:6px 0;">'+view_address+'</div>'
+        });
+        infowindow.open(map, marker);
+
+        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+        map.setCenter(coords);
+    }else{
+        // 지도를 생성합니다
+        var map = new daum.maps.Map(mapContainer, mapOption);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new daum.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch(view_address, function(result, status) {
+
+            // 정상적으로 검색이 완료됐으면
+            if (status === daum.maps.services.Status.OK) {
+
+                var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new daum.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                var infowindow = new daum.maps.InfoWindow({
+                    content: '<div style="width: 300px;text-align:center;padding:6px 0;">'+view_address+'</div>'
+                });
+                infowindow.open(map, marker);
+
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+    }
+
+
+    function allimi_history_change(target){
+
+
+        let artist_id = target.options[target.selectedIndex].getAttribute('data-artist_id');
+        let pet_seq = target.options[target.selectedIndex].getAttribute('data-pet_seq');
+        let cellphone = target.options[target.selectedIndex].getAttribute('data-cellphone');
+
+        $.ajax({
+
+            url:'/data/api.php',
+            type:'post',
+            data:{
+                mode:'get_allimi_history',
+                artist_id:artist_id,
+                cellphone:cellphone,
+                pet_seq:pet_seq,
+            },
+            success:function(res) {
+                let response = JSON.parse(res);
+                let head = response.data.head;
+                let body = response.data.body;
+                if (head.code === 401) {
+                    pop.open('firstRequestMsg1', '잠시 후 다시 시도 해주세요.');
+                } else if (head.code === 200) {
+                    if(body.length === undefined){
+                        body = [body];
+                    }
+
+                    let week = ['일','월','화','수','목','금','토'];
+                    if(body.length> 0){
+
+                        document.getElementById('allimi_history_list').innerHTML = ''
+                        body.forEach(function(el,i){
+
+
+                            let date = new Date(`${el.beauty_date.substr(0,4)}`,`${el.beauty_date.substr(4,2)}`,`${el.beauty_date.substr(6,2)}`);
+
+
+                            document.getElementById('allimi_history_list').innerHTML += ` <div class="allimi-history-cell-wrap" style="cursor: pointer; ${i === body.length-1 ? 'margin-bottom:50px': ''}">
+                                                                                                    <div class="allimi-history-img-wrap">
+                                                                                                        <img src="${el.main_photo !== '' ? img_link_change(el.main_photo) : '/static/pub/images/icon/icon-pup-select-off.png'}">
+                                                                                                    </div>
+                                                                                                    <div class="allimi-history-info-wrap" data-payment_log="${el.payment_log_seq}" onclick="location.href=\`https://customer.banjjakpet.com/allim/diary_info?payment_log_seq=${el.payment_log_seq}\`">
+                                                                                                        <strong class="allimi-history-date">${date.getFullYear()}년 ${fill_zero(date.getMonth())}월 ${fill_zero(date.getDate())}일(${week[date.getDay()]})</strong>
+                                                                                                        <span class="allimi-history-name">${el.name}</span>
+                                                                                                    </div>
+                                                                                                </div>`
+
+                        })
+                    }
+                }
+            }
+
+        })
+
+    }
 
 
     $.ajax({
@@ -156,9 +349,18 @@ if($payment_log_seq == ""){
             if (head.code === 401) {
                 pop.open('firstRequestMsg1', '잠시 후 다시 시도 해주세요.');
             } else if (head.code === 200) {
-                console.log(body);
 
-                document.getElementById('allimi_preview_name').innerText = body.pet_name;
+
+                document.getElementById('allimi_before_history').setAttribute('data-artist_id',body.artist_id);
+                document.getElementById('allimi_before_history').setAttribute('data-cellphone',body.cellphone);
+
+                if(body.pet_name_for_owner === '' || body.pet_name_for_owner === null || body.pet_name_for_owner === undefined){
+
+                    document.getElementById('allimi_preview_name').innerText = body.pet_name;
+                }else{
+                    document.getElementById('allimi_preview_name').innerText =body.pet_name_for_owner;
+                }
+
 
                 let beauty_date = new Date(body.beauty_date.substr(0,4),body.beauty_date.substr(4,2),body.beauty_date.substr(6,2));
 
@@ -244,6 +446,191 @@ if($payment_log_seq == ""){
 
 
 
+                if(body.etiquette_1 === 1){
+                    document.getElementById('allimi_preview_attitude').innerText= '아주 잘 했어요. 칭찬해 주세요.'
+                }
+
+                if(body.etiquette_2 === 1){
+                    document.getElementById('allimi_preview_attitude').innerText= '잘해요.'
+                }
+
+                if(body.etiquette_3 === 1){
+                    document.getElementById('allimi_preview_attitude').innerText= '힘들어해요.'
+                }
+                if(body.etiquette_etc === 1){
+                    document.getElementById('allimi_preview_attitude').innerText= body.etiquette_etc_memo;
+                }
+
+                if(body.bath_1 === 1){
+                    document.getElementById('allimi_preview_bath').innerText = '잘해요.';
+                }
+
+                if(body.bath_2 === 1){
+                    document.getElementById('allimi_preview_bath').innerText = '조금 싫어해요.';
+                }
+                if(body.bath_3 === 1){
+                    document.getElementById('allimi_preview_bath').innerText = '거부감이 있어요.';
+                }
+                if(body.bath_etc === 1){
+                    document.getElementById('allimi_preview_bath').innerText = body.bath_etc_memo;
+                }
+
+                if(body.condition_1 ===1){
+                    document.getElementById('allimi_preview_condition').innerText = '잘해요.';
+
+                }
+                if(body.condition_2 ===1){
+                    document.getElementById('allimi_preview_condition').innerText = '조금 싫어해요.';
+
+                }
+                if(body.condition_3 ===1){
+                    document.getElementById('allimi_preview_condition').innerText = '거부감이 있어요.';
+
+                }
+                if(body.condition_etc ===1){
+                    document.getElementById('allimi_preview_condition').innerText = body.condition_etc_memo;
+
+                }
+
+                let tangles_text ='';
+
+                if(body.tangles_1 === 1){
+
+                    tangles_text += '없어요. '
+                }
+
+                if(body.tangles_2 === 1){
+
+                    tangles_text += '얼굴 '
+                }
+                if(body.tangles_3 === 1){
+
+                    tangles_text += '귀 '
+                }
+                if(body.tangles_4 === 1){
+
+                    tangles_text += '겨드랑이 '
+                }
+                if(body.tangles_5 === 1){
+
+                    tangles_text += '다리 '
+                }
+                if(body.tangles_6 === 1){
+
+                    tangles_text += '꼬리 '
+                }
+                if(body.tangles_etc === 1){
+
+                    tangles_text += body.tangles_etc_memo;
+                }
+
+                let skin_text = '';
+
+                if(body.skin_1 === 1){
+
+                    skin_text += '깨끗해요. ';
+
+                }
+                if(body.skin_2 === 1){
+
+                    skin_text += '피부염 ';
+
+                }
+                if(body.skin_3 === 1){
+
+                    skin_text += '각질 ';
+
+                }
+                if(body.skin_4 === 1){
+
+                    skin_text += '붉은기 ';
+
+                }
+                if(body.skin_5 === 1){
+
+                    skin_text += '습진 ';
+
+                }
+                if(body.skin_6 === 1){
+
+                    skin_text += '농피증 ';
+
+                }
+                if(body.skin_7 === 1){
+
+                    skin_text += '알로페시아 ';
+
+                }
+                if(body.skin_etc === 1){
+
+                    skin_text += body.skin_etc_memo;
+
+                }
+
+                let part_text = '';
+
+                if(body.part_1 === 1){
+
+                    part_text += '얼굴 ';
+                }
+
+                if(body.part_2 === 1){
+
+                    part_text += '귀 ';
+                }
+                if(body.part_3 === 1){
+
+                    part_text += '앞발 ';
+                }
+                if(body.part_4 === 1){
+
+                    part_text += '뒷발 ';
+                }
+                if(body.part_5 === 1){
+
+                    part_text += '발톱 ';
+                }
+                if(body.part_6 === 1){
+
+                    part_text += '꼬리 ';
+                }
+                if(body.part_etc === 1){
+
+                    part_text += body.part_etc_memo;
+                }
+
+                let notice_text = '';
+
+                if(body.notice_1 === 1){
+
+                    notice_text += '피부 자극으로 긁거나 핥을 수 있으니 주의해주세요. \n';
+                }
+
+                if(body.notice_2 === 1){
+
+                    notice_text += '스트레스로 인하여 식욕 부진, 구토 및 설사 증상을 보일 수 있습니다. \n';
+                }
+                if(body.notice_3 === 1){
+
+                    notice_text += '항문을 끌고 다니거나 꼬리를 감추는 증상을 보일 수 있습니다. \n';
+                }
+                if(body.notice_4 === 1){
+
+                    notice_text += '이중모(포메,스피츠 등)의 경우 미용 후 알로페시아(클리퍼 증후군) 현상이 나타날 수 있습니다. \n';
+                }
+                if(body.notice_etc === 1){
+
+                    notice_text += body.notice_etc_memo;
+                }
+
+                document.getElementById('allimi_preview_tangle').innerText = tangles_text;
+                document.getElementById('allimi_preview_skin').innerText = skin_text;
+                document.getElementById('allimi_preview_dislike').innerText = part_text;
+                document.getElementById('allimi_preview_self').innerText = notice_text;
+
+
+
+
                 let file_path;
                 if(body.file_path === ''){
                     document.getElementById('allimi_preview_gallery').style.display ='none';
@@ -264,6 +651,88 @@ if($payment_log_seq == ""){
             }
         }
     })
+
+
+    function allimi_open_history(target){
+
+        let artist_id = target.getAttribute('data-artist_id');
+        let cellphone = target.getAttribute('data-cellphone');
+        let pet_seq = target.getAttribute('data-pet_seq');
+
+        $.ajax({
+
+            url:'/data/api.php',
+            type:'post',
+            data:{
+                mode:'get_allimi_history',
+                artist_id:artist_id,
+                cellphone:cellphone,
+                pet_seq:pet_seq
+
+            },
+            success:function(res) {
+                let response = JSON.parse(res);
+                let head = response.data.head;
+                let body = response.data.body;
+                if (head.code === 401) {
+                    pop.open('firstRequestMsg1', '잠시 후 다시 시도 해주세요.');
+                } else if (head.code === 200) {
+
+
+                    if(body.length === undefined){
+
+                        body = [body];
+                    }
+                    if(body.length > 0){
+
+                        document.getElementById('allimi_history_select').innerHTML =`<option data-pet_seq="0" data-artist_id="${artist_id}" data-cellphone="${cellphone}">전체보기</option>`
+
+                        document.getElementById('allimi_history_select').dispatchEvent(new Event('change'));
+                        let pet_list = [];
+                        body.forEach(function(el){
+
+
+                            if(pet_list.includes(`${el.pet_seq}`)){
+
+                                return;
+                            }
+
+                            pet_list.push(`${el.pet_seq}`);
+
+
+                            document.getElementById('allimi_history_select').innerHTML += `<option data-cellphone="${cellphone}" data-artist_id="${artist_id}" data-pet_seq="${el.pet_seq}" >${el.name}</option>`
+                        })
+                    }
+                }
+            }
+
+
+        })
+
+        // document.getElementById('allimi-right-title').innerText = '알리미 발송이력';
+        // document.getElementById('allimi_history').style.display = 'flex';
+        //
+        // document.getElementById('allimi_defalut').style.opacity = '0';
+        // document.getElementById('allimi_preview').style.opacity = '0';
+        // document.getElementById('allimi_gallery').style.opacity = '0';
+        //
+        //
+        //
+        //
+        // setTimeout(function(){
+        //     document.getElementById('allimi_history').style.opacity = '1';
+        //     document.getElementById('allimi_defalut').style.display ='none';
+        //     document.getElementById('allimi_preview').style.display ='none';
+        //     document.getElementById('allimi_gallery').style.display ='none';
+        //
+        //
+        // },200)
+
+
+
+
+    }
+
 
     let popup_swiper = new Swiper('.allimi-swiper-container', {
 
@@ -317,6 +786,78 @@ if($payment_log_seq == ""){
 
         return hours;
     }
+
+    var pop = {
+
+        element : null,
+        elementArr : [],
+        isActive : false,
+        zIndex : 99999,
+
+        init : function(){
+            //팝업 컨텐츠 외 영역 클릭시 닫기 이벤트
+            $(document).on('click' , '.layer-pop-wrap' , function(e){
+                if(pop.isActive){
+                    if($(e.target).parents('.pop-data').length == 0){
+                        pop.close();
+                    }
+                }
+            });
+        },
+
+        // 팝업 열기
+        open : function( _id , _item ){
+            pop.isActive = true;
+            $('html').addClass('fix');
+            this.element = $('#' + _id);
+            this.element.addClass('actived').css({ 'z-index' : pop.zIndex });
+            this.elementArr.push(this.element);
+            pop.zIndex += 1;
+        },
+
+        //팝업 닫기
+        close : function( _item ){
+            var $element;
+            pop.isActive = false;
+            $('html').removeClass('fix');
+            /*
+            if(_item){
+                $(_item).parents('.layer-pop-wrap').removeClass('actived');
+            }else{
+                this.element.removeClass('actived');
+            }
+            */
+            if(_item){
+                $element= $(_item);
+                $element.removeClass('actived');
+            }else{
+                $element =pop.elementArr[pop.elementArr.length - 1];
+                $element.removeClass('actived');
+            }
+            pop.elementArr.pop();
+
+
+        },
+
+        change : function(){
+
+        },
+
+        close2: function(_item){
+            var $element;
+            pop.isActive = false;
+            $('html').removeClass('fix');
+
+            if(_item){
+
+                document.getElementById(`${_item}`).classList.remove('actived');
+            }else{
+                pop.elementArr.pop();
+            }
+
+
+        }
+    };
 
 
 </script>
