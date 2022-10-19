@@ -4782,7 +4782,7 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 }
 
 .allimi-preview-info{
-	border:1px solid #ebebeb;
+	border:1px solid #d4d4d4;
 	border-radius: 10px;
 	width:100%;
 	margin-top:30px;
@@ -4796,7 +4796,7 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 .allimi-preview-info-title{
 	height:45px;
 	width:100%;
-	border-bottom:1px solid #ebebeb;
+	border-bottom:1px solid #d4d4d4;
 	display: flex;
 	align-items: center;
 	justify-content: center;
