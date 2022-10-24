@@ -60,12 +60,12 @@ class TAwsS3
         $w = 0;
         $h = 0;
         list($width, $height) = getimagesize($file); // 업로드 파일의 가로세로 구하기
-        if($width > 1080){ // 가로가 1280보다 크면
-            $w = 1080;
-            $h = 1080*($height/$width); // 가로 기준으로 세로 비율 구하기
-        }else if($height > 1920){ // 세로가 1920보다 크면
-            $h = 1920;
-            $w = 1920*($width/$height); // 세로 기준으로 가로 비율 구하기
+        if($width > 800){ // 가로가 1280보다 크면
+            $w = 800;
+            $h = 800*($height/$width); // 가로 기준으로 세로 비율 구하기
+        }else if($height > 800){ // 세로가 1920보다 크면
+            $h = 800;
+            $w = 800*($width/$height); // 세로 기준으로 가로 비율 구하기
         }
         if(strpos(strtolower($file), ".jpg"))
             $src = imagecreatefromjpeg($file);

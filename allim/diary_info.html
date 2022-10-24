@@ -52,7 +52,7 @@ $lng = "";
         <!--        <a href="/" class="btn-page-ui btn-page-prev"><div class="icon icon-size-24 icon-page-prev">페이지 뒤로가기</div></a>-->
     </div>
     <!-- page-title 클래스의 태그가 div일 경우 가운데 정렬 , h1일 경우 왼쪽 정렬 -->
-    <div class="page-title">알리미</div>
+    <div class="page-title">미용 알리미</div>
 </header>
 <!-- //header -->
 
@@ -458,7 +458,7 @@ $lng = "";
                     document.getElementById('allimi_preview_attitude').innerText= '힘들어해요.'
                 }
                 if(body.etiquette_etc === 1){
-                    document.getElementById('allimi_preview_attitude').innerText= body.etiquette_etc_memo;
+                    document.getElementById('allimi_preview_attitude').innerText= db_to_str(body.etiquette_etc_memo);
                 }
 
                 if(body.bath_1 === 1){
@@ -472,7 +472,7 @@ $lng = "";
                     document.getElementById('allimi_preview_bath').innerText = '거부감이 있어요.';
                 }
                 if(body.bath_etc === 1){
-                    document.getElementById('allimi_preview_bath').innerText = body.bath_etc_memo;
+                    document.getElementById('allimi_preview_bath').innerText = db_to_str(body.bath_etc_memo);
                 }
 
                 if(body.condition_1 ===1){
@@ -488,7 +488,7 @@ $lng = "";
 
                 }
                 if(body.condition_etc ===1){
-                    document.getElementById('allimi_preview_condition').innerText = body.condition_etc_memo;
+                    document.getElementById('allimi_preview_condition').innerText = db_to_str(body.condition_etc_memo);
 
                 }
 
@@ -521,7 +521,7 @@ $lng = "";
                 }
                 if(body.tangles_etc === 1){
 
-                    tangles_text += body.tangles_etc_memo;
+                    tangles_text += db_to_str(body.tangles_etc_memo);
                 }
 
                 let skin_text = '';
@@ -563,7 +563,7 @@ $lng = "";
                 }
                 if(body.skin_etc === 1){
 
-                    skin_text += body.skin_etc_memo;
+                    skin_text += db_to_str(body.skin_etc_memo);
 
                 }
 
@@ -596,7 +596,7 @@ $lng = "";
                 }
                 if(body.part_etc === 1){
 
-                    part_text += body.part_etc_memo;
+                    part_text += db_to_str(body.part_etc_memo);
                 }
 
                 let notice_text = '';
@@ -620,7 +620,7 @@ $lng = "";
                 }
                 if(body.notice_etc === 1){
 
-                    notice_text += body.notice_etc_memo;
+                    notice_text += db_to_str(body.notice_etc_memo);
                 }
 
                 document.getElementById('allimi_preview_tangle').innerText = tangles_text;
@@ -754,6 +754,46 @@ $lng = "";
 
 
     });
+
+
+
+    // db to str 이모지
+    function db_to_str(str){
+        let return_str = str;
+        $.ajax({
+            url: '/data/api.php',
+            data: {
+                mode: 'db_to_str',
+                str: str,
+            },
+            type: 'POST',
+            async:false,
+            success: function (res) {
+                let response = JSON.parse(res);
+                return_str = response.data;
+            }
+        })
+        return return_str;
+    }
+
+    // str to db 이모지
+    function str_to_db(str){
+        let return_str = str;
+        $.ajax({
+            url: '/data/api.php',
+            data: {
+                mode: 'str_to_db',
+                str: str,
+            },
+            type: 'POST',
+            async:false,
+            success: function (res) {
+                let response = JSON.parse(res);
+                return_str = response.data;
+            }
+        })
+        return return_str;
+    }
 
     function img_link_change(img){
         var img 	= img.replace("/pet/images", "/images");

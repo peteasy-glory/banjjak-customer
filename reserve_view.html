@@ -150,7 +150,24 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
         </div>
     </div>
 </article>
+<article id="deletePopup" class="layer-pop-wrap">
+    <div class="layer-pop-parent">
+        <div class="layer-pop-children">
 
+            <div class="pop-data alert-pop-data">
+                <div class="pop-body">
+                    <div class="msg-txt">삭제하시겠습니까?</div>
+                </div>
+                <div class="pop-footer">
+                    <button type="button" class="btn btn-confirm btn-cf" onclick="pop.close();">확인</button>
+                    <button type="button" class="btn btn-confirm btn-cc" onclick="pop.close();">취소</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
 
 
 
@@ -789,6 +806,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                     <button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
                                     <div class="basic-item-ui-list">
                                         <a href="#" class="btn-basic-item-ui-item report_review" data-id="<?=$review_rows->review_seq?>" data-report="<?=$review_rows->is_blind?>" data-payment_log_seq="<?=$review_rows->payment_log_seq?>" data-review_id="<?=$review_rows->customer_id?>">신고하기</a>
+                                        <a href="#" class="btn-basic-item-ui-item" onclick="pop.open('deletePopup')" >삭제하기</a>
                                     </div>
                                 </div>
                             <?php }else{ ?>
@@ -798,6 +816,7 @@ $_SESSION['backurl2'] = $_SERVER[ "REQUEST_URI" ];
                                         <button type="button" class="btn-basic-item-ui-nav"><span class="icon icon-size-16 icon-dot-more"></span></button>
                                         <div class="basic-item-ui-list">
                                             <a href="#" class="btn-basic-item-ui-item report_review" data-id="<?=$review_rows->review_seq?>" data-report="<?=$review_rows->is_blind?>" data-payment_log_seq="<?=$review_rows->payment_log_seq?>" data-review_id="<?=$review_rows->customer_id?>">신고하기</a>
+                                            <a href="#" class="btn-basic-item-ui-item" onclick="pop.open('deletePopup')" >삭제하기</a>
                                         </div>
                                     </div>
                                 <?php	}else{ ?>
