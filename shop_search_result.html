@@ -98,6 +98,7 @@ $_SESSION['backurl_shop'] = $_SERVER[ "REQUEST_URI" ];
                     html +='    <div class="list-inner">';
                     if(data.data.list.length > 0){
                         $.each(data.data.list, function(i, v){
+                            v.file_path = v.file_path.replace('shop/','shop/thumb150/')
                             var soldout = (v.is_soldout == '2')? '<div class="label-soldout">품절</div>' : ''; // 품절 확인
                             var img_link = (v.file_path == '' || v.file_path == null)? v.goodsRepImage : "https://image.banjjakpet.com"+img_link_change(v.file_path); // 상품 이미지
                             //할인율 구하기
