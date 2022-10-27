@@ -153,6 +153,11 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                     $diff_result = intval($diff_2) - intval($diff_1);
                     $beauty_time = ($diff_result/50)*30;
 
+                    if($artist_id === 'cocoa2@daum.net' && $year <=2022 && $month <=10 && $day <=27){
+                        //20221027 cocoa2@daum.net 샵에서 오늘 기준 이전 예약내역은 보이지않게
+                        continue;
+                    }
+
                 ?>
                 
                 <?php
@@ -169,14 +174,18 @@ $type = (isset($_GET['type']) && $_GET['type']) ? $_GET['type'] : "reservation";
                 }
 
 				$timediff = 0;
-				if($hour != "" && $to_hour != "" && $minute != "" && $to_minute != ""){
+				if($hour != "" && $to_hour != "" && $minute != "" && $to_minute != "" ){
+
 					$_s_date = date($year."-".$month."-".$day." ".$hour.":".$minute.":00");
 					$_e_date = date($year."-".$month."-".$day." ".$to_hour.":".$to_minute.":00");
 					$timediff = (strtotime($_e_date) - strtotime($_s_date)) / 60; // minute
 				}
+
+
                 ?>
                 <div class="user-receipt-item">
                     <?php
+
                     $grade_sql = "select * from tb_grade_reserve_approval_mgr where payment_log_seq = {$payment_log_seq}";
                     $grade_result = mysqli_query($connection,$grade_sql);
                     $grade_cnt = mysqli_num_rows($grade_result);
