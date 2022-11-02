@@ -46,134 +46,27 @@ $bestReview_sql = "
 ";
 $bestReview_array = sql_fetch_array($bestReview_sql);
 
+// 엠디 추천 아이템
+$md_item_sql = "
+    SELECT * FROM tb_item_list a
+     LEFT JOIN (
+         SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
+         FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
+     ) b ON b.p_no = a.product_no
+    WHERE a.is_delete = '1' AND a.is_view_main_1 = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.update_dt desc
+";
+$md_item_array = sql_fetch_array($md_item_sql);
 
-$dog_sql = "
-SELECT * FROM tb_item_list a
+// new 쇼핑템
+$new_item_sql = "
+    SELECT * FROM tb_item_list a
     LEFT JOIN (
-        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt
-        from tb_item_review WHERE rating IS NOT NULL AND is_delete ='2' GROUP BY product_no
-    ) b ON b.p_no = a.product_no
-WHERE a.is_delete ='1' AND product_no IN ('CN-BANJJAK-A01',	
-'ETCB-MYPETPU-A01',	
-'ETCB-ICANDOR-A03',
-'ETCB-AINSOAP-A27',	
-'ETCB-BATHMONG-A03',	
-'ETCB-COREADOG-A02',	
-'ETCB-IFANIMAL-A04',	
-'ETCB-ELAMIGO-A12',	
-'JB-S-A44',	
-'JB-T-A90',	
-'ETCB-JAYUPET-A01',	
-'ETCB-JOARU-A01',	
-'ETCB-AVEC-A19',	
-'JB-TREAT-A584',	
-'ETCB-AVEC-A18',
-'ETCB-BUGS-PET-A05',	
-'JB-TREAT-A562',
-'ETCB-LOVEPET-A01',	
-'JB-TREAT-A275',	
-'ETCB-ELAMIGO-A11'	
-
-
-
-) AND a.is_shop ='2' AND a.is_view ='1' AND a.is_soldout = '1' ORDER BY  a.reg_dt desc";
-$dog_array = sql_fetch_array($dog_sql);
-
-$cat_sql = "
-SELECT * FROM tb_item_list a
-    LEFT JOIN (
-        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt
-        from tb_item_review WHERE rating IS NOT NULL AND is_delete ='2' GROUP BY product_no
-    ) b ON b.p_no = a.product_no
-WHERE a.is_delete ='1' AND product_no IN ('ETCB-BANDI-A06',	
-'ETCB-MOMONG-A01',	
-'ETCB-MOMONG-A12',	
-'ETCB-JAYUPET-A03',	
-'CN-BANJJAK-A01',	
-'JB-TREAT-C247',	
-'JB-TREAT-C30',
-'ETCB-BANDI-A01',
-'ETCB-AVEC-A14',
-'ETCB-COCUMONO-A01',	
-'ETCB-STU-A01',
-'ETCB-ELAMIGO-A10',
-'ETCB-MYPETPU-A02',	
-'JB-CNCG-C47',	
-'JB-FRLP-C19',	
-'JB-TREAT-A584',	
-'ETCB-MOMONG-A22',	
-'JB-TREAT-C248',	
-'ETCB-PETTIMJANG-A08',	
-'JB-FRLP-C09'
-) AND a.is_shop ='2' AND a.is_view ='1' AND a.is_soldout = '1' ORDER BY  a.reg_dt desc";
-$cat_array = sql_fetch_array($cat_sql);
-
-$category_1_sql = "
-SELECT * FROM tb_item_list a
-    LEFT JOIN (
-        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt
-        from tb_item_review WHERE rating IS NOT NULL AND is_delete ='2' GROUP BY product_no
-    ) b ON b.p_no = a.product_no
-WHERE a.is_delete ='1' AND product_no IN ('JB-TREAT-A53',	
-'JB-TREAT-A200',	
-'ETCB-BANDI-A05',	
-'ETCB-LOVEPET-A02',	
-'ETCB-ELAMIGO-A06'	
-
-    
-) AND a.is_shop ='2' AND a.is_view ='1' AND a.is_soldout = '1' ORDER BY  a.reg_dt desc";
-$category_1_array = sql_fetch_array($category_1_sql);
-
-$category_2_sql = "
-SELECT * FROM tb_item_list a
-    LEFT JOIN (
-        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt
-        from tb_item_review WHERE rating IS NOT NULL AND is_delete ='2' GROUP BY product_no
-    ) b ON b.p_no = a.product_no
-WHERE a.is_delete ='1' AND product_no IN ('ETCB-COREADOG-A04',	
-'ETCB-COREADOG-A03',	
-'ETCB-BUGS-PET-A01',	
-'ETCB-SIGNALCARE-A01',	
-'JB-MEAL-A64'	
-
-
-    
-) AND a.is_shop ='2' AND a.is_view ='1' AND a.is_soldout = '1' ORDER BY  a.reg_dt desc";
-$category_2_array = sql_fetch_array($category_2_sql);
-
-$category_3_sql = "
-SELECT * FROM tb_item_list a
-    LEFT JOIN (
-        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt
-        from tb_item_review WHERE rating IS NOT NULL AND is_delete ='2' GROUP BY product_no
-    ) b ON b.p_no = a.product_no
-WHERE a.is_delete ='1' AND product_no IN ('ETCB-AVEC-A18',	
-'ETCB-JOLLYJOLIE-A02',	
-'JB-TREAT-A584',	
-'JB-TREAT-A562',	
-'JB-TREAT-A176'	
-
-
-    
-) AND a.is_shop ='2' AND a.is_view ='1' AND a.is_soldout = '1' ORDER BY  a.reg_dt desc";
-$category_3_array = sql_fetch_array($category_3_sql);
-
-$category_4_sql = "
-SELECT * FROM tb_item_list a
-    LEFT JOIN (
-        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt
-        from tb_item_review WHERE rating IS NOT NULL AND is_delete ='2' GROUP BY product_no
-    ) b ON b.p_no = a.product_no
-WHERE a.is_delete ='1' AND product_no IN ('ETCB-STU-A02',	
-'ETCB-BANDI-A38',	
-'ETCB-AVEC-A07',	
-'ETCB-DONIRONI-A08',	
-'ETCB-MOMONG-A14'
-
-
-    
-) AND a.is_shop ='2' AND a.is_view ='1' AND a.is_soldout = '1' ORDER BY  a.reg_dt desc";
-$category_4_array = sql_fetch_array($category_4_sql);
+        SELECT product_no p_no, AVG(rating) rating_avg, COUNT(product_no) AS rating_cnt 
+        FROM tb_item_review WHERE rating IS NOT NULL AND is_delete = '2' GROUP BY product_no
+        ) b ON b.p_no = a.product_no
+    WHERE a.is_delete = '1' AND a.is_view_main_2 = '1' AND a.is_shop = '2' AND a.is_view = '1' AND a.is_soldout = '1' ORDER BY a.reg_dt DESC LIMIT 30 
+";
+$new_item_array = sql_fetch_array($new_item_sql);
 
 // 새로 입점했어요
 $new_shop_sql = "
@@ -712,137 +605,94 @@ if($_SESSION['is_token'] == "1"){
                 </div>
                 <!-- //BEST 미용후기 -->
                 <!-- MD추천 쇼핑템 -->
-                <div class="basic-data-group">
+                <div class="main-md-wrap">
                     <div class="con-title-group">
-                        <h4 class="con-title">강아지 BEST</h4>
+                        <div class="con-title">MD 추천 쇼핑템</div>
+                        <!--<a href="#" class="btn-content-more">전체보기</a>-->
                     </div>
-                    <!-- 20220218 수정 : 구조 변경 -->
-                    <div class="horizontal-swiper-scoller group">
-                        <div class="scroller-inner">
-                            <div class="scroller-mulity-group" style="overflow: auto;">
-                                <div class="scroller-mulity-inner">
-                                    <?php
-                                    for($i=0;$i<count($dog_array);$i=$i+2){
-                                        // 메인사진 구하기
-                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$dog_array[$i]['product_img']}) LIMIT 1";
-                                        $file_result = sql_query($file_sql);
-                                        $file_row = sql_fetch($file_result);
-                                        $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $dog_array[$i]['goodsRepImage'];
+                    <div class="horizontal-swiper-scoller">
+                        <div class="scroller-inner" style="overflow: auto;">
+                            <?php
+                            if(count($md_item_array)>0){
+                                foreach($md_item_array as $rs){
+                                    // 메인사진 구하기
+                                    $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
+                                    $file_result = sql_query($file_sql);
+                                    $file_row = sql_fetch($file_result);
+                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
+                                    $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
 
-                                        //할인율 구하기
-                                        $percent = ($dog_array[$i]['product_price'] == 0 || $dog_array[$i]['sale_price'] == 0)? 0 : 100 - ($dog_array[$i]['sale_price'] / $dog_array[$i]['product_price'] * 100);
-                                        ?>
-                                        <div class="scroller-item">
-                                            <a href="shop_view?product_no=<?=$dog_array[$i]['product_no']?>" class="product-item">
-                                                <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
-                                                <div class="info-wrap">
-                                                    <div class="item-name"><?=$dog_array[$i]['product_name']?></div>
-                                                    <div class="item-price-group">
-                                                        <div class="price-sale"><?=round($percent)?>%</div>
-                                                        <div class="price-value"><?=number_format($dog_array[$i]['sale_price'])?>원</div>
-                                                    </div>
-
-
-                                                    <?php
-
-
-                                                    if($dog_array[$i]['rating_cnt'] > 0){
-                                                        echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($dog_array[$i]['rating_avg']).'</em>('.$dog_array[$i]['rating_cnt'].')</div>';
-
-                                                    }
-
-                                                    ?>
-
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <?php
-                                    }
+                                    //할인율 구하기
+                                    $percent = ($rs['product_price'] == 0 || $rs['sale_price'] == 0)? 0 : 100 - ($rs['sale_price'] / $rs['product_price'] * 100);
                                     ?>
-                                </div>
-                                <div class="scroller-mulity-inner">
-                                    <?php
-                                    for($i=1;$i<count($dog_array);$i=$i+2){
-                                        // 메인사진 구하기
-                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$dog_array[$i]['product_img']}) LIMIT 1";
-                                        $file_result = sql_query($file_sql);
-                                        $file_row = sql_fetch($file_result);
-                                        $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $dog_array[$i]['goodsRepImage'];
-
-                                        //할인율 구하기
-                                        $percent = ($dog_array[$i]['product_price'] == 0 || $dog_array[$i]['sale_price'] == 0)? 0 : 100 - ($dog_array[$i]['sale_price'] / $dog_array[$i]['product_price'] * 100);
-                                        ?>
-                                        <div class="scroller-item">
-                                            <a href="shop_view?product_no=<?=$dog_array[$i]['product_no']?>" class="product-item">
-                                                <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
-                                                <div class="info-wrap">
-                                                    <div class="item-name"><?=$dog_array[$i]['product_name']?></div>
-                                                    <div class="item-price-group">
-                                                        <div class="price-sale"><?=round($percent)?>%</div>
-                                                        <div class="price-value"><?=number_format($dog_array[$i]['sale_price'])?>원</div>
-                                                    </div>
-                                                    <?php
-
-
-                                                    if($dog_array[$i]['rating_cnt'] > 0){
-                                                        echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($dog_array[$i]['rating_avg']).'</em>('.$dog_array[$i]['rating_cnt'].')</div>';
-
-                                                    }
-
-                                                    ?>
+                                    <div class="scroller-item">
+                                        <a href="shop_view?product_no=<?=$rs['product_no']?>" class="product-item">
+                                            <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
+                                            <div class="info-wrap">
+                                                <div class="item-name"><?= $rs['product_name']?></div>
+                                                <div class="item-price-group">
+                                                    <div class="price-sale"><?=round($percent)?>%</div>
+                                                    <div class="price-value"><?=number_format($rs['sale_price'])?>원</div>
                                                 </div>
-                                            </a>
-                                        </div>
-                                        <?php
-                                    }
-                                    ?>
-                                </div>
-                            </div>
+
+
+                                                <?php
+
+
+                                                if($rs['rating_cnt'] > 0){
+                                                    echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($rs['rating_avg']).'</em>('.$rs['rating_cnt'].')</div>';
+
+                                                }
+
+                                                ?>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
-                    <!-- //20220218 수정 : 구조 변경 -->
                 </div>
                 <!-- //MD추천 쇼핑템 -->
                 <!-- NEW 쇼핑템 -->
-                <div class="basic-data-group">
+                <div class="main-new-wrap" id="new_item_parent">
                     <div class="con-title-group">
-                        <h4 class="con-title">고양이 BEST</h4>
+                        <div class="con-title">NEW 쇼핑템</div>
+                        <!--<a href="#" class="btn-content-more">전체보기</a>-->
                     </div>
-                    <!-- 20220218 수정 : 구조 변경 -->
                     <div class="horizontal-swiper-scoller group">
-                        <div class="scroller-inner">
+                        <div class="scroller-inner" id="new_item_1">
                             <div class="scroller-mulity-group" style="overflow: auto;">
                                 <div class="scroller-mulity-inner">
                                     <?php
-                                    for($i=0;$i<count($cat_array);$i=$i+2){
+                                    for($i=0;$i<count($new_item_array);$i=$i+2){
                                         // 메인사진 구하기
-                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$cat_array[$i]['product_img']}) LIMIT 1";
+                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$new_item_array[$i]['product_img']}) LIMIT 1";
                                         $file_result = sql_query($file_sql);
                                         $file_row = sql_fetch($file_result);
                                         $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $cat_array[$i]['goodsRepImage'];
+                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $new_item_array[$i]['goodsRepImage'];
 
                                         //할인율 구하기
-                                        $percent = ($cat_array[$i]['product_price'] == 0 || $cat_array[$i]['sale_price'] == 0)? 0 : 100 - ($cat_array[$i]['sale_price'] / $cat_array[$i]['product_price'] * 100);
+                                        $percent = ($new_item_array[$i]['product_price'] == 0 || $new_item_array[$i]['sale_price'] == 0)? 0 : 100 - ($new_item_array[$i]['sale_price'] / $new_item_array[$i]['product_price'] * 100);
                                         ?>
                                         <div class="scroller-item">
-                                            <a href="shop_view?product_no=<?=$cat_array[$i]['product_no']?>" class="product-item">
+                                            <a href="shop_view?product_no=<?=$new_item_array[$i]['product_no']?>" class="product-item">
                                                 <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
                                                 <div class="info-wrap">
-                                                    <div class="item-name"><?=$cat_array[$i]['product_name']?></div>
+                                                    <div class="item-name"><?=$new_item_array[$i]['product_name']?></div>
                                                     <div class="item-price-group">
                                                         <div class="price-sale"><?=round($percent)?>%</div>
-                                                        <div class="price-value"><?=number_format($cat_array[$i]['sale_price'])?>원</div>
+                                                        <div class="price-value"><?=number_format($new_item_array[$i]['sale_price'])?>원</div>
                                                     </div>
-
 
                                                     <?php
 
 
-                                                    if($cat_array[$i]['rating_cnt'] > 0){
-                                                        echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($cat_array[$i]['rating_avg']).'</em>('.$cat_array[$i]['rating_cnt'].')</div>';
+                                                    if($new_item_array[$i]['rating_cnt'] > 0){
+                                                        echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($new_item_array[$i]['rating_avg']).'</em>('.$new_item_array[$i]['rating_cnt'].')</div>';
 
                                                     }
 
@@ -857,35 +707,38 @@ if($_SESSION['is_token'] == "1"){
                                 </div>
                                 <div class="scroller-mulity-inner">
                                     <?php
-                                    for($i=1;$i<count($cat_array);$i=$i+2){
+                                    for($i=1;$i<count($new_item_array);$i=$i+2){
                                         // 메인사진 구하기
-                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$cat_array[$i]['product_img']}) LIMIT 1";
+                                        $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$new_item_array[$i]['product_img']}) LIMIT 1";
                                         $file_result = sql_query($file_sql);
                                         $file_row = sql_fetch($file_result);
                                         $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $cat_array[$i]['goodsRepImage'];
+
+                                        $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $new_item_array[$i]['goodsRepImage'];
 
                                         //할인율 구하기
-                                        $percent = ($cat_array[$i]['product_price'] == 0 || $cat_array[$i]['sale_price'] == 0)? 0 : 100 - ($cat_array[$i]['sale_price'] / $cat_array[$i]['product_price'] * 100);
+                                        $percent = ($new_item_array[$i]['product_price'] == 0 || $new_item_array[$i]['sale_price'] == 0)? 0 : 100 - ($new_item_array[$i]['sale_price'] / $new_item_array[$i]['product_price'] * 100);
                                         ?>
                                         <div class="scroller-item">
-                                            <a href="shop_view?product_no=<?=$cat_array[$i]['product_no']?>" class="product-item">
+                                            <a href="shop_view?product_no=<?=$new_item_array[$i]['product_no']?>" class="product-item">
                                                 <div class="thumb"><div class="obj"><img src="<?= $photo?>"></div></div>
                                                 <div class="info-wrap">
-                                                    <div class="item-name"><?=$cat_array[$i]['product_name']?></div>
+                                                    <div class="item-name"><?=$new_item_array[$i]['product_name']?></div>
                                                     <div class="item-price-group">
                                                         <div class="price-sale"><?=round($percent)?>%</div>
-                                                        <div class="price-value"><?=number_format($cat_array[$i]['sale_price'])?>원</div>
+                                                        <div class="price-value"><?=number_format($new_item_array[$i]['sale_price'])?>원</div>
                                                     </div>
+
                                                     <?php
 
 
-                                                    if($cat_array[$i]['rating_cnt'] > 0){
-                                                        echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($cat_array[$i]['rating_avg']).'</em>('.$cat_array[$i]['rating_cnt'].')</div>';
+                                                    if($new_item_array[$i]['rating_cnt'] > 0){
+                                                        echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($new_item_array[$i]['rating_avg']).'</em>('.$new_item_array[$i]['rating_cnt'].')</div>';
 
                                                     }
 
                                                     ?>
+
                                                 </div>
                                             </a>
                                         </div>
@@ -896,203 +749,13 @@ if($_SESSION['is_token'] == "1"){
                             </div>
                         </div>
                     </div>
-                    <!-- //20220218 수정 : 구조 변경 -->
-                </div>
+                    <div class="horizontal-swiper-scoller">
+                        <div class="scroller-inner" id="new_item_2">
 
-                <div class="basic-data-group">
-                    <div class="con-title-group">
-                        <h4 class="con-title">카테고리별 베스트</h4>
-                    </div>
-                    <div class="product-category-cell-wrap">
-                        <div class="product-category-cell actived" id="home_all_btn">
-                            전체
-                        </div>
-                        <div class="product-category-cell" id="home_feed_btn">
-                            사료
-                        </div>
-                        <div class="product-category-cell" id="home_snack_btn">
-                            간식
-                        </div>
-                        <div class="product-category-cell" id="home_etc_btn">
-                            용품
+
+
                         </div>
                     </div>
-                    <div class="product-list-wrap">
-                        <div class="product-list" id="home_category_all">
-                            <?php
-                            if(count($category_1_array)>0){
-                                foreach($category_1_array as $rs){
-                                    $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
-                                    $file_result = sql_query($file_sql);
-                                    $file_row = sql_fetch($file_result);
-                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                    $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
-
-                                    $percent = ($rs['product_price'] == 0 || $rs['sale_price'] == 0)? 0 : 100 - ($rs['sale_price'] / $rs['product_price'] * 100);
-
-
-
-                                    ?>
-
-
-                                    <div class="product-cell">
-                                        <a href="shop_view?product_no=<?=$rs['product_no']?>" class="product-a">
-                                            <div class="product-cell-img-box">
-                                                <img src="<?= $photo?>" alt="">
-                                            </div>
-                                            <div class="info-wrap">
-                                                <div class="item-name"><?= $rs['product_name']?></div>
-                                                <div class="item-price-group">
-                                                    <span class="price-sale"><?=round($percent)?>%</span>
-                                                    <span class="price-value"><?=number_format($rs['sale_price'])?>원</span>
-                                                </div>
-                                                <?php
-
-                                                if($rs['rating_cnt'] > 0){
-                                                    echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($rs['rating_avg']).'</em>('.$rs['rating_cnt'].')</div>';
-
-                                                }
-
-                                                ?>
-
-                                            </div>
-                                        </a>
-                                    </div>
-                                <?php }
-                            }?>
-                        </div>
-                        <div class="product-list" style="display:none" id="home_category_feed">
-                            <?php
-                            if(count($category_2_array)>0){
-                                foreach($category_2_array as $rs){
-                                    $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
-                                    $file_result = sql_query($file_sql);
-                                    $file_row = sql_fetch($file_result);
-                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                    $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
-
-                                    $percent = ($rs['product_price'] == 0 || $rs['sale_price'] == 0)? 0 : 100 - ($rs['sale_price'] / $rs['product_price'] * 100);
-
-
-
-                                    ?>
-
-
-                                    <div class="product-cell">
-                                        <a href="shop_view?product_no=<?=$rs['product_no']?>" class="product-a">
-                                            <div class="product-cell-img-box">
-                                                <img src="<?= $photo?>" alt="">
-                                            </div>
-                                            <div class="info-wrap">
-                                                <div class="item-name"><?= $rs['product_name']?></div>
-                                                <div class="item-price-group">
-                                                    <span class="price-sale"><?=round($percent)?>%</span>
-                                                    <span class="price-value"><?=number_format($rs['sale_price'])?>원</span>
-                                                </div>
-                                                <?php
-
-                                                if($rs['rating_cnt'] > 0){
-                                                    echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($rs['rating_avg']).'</em>('.$rs['rating_cnt'].')</div>';
-
-                                                }
-
-                                                ?>
-
-                                            </div>
-                                        </a>
-                                    </div>
-                                <?php }
-                            }?>
-                        </div>
-                        <div class="product-list"  style="display:none" id="home_category_snack">
-                            <?php
-                            if(count($category_3_array)>0){
-                                foreach($category_3_array as $rs){
-                                    $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
-                                    $file_result = sql_query($file_sql);
-                                    $file_row = sql_fetch($file_result);
-                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                    $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
-
-                                    $percent = ($rs['product_price'] == 0 || $rs['sale_price'] == 0)? 0 : 100 - ($rs['sale_price'] / $rs['product_price'] * 100);
-
-
-
-                                    ?>
-
-
-                                    <div class="product-cell">
-                                        <a href="shop_view?product_no=<?=$rs['product_no']?>" class="product-a">
-                                            <div class="product-cell-img-box">
-                                                <img src="<?= $photo?>" alt="">
-                                            </div>
-                                            <div class="info-wrap">
-                                                <div class="item-name"><?= $rs['product_name']?></div>
-                                                <div class="item-price-group">
-                                                    <span class="price-sale"><?=round($percent)?>%</span>
-                                                    <span class="price-value"><?=number_format($rs['sale_price'])?>원</span>
-                                                </div>
-                                                <?php
-
-                                                if($rs['rating_cnt'] > 0){
-                                                    echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($rs['rating_avg']).'</em>('.$rs['rating_cnt'].')</div>';
-
-                                                }
-
-                                                ?>
-
-                                            </div>
-                                        </a>
-                                    </div>
-                                <?php }
-                            }?>
-                        </div>
-                        <div class="product-list"  style="display:none" id="home_category_etc">
-                            <?php
-                            if(count($category_4_array)>0){
-                                foreach($category_4_array as $rs){
-                                    $file_sql = "SELECT * FROM tb_file WHERE is_delete = '1' AND f_seq IN ({$rs['product_img']}) LIMIT 1";
-                                    $file_result = sql_query($file_sql);
-                                    $file_row = sql_fetch($file_result);
-                                    $file_row['file_path'] = str_replace('shop/','shop/thumb150/',$file_row['file_path']);
-                                    $photo = ($file_row['file_path'])? "https://image.banjjakpet.com".img_link_change($file_row['file_path']) : $rs['goodsRepImage'];
-
-                                    $percent = ($rs['product_price'] == 0 || $rs['sale_price'] == 0)? 0 : 100 - ($rs['sale_price'] / $rs['product_price'] * 100);
-
-
-
-                                    ?>
-
-
-                                    <div class="product-cell">
-                                        <a href="shop_view?product_no=<?=$rs['product_no']?>" class="product-a">
-                                            <div class="product-cell-img-box">
-                                                <img src="<?= $photo?>" alt="">
-                                            </div>
-                                            <div class="info-wrap">
-                                                <div class="item-name"><?= $rs['product_name']?></div>
-                                                <div class="item-price-group">
-                                                    <span class="price-sale"><?=round($percent)?>%</span>
-                                                    <span class="price-value"><?=number_format($rs['sale_price'])?>원</span>
-                                                </div>
-                                                <?php
-
-                                                if($rs['rating_cnt'] > 0){
-                                                    echo '<div class="item-grade"><div class="icon icon-size-16 icon-star-yellow"></div><em>'.round($rs['rating_avg']).'</em>('.$rs['rating_cnt'].')</div>';
-
-                                                }
-
-                                                ?>
-
-                                            </div>
-                                        </a>
-                                    </div>
-                                <?php }
-                            }?>
-                        </div>
-
-                    </div>
-                    <!-- 20220218 수정 : 구조 변경 -->
                 </div>
                 <!-- //NEW 쇼핑템 -->
                 <!-- 새로 입점했어요 -->
@@ -1629,67 +1292,7 @@ if($_SESSION['is_token'] == "1"){
     });
 
 
-    let product_list = document.getElementsByClassName('product-list');
 
-    Array.from(document.getElementsByClassName('product-category-cell')).forEach(function(el){
-
-        el.addEventListener('click',function(){
-
-            if(el.classList.contains('actived')){
-                return;
-            }else{
-                Array.from(document.getElementsByClassName('product-category-cell')).forEach(function(el){
-
-                    el.classList.remove('actived');
-                })
-                el.classList.add('actived');
-            }
-
-
-
-            switch(el.getAttribute('id')){
-
-                case 'home_all_btn' : Array.from(product_list).forEach(function(el_){
-
-                    if(el_.getAttribute('id') === 'home_category_all'){
-                        el_.style.display = 'block';
-                    }else{
-                        el_.style.display ='none';
-                    }
-
-                }); break;
-                case 'home_feed_btn' : Array.from(product_list).forEach(function(el_){
-
-                    if(el_.getAttribute('id') === 'home_category_feed'){
-                        el_.style.display = 'block';
-                    }else{
-                        el_.style.display ='none';
-                    }
-
-                }); break;
-                case 'home_snack_btn' : Array.from(product_list).forEach(function(el_){
-
-                    if(el_.getAttribute('id') === 'home_category_snack'){
-                        el_.style.display = 'block';
-                    }else{
-                        el_.style.display ='none';
-                    }
-
-                }); break;
-                case 'home_etc_btn' : Array.from(product_list).forEach(function(el_){
-
-                    if(el_.getAttribute('id') === 'home_category_etc'){
-                        el_.style.display = 'block';
-                    }else{
-                        el_.style.display ='none';
-                    }
-
-                }); break;
-            }
-
-
-        })
-    })
 
 
 </script>
