@@ -5039,10 +5039,15 @@ button.btn-surtax-set{height:26px;  padding:0 10px 0 4px; border-radius:13px;}
 	overflow: hidden;
 	border:1px solid rgba(0,0,0,0.02);
 	box-sizing: border-box;
+	height:100px;
 }
 .product-a .info-wrap{
 	flex:0.6;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+}
+.product-cell-img-box img{
+	height:100%;
+	object-fit: cover;
 }
